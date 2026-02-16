@@ -1,10 +1,10 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { useParams } from 'next/navigation'
 import Image from 'next/image'
 import { motion } from 'framer-motion'
-import { ShoppingCart, Heart, Star, Truck, Shield, Package, GitCompare } from 'lucide-react'
+import { ShoppingCart, Heart, Star, Truck, Shield, Package, GitCompare, ChevronLeft, ChevronRight } from 'lucide-react'
 import api from '@/lib/api'
 import { Product } from '@/types'
 import { formatPrice } from '@/lib/utils'
@@ -139,7 +139,7 @@ export default function ProductDetailPage() {
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="aspect-square bg-muted rounded-lg overflow-hidden mb-3 sm:mb-4"
+            className="relative aspect-square bg-muted rounded-lg overflow-hidden mb-3 sm:mb-4 group"
           >
             {mainImage ? (
               <Image
@@ -154,27 +154,80 @@ export default function ProductDetailPage() {
                 📱
               </div>
             )}
+
+            {/* Main image navigation arrows */}
+            {product.images.length > 1 && (
+              <>
+                <button
+                  onClick={() => setSelectedImage(selectedImage > 0 ? selectedImage - 1 : product.images.length - 1)}
+                  className="absolute left-2 top-1/2 -translate-y-1/2 bg-background/80 backdrop-blur-sm border shadow-md rounded-full p-2 opacity-0 group-hover:opacity-100 transition-opacity hover:bg-background"
+                >
+                  <ChevronLeft className="h-5 w-5" />
+                </button>
+                <button
+                  onClick={() => setSelectedImage(selectedImage < product.images.length - 1 ? selectedImage + 1 : 0)}
+                  className="absolute right-2 top-1/2 -translate-y-1/2 bg-background/80 backdrop-blur-sm border shadow-md rounded-full p-2 opacity-0 group-hover:opacity-100 transition-opacity hover:bg-background"
+                >
+                  <ChevronRight className="h-5 w-5" />
+                </button>
+                <div className="absolute bottom-3 left-1/2 -translate-x-1/2 bg-background/80 backdrop-blur-sm rounded-full px-3 py-1 text-xs font-medium">
+                  {selectedImage + 1} / {product.images.length}
+                </div>
+              </>
+            )}
           </motion.div>
 
           {product.images.length > 1 && (
-            <div className="grid grid-cols-4 gap-1.5 sm:gap-2">
-              {product.images.map((image, index) => (
+            <div className="relative">
+              {/* Left scroll arrow */}
+              {product.images.length > 5 && (
                 <button
-                  key={index}
-                  onClick={() => setSelectedImage(index)}
-                  className={`aspect-square rounded-lg overflow-hidden border-2 ${
-                    selectedImage === index ? 'border-primary' : 'border-transparent'
-                  }`}
+                  onClick={() => {
+                    const container = document.getElementById('image-thumbnails')
+                    if (container) container.scrollBy({ left: -110, behavior: 'smooth' })
+                  }}
+                  className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-background/90 border shadow-md rounded-full p-1 hover:bg-accent transition -ml-2"
                 >
-                  <Image
-                    src={image.url}
-                    alt={`${product.name} ${index + 1}`}
-                    width={100}
-                    height={100}
-                    className="w-full h-full object-cover"
-                  />
+                  <ChevronLeft className="h-4 w-4" />
                 </button>
-              ))}
+              )}
+
+              <div
+                id="image-thumbnails"
+                className="flex gap-1.5 sm:gap-2 overflow-x-auto scrollbar-hide scroll-smooth"
+                style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+              >
+                {product.images.map((image, index) => (
+                  <button
+                    key={index}
+                    onClick={() => setSelectedImage(index)}
+                    className={`flex-shrink-0 aspect-square w-[calc(25%-6px)] sm:w-[calc(20%-8px)] max-w-[100px] rounded-lg overflow-hidden border-2 ${
+                      selectedImage === index ? 'border-primary' : 'border-transparent'
+                    }`}
+                  >
+                    <Image
+                      src={image.url}
+                      alt={`${product.name} ${index + 1}`}
+                      width={100}
+                      height={100}
+                      className="w-full h-full object-cover"
+                    />
+                  </button>
+                ))}
+              </div>
+
+              {/* Right scroll arrow */}
+              {product.images.length > 5 && (
+                <button
+                  onClick={() => {
+                    const container = document.getElementById('image-thumbnails')
+                    if (container) container.scrollBy({ left: 110, behavior: 'smooth' })
+                  }}
+                  className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-background/90 border shadow-md rounded-full p-1 hover:bg-accent transition -mr-2"
+                >
+                  <ChevronRight className="h-4 w-4" />
+                </button>
+              )}
             </div>
           )}
         </div>

@@ -3,7 +3,7 @@
 import { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { useAuthStore } from '@/store/authStore'
-import { LayoutDashboard, Package, FolderOpen, Users, ShoppingCart } from 'lucide-react'
+import { LayoutDashboard, Package, FolderOpen, Users, ShoppingCart, MessageSquare } from 'lucide-react'
 import Link from 'next/link'
 
 export default function AdminDashboardPage() {
@@ -52,6 +52,12 @@ export default function AdminDashboardPage() {
       href: '/admin/users',
       icon: Users,
       description: 'Керування користувачами',
+    },
+    {
+      title: 'Підтримка',
+      href: '/admin/tickets',
+      icon: MessageSquare,
+      description: 'Відповіді на запити',
     },
   ]
 

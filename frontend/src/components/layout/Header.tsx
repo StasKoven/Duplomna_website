@@ -230,9 +230,18 @@ export default function Header() {
                       onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
                       className="flex items-center p-2 hover:bg-accent rounded-md"
                     >
-                      <div className="h-7 w-7 rounded-full bg-primary flex items-center justify-center text-primary-foreground text-sm">
-                        {currentUser?.firstName?.[0]}
-                      </div>
+                      {currentUser?.avatar ? (
+                        <img
+                          src={currentUser.avatar}
+                          alt={currentUser.firstName || ''}
+                          className="h-7 w-7 rounded-full object-cover"
+                          referrerPolicy="no-referrer"
+                        />
+                      ) : (
+                        <div className="h-7 w-7 rounded-full bg-primary flex items-center justify-center text-primary-foreground text-sm">
+                          {currentUser?.firstName?.[0]}
+                        </div>
+                      )}
                     </button>
 
                     <AnimatePresence>
@@ -365,9 +374,18 @@ export default function Header() {
                 {isAuth ? (
                   <div className="mb-4 p-3 bg-muted rounded-lg">
                     <div className="flex items-center space-x-3">
-                      <div className="h-10 w-10 rounded-full bg-primary flex items-center justify-center text-primary-foreground">
-                        {currentUser?.firstName?.[0]}
-                      </div>
+                      {currentUser?.avatar ? (
+                        <img
+                          src={currentUser.avatar}
+                          alt={currentUser.firstName || ''}
+                          className="h-10 w-10 rounded-full object-cover"
+                          referrerPolicy="no-referrer"
+                        />
+                      ) : (
+                        <div className="h-10 w-10 rounded-full bg-primary flex items-center justify-center text-primary-foreground">
+                          {currentUser?.firstName?.[0]}
+                        </div>
+                      )}
                       <div className="flex-1 min-w-0">
                         <p className="font-medium truncate">{currentUser?.firstName} {currentUser?.lastName}</p>
                         <p className="text-xs text-muted-foreground truncate">{currentUser?.email}</p>

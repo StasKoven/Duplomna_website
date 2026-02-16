@@ -9,8 +9,41 @@ const api = axios.create({
   headers: {
     'Content-Type': 'application/json',
   },
-  timeout: isProduction ? 30000 : 10000,
+  timeout: isProduction ? 30000 : 15000,
 })
+
+// Retry helper for GET requests that fail due to network/server startup issues
+const MAX_RETRIES = 3
+const RETRY_DELAY = 1000 // ms
+
+const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
+
+const isRetryableError = (error: AxiosError) => {
+  // Retry on network errors (backend not started yet) or 5xx server errors
+  if (!error.response) return true // Network error / ECONNREFUSED
+  const status = error.response.status
+  return status >= 500 || status === 0
+}
+
+// Override the default get method to add retry logic for resilience
+const originalGet = api.get.bind(api)
+api.get = async function retryGet(...args: Parameters<typeof originalGet>) {
+  let lastError: any
+  for (let attempt = 0; attempt <= MAX_RETRIES; attempt++) {
+    try {
+      return await originalGet(...args)
+    } catch (error: any) {
+      lastError = error
+      if (attempt < MAX_RETRIES && isRetryableError(error)) {
+        console.warn(`[API] GET ${args[0]} failed (attempt ${attempt + 1}/${MAX_RETRIES + 1}), retrying in ${RETRY_DELAY * (attempt + 1)}ms...`)
+        await sleep(RETRY_DELAY * (attempt + 1))
+      } else {
+        throw error
+      }
+    }
+  }
+  throw lastError
+} as typeof originalGet
 
 api.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {

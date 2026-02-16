@@ -23,6 +23,16 @@ router.post('/register', [
 ], authController.register);
 
 /**
+ * @route   POST /api/auth/google
+ * @desc    Authenticate with Google via Firebase
+ * @access  Public
+ */
+router.post('/google', [
+  body('idToken').notEmpty().withMessage('Firebase ID token is required'),
+  validate
+], authController.googleAuth);
+
+/**
  * @route   POST /api/auth/login
  * @desc    Login user
  * @access  Public

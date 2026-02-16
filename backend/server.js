@@ -18,6 +18,7 @@ const wishlistRoutes = require('./routes/wishlist.routes');
 const cartRoutes = require('./routes/cart.routes');
 const comparisonRoutes = require('./routes/comparison.routes');
 const couponRoutes = require('./routes/coupon.routes');
+const ticketRoutes = require('./routes/ticket.routes');
 
 const errorHandler = require('./middleware/errorHandler');
 
@@ -90,16 +91,6 @@ if (process.env.NODE_ENV === 'development') {
   });
 }
 
-// Database connection
-mongoose.connect(process.env.MONGODB_URI)
-  .then(() => {
-    console.log('✅ MongoDB connected successfully');
-  })
-  .catch(err => {
-    console.error('❌ MongoDB connection error:', err);
-    process.exit(1);
-  });
-
 // Mongoose error logging
 mongoose.connection.on('error', (err) => {
   console.error('❌ MongoDB runtime error:', err);
@@ -120,6 +111,7 @@ app.use('/api/wishlist', wishlistRoutes);
 app.use('/api/cart', cartRoutes);
 app.use('/api/comparisons', comparisonRoutes);
 app.use('/api/coupons', couponRoutes);
+app.use('/api/tickets', ticketRoutes);
 
 // Silence Chrome DevTools probe noise
 // Chrome sometimes requests this well-known URL; respond with 204 to avoid 404 logs
@@ -129,7 +121,13 @@ app.get('/.well-known/appspecific/com.chrome.devtools.json', (req, res) => {
 
 // Health check
 app.get('/api/health', (req, res) => {
-  res.json({ status: 'OK', timestamp: new Date().toISOString() });
+  const dbState = mongoose.connection.readyState;
+  const dbStates = { 0: 'disconnected', 1: 'connected', 2: 'connecting', 3: 'disconnecting' };
+  res.json({ 
+    status: dbState === 1 ? 'OK' : 'DEGRADED', 
+    database: dbStates[dbState] || 'unknown',
+    timestamp: new Date().toISOString() 
+  });
 });
 
 // Error handling
@@ -148,22 +146,41 @@ app.use((req, res) => {
 
 const PORT = process.env.PORT || 5000;
 
-const server = app.listen(PORT, () => {
-  console.log('\n🚀 ========================================');
-  console.log(`🚀 Server running on port ${PORT}`);
-  console.log(`🌍 Environment: ${process.env.NODE_ENV}`);
-  console.log(`🔗 API Base: http://localhost:${PORT}/api`);
-  console.log(`🔗 Health Check: http://localhost:${PORT}/api/health`);
-  console.log('🚀 ========================================\n');
-});
+// Database connection - start server ONLY after MongoDB is connected
+let server;
+
+const startServer = async () => {
+  try {
+    await mongoose.connect(process.env.MONGODB_URI);
+    console.log('✅ MongoDB connected successfully');
+
+    server = app.listen(PORT, () => {
+      console.log('\n🚀 ========================================');
+      console.log(`🚀 Server running on port ${PORT}`);
+      console.log(`🌍 Environment: ${process.env.NODE_ENV}`);
+      console.log(`🔗 API Base: http://localhost:${PORT}/api`);
+      console.log(`🔗 Health Check: http://localhost:${PORT}/api/health`);
+      console.log('🚀 ========================================\n');
+    });
+  } catch (err) {
+    console.error('❌ MongoDB connection error:', err);
+    process.exit(1);
+  }
+};
+
+startServer();
 
 // Handle unhandled promise rejections
 process.on('unhandledRejection', (err) => {
   console.error('\n💥 UNHANDLED REJECTION! Shutting down...');
   console.error('Error:', err);
-  server.close(() => {
+  if (server) {
+    server.close(() => {
+      process.exit(1);
+    });
+  } else {
     process.exit(1);
-  });
+  }
 });
 
 // Handle uncaught exceptions

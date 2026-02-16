@@ -4,6 +4,8 @@ import api from '@/lib/api'
 import { User, AuthResponse } from '@/types'
 import { toast } from 'sonner'
 import { logError, logInfo } from '@/lib/errorLogger'
+import { signInWithPopup } from 'firebase/auth'
+import { auth, googleProvider } from '@/lib/firebase'
 
 interface AuthState {
   user: User | null
@@ -13,6 +15,7 @@ interface AuthState {
   isLoading: boolean
   login: (email: string, password: string) => Promise<void>
   register: (data: RegisterData) => Promise<void>
+  googleLogin: () => Promise<void>
   logout: () => void
   setUser: (user: User) => void
   fetchProfile: () => Promise<void>
@@ -104,6 +107,53 @@ export const useAuthStore = create<AuthState>()(
           logError('Auth Store - Register', error, { email: data.email })
           set({ isLoading: false })
           toast.error(error.response?.data?.message || 'Помилка реєстрації')
+          throw error
+        }
+      },
+
+      googleLogin: async () => {
+        try {
+          logInfo('Auth Store', 'Google login attempt')
+          set({ isLoading: true })
+
+          // Sign in with Google via Firebase
+          const result = await signInWithPopup(auth, googleProvider)
+          const idToken = await result.user.getIdToken()
+
+          // Send Firebase token to our backend
+          const response = await api.post<AuthResponse>('/auth/google', { idToken })
+          const { user, accessToken, refreshToken } = response.data
+
+          localStorage.setItem('accessToken', accessToken)
+          localStorage.setItem('refreshToken', refreshToken)
+
+          set({
+            user,
+            accessToken,
+            refreshToken,
+            isAuthenticated: true,
+            isLoading: false,
+          })
+
+          // Sync cart and wishlist
+          await get().syncStores()
+
+          logInfo('Auth Store', 'Google login successful', { userId: user.id })
+          toast.success('Вхід через Google успішний!')
+        } catch (error: any) {
+          logError('Auth Store - Google Login', error)
+          set({ isLoading: false })
+          
+          // Handle specific Firebase errors
+          if (error?.code === 'auth/popup-closed-by-user') {
+            // User closed the popup, no need to show error
+            return
+          }
+          if (error?.code === 'auth/cancelled-popup-request') {
+            return
+          }
+          
+          toast.error(error?.response?.data?.message || 'Помилка входу через Google')
           throw error
         }
       },

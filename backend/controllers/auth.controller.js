@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
 const User = require('../models/User.model');
+const admin = require('../config/firebase');
 
 /**
  * Generate access and refresh tokens
@@ -77,6 +78,105 @@ exports.register = async (req, res) => {
 };
 
 /**
+ * Google authentication via Firebase
+ */
+exports.googleAuth = async (req, res) => {
+  try {
+    const { idToken } = req.body;
+
+    if (!idToken) {
+      return res.status(400).json({ message: 'Firebase ID token is required' });
+    }
+
+    // Verify Firebase ID token
+    const decodedToken = await admin.auth().verifyIdToken(idToken);
+    const { uid, email, name, picture } = decodedToken;
+
+    // Check if user already exists by firebaseUid or email
+    let user = await User.findOne({ 
+      $or: [{ firebaseUid: uid }, { email: email }] 
+    });
+
+    if (user) {
+      // Update firebaseUid if user exists by email but doesn't have firebaseUid
+      if (!user.firebaseUid) {
+        user.firebaseUid = uid;
+        user.authProvider = 'google';
+        if (picture && !user.avatar) {
+          user.avatar = picture;
+        }
+        user.emailVerified = true;
+        await user.save();
+      }
+
+      // Check if account is active
+      if (!user.isActive) {
+        return res.status(403).json({ message: 'Account is deactivated' });
+      }
+    } else {
+      // Create new user from Google data
+      const nameParts = (name || 'Google User').split(' ');
+      const firstName = nameParts[0] || 'Google';
+      const lastName = nameParts.slice(1).join(' ') || 'User';
+
+      user = new User({
+        firstName,
+        lastName,
+        email,
+        authProvider: 'google',
+        firebaseUid: uid,
+        avatar: picture || null,
+        isActive: true,
+        emailVerified: true,
+      });
+
+      await user.save();
+    }
+
+    // Generate JWT tokens
+    const { accessToken, refreshToken } = generateTokens(user._id);
+
+    // Save refresh token to user
+    user.refreshTokens.push({ token: refreshToken });
+    await user.save();
+
+    res.json({
+      message: 'Google authentication successful',
+      user: {
+        _id: user._id,
+        id: user._id,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+        role: user.role,
+        avatar: user.avatar,
+        phone: user.phone,
+        isActive: user.isActive,
+        emailVerified: user.emailVerified,
+        authProvider: user.authProvider,
+        wishlist: user.wishlist,
+        cart: user.cart,
+        createdAt: user.createdAt,
+        updatedAt: user.updatedAt,
+      },
+      accessToken,
+      refreshToken,
+    });
+  } catch (error) {
+    console.error('Google auth error:', error);
+    
+    if (error.code === 'auth/id-token-expired') {
+      return res.status(401).json({ message: 'Token expired, please try again' });
+    }
+    if (error.code === 'auth/argument-error') {
+      return res.status(400).json({ message: 'Invalid token' });
+    }
+    
+    res.status(500).json({ message: 'Google authentication failed', error: error.message });
+  }
+};
+
+/**
  * Login user
  */
 exports.login = async (req, res) => {
@@ -88,6 +188,13 @@ exports.login = async (req, res) => {
     
     if (!user) {
       return res.status(401).json({ message: 'Invalid email or password' });
+    }
+
+    // Check if user registered via Google (no password)
+    if (user.authProvider === 'google' && !user.password) {
+      return res.status(400).json({ 
+        message: 'Цей акаунт зареєстрований через Google. Використовуйте вхід через Google.' 
+      });
     }
 
     // Check if account is active
