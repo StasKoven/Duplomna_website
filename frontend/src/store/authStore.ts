@@ -169,13 +169,16 @@ export const useAuthStore = create<AuthState>()(
           isAuthenticated: false,
         })
 
-        // Очищуємо кошик та список бажань при виході
+        // Очищуємо кошик, список бажань та порівняння при виході
         if (typeof window !== 'undefined') {
           const { useCartStore } = require('@/store/cartStore')
           const { useWishlistStore } = require('@/store/wishlistStore')
+          const { useComparisonStore } = require('@/store/comparisonStore')
           // Очищуємо кошик повністю при виході з акаунта
           useCartStore.setState({ items: [], isAuthenticated: false })
           useWishlistStore.setState({ items: [] })
+          // Очищуємо порівняння при виході з акаунта
+          useComparisonStore.setState({ comparisons: [] })
         }
 
         toast.success('Ви вийшли з системи')

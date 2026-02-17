@@ -17,7 +17,10 @@ const productSchema = z.object({
   description: z.string().min(10, 'Опис має містити мінімум 10 символів'),
   shortDescription: z.string().optional(),
   price: z.number().min(0, 'Ціна має бути більше 0'),
-  comparePrice: z.number().optional().nullable(),
+  comparePrice: z.preprocess(
+    (val) => (val === '' || val === undefined || val === null || Number.isNaN(Number(val)) ? undefined : Number(val)),
+    z.number().positive('Стара ціна має бути більше 0').optional()
+  ),
   cost: z.number().min(0, 'Собівартість має бути більше 0').optional().default(0),
   category: z.string().min(1, 'Оберіть категорію'),
   brand: z.string().optional(),
@@ -304,7 +307,7 @@ export default function EditProductPage() {
                   Стара ціна (для знижки)
                 </label>
                 <input
-                  {...register('comparePrice', { valueAsNumber: true })}
+                  {...register('comparePrice')}
                   type="number"
                   step="0.01"
                   className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary"

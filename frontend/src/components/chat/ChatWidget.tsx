@@ -113,6 +113,22 @@ export default function ChatWidget() {
   const { user, isAuthenticated } = useAuthStore()
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLTextAreaElement>(null)
+  const prevIsAuthenticated = useRef(isAuthenticated)
+
+  // Reset chat state when user logs out
+  useEffect(() => {
+    if (prevIsAuthenticated.current && !isAuthenticated) {
+      setView('main')
+      setTickets([])
+      setCurrentTicket(null)
+      setMessageText('')
+      setUnreadCount(0)
+      setNewTicketData({ subject: '', message: '', category: 'other', guestName: '', guestEmail: '' })
+      setSelectedFaq(null)
+      setIsOpen(false)
+    }
+    prevIsAuthenticated.current = isAuthenticated
+  }, [isAuthenticated])
 
   const scrollToBottom = useCallback(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })

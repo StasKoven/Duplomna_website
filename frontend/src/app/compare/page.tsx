@@ -407,14 +407,14 @@ function ComparisonContent() {
 
       {/* ===== DESKTOP: Table view ===== */}
       <div className="hidden lg:block overflow-x-auto rounded-xl border bg-card">
-        <table className="w-full border-collapse">
+        <table className="w-full border-collapse table-fixed">
           <thead>
             <tr className="border-b-2">
               <th className="text-left py-4 px-5 w-52 bg-muted/60 sticky left-0 z-10">
                 <span className="text-sm font-medium text-muted-foreground">Параметр</span>
               </th>
               {products.map(product => (
-                <th key={product._id} className="py-4 px-4 min-w-[220px] max-w-[260px]">
+                <th key={product._id} className="py-4 px-4" style={{ width: `${100 / (products.length + 1)}%`, minWidth: '200px' }}>
                   <div className="relative">
                     <button
                       onClick={() => handleRemove(product._id)}

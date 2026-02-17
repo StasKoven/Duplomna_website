@@ -23,7 +23,10 @@ const productSchema = z.object({
   description: z.string().min(10, 'Опис має містити мінімум 10 символів'),
   shortDescription: z.string().optional(),
   price: z.number().min(0.01, 'Ціна має бути більше 0'),
-  comparePrice: z.number().optional().nullable(),
+  comparePrice: z.preprocess(
+    (val) => (val === '' || val === undefined || val === null || Number.isNaN(Number(val)) ? undefined : Number(val)),
+    z.number().positive('Стара ціна має бути більше 0').optional()
+  ),
   cost: z.number().min(0, 'Собівартість має бути більше або дорівнювати 0').optional().default(0),
   category: z.string().min(1, 'Оберіть категорію'),
   brand: z.string().optional(),
@@ -222,7 +225,7 @@ export default function CreateProductPage() {
 
     setIsLoading(true)
     try {
-      const productData = {
+      const productData: Record<string, any> = {
         ...data,
         features: features.filter(f => f.trim() !== ''),
         specifications: specifications.filter(s => s.name.trim() && s.value.trim()),
@@ -232,6 +235,11 @@ export default function CreateProductPage() {
           alt: data.name,
           isMain: img.isMain,
         })),
+      }
+
+      // Remove comparePrice if not set
+      if (!productData.comparePrice) {
+        delete productData.comparePrice
       }
 
       await api.post('/products', productData)
@@ -378,17 +386,21 @@ export default function CreateProductPage() {
                   </div>
 
                   <div className="flex flex-wrap gap-6 pt-2">
-                    <label className="relative flex items-center gap-3 cursor-pointer">
+                    <label className="relative inline-flex items-center gap-3 cursor-pointer">
                       <input type="checkbox" {...register('isActive')} className="sr-only peer" />
-                      <div className="w-10 h-6 bg-muted rounded-full peer-checked:bg-green-500 transition-colors after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-transform peer-checked:after:translate-x-4 after:shadow-sm" />
+                      <div className="relative w-10 h-6 bg-muted rounded-full peer-checked:bg-green-500 transition-colors flex-shrink-0">
+                        <div className="absolute top-0.5 left-0.5 bg-white rounded-full h-5 w-5 shadow-sm transition-transform peer-checked:translate-x-4" />
+                      </div>
                       <div>
                         <span className="text-sm font-medium">Активний товар</span>
                         <p className="text-xs text-muted-foreground">Відображається на сайті</p>
                       </div>
                     </label>
-                    <label className="relative flex items-center gap-3 cursor-pointer">
+                    <label className="relative inline-flex items-center gap-3 cursor-pointer">
                       <input type="checkbox" {...register('isFeatured')} className="sr-only peer" />
-                      <div className="w-10 h-6 bg-muted rounded-full peer-checked:bg-yellow-500 transition-colors after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-transform peer-checked:after:translate-x-4 after:shadow-sm" />
+                      <div className="relative w-10 h-6 bg-muted rounded-full peer-checked:bg-yellow-500 transition-colors flex-shrink-0">
+                        <div className="absolute top-0.5 left-0.5 bg-white rounded-full h-5 w-5 shadow-sm transition-transform peer-checked:translate-x-4" />
+                      </div>
                       <div>
                         <span className="text-sm font-medium">Рекомендований</span>
                         <p className="text-xs text-muted-foreground">Показується на головній</p>
@@ -422,7 +434,7 @@ export default function CreateProductPage() {
                     <div>
                       <label className="block text-sm font-medium mb-2">Стара ціна <span className="text-muted-foreground">(для знижки)</span></label>
                       <div className="relative">
-                        <input {...register('comparePrice', { valueAsNumber: true })} type="number" step="0.01" min="0" className="w-full pl-8 pr-4 py-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition" placeholder="34999" />
+                        <input {...register('comparePrice')} type="number" step="0.01" min="0" className="w-full pl-8 pr-4 py-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition" placeholder="34999" />
                         <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">₴</span>
                       </div>
                     </div>

@@ -50,14 +50,13 @@ exports.getProducts = async (req, res) => {
       if (maxPrice) filter.price.$lte = Number(maxPrice);
     }
 
-    // Text search - use regex for partial matches
+    // Search only by product name and brand
     if (search) {
-      const searchRegex = new RegExp(search.trim(), 'i');
+      const escapedSearch = search.trim().replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      const searchRegex = new RegExp(escapedSearch, 'i');
       filter.$or = [
         { name: searchRegex },
-        { description: searchRegex },
-        { brand: searchRegex },
-        { sku: searchRegex }
+        { brand: searchRegex }
       ];
     }
 
