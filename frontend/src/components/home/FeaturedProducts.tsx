@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { ArrowRight } from 'lucide-react'
@@ -9,24 +9,46 @@ import { Product } from '@/types'
 import ProductCard from '@/components/products/ProductCard'
 import s from './FeaturedProducts.module.css'
 
+const COMPONENT_MAX_RETRIES = 5
+const COMPONENT_RETRY_DELAY = 2000
+
 export default function FeaturedProducts() {
   const [products, setProducts] = useState<Product[]>([])
   const [loading, setLoading] = useState(true)
+  const cancelledRef = useRef(false)
 
   useEffect(() => {
-    fetchFeaturedProducts()
-  }, [])
+    cancelledRef.current = false
 
-  const fetchFeaturedProducts = async () => {
-    try {
-      const response = await api.get('/products/featured?limit=8')
-      setProducts(response.data.products || [])
-    } catch (error) {
-      console.error('Error fetching featured products:', error)
-    } finally {
-      setLoading(false)
+    const fetchFeaturedProducts = async (attempt = 0) => {
+      try {
+        const response = await api.get('/products/featured?limit=8')
+        if (!cancelledRef.current) {
+          setProducts(response.data.products || [])
+          setLoading(false)
+        }
+      } catch (error: any) {
+        if (cancelledRef.current) return
+        console.error('Error fetching featured products:', error)
+        // If backend isn't ready (network error), retry with delay
+        const isNetworkError = !error.response
+        if (isNetworkError && attempt < COMPONENT_MAX_RETRIES) {
+          await new Promise(resolve => setTimeout(resolve, COMPONENT_RETRY_DELAY))
+          if (!cancelledRef.current) {
+            return fetchFeaturedProducts(attempt + 1)
+          }
+        } else {
+          setLoading(false)
+        }
+      }
     }
-  }
+
+    fetchFeaturedProducts()
+
+    return () => {
+      cancelledRef.current = true
+    }
+  }, [])
 
   // Анімація контейнера
   const container = {

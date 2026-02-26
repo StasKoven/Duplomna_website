@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { motion } from 'framer-motion'
@@ -9,29 +9,50 @@ import api from '@/lib/api'
 import { Category } from '@/types'
 import s from './Categories.module.css'
 
+const COMPONENT_MAX_RETRIES = 5
+const COMPONENT_RETRY_DELAY = 2000
+
 export default function Categories() {
   const [categories, setCategories] = useState<Category[]>([])
   const [loading, setLoading] = useState(true)
+  const cancelledRef = useRef(false)
 
   useEffect(() => {
-    fetchCategories()
-  }, [])
+    cancelledRef.current = false
 
-  const fetchCategories = async () => {
-    try {
-      const response = await api.get('/categories')
-      const incoming = response.data?.categories
-      if (Array.isArray(incoming) && incoming.length) {
-        setCategories(incoming.slice(0, 6))
-      } else {
-        setCategories([])
+    const fetchCategories = async (attempt = 0) => {
+      try {
+        const response = await api.get('/categories')
+        if (cancelledRef.current) return
+        const incoming = response.data?.categories
+        if (Array.isArray(incoming) && incoming.length) {
+          setCategories(incoming.slice(0, 6))
+        } else {
+          setCategories([])
+        }
+        setLoading(false)
+      } catch (error: any) {
+        if (cancelledRef.current) return
+        console.error('Error fetching categories:', error)
+        // If backend isn't ready (network error), retry with delay
+        const isNetworkError = !error.response
+        if (isNetworkError && attempt < COMPONENT_MAX_RETRIES) {
+          await new Promise(resolve => setTimeout(resolve, COMPONENT_RETRY_DELAY))
+          if (!cancelledRef.current) {
+            return fetchCategories(attempt + 1)
+          }
+        } else {
+          setLoading(false)
+        }
       }
-    } catch (error) {
-      console.error('Error fetching categories:', error)
-    } finally {
-      setLoading(false)
     }
-  }
+
+    fetchCategories()
+
+    return () => {
+      cancelledRef.current = true
+    }
+  }, [])
 
   // Анімаційні варіанти
   const container = {

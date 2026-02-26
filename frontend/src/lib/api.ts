@@ -13,8 +13,8 @@ const api = axios.create({
 })
 
 // Retry helper for GET requests that fail due to network/server startup issues
-const MAX_RETRIES = 3
-const RETRY_DELAY = 1000 // ms
+const MAX_RETRIES = 2
+const RETRY_DELAY = 500 // ms
 
 const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
 
