@@ -185,17 +185,17 @@ export default function OrdersPage() {
                       className={s.itemRow}
                     >
                       <div className={s.itemImageWrapper}>
-                        {item.product.images && item.product.images[0] && (
+                        {item.product?.images && item.product.images[0] && (
                           <img
                             src={item.product.images[0]}
-                            alt={item.product.name}
+                            alt={item.product?.name || 'Товар'}
                             className={s.itemImage}
                           />
                         )}
                       </div>
                       <div className={s.itemInfo}>
                         <h4 className={s.itemName}>
-                          {item.product.name}
+                          {item.product?.name || 'Товар видалено'}
                         </h4>
                         <p className={s.itemQuantity}>
                           Кількість: {item.quantity}

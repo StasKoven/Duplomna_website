@@ -27,9 +27,10 @@ export const useCartStore = create<CartState>()(
       isAuthenticated: false,
 
       setAuthenticated: (value: boolean) => {
+        const wasAuthenticated = get().isAuthenticated
         set({ isAuthenticated: value })
-        if (value) {
-          // Синхронізуємо локальний кошик з сервером при вході
+        if (value && !wasAuthenticated) {
+          // Синхронізуємо локальний кошик з сервером тільки при переході з неавторизованого стану
           get().syncCartToServer()
         }
       },
@@ -39,14 +40,28 @@ export const useCartStore = create<CartState>()(
         if (!isAuthenticated || items.length === 0) return
 
         try {
-          // Відправляємо всі локальні товари на сервер
+          // Спочатку отримуємо поточний серверний кошик
+          const serverResponse = await api.get('/cart')
+          const serverCart = serverResponse.data?.cart || []
+
+          // Додаємо тільки ті товари, яких ще немає на сервері
           for (const item of items) {
             const product = item.product as Product
-            await api.post('/cart', {
-              productId: product._id,
-              quantity: item.quantity
-            })
+            const existsOnServer = serverCart.some(
+              (sc: any) => {
+                const serverId = typeof sc.product === 'object' ? sc.product._id : sc.product
+                return serverId === product._id
+              }
+            )
+
+            if (!existsOnServer) {
+              await api.post('/cart', {
+                productId: product._id,
+                quantity: item.quantity
+              })
+            }
           }
+
           // Отримуємо оновлений кошик з сервера
           const response = await api.get('/cart')
           set({ items: response.data?.cart || [] })

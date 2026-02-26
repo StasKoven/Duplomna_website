@@ -26,8 +26,7 @@ export default function Main({ children }: MainProps) {
       if (accessToken && !isAuthenticated) {
         try {
           await fetchProfile()
-          // Синхронізуємо стан авторизації з кошиком
-          setAuthenticated(true)
+          // fetchProfile → syncStores → setAuthenticated(true) вже виконано
           // Завантажуємо кошик з сервера
           await fetchCart()
         } catch (error) {

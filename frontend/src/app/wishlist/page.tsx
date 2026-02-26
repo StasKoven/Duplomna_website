@@ -4,7 +4,7 @@ import { useEffect } from 'react'
 import Link from 'next/link'
 import { Heart, ShoppingCart, X } from 'lucide-react'
 import Image from 'next/image'
-import { motion } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 import { useWishlistStore } from '@/store/wishlistStore'
 import { useCartStore } from '@/store/cartStore'
 import { useAuthStore } from '@/store/authStore'
@@ -41,6 +41,30 @@ export default function WishlistPage() {
     )
   }
 
+  if (!isAuthenticated) {
+    return (
+      <div className={`container-custom ${s.emptyWrapper}`}>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className={s.emptyContent}
+        >
+          <Heart className={s.emptyIcon} />
+          <h1 className={s.emptyTitle}>Увійдіть до аккаунту</h1>
+          <p className={s.emptyText}>
+            Щоб переглядати список бажань, увійдіть або зареєструйтесь
+          </p>
+          <Link
+            href="/login?redirect=/wishlist"
+            className={s.catalogLink}
+          >
+            Увійти
+          </Link>
+        </motion.div>
+      </div>
+    )
+  }
+
   if (items.length === 0) {
     return (
       <div className={`container-custom ${s.emptyWrapper}`}>
@@ -71,7 +95,7 @@ export default function WishlistPage() {
         <div>
           <h1 className={s.title}>Список бажань</h1>
           <p className={s.subtitle}>
-            У вас {items.length} {items.length === 1 ? 'товар' : 'товарів'} у списку бажань
+            У вас {items.length} {items.length === 1 ? 'товар' : (items.length >= 2 && items.length <= 4) ? 'товари' : 'товарів'} у списку бажань
           </p>
         </div>
         {items.length > 0 && (
@@ -90,6 +114,7 @@ export default function WishlistPage() {
       </div>
 
       <div className={s.gridLayout}>
+        <AnimatePresence>
         {items.map((item) => (
           <motion.div
             key={item._id}
@@ -156,6 +181,7 @@ export default function WishlistPage() {
             </div>
           </motion.div>
         ))}
+        </AnimatePresence>
       </div>
     </div>
   )

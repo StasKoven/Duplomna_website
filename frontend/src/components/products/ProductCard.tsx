@@ -50,6 +50,7 @@ export default function ProductCard({ product, compact = false }: ProductCardPro
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault()
     e.stopPropagation()
+    if (product.stock === 0) return
     addItem(product)
   }
 

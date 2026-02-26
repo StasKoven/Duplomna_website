@@ -24,7 +24,8 @@ interface PasswordData {
 export default function ProfilePage() {
   const router = useRouter()
   const { user, isAuthenticated, setUser } = useAuthStore()
-  const [loading, setLoading] = useState(false)
+  const [profileLoading, setProfileLoading] = useState(false)
+  const [passwordLoading, setPasswordLoading] = useState(false)
   const [activeTab, setActiveTab] = useState<'profile' | 'password'>('profile')
 
   const [profileData, setProfileData] = useState<ProfileData>({
@@ -55,7 +56,7 @@ export default function ProfilePage() {
 
   const handleProfileUpdate = async (e: React.FormEvent) => {
     e.preventDefault()
-    setLoading(true)
+    setProfileLoading(true)
 
     try {
       const response = await api.put('/users/profile', {
@@ -69,7 +70,7 @@ export default function ProfilePage() {
     } catch (error: any) {
       toast.error(error.response?.data?.message || 'Помилка оновлення профілю')
     } finally {
-      setLoading(false)
+      setProfileLoading(false)
     }
   }
 
@@ -81,12 +82,27 @@ export default function ProfilePage() {
       return
     }
 
-    if (passwordData.newPassword.length < 6) {
-      toast.error('Пароль повинен містити щонайменше 6 символів')
+    if (passwordData.newPassword.length < 8) {
+      toast.error('Пароль повинен містити щонайменше 8 символів')
       return
     }
 
-    setLoading(true)
+    if (!/[A-Z]/.test(passwordData.newPassword)) {
+      toast.error('Пароль має містити хоча б одну велику літеру')
+      return
+    }
+
+    if (!/[a-z]/.test(passwordData.newPassword)) {
+      toast.error('Пароль має містити хоча б одну малу літеру')
+      return
+    }
+
+    if (!/[0-9]/.test(passwordData.newPassword)) {
+      toast.error('Пароль має містити хоча б одну цифру')
+      return
+    }
+
+    setPasswordLoading(true)
 
     try {
       await api.put('/users/change-password', {
@@ -103,7 +119,7 @@ export default function ProfilePage() {
     } catch (error: any) {
       toast.error(error.response?.data?.message || 'Помилка зміни пароля')
     } finally {
-      setLoading(false)
+      setPasswordLoading(false)
     }
   }
 
@@ -221,11 +237,11 @@ export default function ProfilePage() {
 
               <button
                 type="submit"
-                disabled={loading}
+                disabled={profileLoading}
                 className={`btn-primary ${s.submitBtn}`}
               >
                 <Save className={s.btnIcon} />
-                {loading ? 'Збереження...' : 'Зберегти зміни'}
+                {profileLoading ? 'Збереження...' : 'Зберегти зміни'}
               </button>
             </form>
           </div>
@@ -268,10 +284,10 @@ export default function ProfilePage() {
                   }
                   className={`input ${s.inputFull}`}
                   required
-                  minLength={6}
+                  minLength={8}
                 />
                 <p className={s.hint}>
-                  Мінімум 6 символів
+                  Мінімум 8 символів, велика та мала літера, цифра
                 </p>
               </div>
 
@@ -290,17 +306,17 @@ export default function ProfilePage() {
                   }
                   className={`input ${s.inputFull}`}
                   required
-                  minLength={6}
+                  minLength={8}
                 />
               </div>
 
               <button
                 type="submit"
-                disabled={loading}
+                disabled={passwordLoading}
                 className={`btn-primary ${s.submitBtn}`}
               >
                 <Lock className={s.btnIcon} />
-                {loading ? 'Зміна паролю...' : 'Змінити пароль'}
+                {passwordLoading ? 'Зміна паролю...' : 'Змінити пароль'}
               </button>
             </form>
           </div>

@@ -20,6 +20,13 @@ router.get('/', productController.getProducts);
 router.get('/featured', productController.getFeaturedProducts);
 
 /**
+ * @route   GET /api/products/filters
+ * @desc    Get filter options (brands + price range)
+ * @access  Public
+ */
+router.get('/filters', productController.getFilterOptions);
+
+/**
  * @route   GET /api/products/stats
  * @desc    Get product statistics
  * @access  Private (Admin)

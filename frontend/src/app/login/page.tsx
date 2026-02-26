@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, Suspense } from 'react'
+import { useState, useEffect, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
@@ -27,6 +27,13 @@ function LoginForm() {
   const [isGoogleLoading, setIsGoogleLoading] = useState(false)
   const login = useAuthStore(state => state.login)
   const googleLogin = useAuthStore(state => state.googleLogin)
+  const isAuthenticated = useAuthStore(state => state.isAuthenticated)
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      router.replace('/')
+    }
+  }, [isAuthenticated, router])
 
   const {
     register,
@@ -133,13 +140,6 @@ function LoginForm() {
             </div>
 
             <div className={s.rememberRow}>
-              <label className={s.checkboxLabel}>
-                <input
-                  type="checkbox"
-                  className={s.checkbox}
-                />
-                <span className={s.rememberText}>Запам'ятати мене</span>
-              </label>
               <Link
                 href="/forgot-password"
                 className={s.forgotLink}
@@ -209,23 +209,25 @@ function LoginForm() {
             </p>
           </div>
 
-          <div className={s.dividerSection}>
-            <div className={s.divider}>
-              <div className={s.dividerLine}>
-                <div className={s.dividerBorder}></div>
+          {process.env.NODE_ENV === 'development' && (
+            <div className={s.dividerSection}>
+              <div className={s.divider}>
+                <div className={s.dividerLine}>
+                  <div className={s.dividerBorder}></div>
+                </div>
+                <div className={s.dividerTextWrap}>
+                  <span className={s.dividerSpan}>
+                    Для тестування
+                  </span>
+                </div>
               </div>
-              <div className={s.dividerTextWrap}>
-                <span className={s.dividerSpan}>
-                  Для тестування
-                </span>
+              <div className={s.testInfo}>
+                <p className={s.testInfoTitle}>Тестовий аккаунт адміністратора:</p>
+                <p className={s.testInfoText}>Email: admin@electronics.com</p>
+                <p className={s.testInfoText}>Пароль: Admin123!@#</p>
               </div>
             </div>
-            <div className={s.testInfo}>
-              <p className={s.testInfoTitle}>Тестовий аккаунт адміністратора:</p>
-              <p className={s.testInfoText}>Email: admin@electronics.com</p>
-              <p className={s.testInfoText}>Пароль: Admin123!@#</p>
-            </div>
-          </div>
+          )}
         </div>
       </motion.div>
     </div>

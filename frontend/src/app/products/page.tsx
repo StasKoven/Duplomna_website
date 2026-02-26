@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState, useCallback, Suspense } from 'react'
+import { useEffect, useState, useCallback, Suspense, useRef } from 'react'
 import { useSearchParams, useRouter, usePathname } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Filter, X, ChevronDown, ChevronUp, RotateCcw } from 'lucide-react'
@@ -54,6 +54,9 @@ function ProductsContent() {
   // Local price inputs (before applying)
   const [localPriceMin, setLocalPriceMin] = useState(filters.minPrice)
   const [localPriceMax, setLocalPriceMax] = useState(filters.maxPrice)
+  
+  // Flag to prevent double fetch when URL sync sets filters
+  const isUrlSync = useRef(false)
 
   // Update URL with filters
   const updateURL = useCallback((newFilters: Filters) => {
@@ -81,6 +84,8 @@ function ProductsContent() {
     const sort = searchParams.get('sort') || 'newest'
     const inStock = searchParams.get('inStock') === 'true'
 
+    // Mark that this filter change came from URL sync to avoid double fetch
+    isUrlSync.current = true
     setFilters({ search, category, minPrice, maxPrice, brands, sort, inStock })
     setLocalPriceMin(minPrice)
     setLocalPriceMax(maxPrice)
@@ -91,29 +96,14 @@ function ProductsContent() {
   useEffect(() => {
     const fetchInitialData = async () => {
       try {
-        const [catResponse, productsResponse] = await Promise.all([
+        const [catResponse, filtersResponse] = await Promise.all([
           api.get('/categories'),
-          api.get('/products?limit=1000')
+          api.get('/products/filters')
         ])
         
         setCategories(catResponse.data.categories)
-        
-        // Extract unique brands
-        const brands = [...new Set(
-          productsResponse.data.products
-            .map((p: Product) => p.brand)
-            .filter(Boolean)
-        )] as string[]
-        setAllBrands(brands.sort())
-        
-        // Get price range
-        const prices = productsResponse.data.products.map((p: Product) => p.price)
-        if (prices.length > 0) {
-          setPriceRange({
-            min: Math.floor(Math.min(...prices)),
-            max: Math.ceil(Math.max(...prices))
-          })
-        }
+        setAllBrands(filtersResponse.data.brands)
+        setPriceRange(filtersResponse.data.priceRange)
       } catch (error) {
         console.error('Error fetching initial data:', error)
       }
@@ -124,6 +114,13 @@ function ProductsContent() {
 
   // Fetch products when filters change
   useEffect(() => {
+    // Skip if this change was triggered by URL sync (it will trigger via searchParams effect)
+    if (isUrlSync.current) {
+      isUrlSync.current = false
+    }
+
+    const controller = new AbortController()
+
     const fetchProducts = async () => {
       try {
         setLoading(true)
@@ -151,17 +148,21 @@ function ProductsContent() {
         }
         params.set('sort', sortMap[filters.sort] || '-createdAt')
 
-        const response = await api.get(`/products?${params}`)
+        const response = await api.get(`/products?${params}`, { signal: controller.signal })
         setProducts(response.data.products)
         setTotal(response.data.pagination.total)
-      } catch (error) {
-        console.error('Error fetching products:', error)
+      } catch (error: any) {
+        if (error?.name !== 'CanceledError' && error?.code !== 'ERR_CANCELED') {
+          console.error('Error fetching products:', error)
+        }
       } finally {
         setLoading(false)
       }
     }
 
     fetchProducts()
+
+    return () => controller.abort()
   }, [filters, page])
 
   // Handle filter changes
@@ -523,7 +524,7 @@ function ProductsContent() {
               {(filters.minPrice || filters.maxPrice) && (
                 <span className={s.filterTag}>
                   {filters.minPrice || 0} - {filters.maxPrice || '∞'} ₴
-                  <button onClick={() => { handleFilterChange('minPrice', ''); handleFilterChange('maxPrice', ''); setLocalPriceMin(''); setLocalPriceMax(''); }} className={s.tagRemoveBtn}>
+                  <button onClick={() => { const newFilters = { ...filters, minPrice: '', maxPrice: '' }; setFilters(newFilters); setLocalPriceMin(''); setLocalPriceMax(''); setPage(1); updateURL(newFilters); }} className={s.tagRemoveBtn}>
                     <X className={s.iconXs} />
                   </button>
                 </span>

@@ -313,6 +313,41 @@ exports.getRelatedProducts = async (req, res) => {
 };
 
 /**
+ * Get filter options (brands + price range)
+ */
+exports.getFilterOptions = async (req, res) => {
+  try {
+    const result = await Product.aggregate([
+      { $match: { isActive: true } },
+      {
+        $group: {
+          _id: null,
+          brands: { $addToSet: '$brand' },
+          minPrice: { $min: '$price' },
+          maxPrice: { $max: '$price' },
+        },
+      },
+    ]);
+
+    if (result.length === 0) {
+      return res.json({ brands: [], priceRange: { min: 0, max: 0 } });
+    }
+
+    const brands = result[0].brands.filter(Boolean).sort();
+    res.json({
+      brands,
+      priceRange: {
+        min: Math.floor(result[0].minPrice),
+        max: Math.ceil(result[0].maxPrice),
+      },
+    });
+  } catch (error) {
+    console.error('Get filter options error:', error);
+    res.status(500).json({ message: 'Failed to fetch filter options' });
+  }
+};
+
+/**
  * Get product statistics (Admin only)
  */
 exports.getProductStats = async (req, res) => {
