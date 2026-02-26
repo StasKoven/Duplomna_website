@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { Tag, X, Check } from 'lucide-react'
 import api from '@/lib/api'
 import { toast } from 'sonner'
+import s from './CouponInput.module.css'
 
 interface CouponInputProps {
   subtotal: number
@@ -58,27 +59,27 @@ export default function CouponInput({
 
   if (appliedCoupon) {
     return (
-      <div className="bg-green-50 border border-green-200 rounded-lg p-4">
-        <div className="flex items-start justify-between gap-3">
-          <div className="flex items-start gap-3 flex-1">
-            <div className="p-2 bg-green-100 rounded-lg">
-              <Check className="h-5 w-5 text-green-600" />
+      <div className={s.appliedContainer}>
+        <div className={s.appliedContent}>
+          <div className={s.appliedInner}>
+            <div className={s.iconContainer}>
+              <Check className={s.checkIcon} />
             </div>
-            <div className="flex-1">
-              <div className="flex items-center gap-2 mb-1">
-                <span className="font-semibold text-green-900">
+            <div className={s.contentArea}>
+              <div className={s.titleRow}>
+                <span className={s.titleText}>
                   Купон застосовано
                 </span>
-                <span className="px-2 py-0.5 bg-green-600 text-white text-xs font-mono rounded">
+                <span className={s.codeBadge}>
                   {appliedCoupon.code}
                 </span>
               </div>
-              <p className="text-sm text-green-700 mb-2">
+              <p className={s.description}>
                 {appliedCoupon.description}
               </p>
-              <div className="flex items-baseline gap-2">
-                <span className="text-sm text-green-600">Знижка:</span>
-                <span className="text-lg font-bold text-green-700">
+              <div className={s.discountRow}>
+                <span className={s.discountLabel}>Знижка:</span>
+                <span className={s.discountValue}>
                   -{appliedCoupon.discount.toLocaleString('uk-UA')} ₴
                 </span>
               </div>
@@ -86,10 +87,10 @@ export default function CouponInput({
           </div>
           <button
             onClick={handleRemoveCoupon}
-            className="p-2 hover:bg-green-100 rounded-md transition-colors"
+            className={s.removeButton}
             title="Видалити купон"
           >
-            <X className="h-4 w-4 text-green-600" />
+            <X className={s.removeIcon} />
           </button>
         </div>
       </div>
@@ -97,19 +98,19 @@ export default function CouponInput({
   }
 
   return (
-    <div className="bg-card border rounded-lg p-4">
-      <div className="flex items-center gap-2 mb-3">
-        <Tag className="h-5 w-5 text-primary" />
-        <h3 className="font-semibold">Є промокод?</h3>
+    <div className={s.inputContainer}>
+      <div className={s.headerRow}>
+        <Tag className={s.tagIcon} />
+        <h3 className={s.title}>Є промокод?</h3>
       </div>
       
-      <div className="flex gap-2">
+      <div className={s.inputRow}>
         <input
           type="text"
           value={code}
           onChange={(e) => setCode(e.target.value.toUpperCase())}
           placeholder="Введіть код купона"
-          className="input flex-1 font-mono"
+          className={`input ${s.input}`}
           disabled={loading}
           onKeyPress={(e) => {
             if (e.key === 'Enter') {
@@ -120,13 +121,13 @@ export default function CouponInput({
         <button
           onClick={handleApplyCoupon}
           disabled={loading || !code.trim()}
-          className="btn-primary whitespace-nowrap disabled:opacity-50"
+          className={`btn-primary ${s.applyButton}`}
         >
           {loading ? 'Перевірка...' : 'Застосувати'}
         </button>
       </div>
       
-      <p className="text-xs text-muted-foreground mt-2">
+      <p className={s.helpText}>
         Введіть промокод, щоб отримати знижку
       </p>
     </div>

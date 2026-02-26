@@ -1,0 +1,61 @@
+/* Сторінка "Про нас" */
+
+/* Загальний контейнер сторінки */
+.page {
+  @apply py-12;
+}
+
+/* Обгортка контенту */
+.wrapper {
+  @apply max-w-3xl mx-auto;
+}
+
+/* Заголовок сторінки */
+.title {
+  @apply text-4xl font-bold mb-6;
+}
+
+/* Блок прозового контенту */
+.content {
+  @apply max-w-none leading-relaxed;
+}
+
+/* Вступний текст */
+.intro {
+  @apply text-lg text-muted-foreground mb-6;
+}
+
+/* Секція контенту */
+.section {
+  @apply mb-8;
+}
+
+/* Заголовок секції */
+.sectionTitle {
+  @apply text-2xl font-bold mb-4;
+}
+
+/* Текст секції */
+.sectionText {
+  @apply text-muted-foreground;
+}
+
+/* Список переваг */
+.list {
+  @apply space-y-3 text-muted-foreground;
+}
+
+/* Елемент списку */
+.listItem {
+  @apply flex items-start gap-2;
+}
+
+/* Позначка (галочка) */
+.checkmark {
+  @apply text-primary mt-1;
+}
+
+/* Текст блоку переваг */
+.advantagesText {
+  @apply text-muted-foreground mb-4;
+}

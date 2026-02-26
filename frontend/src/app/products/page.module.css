@@ -1,0 +1,319 @@
+/* ==============================
+   Сторінка каталогу товарів
+   ============================== */
+
+/* Стан завантаження (Suspense fallback) */
+.loadingContainer {
+  @apply py-8;
+}
+
+.loadingPulse {
+  @apply animate-pulse;
+}
+
+.loadingTitle {
+  @apply h-8 bg-muted rounded w-1/4 mb-4;
+}
+
+.loadingGrid {
+  @apply grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4;
+}
+
+.loadingCard {
+  @apply h-64 bg-muted rounded-lg;
+}
+
+/* Головний контейнер сторінки */
+.pageContainer {
+  @apply py-4 sm:py-8;
+}
+
+/* === Заголовок сторінки === */
+.header {
+  @apply mb-4 sm:mb-8;
+}
+
+.title {
+  @apply text-2xl sm:text-3xl font-bold mb-1 sm:mb-2;
+}
+
+.subtitle {
+  @apply text-sm sm:text-base text-muted-foreground;
+}
+
+.clearSearchBtn {
+  @apply mt-2 text-sm text-primary hover:underline flex items-center gap-1;
+}
+
+/* === Розміри іконок === */
+.iconSm {
+  @apply h-4 w-4;
+}
+
+.iconMd {
+  @apply h-5 w-5;
+}
+
+.iconXs {
+  @apply h-3 w-3;
+}
+
+/* === Бічна панель фільтрів === */
+.filterSidebar {
+  @apply space-y-4;
+}
+
+/* Кнопка скидання фільтрів */
+.resetFiltersBtn {
+  @apply flex items-center gap-2 text-sm text-primary hover:underline w-full justify-center py-2 border border-primary rounded-lg;
+}
+
+/* Секція фільтра (категорії, ціна, бренди) */
+.filterSection {
+  @apply border rounded-lg overflow-hidden;
+}
+
+.sectionToggle {
+  @apply flex items-center justify-between w-full p-4 font-semibold hover:bg-accent/50 transition;
+}
+
+/* Список категорій */
+.categoryList {
+  @apply px-4 pb-4 space-y-1;
+}
+
+.categoryItem {
+  @apply block w-full text-left text-sm py-1.5 px-2 rounded transition;
+}
+
+.categoryItemActive {
+  @apply bg-primary text-primary-foreground;
+}
+
+.categoryItemInactive {
+  @apply hover:bg-accent;
+}
+
+/* Фільтр за ціною */
+.priceBody {
+  @apply px-4 pb-4 space-y-3;
+}
+
+.priceInputRow {
+  @apply flex gap-2 items-center;
+}
+
+.priceInputWrapper {
+  @apply flex-1;
+}
+
+.priceInput {
+  @apply w-full px-3 py-2 text-sm border rounded-md focus:outline-none focus:ring-2 focus:ring-primary;
+}
+
+.priceSeparator {
+  @apply text-muted-foreground;
+}
+
+.priceSliderSection {
+  @apply space-y-2;
+}
+
+.priceSlider {
+  @apply w-full accent-primary;
+}
+
+.priceRangeLabels {
+  @apply flex justify-between text-xs text-muted-foreground;
+}
+
+.applyPriceBtn {
+  @apply w-full py-2 bg-primary text-primary-foreground text-sm rounded-md hover:bg-primary/90 transition;
+}
+
+/* Фільтр за брендом */
+.brandList {
+  @apply px-4 pb-4 space-y-2 max-h-60 overflow-y-auto;
+}
+
+.brandLabel {
+  @apply flex items-center gap-2 cursor-pointer hover:bg-accent/50 p-1.5 rounded transition;
+}
+
+.checkbox {
+  @apply w-4 h-4 rounded border-gray-300 text-primary focus:ring-primary;
+}
+
+.brandText {
+  @apply text-sm;
+}
+
+/* Фільтр наявності на складі */
+.stockSection {
+  @apply border rounded-lg p-4;
+}
+
+.stockLabel {
+  @apply flex items-center gap-2 cursor-pointer;
+}
+
+.stockText {
+  @apply text-sm font-medium;
+}
+
+/* === Мобільна панель фільтрів і сортування === */
+.mobileBar {
+  @apply flex gap-2 mb-4 lg:hidden;
+}
+
+.mobileFilterBtn {
+  @apply flex-1 flex items-center justify-center gap-2 border rounded-lg py-2.5 px-4 text-sm font-medium transition;
+}
+
+.mobileFilterBtnActive {
+  @apply border-primary text-primary;
+}
+
+.mobileFilterBtnInactive {
+  @apply hover:bg-accent;
+}
+
+.filterBadge {
+  @apply bg-primary text-primary-foreground text-xs px-1.5 py-0.5 rounded-full;
+}
+
+.mobileSortSelect {
+  @apply flex-1 border rounded-lg py-2.5 px-4 text-sm font-medium bg-background;
+}
+
+/* === Десктопна панель сортування === */
+.desktopSortBar {
+  @apply hidden lg:flex items-center justify-between mb-6 pb-4 border-b;
+}
+
+.sortBarLeft {
+  @apply flex items-center gap-4;
+}
+
+.resetAllBtn {
+  @apply flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition;
+}
+
+.sortBarRight {
+  @apply flex items-center gap-2;
+}
+
+.sortLabel {
+  @apply text-sm text-muted-foreground;
+}
+
+.desktopSortSelect {
+  @apply border rounded-lg py-2 px-3 text-sm bg-background focus:outline-none focus:ring-2 focus:ring-primary;
+}
+
+/* === Мобільний drawer фільтрів === */
+.drawerOverlay {
+  @apply fixed inset-0 bg-black/50 z-50 lg:hidden;
+}
+
+.drawerPanel {
+  @apply fixed inset-y-0 left-0 w-[300px] bg-background z-50 lg:hidden overflow-y-auto;
+}
+
+.drawerContent {
+  @apply p-4;
+}
+
+.drawerHeader {
+  @apply flex items-center justify-between mb-6;
+}
+
+.drawerTitle {
+  @apply text-lg font-semibold;
+}
+
+.drawerCloseBtn {
+  @apply p-2 hover:bg-accent rounded-lg transition;
+}
+
+/* === Основна сітка сторінки === */
+.mainGrid {
+  @apply grid lg:grid-cols-4 gap-4 sm:gap-8;
+}
+
+.desktopSidebar {
+  @apply hidden lg:block lg:col-span-1;
+}
+
+.sidebarSticky {
+  @apply sticky top-24;
+}
+
+.productsColumn {
+  @apply lg:col-span-3;
+}
+
+/* === Теги активних фільтрів === */
+.activeFilterTags {
+  @apply flex flex-wrap gap-2 mb-4;
+}
+
+.filterTag {
+  @apply inline-flex items-center gap-1 px-3 py-1 bg-primary/10 text-primary text-sm rounded-full;
+}
+
+.tagRemoveBtn {
+  @apply hover:bg-primary/20 rounded-full p-0.5;
+}
+
+/* === Сітка товарів === */
+.productsGrid {
+  @apply grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-6;
+}
+
+/* Скелетон завантаження товарів */
+.skeletonCard {
+  @apply rounded-lg bg-muted animate-pulse h-64 sm:h-96;
+}
+
+/* === Порожній стан (товарів не знайдено) === */
+.emptyState {
+  @apply text-center py-12;
+}
+
+.emptyIcon {
+  @apply text-6xl mb-4;
+}
+
+.emptyTitle {
+  @apply text-xl font-semibold mb-2;
+}
+
+.emptyText {
+  @apply text-muted-foreground mb-4;
+}
+
+.emptyResetBtn {
+  @apply inline-flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition;
+}
+
+/* === Пагінація === */
+.pagination {
+  @apply flex justify-center items-center gap-2 mt-6 sm:mt-8;
+}
+
+.paginationArrow {
+  @apply px-3 py-2 border rounded-lg text-sm hover:bg-accent transition disabled:opacity-50 disabled:cursor-not-allowed;
+}
+
+.paginationPage {
+  @apply w-10 h-10 rounded-lg text-sm font-medium transition;
+}
+
+.paginationPageActive {
+  @apply bg-primary text-primary-foreground;
+}
+
+.paginationPageInactive {
+  @apply border hover:bg-accent;
+}

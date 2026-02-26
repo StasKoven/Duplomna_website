@@ -1,0 +1,49 @@
+/* Секція промо-пропозицій */
+.section {
+  @apply py-16 bg-muted/30;
+}
+
+/* Заголовок секції */
+.title {
+  @apply text-3xl font-bold tracking-tight mb-8 text-center;
+}
+
+/* Сітка карток */
+.gridLayout {
+  @apply grid grid-cols-1 md:grid-cols-3 gap-6;
+}
+
+/* Картка промо-акції */
+.card {
+  @apply relative overflow-hidden rounded-xl bg-gradient-to-br p-6 text-white transition-transform hover:scale-105;
+}
+
+/* Декоративне коло */
+.circle {
+  @apply absolute top-0 right-0 -mt-4 -mr-4 h-24 w-24 rounded-full bg-white/10;
+}
+
+/* Контент картки */
+.content {
+  @apply relative;
+}
+
+/* Обгортка іконки */
+.iconWrap {
+  @apply mb-4;
+}
+
+/* Іконка промо */
+.icon {
+  @apply h-8 w-8;
+}
+
+/* Назва акції */
+.cardTitle {
+  @apply text-xl font-bold mb-2;
+}
+
+/* Опис акції */
+.cardDescription {
+  @apply text-sm text-white/90;
+}

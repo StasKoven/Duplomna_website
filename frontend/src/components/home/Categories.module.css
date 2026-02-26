@@ -1,0 +1,76 @@
+/* Секція категорій */
+.section {
+  @apply py-8 sm:py-12 md:py-16 bg-muted/30;
+}
+
+/* Обгортка контейнера */
+.container {
+  @apply mx-auto px-4;
+}
+
+/* Заголовок секції */
+.header {
+  @apply flex items-center justify-between mb-4 sm:mb-6 md:mb-8;
+}
+
+.title {
+  @apply text-xl sm:text-2xl md:text-3xl font-bold tracking-tight;
+}
+
+.subtitle {
+  @apply text-sm sm:text-base text-muted-foreground mt-1 sm:mt-2;
+}
+
+/* Посилання "Дивитись всі" (десктоп) */
+.viewAllLink {
+  @apply hidden sm:flex items-center text-sm font-medium text-primary hover:underline;
+}
+
+/* Сітка категорій */
+.gridLayout {
+  @apply grid grid-cols-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 sm:gap-4;
+}
+
+/* Скелетон завантаження */
+.skeleton {
+  @apply aspect-square rounded-lg bg-muted animate-pulse;
+}
+
+/* Посилання на категорію */
+.categoryLink {
+  @apply block;
+}
+
+/* Картка категорії */
+.card {
+  @apply relative aspect-square rounded-lg sm:rounded-xl bg-background border overflow-hidden transition-all hover:shadow-lg active:scale-95 sm:hover:scale-105;
+}
+
+/* Зображення категорії */
+.cardImage {
+  @apply object-cover;
+}
+
+/* Емодзі-заглушка */
+.emojiContainer {
+  @apply flex items-center justify-center h-full text-4xl sm:text-5xl md:text-6xl;
+}
+
+/* Градієнтний оверлей */
+.overlay {
+  @apply absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity;
+}
+
+/* Назва категорії */
+.categoryName {
+  @apply mt-2 sm:mt-3 text-xs sm:text-sm font-medium text-center group-hover:text-primary transition-colors line-clamp-1;
+}
+
+/* Мобільне посилання "Дивитись всі" */
+.mobileViewAll {
+  @apply mt-4 sm:hidden text-center;
+}
+
+.mobileViewAllLink {
+  @apply inline-flex items-center text-sm font-medium text-primary;
+}

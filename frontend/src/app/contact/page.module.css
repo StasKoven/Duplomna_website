@@ -1,0 +1,131 @@
+/* Сторінка "Контакти" */
+
+/* Загальний контейнер сторінки */
+.page {
+  @apply py-12;
+}
+
+/* Обгортка контенту */
+.wrapper {
+  @apply max-w-5xl mx-auto;
+}
+
+/* Шапка сторінки */
+.header {
+  @apply text-center mb-12;
+}
+
+/* Назва сторінки */
+.title {
+  @apply text-4xl font-bold mb-4;
+}
+
+/* Підзаголовок */
+.subtitle {
+  @apply text-muted-foreground max-w-2xl mx-auto;
+}
+
+/* Сітка контенту */
+.gridLayout {
+  @apply grid md:grid-cols-2 gap-8;
+}
+
+/* Заголовок секції */
+.sectionTitle {
+  @apply text-2xl font-bold mb-6;
+}
+
+/* Список контактів */
+.contactList {
+  @apply space-y-6;
+}
+
+/* Елемент контактної інформації */
+.contactItem {
+  @apply flex items-start gap-4;
+}
+
+/* Обгортка іконки */
+.iconBox {
+  @apply p-3 bg-primary/10 rounded-lg;
+}
+
+/* Іконка контакту */
+.icon {
+  @apply h-6 w-6 text-primary;
+}
+
+/* Назва контакту */
+.contactLabel {
+  @apply font-semibold mb-1;
+}
+
+/* Текст контакту */
+.contactText {
+  @apply text-muted-foreground;
+}
+
+/* Додатковий текст контакту */
+.contactSubtext {
+  @apply text-sm text-muted-foreground;
+}
+
+/* Блок годин роботи */
+.hoursBox {
+  @apply mt-8 p-6 bg-muted rounded-lg;
+}
+
+/* Заголовок годин роботи */
+.hoursTitle {
+  @apply font-semibold mb-3;
+}
+
+/* Список годин роботи */
+.hoursList {
+  @apply space-y-2 text-sm;
+}
+
+/* Рядок годин */
+.hoursRow {
+  @apply flex justify-between;
+}
+
+/* Назва дня тижня */
+.hoursLabel {
+  @apply text-muted-foreground;
+}
+
+/* Значення часу роботи */
+.hoursValue {
+  @apply font-medium;
+}
+
+/* Форма зворотного зв'язку */
+.form {
+  @apply space-y-4;
+}
+
+/* Мітка поля форми */
+.label {
+  @apply block text-sm font-medium mb-2;
+}
+
+/* Поле введення */
+.input {
+  @apply w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary;
+}
+
+/* Текстове поле */
+.textarea {
+  @apply w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary resize-none;
+}
+
+/* Кнопка відправки */
+.submitBtn {
+  @apply w-full bg-primary text-white py-3 px-4 rounded-md hover:bg-primary/90 transition font-medium flex items-center justify-center gap-2;
+}
+
+/* Іконка відправки */
+.sendIcon {
+  @apply h-5 w-5;
+}

@@ -4,8 +4,9 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { Facebook, Instagram, Twitter, Mail, Phone, MapPin, ChevronDown } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import s from './Footer.module.css'
 
-// Collapsible section for mobile
+// Згортана секція для мобільних пристроїв
 function FooterSection({ 
   title, 
   children,
@@ -18,22 +19,22 @@ function FooterSection({
   const [isOpen, setIsOpen] = useState(defaultOpen)
 
   return (
-    <div className="border-b border-border/50 md:border-0 py-3 md:py-0">
+    <div className={s.sectionWrapper}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center justify-between w-full md:cursor-default"
+        className={s.sectionButton}
       >
-        <h3 className="text-base sm:text-lg font-semibold">{title}</h3>
+        <h3 className={s.sectionTitle}>{title}</h3>
         <ChevronDown 
           className={cn(
-            "h-5 w-5 transition-transform md:hidden",
-            isOpen && "rotate-180"
+            s.chevron,
+            isOpen && s.chevronOpen
           )} 
         />
       </button>
       <div className={cn(
-        "overflow-hidden transition-all duration-300 md:overflow-visible",
-        isOpen ? "max-h-96 mt-3 md:mt-4" : "max-h-0 md:max-h-none md:mt-4"
+        s.sectionContent,
+        isOpen ? s.sectionContentOpen : s.sectionContentClosed
       )}>
         {children}
       </div>
@@ -43,57 +44,55 @@ function FooterSection({
 
 export default function Footer() {
   return (
-    <footer className="border-t bg-muted/50">
-      <div className="container-custom py-6 sm:py-8 md:py-12">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-0 md:gap-8">
+    <footer className={s.footer}>
+      <div className={`container-custom ${s.container}`}>
+        <div className={s.gridLayout}>
           {/* ==================== */}
-          {/* About Section */}
           {/* Інформація про магазин */}
           {/* Завжди видима на мобільних */}
           {/* Містить опис та соціальні мережі */}
           {/* ==================== */}
-          <div className="pb-4 md:pb-0">
-            <h3 className="mb-3 md:mb-4 text-base sm:text-lg font-semibold">TechStore</h3>
-            <p className="text-sm text-muted-foreground mb-4">
+          <div className={s.aboutSection}>
+            <h3 className={s.aboutTitle}>TechStore</h3>
+            <p className={s.aboutDescription}>
               Ваш надійний партнер у світі електроніки. Найкращі ціни та якість гарантовані.
             </p>
-            <div className="flex space-x-4">
-              <a href="#" className="text-muted-foreground hover:text-primary p-2 -ml-2 rounded-md hover:bg-accent transition-colors">
-                <Facebook className="h-5 w-5" />
+            <div className={s.socialLinks}>
+              <a href="#" className={s.socialLinkFirst}>
+                <Facebook className={s.socialIcon} />
               </a>
-              <a href="#" className="text-muted-foreground hover:text-primary p-2 rounded-md hover:bg-accent transition-colors">
-                <Instagram className="h-5 w-5" />
+              <a href="#" className={s.socialLink}>
+                <Instagram className={s.socialIcon} />
               </a>
-              <a href="#" className="text-muted-foreground hover:text-primary p-2 rounded-md hover:bg-accent transition-colors">
-                <Twitter className="h-5 w-5" />
+              <a href="#" className={s.socialLink}>
+                <Twitter className={s.socialIcon} />
               </a>
             </div>
           </div>
 
           {/* ==================== */}
-          {/* Quick Links Section */}
           {/* Швидкі посилання для покупців */}
           {/* Згортається на мобільних пристроях */}
           {/* ==================== */}
           <FooterSection title="Покупцям">
-            <ul className="space-y-2.5 text-sm">
+            <ul className={s.linksList}>
               <li>
-                <Link href="/about" className="text-muted-foreground hover:text-primary transition-colors inline-block py-0.5">
+                <Link href="/about" className={s.footerLink}>
                   Про нас
                 </Link>
               </li>
               <li>
-                <Link href="/delivery" className="text-muted-foreground hover:text-primary transition-colors inline-block py-0.5">
+                <Link href="/delivery" className={s.footerLink}>
                   Доставка та оплата
                 </Link>
               </li>
               <li>
-                <Link href="/warranty" className="text-muted-foreground hover:text-primary transition-colors inline-block py-0.5">
+                <Link href="/warranty" className={s.footerLink}>
                   Гарантія та повернення
                 </Link>
               </li>
               <li>
-                <Link href="/faq" className="text-muted-foreground hover:text-primary transition-colors inline-block py-0.5">
+                <Link href="/faq" className={s.footerLink}>
                   Питання та відповіді
                 </Link>
               </li>
@@ -101,29 +100,28 @@ export default function Footer() {
           </FooterSection>
 
           {/* ==================== */}
-          {/* Categories Section */}
           {/* Посилання на категорії товарів */}
           {/* Згортається на мобільних пристроях */}
           {/* ==================== */}
           <FooterSection title="Категорії">
-            <ul className="space-y-2.5 text-sm">
+            <ul className={s.linksList}>
               <li>
-                <Link href="/products?category=smartphones" className="text-muted-foreground hover:text-primary transition-colors inline-block py-0.5">
+                <Link href="/products?category=smartphones" className={s.footerLink}>
                   Смартфони
                 </Link>
               </li>
               <li>
-                <Link href="/products?category=laptops" className="text-muted-foreground hover:text-primary transition-colors inline-block py-0.5">
+                <Link href="/products?category=laptops" className={s.footerLink}>
                   Ноутбуки
                 </Link>
               </li>
               <li>
-                <Link href="/products?category=tablets" className="text-muted-foreground hover:text-primary transition-colors inline-block py-0.5">
+                <Link href="/products?category=tablets" className={s.footerLink}>
                   Планшети
                 </Link>
               </li>
               <li>
-                <Link href="/products?category=accessories" className="text-muted-foreground hover:text-primary transition-colors inline-block py-0.5">
+                <Link href="/products?category=accessories" className={s.footerLink}>
                   Аксесуари
                 </Link>
               </li>
@@ -131,26 +129,25 @@ export default function Footer() {
           </FooterSection>
 
           {/* ==================== */}
-          {/* Contact Section */}
           {/* Контактна інформація магазину */}
           {/* Адреса, телефон, email */}
           {/* Відкрита за замовчуванням на мобільних */}
           {/* ==================== */}
           <FooterSection title="Контакти" defaultOpen>
-            <ul className="space-y-3 text-sm">
-              <li className="flex items-start space-x-2">
-                <MapPin className="h-5 w-5 text-muted-foreground flex-shrink-0 mt-0.5" />
-                <span className="text-muted-foreground">м. Київ, вул. Хрещатик, 1</span>
+            <ul className={s.contactList}>
+              <li className={s.contactItemAddress}>
+                <MapPin className={s.addressIcon} />
+                <span className={s.addressText}>м. Київ, вул. Хрещатик, 1</span>
               </li>
               <li>
-                <a href="tel:+380441234567" className="flex items-center space-x-2 text-muted-foreground hover:text-primary transition-colors py-1">
-                  <Phone className="h-5 w-5 flex-shrink-0" />
+                <a href="tel:+380441234567" className={s.contactLink}>
+                  <Phone className={s.contactIcon} />
                   <span>+38 (044) 123-45-67</span>
                 </a>
               </li>
               <li>
-                <a href="mailto:info@techstore.ua" className="flex items-center space-x-2 text-muted-foreground hover:text-primary transition-colors py-1">
-                  <Mail className="h-5 w-5 flex-shrink-0" />
+                <a href="mailto:info@techstore.ua" className={s.contactLink}>
+                  <Mail className={s.contactIcon} />
                   <span>info@techstore.ua</span>
                 </a>
               </li>
@@ -158,7 +155,8 @@ export default function Footer() {
           </FooterSection>
         </div>
 
-        <div className="mt-6 md:mt-8 pt-6 md:pt-8 border-t text-center text-sm text-muted-foreground">
+        {/* Нижня панель з копірайтом */}
+        <div className={s.bottomBar}>
           <p>&copy; {new Date().getFullYear()} TechStore. Всі права захищені.</p>
         </div>
       </div>

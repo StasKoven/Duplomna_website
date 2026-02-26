@@ -1,0 +1,133 @@
+/* ==========================================
+   Картка відгуку — ReviewCard
+   ========================================== */
+
+/* Контейнер картки відгуку */
+.card {
+  @apply border-b pb-6 last:border-0;
+}
+
+/* Основний макет картки */
+.content {
+  @apply flex items-start gap-4;
+}
+
+/* --- Аватар користувача --- */
+
+/* Обгортка аватара */
+.avatarContainer {
+  @apply flex-shrink-0;
+}
+
+/* Зображення аватара */
+.avatarImage {
+  @apply rounded-full;
+}
+
+/* Заглушка аватара (ініціали) */
+.avatarPlaceholder {
+  @apply w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary font-semibold;
+}
+
+/* --- Основний вміст відгуку --- */
+
+/* Тіло відгуку */
+.body {
+  @apply flex-1 min-w-0;
+}
+
+/* Заголовок відгуку (ім'я + дата) */
+.header {
+  @apply flex items-start justify-between gap-4 mb-2;
+}
+
+/* Рядок з ім'ям та значком підтвердження */
+.userNameRow {
+  @apply flex items-center gap-2 mb-1;
+}
+
+/* Ім'я користувача */
+.userName {
+  @apply font-semibold;
+}
+
+/* Значок підтвердженої покупки */
+.verifiedBadge {
+  @apply flex items-center gap-1 text-xs text-green-600;
+}
+
+/* Іконка підтвердження */
+.verifiedIcon {
+  @apply h-3 w-3;
+}
+
+/* Дата відгуку */
+.date {
+  @apply text-xs text-muted-foreground whitespace-nowrap;
+}
+
+/* --- Текстовий вміст --- */
+
+/* Заголовок відгуку */
+.title {
+  @apply font-medium mb-2;
+}
+
+/* Коментар відгуку */
+.comment {
+  @apply text-sm text-foreground mb-3 whitespace-pre-wrap;
+}
+
+/* --- Зображення відгуку --- */
+
+/* Обгортка секції зображень */
+.imagesSection {
+  @apply mb-3;
+}
+
+/* Сітка зображень */
+.imagesGrid {
+  @apply flex flex-wrap gap-2;
+}
+
+/* Обгортка окремого зображення */
+.imageWrapper {
+  @apply relative w-20 h-20 rounded-lg overflow-hidden border cursor-pointer hover:opacity-80 transition;
+}
+
+/* Зображення (object-cover) */
+.imageCover {
+  @apply object-cover;
+}
+
+/* Кнопка "Показати ще" */
+.showMoreBtn {
+  @apply text-sm text-primary hover:underline mt-2;
+}
+
+/* --- Кнопка "Корисно" --- */
+
+/* Базовий стиль кнопки */
+.helpfulBtn {
+  @apply flex items-center gap-2 text-sm transition;
+}
+
+/* Кнопка "Корисно" — активна */
+.helpfulBtnActive {
+  @apply text-primary font-medium;
+}
+
+/* Кнопка "Корисно" — неактивна */
+.helpfulBtnInactive {
+  @apply text-muted-foreground hover:text-primary;
+}
+
+/* Іконка кнопки "Корисно" */
+.helpfulIcon {
+  @apply h-4 w-4;
+}
+
+/* Іконка кнопки "Корисно" — заповнена */
+.helpfulIconActive {
+  @apply fill-current;
+}

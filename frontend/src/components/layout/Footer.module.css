@@ -1,0 +1,158 @@
+/* ==================== */
+/* Футер сайту */
+/* ==================== */
+
+/* Основний контейнер футера */
+.footer {
+  @apply border-t bg-muted/50;
+}
+
+/* Внутрішній контейнер з відступами */
+.container {
+  @apply mx-auto px-4 py-6 sm:py-8 md:py-12;
+}
+
+/* Сітка колонок футера */
+.gridLayout {
+  @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-0 md:gap-8;
+}
+
+/* ==================== */
+/* Секція "Про магазин" */
+/* ==================== */
+
+/* Обгортка секції "Про нас" */
+.aboutSection {
+  @apply pb-4 md:pb-0;
+}
+
+/* Заголовок секції "Про нас" */
+.aboutTitle {
+  @apply mb-3 md:mb-4 text-base sm:text-lg font-semibold;
+}
+
+/* Опис магазину */
+.aboutDescription {
+  @apply text-sm text-muted-foreground mb-4;
+}
+
+/* Контейнер іконок соціальних мереж */
+.socialLinks {
+  @apply flex space-x-4;
+}
+
+/* Перша іконка соціальної мережі (з від'ємним лівим відступом) */
+.socialLinkFirst {
+  @apply text-muted-foreground hover:text-primary p-2 -ml-2 rounded-md hover:bg-accent transition-colors;
+}
+
+/* Іконка соціальної мережі */
+.socialLink {
+  @apply text-muted-foreground hover:text-primary p-2 rounded-md hover:bg-accent transition-colors;
+}
+
+/* Розмір іконки соціальної мережі */
+.socialIcon {
+  @apply h-5 w-5;
+}
+
+/* ==================== */
+/* Згортана секція (FooterSection) */
+/* ==================== */
+
+/* Обгортка згортаної секції */
+.sectionWrapper {
+  @apply border-b border-border/50 md:border-0 py-3 md:py-0;
+}
+
+/* Кнопка заголовка секції */
+.sectionButton {
+  @apply flex items-center justify-between w-full md:cursor-default;
+}
+
+/* Заголовок секції */
+.sectionTitle {
+  @apply text-base sm:text-lg font-semibold;
+}
+
+/* Іконка стрілки (шеврон) */
+.chevron {
+  @apply h-5 w-5 transition-transform md:hidden;
+}
+
+/* Іконка стрілки у розгорнутому стані */
+.chevronOpen {
+  @apply rotate-180;
+}
+
+/* Вміст секції (базові стилі) */
+.sectionContent {
+  @apply overflow-hidden transition-all duration-300 md:overflow-visible;
+}
+
+/* Вміст секції у відкритому стані */
+.sectionContentOpen {
+  @apply max-h-96 mt-3 md:mt-4;
+}
+
+/* Вміст секції у закритому стані */
+.sectionContentClosed {
+  @apply max-h-0 md:max-h-none md:mt-4;
+}
+
+/* ==================== */
+/* Списки посилань */
+/* ==================== */
+
+/* Список посилань (покупцям, категорії) */
+.linksList {
+  @apply space-y-2.5 text-sm;
+}
+
+/* Посилання у списку */
+.footerLink {
+  @apply text-muted-foreground hover:text-primary transition-colors inline-block py-0.5;
+}
+
+/* ==================== */
+/* Контактна інформація */
+/* ==================== */
+
+/* Список контактів */
+.contactList {
+  @apply space-y-3 text-sm;
+}
+
+/* Елемент контакту з адресою */
+.contactItemAddress {
+  @apply flex items-start space-x-2;
+}
+
+/* Іконка адреси */
+.addressIcon {
+  @apply h-5 w-5 text-muted-foreground flex-shrink-0 mt-0.5;
+}
+
+/* Текст адреси */
+.addressText {
+  @apply text-muted-foreground;
+}
+
+/* Посилання на контакт (телефон, email) */
+.contactLink {
+  @apply flex items-center space-x-2 text-muted-foreground hover:text-primary transition-colors py-1;
+}
+
+/* Іконка контакту */
+.contactIcon {
+  @apply h-5 w-5 flex-shrink-0;
+}
+
+/* ==================== */
+/* Нижня панель з копірайтом */
+/* ==================== */
+
+/* Нижня панель футера */
+.bottomBar {
+  @apply mt-6 md:mt-8 pt-6 md:pt-8 border-t text-center text-sm text-muted-foreground;
+}

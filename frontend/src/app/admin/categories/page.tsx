@@ -6,6 +6,7 @@ import { useAuthStore } from '@/store/authStore'
 import api from '@/lib/api'
 import { Plus, Edit, Trash2, Search, X } from 'lucide-react'
 import { toast } from 'sonner'
+import s from './page.module.css'
 
 interface Category {
   _id: string
@@ -136,82 +137,82 @@ export default function AdminCategoriesPage() {
   }
 
   return (
-    <div className="container-custom py-8">
-      <div className="flex flex-wrap items-center justify-between gap-4 mb-8">
+    <div className={`container-custom ${s.page}`}>
+      <div className={s.header}>
         <div>
-          <h1 className="text-3xl font-bold mb-2">Категорії</h1>
-          <p className="text-muted-foreground">
+          <h1 className={s.title}>Категорії</h1>
+          <p className={s.subtitle}>
             Всього категорій: {categories.length}
           </p>
         </div>
         <button
           onClick={() => handleOpenModal()}
-          className="btn-primary flex items-center gap-2"
+          className={`btn-primary ${s.addButton}`}
         >
-          <Plus className="h-5 w-5" />
+          <Plus className={s.buttonIcon} />
           Додати категорію
         </button>
       </div>
 
       {/* Search */}
-      <div className="mb-6">
-        <div className="relative max-w-md">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+      <div className={s.searchWrapper}>
+        <div className={s.searchContainer}>
+          <Search className={s.searchIcon} />
           <input
             type="text"
             placeholder="Пошук категорій..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
+            className={s.searchInput}
           />
         </div>
       </div>
 
       {loading ? (
-        <div className="text-center py-12">Завантаження...</div>
+        <div className={s.loading}>Завантаження...</div>
       ) : (
-        <div className="bg-card border rounded-lg overflow-hidden">
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead className="bg-muted">
+        <div className={s.tableContainer}>
+          <div className={s.tableScroll}>
+            <table className={s.table}>
+              <thead className={s.thead}>
                 <tr>
-                  <th className="text-left py-3 px-4">Назва</th>
-                  <th className="text-left py-3 px-4">Slug</th>
-                  <th className="text-left py-3 px-4">Іконка</th>
-                  <th className="text-left py-3 px-4">Опис</th>
-                  <th className="text-left py-3 px-4">Дата створення</th>
-                  <th className="text-right py-3 px-4">Дії</th>
+                  <th className={s.th}>Назва</th>
+                  <th className={s.th}>Slug</th>
+                  <th className={s.th}>Іконка</th>
+                  <th className={s.th}>Опис</th>
+                  <th className={s.th}>Дата створення</th>
+                  <th className={s.thRight}>Дії</th>
                 </tr>
               </thead>
               <tbody>
                 {filteredCategories.map((category) => (
-                  <tr key={category._id} className="border-t hover:bg-muted/50">
-                    <td className="py-3 px-4 font-medium">{category.name}</td>
-                    <td className="py-3 px-4 text-sm text-muted-foreground">
+                  <tr key={category._id} className={s.tr}>
+                    <td className={s.tdName}>{category.name}</td>
+                    <td className={s.tdMuted}>
                       {category.slug}
                     </td>
-                    <td className="py-3 px-4 text-sm">{category.icon || '-'}</td>
-                    <td className="py-3 px-4 text-sm text-muted-foreground max-w-xs truncate">
+                    <td className={s.tdIcon}>{category.icon || '-'}</td>
+                    <td className={s.tdDescription}>
                       {category.description || '-'}
                     </td>
-                    <td className="py-3 px-4 text-sm text-muted-foreground">
+                    <td className={s.tdMuted}>
                       {new Date(category.createdAt).toLocaleDateString('uk-UA')}
                     </td>
-                    <td className="py-3 px-4">
-                      <div className="flex items-center justify-end gap-2">
+                    <td className={s.tdActions}>
+                      <div className={s.actionsContainer}>
                         <button
                           onClick={() => handleOpenModal(category)}
-                          className="p-2 hover:bg-muted rounded-md transition-colors"
+                          className={s.actionButton}
                           title="Редагувати"
                         >
-                          <Edit className="h-4 w-4 text-blue-600" />
+                          <Edit className={s.editIcon} />
                         </button>
                         <button
                           onClick={() => handleDelete(category._id, category.name)}
-                          className="p-2 hover:bg-muted rounded-md transition-colors"
+                          className={s.actionButton}
                           title="Видалити"
                         >
-                          <Trash2 className="h-4 w-4 text-red-600" />
+                          <Trash2 className={s.deleteIcon} />
                         </button>
                       </div>
                     </td>
@@ -222,7 +223,7 @@ export default function AdminCategoriesPage() {
           </div>
 
           {filteredCategories.length === 0 && (
-            <div className="text-center py-12 text-muted-foreground">
+            <div className={s.emptyState}>
               {searchTerm ? 'Категорій не знайдено' : 'Немає категорій'}
             </div>
           )}
@@ -231,23 +232,23 @@ export default function AdminCategoriesPage() {
 
       {/* Modal */}
       {showModal && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className="bg-card rounded-lg max-w-md w-full p-6">
-            <div className="flex items-center justify-between mb-6">
-              <h2 className="text-2xl font-bold">
+        <div className={s.overlay}>
+          <div className={s.modal}>
+            <div className={s.modalHeader}>
+              <h2 className={s.modalTitle}>
                 {editingCategory ? 'Редагувати категорію' : 'Нова категорія'}
               </h2>
               <button
                 onClick={handleCloseModal}
-                className="p-2 hover:bg-muted rounded-md transition-colors"
+                className={s.closeButton}
               >
-                <X className="h-5 w-5" />
+                <X className={s.closeIcon} />
               </button>
             </div>
 
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form onSubmit={handleSubmit} className={s.form}>
               <div>
-                <label className="block text-sm font-medium mb-2">
+                <label className={s.label}>
                   Назва категорії *
                 </label>
                 <input
@@ -256,25 +257,25 @@ export default function AdminCategoriesPage() {
                   onChange={(e) =>
                     setFormData({ ...formData, name: e.target.value })
                   }
-                  className="input w-full"
+                  className={`input ${s.formInput}`}
                   required
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium mb-2">Опис</label>
+                <label className={s.label}>Опис</label>
                 <textarea
                   value={formData.description}
                   onChange={(e) =>
                     setFormData({ ...formData, description: e.target.value })
                   }
-                  className="input w-full"
+                  className={`input ${s.formInput}`}
                   rows={3}
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium mb-2">
+                <label className={s.label}>
                   Іконка (Lucide React)
                 </label>
                 <input
@@ -283,23 +284,23 @@ export default function AdminCategoriesPage() {
                   onChange={(e) =>
                     setFormData({ ...formData, icon: e.target.value })
                   }
-                  className="input w-full"
+                  className={`input ${s.formInput}`}
                   placeholder="Smartphone, Laptop, Headphones..."
                 />
-                <p className="text-xs text-muted-foreground mt-1">
+                <p className={s.hint}>
                   Назва іконки з бібліотеки Lucide React
                 </p>
               </div>
 
-              <div className="flex gap-3 pt-4">
+              <div className={s.buttonRow}>
                 <button
                   type="button"
                   onClick={handleCloseModal}
-                  className="btn-secondary flex-1"
+                  className={`btn-secondary ${s.buttonHalf}`}
                 >
                   Скасувати
                 </button>
-                <button type="submit" className="btn-primary flex-1">
+                <button type="submit" className={`btn-primary ${s.buttonHalf}`}>
                   {editingCategory ? 'Зберегти' : 'Створити'}
                 </button>
               </div>

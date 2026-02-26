@@ -7,6 +7,7 @@ import { motion } from 'framer-motion'
 import { RatingDisplay } from './Rating'
 import { formatDistance } from 'date-fns'
 import { uk } from 'date-fns/locale'
+import s from './ReviewCard.module.css'
 
 interface Review {
   _id: string
@@ -40,44 +41,44 @@ export function ReviewCard({ review, onHelpful, currentUserId }: ReviewCardProps
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="border-b pb-6 last:border-0"
+      className={s.card}
     >
-      <div className="flex items-start gap-4">
-        {/* User Avatar */}
-        <div className="flex-shrink-0">
+      <div className={s.content}>
+        {/* Аватар користувача */}
+        <div className={s.avatarContainer}>
           {review.user.avatar ? (
             <Image
               src={review.user.avatar}
               alt={review.user.firstName}
               width={48}
               height={48}
-              className="rounded-full"
+              className={s.avatarImage}
             />
           ) : (
-            <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary font-semibold">
+            <div className={s.avatarPlaceholder}>
               {review.user.firstName[0]}{review.user.lastName[0]}
             </div>
           )}
         </div>
 
-        <div className="flex-1 min-w-0">
-          {/* Header */}
-          <div className="flex items-start justify-between gap-4 mb-2">
+        <div className={s.body}>
+          {/* Заголовок */}
+          <div className={s.header}>
             <div>
-              <div className="flex items-center gap-2 mb-1">
-                <h4 className="font-semibold">
+              <div className={s.userNameRow}>
+                <h4 className={s.userName}>
                   {review.user.firstName} {review.user.lastName}
                 </h4>
                 {review.isVerifiedPurchase && (
-                  <div className="flex items-center gap-1 text-xs text-green-600">
-                    <CheckCircle className="h-3 w-3" />
+                  <div className={s.verifiedBadge}>
+                    <CheckCircle className={s.verifiedIcon} />
                     <span>Підтверджена покупка</span>
                   </div>
                 )}
               </div>
               <RatingDisplay rating={review.rating} showCount={false} size="sm" />
             </div>
-            <span className="text-xs text-muted-foreground whitespace-nowrap">
+            <span className={s.date}>
               {formatDistance(new Date(review.createdAt), new Date(), {
                 addSuffix: true,
                 locale: uk
@@ -85,31 +86,31 @@ export function ReviewCard({ review, onHelpful, currentUserId }: ReviewCardProps
             </span>
           </div>
 
-          {/* Title */}
+          {/* Заголовок відгуку */}
           {review.title && (
-            <h5 className="font-medium mb-2">{review.title}</h5>
+            <h5 className={s.title}>{review.title}</h5>
           )}
 
-          {/* Comment */}
-          <p className="text-sm text-foreground mb-3 whitespace-pre-wrap">
+          {/* Коментар */}
+          <p className={s.comment}>
             {review.comment}
           </p>
 
-          {/* Images */}
+          {/* Зображення */}
           {review.images && review.images.length > 0 && (
-            <div className="mb-3">
-              <div className="flex flex-wrap gap-2">
+            <div className={s.imagesSection}>
+              <div className={s.imagesGrid}>
                 {displayImages?.map((img, idx) => (
                   <div
                     key={idx}
-                    className="relative w-20 h-20 rounded-lg overflow-hidden border cursor-pointer hover:opacity-80 transition"
+                    className={s.imageWrapper}
                   >
                     <Image
                       src={img}
                       alt={`Review image ${idx + 1}`}
                       fill
                       sizes="80px"
-                      className="object-cover"
+                      className={s.imageCover}
                     />
                   </div>
                 ))}
@@ -117,7 +118,7 @@ export function ReviewCard({ review, onHelpful, currentUserId }: ReviewCardProps
               {review.images.length > 3 && !showAllImages && (
                 <button
                   onClick={() => setShowAllImages(true)}
-                  className="text-sm text-primary hover:underline mt-2"
+                  className={s.showMoreBtn}
                 >
                   Показати ще {review.images.length - 3} фото
                 </button>
@@ -125,16 +126,14 @@ export function ReviewCard({ review, onHelpful, currentUserId }: ReviewCardProps
             </div>
           )}
 
-          {/* Helpful Button */}
+          {/* Кнопка "Корисно" */}
           <button
             onClick={() => onHelpful(review._id)}
-            className={`flex items-center gap-2 text-sm transition ${
-              isHelpful
-                ? 'text-primary font-medium'
-                : 'text-muted-foreground hover:text-primary'
+            className={`${s.helpfulBtn} ${
+              isHelpful ? s.helpfulBtnActive : s.helpfulBtnInactive
             }`}
           >
-            <ThumbsUp className={`h-4 w-4 ${isHelpful ? 'fill-current' : ''}`} />
+            <ThumbsUp className={`${s.helpfulIcon} ${isHelpful ? s.helpfulIconActive : ''}`} />
             <span>
               Корисно {review.helpful.length > 0 && `(${review.helpful.length})`}
             </span>

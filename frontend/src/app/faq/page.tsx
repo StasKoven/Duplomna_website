@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { ChevronDown } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
+import s from './page.module.css'
 
 const faqs = [
   {
@@ -102,20 +103,20 @@ export default function FAQPage() {
   }
 
   return (
-    <div className="container-custom py-12">
-      <div className="max-w-4xl mx-auto">
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold mb-4">Часті питання</h1>
-          <p className="text-muted-foreground">
+    <div className={`container-custom ${s.page}`}>
+      <div className={s.wrapper}>
+        <div className={s.header}>
+          <h1 className={s.title}>Часті питання</h1>
+          <p className={s.subtitle}>
             Знайдіть відповіді на найпопулярніші питання
           </p>
         </div>
 
-        <div className="space-y-8">
+        <div className={s.sections}>
           {faqs.map((category, catIndex) => (
             <div key={catIndex}>
-              <h2 className="text-2xl font-bold mb-4">{category.category}</h2>
-              <div className="space-y-3">
+              <h2 className={s.categoryTitle}>{category.category}</h2>
+              <div className={s.questionList}>
                 {category.questions.map((faq, faqIndex) => {
                   const itemId = `${catIndex}-${faqIndex}`
                   const isOpen = openItems.includes(itemId)
@@ -123,17 +124,15 @@ export default function FAQPage() {
                   return (
                     <div
                       key={itemId}
-                      className="bg-card border rounded-lg overflow-hidden"
+                      className={s.questionCard}
                     >
                       <button
                         onClick={() => toggleItem(itemId)}
-                        className="w-full px-6 py-4 flex items-center justify-between text-left hover:bg-muted/50 transition"
+                        className={s.questionBtn}
                       >
-                        <span className="font-semibold pr-4">{faq.q}</span>
+                        <span className={s.questionText}>{faq.q}</span>
                         <ChevronDown
-                          className={`h-5 w-5 flex-shrink-0 transition-transform ${
-                            isOpen ? 'rotate-180' : ''
-                          }`}
+                          className={`${s.chevron} ${isOpen ? s.chevronOpen : ''}`}
                         />
                       </button>
                       <AnimatePresence>
@@ -143,9 +142,9 @@ export default function FAQPage() {
                             animate={{ height: 'auto' }}
                             exit={{ height: 0 }}
                             transition={{ duration: 0.2 }}
-                            className="overflow-hidden"
+                            className={s.animWrapper}
                           >
-                            <div className="px-6 pb-4 text-muted-foreground">
+                            <div className={s.answer}>
                               {faq.a}
                             </div>
                           </motion.div>
@@ -159,14 +158,14 @@ export default function FAQPage() {
           ))}
         </div>
 
-        <div className="mt-12 p-6 bg-muted rounded-lg text-center">
-          <h3 className="font-semibold text-lg mb-2">Не знайшли відповідь?</h3>
-          <p className="text-muted-foreground mb-4">
+        <div className={s.ctaBox}>
+          <h3 className={s.ctaTitle}>Не знайшли відповідь?</h3>
+          <p className={s.ctaText}>
             Зв'яжіться з нашою службою підтримки, і ми з радістю допоможемо
           </p>
           <a
             href="/contact"
-            className="inline-block bg-primary text-white px-6 py-2 rounded-md hover:bg-primary/90 transition"
+            className={s.ctaLink}
           >
             Зв'язатися з нами
           </a>

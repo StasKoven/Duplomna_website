@@ -6,6 +6,7 @@ import { useAuthStore } from '@/store/authStore'
 import api from '@/lib/api'
 import { User, Mail, Lock, Save } from 'lucide-react'
 import { toast } from 'sonner'
+import s from './page.module.css'
 
 interface ProfileData {
   firstName: string
@@ -111,40 +112,40 @@ export default function ProfilePage() {
   }
 
   return (
-    <div className="container-custom py-8">
-      <div className="max-w-3xl mx-auto">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold mb-2">Мій профіль</h1>
-          <p className="text-muted-foreground">
+    <div className={`container-custom ${s.page}`}>
+      <div className={s.contentWrapper}>
+        <div className={s.header}>
+          <h1 className={s.title}>Мій профіль</h1>
+          <p className={s.subtitle}>
             Керуйте своїми особистими даними
           </p>
         </div>
 
         {/* Tabs */}
-        <div className="flex gap-4 border-b mb-6">
+        <div className={s.tabs}>
           <button
             onClick={() => setActiveTab('profile')}
-            className={`pb-3 px-4 font-medium transition-colors ${
+            className={`${s.tabBtn} ${
               activeTab === 'profile'
-                ? 'border-b-2 border-primary text-primary'
-                : 'text-muted-foreground hover:text-foreground'
+                ? s.tabBtnActive
+                : s.tabBtnInactive
             }`}
           >
-            <div className="flex items-center gap-2">
-              <User className="h-4 w-4" />
+            <div className={s.tabBtnContent}>
+              <User className={s.tabIcon} />
               Особисті дані
             </div>
           </button>
           <button
             onClick={() => setActiveTab('password')}
-            className={`pb-3 px-4 font-medium transition-colors ${
+            className={`${s.tabBtn} ${
               activeTab === 'password'
-                ? 'border-b-2 border-primary text-primary'
-                : 'text-muted-foreground hover:text-foreground'
+                ? s.tabBtnActive
+                : s.tabBtnInactive
             }`}
           >
-            <div className="flex items-center gap-2">
-              <Lock className="h-4 w-4" />
+            <div className={s.tabBtnContent}>
+              <Lock className={s.tabIcon} />
               Змінити пароль
             </div>
           </button>
@@ -152,11 +153,11 @@ export default function ProfilePage() {
 
         {/* Profile Tab */}
         {activeTab === 'profile' && (
-          <div className="bg-card border rounded-lg p-6">
-            <form onSubmit={handleProfileUpdate} className="space-y-6">
-              <div className="grid md:grid-cols-2 gap-6">
+          <div className={s.card}>
+            <form onSubmit={handleProfileUpdate} className={s.form}>
+              <div className={s.formGrid}>
                 <div>
-                  <label className="block text-sm font-medium mb-2">
+                  <label className={s.label}>
                     Ім'я
                   </label>
                   <input
@@ -165,12 +166,12 @@ export default function ProfilePage() {
                     onChange={(e) =>
                       setProfileData({ ...profileData, firstName: e.target.value })
                     }
-                    className="input w-full"
+                    className={`input ${s.inputFull}`}
                     required
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium mb-2">
+                  <label className={s.label}>
                     Прізвище
                   </label>
                   <input
@@ -179,32 +180,32 @@ export default function ProfilePage() {
                     onChange={(e) =>
                       setProfileData({ ...profileData, lastName: e.target.value })
                     }
-                    className="input w-full"
+                    className={`input ${s.inputFull}`}
                     required
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-sm font-medium mb-2">
+                <label className={s.label}>
                   Email
                 </label>
-                <div className="relative">
-                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+                <div className={s.emailWrapper}>
+                  <Mail className={s.emailIcon} />
                   <input
                     type="email"
                     value={profileData.email}
-                    className="input w-full pl-10 bg-muted"
+                    className={`input ${s.emailInput}`}
                     disabled
                   />
                 </div>
-                <p className="text-sm text-muted-foreground mt-1">
+                <p className={s.hint}>
                   Email не може бути змінений
                 </p>
               </div>
 
               <div>
-                <label className="block text-sm font-medium mb-2">
+                <label className={s.label}>
                   Телефон
                 </label>
                 <input
@@ -213,7 +214,7 @@ export default function ProfilePage() {
                   onChange={(e) =>
                     setProfileData({ ...profileData, phone: e.target.value })
                   }
-                  className="input w-full"
+                  className={`input ${s.inputFull}`}
                   placeholder="+380"
                 />
               </div>
@@ -221,9 +222,9 @@ export default function ProfilePage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="btn-primary flex items-center gap-2"
+                className={`btn-primary ${s.submitBtn}`}
               >
-                <Save className="h-4 w-4" />
+                <Save className={s.btnIcon} />
                 {loading ? 'Збереження...' : 'Зберегти зміни'}
               </button>
             </form>
@@ -232,10 +233,10 @@ export default function ProfilePage() {
 
         {/* Password Tab */}
         {activeTab === 'password' && (
-          <div className="bg-card border rounded-lg p-6">
-            <form onSubmit={handlePasswordChange} className="space-y-6">
+          <div className={s.card}>
+            <form onSubmit={handlePasswordChange} className={s.form}>
               <div>
-                <label className="block text-sm font-medium mb-2">
+                <label className={s.label}>
                   Поточний пароль
                 </label>
                 <input
@@ -247,13 +248,13 @@ export default function ProfilePage() {
                       currentPassword: e.target.value,
                     })
                   }
-                  className="input w-full"
+                  className={`input ${s.inputFull}`}
                   required
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium mb-2">
+                <label className={s.label}>
                   Новий пароль
                 </label>
                 <input
@@ -265,17 +266,17 @@ export default function ProfilePage() {
                       newPassword: e.target.value,
                     })
                   }
-                  className="input w-full"
+                  className={`input ${s.inputFull}`}
                   required
                   minLength={6}
                 />
-                <p className="text-sm text-muted-foreground mt-1">
+                <p className={s.hint}>
                   Мінімум 6 символів
                 </p>
               </div>
 
               <div>
-                <label className="block text-sm font-medium mb-2">
+                <label className={s.label}>
                   Підтвердити новий пароль
                 </label>
                 <input
@@ -287,7 +288,7 @@ export default function ProfilePage() {
                       confirmPassword: e.target.value,
                     })
                   }
-                  className="input w-full"
+                  className={`input ${s.inputFull}`}
                   required
                   minLength={6}
                 />
@@ -296,9 +297,9 @@ export default function ProfilePage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="btn-primary flex items-center gap-2"
+                className={`btn-primary ${s.submitBtn}`}
               >
-                <Lock className="h-4 w-4" />
+                <Lock className={s.btnIcon} />
                 {loading ? 'Зміна паролю...' : 'Змінити пароль'}
               </button>
             </form>

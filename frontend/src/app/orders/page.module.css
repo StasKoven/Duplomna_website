@@ -1,0 +1,192 @@
+/* Сторінка замовлень користувача */
+
+/* Відступ сторінки */
+.page {
+  @apply py-8;
+}
+
+/* Секція заголовку */
+.header {
+  @apply mb-8;
+}
+
+.title {
+  @apply text-3xl font-bold mb-2;
+}
+
+.subtitle {
+  @apply text-muted-foreground;
+}
+
+/* Стан завантаження */
+.loading {
+  @apply text-center py-12;
+}
+
+/* Порожній стан */
+.emptyState {
+  @apply text-center py-12;
+}
+
+.emptyIcon {
+  @apply h-16 w-16 mx-auto text-muted-foreground mb-4;
+}
+
+.emptyTitle {
+  @apply text-xl font-semibold mb-2;
+}
+
+.emptyText {
+  @apply text-muted-foreground mb-6;
+}
+
+/* Список замовлень */
+.ordersList {
+  @apply space-y-6;
+}
+
+/* Картка замовлення */
+.orderCard {
+  @apply bg-card border rounded-lg p-6;
+}
+
+.orderHeader {
+  @apply flex flex-wrap items-start justify-between gap-4 mb-4;
+}
+
+.orderNumberRow {
+  @apply flex items-center gap-2 mb-1;
+}
+
+.orderNumber {
+  @apply font-semibold;
+}
+
+.orderDate {
+  @apply text-sm text-muted-foreground;
+}
+
+/* Статус замовлення */
+.statusWrapper {
+  @apply flex items-center gap-2;
+}
+
+.statusBadge {
+  @apply px-3 py-1 rounded-full text-sm font-medium;
+}
+
+/* Кольори статусів */
+.statusDelivered {
+  @apply bg-green-100 text-green-700;
+}
+
+.statusCancelled {
+  @apply bg-red-100 text-red-700;
+}
+
+.statusProcessing {
+  @apply bg-blue-100 text-blue-700;
+}
+
+.statusShipped {
+  @apply bg-purple-100 text-purple-700;
+}
+
+.statusDefault {
+  @apply bg-gray-100 text-gray-700;
+}
+
+/* Іконки статусів */
+.statusIcon {
+  @apply h-5 w-5;
+}
+
+.iconDelivered {
+  @apply text-green-600;
+}
+
+.iconCancelled {
+  @apply text-red-600;
+}
+
+.iconProcessing {
+  @apply text-blue-600;
+}
+
+.iconShipped {
+  @apply text-purple-600;
+}
+
+.iconDefault {
+  @apply text-gray-600;
+}
+
+/* Секція товарів замовлення */
+.itemsSection {
+  @apply border-t pt-4 mb-4;
+}
+
+.itemsList {
+  @apply space-y-3;
+}
+
+.itemRow {
+  @apply flex items-center gap-4;
+}
+
+.itemImageWrapper {
+  @apply w-16 h-16 bg-muted rounded flex-shrink-0;
+}
+
+.itemImage {
+  @apply w-full h-full object-cover rounded;
+}
+
+.itemInfo {
+  @apply flex-1 min-w-0;
+}
+
+.itemName {
+  @apply font-medium truncate;
+}
+
+.itemQuantity {
+  @apply text-sm text-muted-foreground;
+}
+
+.itemPriceWrapper {
+  @apply text-right;
+}
+
+.itemPrice {
+  @apply font-semibold;
+}
+
+/* Секція підсумку замовлення */
+.footerSection {
+  @apply border-t pt-4;
+}
+
+.addressRow {
+  @apply flex justify-between items-center mb-3;
+}
+
+.addressLabel {
+  @apply text-muted-foreground;
+}
+
+.addressText {
+  @apply text-sm;
+}
+
+.totalRow {
+  @apply flex justify-between items-center;
+}
+
+.totalLabel {
+  @apply font-semibold text-lg;
+}
+
+.totalValue {
+  @apply font-bold text-xl text-primary;
+}

@@ -10,6 +10,7 @@ import * as z from 'zod'
 import { Mail, Lock, User, Eye, EyeOff, Phone } from 'lucide-react'
 import { useAuthStore } from '@/store/authStore'
 import { toast } from 'sonner'
+import s from './page.module.css'
 
 const registerSchema = z.object({
   firstName: z.string().min(2, 'Ім\'я має містити мінімум 2 символи'),
@@ -77,57 +78,57 @@ export default function RegisterPage() {
   }
 
   return (
-    <div className="min-h-[80vh] flex items-center justify-center py-12 px-4">
+    <div className={s.wrapper}>
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="w-full max-w-2xl"
+        className={s.container}
       >
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold mb-2">Створити аккаунт</h1>
-          <p className="text-muted-foreground">
+        <div className={s.header}>
+          <h1 className={s.title}>Створити аккаунт</h1>
+          <p className={s.subtitle}>
             Заповніть форму для реєстрації
           </p>
         </div>
 
-        <div className="bg-card p-8 rounded-lg shadow-lg border">
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-            <div className="grid md:grid-cols-2 gap-6">
+        <div className={s.card}>
+          <form onSubmit={handleSubmit(onSubmit)} className={s.form}>
+            <div className={s.gridRow}>
               <div>
-                <label className="block text-sm font-medium mb-2">
+                <label className={s.label}>
                   Ім'я *
                 </label>
-                <div className="relative">
-                  <User className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+                <div className={s.inputWrapper}>
+                  <User className={s.inputIcon} />
                   <input
                     {...registerField('firstName')}
                     type="text"
                     placeholder="Іван"
-                    className="w-full pl-10 pr-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
+                    className={s.input}
                   />
                 </div>
                 {errors.firstName && (
-                  <p className="mt-1 text-sm text-destructive">
+                  <p className={s.error}>
                     {errors.firstName.message}
                   </p>
                 )}
               </div>
 
               <div>
-                <label className="block text-sm font-medium mb-2">
+                <label className={s.label}>
                   Прізвище *
                 </label>
-                <div className="relative">
-                  <User className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+                <div className={s.inputWrapper}>
+                  <User className={s.inputIcon} />
                   <input
                     {...registerField('lastName')}
                     type="text"
                     placeholder="Петренко"
-                    className="w-full pl-10 pr-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
+                    className={s.input}
                   />
                 </div>
                 {errors.lastName && (
-                  <p className="mt-1 text-sm text-destructive">
+                  <p className={s.error}>
                     {errors.lastName.message}
                   </p>
                 )}
@@ -135,122 +136,122 @@ export default function RegisterPage() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium mb-2">
+              <label className={s.label}>
                 Email *
               </label>
-              <div className="relative">
-                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+              <div className={s.inputWrapper}>
+                <Mail className={s.inputIcon} />
                 <input
                   {...registerField('email')}
                   type="email"
                   placeholder="your@email.com"
-                  className="w-full pl-10 pr-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
+                  className={s.input}
                 />
               </div>
               {errors.email && (
-                <p className="mt-1 text-sm text-destructive">
+                <p className={s.error}>
                   {errors.email.message}
                 </p>
               )}
             </div>
 
             <div>
-              <label className="block text-sm font-medium mb-2">
+              <label className={s.label}>
                 Телефон
               </label>
-              <div className="relative">
-                <Phone className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+              <div className={s.inputWrapper}>
+                <Phone className={s.inputIcon} />
                 <input
                   {...registerField('phone')}
                   type="tel"
                   placeholder="+380 XX XXX XX XX"
-                  className="w-full pl-10 pr-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
+                  className={s.input}
                 />
               </div>
               {errors.phone && (
-                <p className="mt-1 text-sm text-destructive">
+                <p className={s.error}>
                   {errors.phone.message}
                 </p>
               )}
             </div>
 
-            <div className="grid md:grid-cols-2 gap-6">
+            <div className={s.gridRow}>
               <div>
-                <label className="block text-sm font-medium mb-2">
+                <label className={s.label}>
                   Пароль *
                 </label>
-                <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+                <div className={s.inputWrapper}>
+                  <Lock className={s.inputIcon} />
                   <input
                     {...registerField('password')}
                     type={showPassword ? 'text' : 'password'}
                     placeholder="••••••••"
-                    className="w-full pl-10 pr-12 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
+                    className={s.inputWithToggle}
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                    className={s.togglePassword}
                   >
                     {showPassword ? (
-                      <EyeOff className="h-5 w-5" />
+                      <EyeOff className={s.icon} />
                     ) : (
-                      <Eye className="h-5 w-5" />
+                      <Eye className={s.icon} />
                     )}
                   </button>
                 </div>
                 {errors.password && (
-                  <p className="mt-1 text-sm text-destructive">
+                  <p className={s.error}>
                     {errors.password.message}
                   </p>
                 )}
               </div>
 
               <div>
-                <label className="block text-sm font-medium mb-2">
+                <label className={s.label}>
                   Підтвердіть пароль *
                 </label>
-                <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+                <div className={s.inputWrapper}>
+                  <Lock className={s.inputIcon} />
                   <input
                     {...registerField('confirmPassword')}
                     type={showConfirmPassword ? 'text' : 'password'}
                     placeholder="••••••••"
-                    className="w-full pl-10 pr-12 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
+                    className={s.inputWithToggle}
                   />
                   <button
                     type="button"
                     onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                    className={s.togglePassword}
                   >
                     {showConfirmPassword ? (
-                      <EyeOff className="h-5 w-5" />
+                      <EyeOff className={s.icon} />
                     ) : (
-                      <Eye className="h-5 w-5" />
+                      <Eye className={s.icon} />
                     )}
                   </button>
                 </div>
                 {errors.confirmPassword && (
-                  <p className="mt-1 text-sm text-destructive">
+                  <p className={s.error}>
                     {errors.confirmPassword.message}
                   </p>
                 )}
               </div>
             </div>
 
-            <div className="flex items-start gap-2">
+            <div className={s.termsRow}>
               <input
                 type="checkbox"
                 required
-                className="mt-1 rounded border-gray-300 text-primary focus:ring-primary"
+                className={s.termsCheckbox}
               />
-              <label className="text-sm text-muted-foreground">
+              <label className={s.termsLabel}>
                 Я погоджуюся з{' '}
-                <Link href="/terms" className="text-primary hover:underline">
+                <Link href="/terms" className={s.termsLink}>
                   умовами використання
                 </Link>{' '}
                 та{' '}
-                <Link href="/privacy" className="text-primary hover:underline">
+                <Link href="/privacy" className={s.termsLink}>
                   політикою конфіденційності
                 </Link>
               </label>
@@ -259,19 +260,19 @@ export default function RegisterPage() {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full bg-primary text-white py-2 px-4 rounded-md hover:bg-primary/90 transition disabled:opacity-50 disabled:cursor-not-allowed font-medium"
+              className={s.submitBtn}
             >
               {isLoading ? 'Завантаження...' : 'Зареєструватися'}
             </button>
           </form>
 
-          <div className="mt-6">
-            <div className="relative">
-              <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t"></div>
+          <div className={s.dividerSection}>
+            <div className={s.divider}>
+              <div className={s.dividerLine}>
+                <div className={s.dividerBorder}></div>
               </div>
-              <div className="relative flex justify-center text-sm">
-                <span className="px-2 bg-card text-muted-foreground">
+              <div className={s.dividerTextWrap}>
+                <span className={s.dividerSpan}>
                   або
                 </span>
               </div>
@@ -281,9 +282,9 @@ export default function RegisterPage() {
               type="button"
               onClick={handleGoogleRegister}
               disabled={isGoogleLoading}
-              className="mt-4 w-full flex items-center justify-center gap-3 bg-white text-gray-700 border border-gray-300 py-2 px-4 rounded-md hover:bg-gray-50 transition disabled:opacity-50 disabled:cursor-not-allowed font-medium shadow-sm"
+              className={s.googleBtn}
             >
-              <svg className="h-5 w-5" viewBox="0 0 24 24">
+              <svg className={s.googleIcon} viewBox="0 0 24 24">
                 <path
                   d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z"
                   fill="#4285F4"
@@ -305,12 +306,12 @@ export default function RegisterPage() {
             </button>
           </div>
 
-          <div className="mt-6 text-center">
-            <p className="text-sm text-muted-foreground">
+          <div className={s.footerText}>
+            <p className={s.footerP}>
               Вже є аккаунт?{' '}
               <Link
                 href="/login"
-                className="text-primary font-medium hover:underline"
+                className={s.authLink}
               >
                 Увійти
               </Link>

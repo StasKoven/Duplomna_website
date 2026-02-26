@@ -13,6 +13,7 @@ import { useWishlistStore } from '@/store/wishlistStore'
 import { useComparisonStore } from '@/store/comparisonStore'
 import { toast } from 'sonner'
 import ReviewSection from '@/components/products/ReviewSection'
+import s from './page.module.css'
 
 export default function ProductDetailPage() {
   const params = useParams()
@@ -101,14 +102,14 @@ export default function ProductDetailPage() {
 
   if (loading) {
     return (
-      <div className="container-custom py-4 sm:py-8">
-        <div className="animate-pulse">
-          <div className="grid md:grid-cols-2 gap-4 sm:gap-8">
-            <div className="aspect-square bg-muted rounded-lg" />
-            <div className="space-y-4">
-              <div className="h-6 sm:h-8 bg-muted rounded w-3/4" />
-              <div className="h-4 bg-muted rounded w-1/4" />
-              <div className="h-10 sm:h-12 bg-muted rounded w-1/3" />
+      <div className={`container-custom ${s.pageContainer}`}>
+        <div className={s.skeleton}>
+          <div className={s.skeletonGrid}>
+            <div className={s.skeletonImage} />
+            <div className={s.skeletonInfo}>
+              <div className={s.skeletonTitle} />
+              <div className={s.skeletonRating} />
+              <div className={s.skeletonPrice} />
             </div>
           </div>
         </div>
@@ -118,10 +119,10 @@ export default function ProductDetailPage() {
 
   if (!product) {
     return (
-      <div className="container-custom py-4 sm:py-8">
-        <div className="text-center">
-          <h1 className="text-xl sm:text-2xl font-bold mb-4">Товар не знайдено</h1>
-          <a href="/products" className="text-primary hover:underline">
+      <div className={`container-custom ${s.pageContainer}`}>
+        <div className={s.notFound}>
+          <h1 className={s.notFoundTitle}>Товар не знайдено</h1>
+          <a href="/products" className={s.notFoundLink}>
             Повернутися до каталогу
           </a>
         </div>
@@ -132,14 +133,14 @@ export default function ProductDetailPage() {
   const mainImage = product.images[selectedImage]?.url || product.images[0]?.url
 
   return (
-    <div className="container-custom py-4 sm:py-8">
-      <div className="grid md:grid-cols-2 gap-4 sm:gap-8 mb-8 sm:mb-12">
+    <div className={`container-custom ${s.pageContainer}`}>
+      <div className={s.mainGrid}>
         {/* Images */}
         <div>
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="relative aspect-square bg-muted rounded-lg overflow-hidden mb-3 sm:mb-4 group"
+            className={`group ${s.mainImageWrapper}`}
           >
             {mainImage ? (
               <Image
@@ -147,10 +148,10 @@ export default function ProductDetailPage() {
                 alt={product.name}
                 width={600}
                 height={600}
-                className="w-full h-full object-cover"
+                className={s.mainImage}
               />
             ) : (
-              <div className="flex items-center justify-center h-full text-5xl sm:text-6xl">
+              <div className={s.imagePlaceholder}>
                 📱
               </div>
             )}
@@ -160,17 +161,17 @@ export default function ProductDetailPage() {
               <>
                 <button
                   onClick={() => setSelectedImage(selectedImage > 0 ? selectedImage - 1 : product.images.length - 1)}
-                  className="absolute left-2 top-1/2 -translate-y-1/2 bg-background/80 backdrop-blur-sm border shadow-md rounded-full p-2 opacity-0 group-hover:opacity-100 transition-opacity hover:bg-background"
+                  className={`${s.imageNavBtn} ${s.imageNavLeft}`}
                 >
-                  <ChevronLeft className="h-5 w-5" />
+                  <ChevronLeft className={s.iconMd} />
                 </button>
                 <button
                   onClick={() => setSelectedImage(selectedImage < product.images.length - 1 ? selectedImage + 1 : 0)}
-                  className="absolute right-2 top-1/2 -translate-y-1/2 bg-background/80 backdrop-blur-sm border shadow-md rounded-full p-2 opacity-0 group-hover:opacity-100 transition-opacity hover:bg-background"
+                  className={`${s.imageNavBtn} ${s.imageNavRight}`}
                 >
-                  <ChevronRight className="h-5 w-5" />
+                  <ChevronRight className={s.iconMd} />
                 </button>
-                <div className="absolute bottom-3 left-1/2 -translate-x-1/2 bg-background/80 backdrop-blur-sm rounded-full px-3 py-1 text-xs font-medium">
+                <div className={s.imageCounter}>
                   {selectedImage + 1} / {product.images.length}
                 </div>
               </>
@@ -178,7 +179,7 @@ export default function ProductDetailPage() {
           </motion.div>
 
           {product.images.length > 1 && (
-            <div className="relative">
+            <div className={s.thumbnailsWrapper}>
               {/* Left scroll arrow */}
               {product.images.length > 5 && (
                 <button
@@ -186,23 +187,22 @@ export default function ProductDetailPage() {
                     const container = document.getElementById('image-thumbnails')
                     if (container) container.scrollBy({ left: -110, behavior: 'smooth' })
                   }}
-                  className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-background/90 border shadow-md rounded-full p-1 hover:bg-accent transition -ml-2"
+                  className={`${s.thumbnailScrollBtn} ${s.thumbnailScrollLeft}`}
                 >
-                  <ChevronLeft className="h-4 w-4" />
+                  <ChevronLeft className={s.iconSm} />
                 </button>
               )}
 
               <div
                 id="image-thumbnails"
-                className="flex gap-1.5 sm:gap-2 overflow-x-auto scrollbar-hide scroll-smooth"
-                style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+                className={s.thumbnailsList}
               >
                 {product.images.map((image, index) => (
                   <button
                     key={index}
                     onClick={() => setSelectedImage(index)}
-                    className={`flex-shrink-0 aspect-square w-[calc(25%-6px)] sm:w-[calc(20%-8px)] max-w-[100px] rounded-lg overflow-hidden border-2 ${
-                      selectedImage === index ? 'border-primary' : 'border-transparent'
+                    className={`${s.thumbnailBtn} ${
+                      selectedImage === index ? s.thumbnailActive : s.thumbnailInactive
                     }`}
                   >
                     <Image
@@ -210,7 +210,7 @@ export default function ProductDetailPage() {
                       alt={`${product.name} ${index + 1}`}
                       width={100}
                       height={100}
-                      className="w-full h-full object-cover"
+                      className={s.thumbnailImage}
                     />
                   </button>
                 ))}
@@ -223,9 +223,9 @@ export default function ProductDetailPage() {
                     const container = document.getElementById('image-thumbnails')
                     if (container) container.scrollBy({ left: 110, behavior: 'smooth' })
                   }}
-                  className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-background/90 border shadow-md rounded-full p-1 hover:bg-accent transition -mr-2"
+                  className={`${s.thumbnailScrollBtn} ${s.thumbnailScrollRight}`}
                 >
-                  <ChevronRight className="h-4 w-4" />
+                  <ChevronRight className={s.iconSm} />
                 </button>
               )}
             </div>
@@ -234,105 +234,101 @@ export default function ProductDetailPage() {
 
         {/* Product Info */}
         <div>
-          <div className="mb-4">
+          <div className={s.productInfoSection}>
             {product.category && typeof product.category === 'object' && (
-              <p className="text-xs sm:text-sm text-muted-foreground mb-1 sm:mb-2">
+              <p className={s.categoryLabel}>
                 {product.category.name}
               </p>
             )}
-            <h1 className="text-xl sm:text-3xl font-bold mb-2">{product.name}</h1>
+            <h1 className={s.productTitle}>{product.name}</h1>
             
             {product.rating.count > 0 && (
-              <div className="flex items-center gap-2 mb-3 sm:mb-4">
-                <div className="flex items-center gap-0.5">
+              <div className={s.ratingWrapper}>
+                <div className={s.starsWrapper}>
                   {[...Array(5)].map((_, i) => (
                     <Star
                       key={i}
-                      className={`h-3.5 w-3.5 sm:h-4 sm:w-4 ${
-                        i < Math.round(product.rating.average)
-                          ? 'fill-yellow-400 text-yellow-400'
-                          : 'text-gray-300'
-                      }`}
+                      className={i < Math.round(product.rating.average) ? s.starFilled : s.starEmpty}
                     />
                   ))}
                 </div>
-                <span className="text-xs sm:text-sm text-muted-foreground">
+                <span className={s.ratingText}>
                   {product.rating.average.toFixed(1)} ({product.rating.count} відгуків)
                 </span>
               </div>
             )}
           </div>
 
-          <div className="mb-4 sm:mb-6">
-            <div className="flex items-baseline gap-2 sm:gap-3 mb-2">
-              <span className="text-2xl sm:text-4xl font-bold">{formatPrice(product.price)}</span>
+          <div className={s.priceSection}>
+            <div className={s.priceRow}>
+              <span className={s.currentPrice}>{formatPrice(product.price)}</span>
               {product.comparePrice && product.comparePrice > product.price && (
                 <>
-                  <span className="text-base sm:text-xl text-muted-foreground line-through">
+                  <span className={s.oldPrice}>
                     {formatPrice(product.comparePrice)}
                   </span>
-                  <span className="text-xs sm:text-sm font-semibold text-destructive">
+                  <span className={s.discountBadge}>
                     -{product.discountPercentage}%
                   </span>
                 </>
               )}
             </div>
             
-            <p className="text-xs sm:text-sm text-muted-foreground">
+            <p className={s.stockInfo}>
               {product.stock > 0 ? (
-                <span className="text-green-600">✓ В наявності</span>
+                <span className={s.inStock}>✓ В наявності</span>
               ) : (
-                <span className="text-red-600">Немає в наявності</span>
+                <span className={s.outOfStock}>Немає в наявності</span>
               )}
             </p>
           </div>
 
-          <div className="space-y-3 mb-4 sm:mb-6">
+          <div className={s.actionsSection}>
             <button
               onClick={handleAddToCart}
               disabled={product.stock === 0}
-              className="w-full rounded-md bg-primary px-6 sm:px-8 py-2.5 sm:py-3 text-white text-sm sm:text-base font-medium hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+              className={s.addToCartBtn}
             >
-              <ShoppingCart className="h-4 w-4 sm:h-5 sm:w-5" />
+              <ShoppingCart className={s.actionIcon} />
               {product.stock === 0 ? 'Немає в наявності' : 'Додати до кошика'}
             </button>
 
-            <div className="grid grid-cols-2 gap-3">
+            <div className={s.actionButtonsGrid}>
               <button 
                 onClick={handleAddToWishlist}
-                className={`rounded-md border px-4 py-2.5 sm:py-3 text-sm font-medium hover:bg-accent flex items-center justify-center gap-2 ${
-                  isInWishlist(product._id) ? 'border-red-500 text-red-500' : ''
+                className={`${s.actionBtn} ${
+                  isInWishlist(product._id) ? s.wishlistActive : ''
                 }`}
               >
-                <Heart className={`h-4 w-4 sm:h-5 sm:w-5 ${isInWishlist(product._id) ? 'fill-current' : ''}`} />
-                <span className="hidden sm:inline">{isInWishlist(product._id) ? 'У бажаннях' : 'До бажань'}</span>
-                <span className="sm:hidden">{isInWishlist(product._id) ? '✓' : ''}</span>
+                <Heart className={`${s.actionIcon} ${isInWishlist(product._id) ? s.iconFilled : ''}`} />
+                <span className={s.hiddenMobile}>{isInWishlist(product._id) ? 'У бажаннях' : 'До бажань'}</span>
+                <span className={s.hiddenDesktop}>{isInWishlist(product._id) ? '✓' : ''}</span>
               </button>
 
               <button 
                 onClick={handleToggleComparison}
-                className={`rounded-md border px-4 py-2.5 sm:py-3 text-sm font-medium hover:bg-accent flex items-center justify-center gap-2 ${
-                  isInComparison() ? 'border-primary text-primary' : ''
+                className={`${s.actionBtn} ${
+                  isInComparison() ? s.comparisonActive : ''
                 }`}
               >
-                <GitCompare className={`h-4 w-4 sm:h-5 sm:w-5`} />
-                <span className="hidden sm:inline">{isInComparison() ? 'Порівнюється' : 'Порівняти'}</span>
-                <span className="sm:hidden">{isInComparison() ? '✓' : ''}</span>
+                <GitCompare className={s.actionIcon} />
+                <span className={s.hiddenMobile}>{isInComparison() ? 'Порівнюється' : 'Порівняти'}</span>
+                <span className={s.hiddenDesktop}>{isInComparison() ? '✓' : ''}</span>
               </button>
             </div>
           </div>
 
-          <div className="space-y-2 sm:space-y-3 py-4 sm:py-6 border-t">
-            <div className="flex items-center gap-2 sm:gap-3 text-xs sm:text-sm">
-              <Truck className="h-4 w-4 sm:h-5 sm:w-5 text-primary flex-shrink-0" />
+          <div className={s.deliveryInfo}>
+            <div className={s.deliveryItem}>
+              <Truck className={s.deliveryIcon} />
               <span>Безкоштовна доставка від 1000 грн</span>
             </div>
-            <div className="flex items-center gap-2 sm:gap-3 text-xs sm:text-sm">
-              <Shield className="h-4 w-4 sm:h-5 sm:w-5 text-primary flex-shrink-0" />
+            <div className={s.deliveryItem}>
+              <Shield className={s.deliveryIcon} />
               <span>Офіційна гарантія {product.warranty || '1 рік'}</span>
             </div>
-            <div className="flex items-center gap-2 sm:gap-3 text-xs sm:text-sm">
-              <Package className="h-4 w-4 sm:h-5 sm:w-5 text-primary flex-shrink-0" />
+            <div className={s.deliveryItem}>
+              <Package className={s.deliveryIcon} />
               <span>Доставка 1-3 дні</span>
             </div>
           </div>
@@ -340,21 +336,21 @@ export default function ProductDetailPage() {
       </div>
 
       {/* Description & Specs */}
-      <div className="grid md:grid-cols-2 gap-6 sm:gap-8">
+      <div className={s.descriptionGrid}>
         <div>
-          <h2 className="text-xl sm:text-2xl font-bold mb-3 sm:mb-4">Опис</h2>
-          <p className="text-sm sm:text-base text-muted-foreground whitespace-pre-line">
+          <h2 className={s.sectionTitle}>Опис</h2>
+          <p className={s.descriptionText}>
             {product.description}
           </p>
 
           {product.features && product.features.length > 0 && (
-            <div className="mt-4 sm:mt-6">
-              <h3 className="font-semibold mb-2 sm:mb-3">Особливості:</h3>
-              <ul className="space-y-1.5 sm:space-y-2">
+            <div className={s.featuresWrapper}>
+              <h3 className={s.featuresSubtitle}>Особливості:</h3>
+              <ul className={s.featuresList}>
                 {product.features.map((feature, index) => (
-                  <li key={index} className="flex items-start gap-2">
-                    <span className="text-primary mt-0.5">✓</span>
-                    <span className="text-xs sm:text-sm">{feature}</span>
+                  <li key={index} className={s.featureItem}>
+                    <span className={s.featureCheck}>✓</span>
+                    <span className={s.featureText}>{feature}</span>
                   </li>
                 ))}
               </ul>
@@ -364,15 +360,15 @@ export default function ProductDetailPage() {
 
         {product.specifications && product.specifications.length > 0 && (
           <div>
-            <h2 className="text-xl sm:text-2xl font-bold mb-3 sm:mb-4">Характеристики</h2>
-            <div className="space-y-1.5 sm:space-y-2">
+            <h2 className={s.sectionTitle}>Характеристики</h2>
+            <div className={s.specsList}>
               {product.specifications.map((spec, index) => (
                 <div
                   key={index}
-                  className="flex justify-between py-1.5 sm:py-2 border-b text-xs sm:text-sm"
+                  className={s.specRow}
                 >
-                  <span className="font-medium">{spec.name}</span>
-                  <span className="text-muted-foreground text-right ml-4">{spec.value}</span>
+                  <span className={s.specName}>{spec.name}</span>
+                  <span className={s.specValue}>{spec.value}</span>
                 </div>
               ))}
             </div>

@@ -1,0 +1,141 @@
+/* Сторінка списку бажань */
+
+/* Стан завантаження */
+.loadingWrapper {
+  @apply py-12;
+}
+
+.loadingContent {
+  @apply text-center;
+}
+
+.spinner {
+  @apply animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto;
+}
+
+.loadingText {
+  @apply mt-4 text-muted-foreground;
+}
+
+/* Порожній стан */
+.emptyWrapper {
+  @apply py-12;
+}
+
+.emptyContent {
+  @apply text-center max-w-md mx-auto;
+}
+
+.emptyIcon {
+  @apply h-24 w-24 mx-auto text-muted-foreground mb-6;
+}
+
+.emptyTitle {
+  @apply text-3xl font-bold mb-4;
+}
+
+.emptyText {
+  @apply text-muted-foreground mb-8;
+}
+
+.catalogLink {
+  @apply inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-md hover:bg-primary/90 transition;
+}
+
+/* Основна сторінка */
+.page {
+  @apply py-8;
+}
+
+/* Заголовок сторінки */
+.headerWrapper {
+  @apply flex items-center justify-between mb-8;
+}
+
+.title {
+  @apply text-3xl font-bold mb-2;
+}
+
+.subtitle {
+  @apply text-muted-foreground;
+}
+
+.clearBtn {
+  @apply text-red-600 hover:text-red-700 text-sm font-medium;
+}
+
+/* Сітка товарів */
+.gridLayout {
+  @apply grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6;
+}
+
+/* Картка товару */
+.card {
+  @apply bg-card border rounded-lg overflow-hidden;
+}
+
+/* Зображення товару */
+.imageWrapper {
+  @apply relative aspect-square bg-muted;
+}
+
+.image {
+  @apply object-cover;
+}
+
+.imagePlaceholder {
+  @apply flex items-center justify-center h-full text-6xl;
+}
+
+/* Кнопка видалення */
+.removeBtn {
+  @apply absolute top-3 right-3 p-2 bg-white rounded-full shadow-lg hover:bg-red-50 transition;
+}
+
+.removeIcon {
+  @apply h-4 w-4 text-red-600;
+}
+
+/* Контент картки */
+.cardContent {
+  @apply p-4;
+}
+
+.productLink {
+  @apply font-semibold hover:text-primary transition line-clamp-2 mb-2 block;
+}
+
+/* Ціна товару */
+.priceRow {
+  @apply flex items-baseline gap-2 mb-3;
+}
+
+.price {
+  @apply text-xl font-bold;
+}
+
+.comparePrice {
+  @apply text-sm text-muted-foreground line-through;
+}
+
+/* Наявність товару */
+.stockRow {
+  @apply flex items-center gap-2 mb-3;
+}
+
+.inStock {
+  @apply text-sm text-green-600;
+}
+
+.outOfStock {
+  @apply text-sm text-red-600;
+}
+
+/* Кнопка додавання до кошика */
+.addToCartBtn {
+  @apply w-full flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed;
+}
+
+.cartIcon {
+  @apply h-4 w-4;
+}

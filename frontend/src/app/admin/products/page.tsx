@@ -10,6 +10,7 @@ import { Pencil, Trash2, Plus, Search } from 'lucide-react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { toast } from 'sonner'
+import s from './page.module.css'
 
 export default function AdminProductsPage() {
   const router = useRouter()
@@ -65,128 +66,128 @@ export default function AdminProductsPage() {
   }
 
   return (
-    <div className="container-custom py-8">
-      <div className="flex justify-between items-center mb-8">
+    <div className={`container-custom ${s.page}`}>
+      <div className={s.headerRow}>
         <div>
-          <h1 className="text-3xl font-bold mb-2">Керування товарами</h1>
-          <p className="text-muted-foreground">
+          <h1 className={s.title}>Керування товарами</h1>
+          <p className={s.subtitle}>
             Всього товарів: {products.length}
           </p>
         </div>
         <Link
           href="/admin/products/create"
-          className="flex items-center gap-2 bg-primary text-white px-4 py-2 rounded-md hover:bg-primary/90 transition"
+          className={s.addBtn}
         >
-          <Plus className="h-5 w-5" />
+          <Plus className={s.addBtnIcon} />
           Додати товар
         </Link>
       </div>
 
       {/* Search */}
-      <div className="mb-6">
-        <div className="relative max-w-md">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+      <div className={s.searchSection}>
+        <div className={s.searchWrap}>
+          <Search className={s.searchIcon} />
           <input
             type="text"
             placeholder="Пошук товарів..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
+            className={s.searchInput}
           />
         </div>
       </div>
 
       {loading ? (
-        <div className="text-center py-12">Завантаження...</div>
+        <div className={s.loading}>Завантаження...</div>
       ) : (
-        <div className="bg-card border rounded-lg overflow-hidden">
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead className="bg-muted">
+        <div className={s.tableCard}>
+          <div className={s.tableScroll}>
+            <table className={s.table}>
+              <thead className={s.thead}>
                 <tr>
-                  <th className="text-left py-3 px-4">Зображення</th>
-                  <th className="text-left py-3 px-4">Назва</th>
-                  <th className="text-left py-3 px-4">Ціна</th>
-                  <th className="text-left py-3 px-4">Запас</th>
-                  <th className="text-left py-3 px-4">Статус</th>
-                  <th className="text-right py-3 px-4">Дії</th>
+                  <th className={s.th}>Зображення</th>
+                  <th className={s.th}>Назва</th>
+                  <th className={s.th}>Ціна</th>
+                  <th className={s.th}>Запас</th>
+                  <th className={s.th}>Статус</th>
+                  <th className={s.thActions}>Дії</th>
                 </tr>
               </thead>
               <tbody>
                 {filteredProducts.map((product) => (
-                  <tr key={product._id} className="border-t hover:bg-muted/50">
-                    <td className="py-3 px-4">
-                      <div className="relative w-16 h-16 bg-muted rounded-md overflow-hidden">
+                  <tr key={product._id} className={s.tr}>
+                    <td className={s.td}>
+                      <div className={s.imageWrap}>
                         {product.images[0]?.url ? (
                           <Image
                             src={product.images[0].url}
                             alt={product.name}
                             fill
                             sizes="64px"
-                            className="object-cover"
+                            className={s.image}
                           />
                         ) : (
-                          <div className="flex items-center justify-center h-full text-2xl">
+                          <div className={s.imagePlaceholder}>
                             📱
                           </div>
                         )}
                       </div>
                     </td>
-                    <td className="py-3 px-4">
+                    <td className={s.td}>
                       <div>
-                        <div className="font-medium line-clamp-1">
+                        <div className={s.productName}>
                           {product.name}
                         </div>
-                        <div className="text-sm text-muted-foreground">
+                        <div className={s.productSlug}>
                           {product.slug}
                         </div>
                       </div>
                     </td>
-                    <td className="py-3 px-4">
-                      <div className="font-medium">{formatPrice(product.price)}</div>
+                    <td className={s.td}>
+                      <div className={s.price}>{formatPrice(product.price)}</div>
                       {product.comparePrice && (
-                        <div className="text-sm text-muted-foreground line-through">
+                        <div className={s.comparePrice}>
                           {formatPrice(product.comparePrice)}
                         </div>
                       )}
                     </td>
-                    <td className="py-3 px-4">
+                    <td className={s.td}>
                       <span
-                        className={`inline-block px-2 py-1 rounded text-sm ${
+                        className={`${s.badge} ${
                           product.stock === 0
-                            ? 'bg-red-100 text-red-700'
+                            ? s.stockNone
                             : product.stock < 5
-                            ? 'bg-yellow-100 text-yellow-700'
-                            : 'bg-green-100 text-green-700'
+                            ? s.stockLow
+                            : s.stockOk
                         }`}
                       >
                         {product.stock} шт.
                       </span>
                     </td>
-                    <td className="py-3 px-4">
+                    <td className={s.td}>
                       <span
-                        className={`inline-block px-2 py-1 rounded text-sm ${
+                        className={`${s.badge} ${
                           product.isActive
-                            ? 'bg-green-100 text-green-700'
-                            : 'bg-gray-100 text-gray-700'
+                            ? s.statusActive
+                            : s.statusInactive
                         }`}
                       >
                         {product.isActive ? 'Активний' : 'Неактивний'}
                       </span>
                     </td>
-                    <td className="py-3 px-4">
-                      <div className="flex items-center justify-end gap-2">
+                    <td className={s.td}>
+                      <div className={s.actions}>
                         <Link
                           href={`/admin/products/${product._id}/edit`}
-                          className="p-2 hover:bg-accent rounded-md transition"
+                          className={s.editBtn}
                         >
-                          <Pencil className="h-4 w-4" />
+                          <Pencil className={s.actionIcon} />
                         </Link>
                         <button
                           onClick={() => handleDelete(product._id)}
-                          className="p-2 text-destructive hover:bg-destructive/10 rounded-md transition"
+                          className={s.deleteBtn}
                         >
-                          <Trash2 className="h-4 w-4" />
+                          <Trash2 className={s.actionIcon} />
                         </button>
                       </div>
                     </td>
@@ -197,7 +198,7 @@ export default function AdminProductsPage() {
           </div>
 
           {filteredProducts.length === 0 && (
-            <div className="text-center py-12 text-muted-foreground">
+            <div className={s.emptyState}>
               {searchTerm ? 'Товари не знайдено' : 'Немає товарів'}
             </div>
           )}

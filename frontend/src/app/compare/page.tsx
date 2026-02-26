@@ -12,6 +12,7 @@ import { useWishlistStore } from '@/store/wishlistStore'
 import { formatPrice } from '@/lib/utils'
 import { toast } from 'sonner'
 import { Product } from '@/types'
+import s from './page.module.css'
 
 function ComparisonContent() {
   const router = useRouter()
@@ -87,8 +88,8 @@ function ComparisonContent() {
     // Specs
     allSpecs.forEach((values, name) => {
       const specValues = products.map(p => {
-        const spec = p.specifications?.find(s => s.name === name)
-        return spec?.value || '-'
+        const sp = p.specifications?.find(sp => sp.name === name)
+        return sp?.value || '-'
       })
       diff[`spec-${name}`] = new Set(specValues).size > 1
     })
@@ -157,7 +158,7 @@ function ComparisonContent() {
   const getCellHighlightClass = (key: string, productId: string) => {
     if (!highlightBest || products.length < 2) return ''
     if (bestValues[key] === productId) {
-      return 'bg-green-50 dark:bg-green-950/30'
+      return s.cellHighlight
     }
     return ''
   }
@@ -165,26 +166,26 @@ function ComparisonContent() {
   // ===== EMPTY STATE =====
   if (!comparison || products.length === 0) {
     return (
-      <div className="container-custom py-12">
+      <div className={`container-custom ${s.emptyPage}`}>
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-center max-w-lg mx-auto"
+          className={s.emptyContent}
         >
-          <div className="w-24 h-24 mx-auto mb-6 bg-muted rounded-full flex items-center justify-center">
-            <BarChart3 className="h-12 w-12 text-muted-foreground" />
+          <div className={s.emptyIconWrap}>
+            <BarChart3 className={s.emptyIcon} />
           </div>
-          <h1 className="text-3xl font-bold mb-3">Порівняння порожнє</h1>
-          <p className="text-muted-foreground mb-8">
+          <h1 className={s.emptyTitle}>Порівняння порожнє</h1>
+          <p className={s.emptyText}>
             Додайте товари для порівняння характеристик.
             <br />
-            Натисніть іконку <span className="inline-flex items-center"><BarChart3 className="h-4 w-4 mx-1" /></span> на картці товару.
+            Натисніть іконку <span className={s.inlineIconWrap}><BarChart3 className={s.inlineIcon} /></span> на картці товару.
           </p>
           <Link
             href="/products"
-            className="inline-flex items-center gap-2 bg-primary text-primary-foreground px-6 py-3 rounded-lg hover:bg-primary/90 transition font-medium"
+            className={s.emptyButton}
           >
-            <ShoppingCart className="h-5 w-5" />
+            <ShoppingCart className={s.emptyButtonIcon} />
             Перейти до каталогу
           </Link>
         </motion.div>
@@ -193,46 +194,46 @@ function ComparisonContent() {
   }
 
   return (
-    <div className="container-custom py-6 sm:py-8">
+    <div className={`container-custom ${s.page}`}>
       {/* ===== HEADER ===== */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+      <div className={s.header}>
         <div>
           <button
             onClick={() => router.back()}
-            className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition mb-2"
+            className={s.backButton}
           >
-            <ArrowLeft className="h-4 w-4" />
+            <ArrowLeft className={s.backIcon} />
             Назад
           </button>
-          <h1 className="text-2xl sm:text-3xl font-bold">Порівняння товарів</h1>
-          <p className="text-muted-foreground text-sm mt-1">
+          <h1 className={s.title}>Порівняння товарів</h1>
+          <p className={s.subtitle}>
             {comparison.categoryName} — {products.length} {products.length === 1 ? 'товар' : products.length < 5 ? 'товари' : 'товарів'}
           </p>
         </div>
         <button
           onClick={handleClear}
-          className="self-start sm:self-auto inline-flex items-center gap-2 text-sm text-destructive hover:text-destructive/80 font-medium transition px-3 py-2 rounded-lg hover:bg-destructive/10"
+          className={s.clearButton}
         >
-          <Trash2 className="h-4 w-4" />
+          <Trash2 className={s.clearIcon} />
           Очистити все
         </button>
       </div>
 
       {/* ===== CATEGORY TABS ===== */}
       {comparisons.length > 1 && (
-        <div className="mb-6 flex gap-2 flex-wrap">
+        <div className={s.tabs}>
           {comparisons.map(comp => (
             <Link
               key={comp.categoryId}
               href={`/compare?category=${comp.categoryId}`}
-              className={`px-4 py-2 rounded-lg text-sm font-medium transition ${
+              className={`${s.tab} ${
                 comp.categoryId === comparison.categoryId
-                  ? 'bg-primary text-primary-foreground shadow-sm'
-                  : 'bg-muted hover:bg-muted/80 text-foreground'
+                  ? s.tabActive
+                  : s.tabInactive
               }`}
             >
               {comp.categoryName}
-              <span className="ml-1.5 px-1.5 py-0.5 rounded-full text-xs bg-black/10 dark:bg-white/10">
+              <span className={s.tabBadge}>
                 {comp.products.length}
               </span>
             </Link>
@@ -241,70 +242,70 @@ function ComparisonContent() {
       )}
 
       {/* ===== CONTROLS ===== */}
-      <div className="flex flex-wrap gap-3 mb-6">
+      <div className={s.controls}>
         <button
           onClick={() => setShowOnlyDifferences(!showOnlyDifferences)}
-          className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition border ${
+          className={`${s.controlBtn} ${
             showOnlyDifferences
-              ? 'bg-primary text-primary-foreground border-primary'
-              : 'bg-card border-border hover:bg-muted'
+              ? s.controlBtnActive
+              : s.controlBtnInactive
           }`}
         >
-          {showOnlyDifferences ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+          {showOnlyDifferences ? <EyeOff className={s.controlIcon} /> : <Eye className={s.controlIcon} />}
           {showOnlyDifferences ? 'Всі параметри' : 'Тільки відмінності'}
         </button>
         <button
           onClick={() => setHighlightBest(!highlightBest)}
-          className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition border ${
+          className={`${s.controlBtn} ${
             highlightBest
-              ? 'bg-green-500 text-white border-green-500'
-              : 'bg-card border-border hover:bg-muted'
+              ? s.highlightBtnActive
+              : s.controlBtnInactive
           }`}
         >
-          <Star className="h-4 w-4" />
+          <Star className={s.controlIcon} />
           {highlightBest ? 'Приховати кращі' : 'Кращі значення'}
         </button>
       </div>
 
       {/* ===== MOBILE: Card view ===== */}
-      <div className="block lg:hidden space-y-6">
+      <div className={s.mobileView}>
         {/* Product cards row */}
-        <div className="grid grid-cols-2 gap-3">
+        <div className={s.mobileGrid}>
           {products.map(product => (
             <motion.div
               key={product._id}
               layout
-              className="relative bg-card border rounded-xl p-3 text-center"
+              className={s.mobileCard}
             >
               <button
                 onClick={() => handleRemove(product._id)}
-                className="absolute top-2 right-2 p-1.5 bg-destructive/10 text-destructive rounded-full hover:bg-destructive hover:text-white transition z-10"
+                className={s.mobileRemoveBtn}
               >
-                <X className="h-3.5 w-3.5" />
+                <X className={s.removeIconXs} />
               </button>
 
-              <div className="w-20 h-20 mx-auto bg-muted rounded-lg overflow-hidden mb-2">
+              <div className={s.mobileImageWrap}>
                 {product.images?.[0]?.url ? (
-                  <Image src={product.images[0].url} alt={product.name} width={80} height={80} className="object-cover w-full h-full" />
+                  <Image src={product.images[0].url} alt={product.name} width={80} height={80} className={s.productImage} />
                 ) : (
-                  <div className="flex items-center justify-center h-full text-2xl">📱</div>
+                  <div className={s.mobileFallback}>📱</div>
                 )}
               </div>
 
-              <Link href={`/products/${product.slug}`} className="text-sm font-semibold hover:text-primary transition line-clamp-2 mb-1 block">
+              <Link href={`/products/${product.slug}`} className={s.mobileProductLink}>
                 {product.name}
               </Link>
 
-              <div className="text-lg font-bold text-primary mb-2">
+              <div className={s.mobilePrice}>
                 {formatPrice(product.price)}
               </div>
 
               <button
                 onClick={() => handleAddToCart(product)}
                 disabled={product.stock === 0}
-                className="w-full btn-primary text-xs py-2 disabled:opacity-50 flex items-center justify-center gap-1.5"
+                className={`btn-primary ${s.mobileCartBtn}`}
               >
-                <ShoppingCart className="h-3.5 w-3.5" />
+                <ShoppingCart className={s.mobileCartIcon} />
                 {product.stock === 0 ? 'Немає' : 'До кошика'}
               </button>
             </motion.div>
@@ -312,14 +313,14 @@ function ComparisonContent() {
         </div>
 
         {/* Mobile specs list */}
-        <div className="space-y-3">
+        <div className={s.mobileSpecs}>
           {shouldShowRow('price') && (
             <MobileCompareRow label="Ціна" diffKey="price" hasDiff={hasDifference['price']}>
               {products.map(p => (
-                <div key={p._id} className={`flex-1 text-center py-2 rounded-lg ${getCellHighlightClass('price', p._id)}`}>
-                  <span className="font-bold">{formatPrice(p.price)}</span>
+                <div key={p._id} className={`${s.mobileCell} ${getCellHighlightClass('price', p._id)}`}>
+                  <span className={s.bold}>{formatPrice(p.price)}</span>
                   {p.comparePrice && p.comparePrice > p.price && (
-                    <div className="text-xs text-muted-foreground line-through">{formatPrice(p.comparePrice)}</div>
+                    <div className={s.oldPrice}>{formatPrice(p.comparePrice)}</div>
                   )}
                 </div>
               ))}
@@ -329,12 +330,12 @@ function ComparisonContent() {
           {shouldShowRow('rating') && (
             <MobileCompareRow label="Рейтинг" diffKey="rating" hasDiff={hasDifference['rating']}>
               {products.map(p => (
-                <div key={p._id} className={`flex-1 text-center py-2 rounded-lg ${getCellHighlightClass('rating', p._id)}`}>
-                  <div className="flex items-center justify-center gap-1">
-                    <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
-                    <span className="font-medium">{p.rating?.average?.toFixed(1) || '—'}</span>
+                <div key={p._id} className={`${s.mobileCell} ${getCellHighlightClass('rating', p._id)}`}>
+                  <div className={s.ratingWrap}>
+                    <Star className={s.starFilled} />
+                    <span className={s.ratingValue}>{p.rating?.average?.toFixed(1) || '—'}</span>
                   </div>
-                  <span className="text-xs text-muted-foreground">({p.rating?.count || 0} відг.)</span>
+                  <span className={s.ratingCount}>({p.rating?.count || 0} відг.)</span>
                 </div>
               ))}
             </MobileCompareRow>
@@ -343,11 +344,11 @@ function ComparisonContent() {
           {shouldShowRow('stock') && (
             <MobileCompareRow label="Наявність" diffKey="stock" hasDiff={hasDifference['stock']}>
               {products.map(p => (
-                <div key={p._id} className={`flex-1 text-center py-2 rounded-lg ${getCellHighlightClass('stock', p._id)}`}>
+                <div key={p._id} className={`${s.mobileCell} ${getCellHighlightClass('stock', p._id)}`}>
                   {p.stock > 0 ? (
-                    <span className="text-sm text-green-600 font-medium">✓ Є ({p.stock})</span>
+                    <span className={s.stockIn}>✓ Є ({p.stock})</span>
                   ) : (
-                    <span className="text-sm text-red-500 font-medium">✗ Немає</span>
+                    <span className={s.stockOut}>✗ Немає</span>
                   )}
                 </div>
               ))}
@@ -357,7 +358,7 @@ function ComparisonContent() {
           {shouldShowRow('brand') && (
             <MobileCompareRow label="Бренд" diffKey="brand" hasDiff={hasDifference['brand']}>
               {products.map(p => (
-                <div key={p._id} className="flex-1 text-center py-2 text-sm">{p.brand || '—'}</div>
+                <div key={p._id} className={s.mobileCellText}>{p.brand || '—'}</div>
               ))}
             </MobileCompareRow>
           )}
@@ -365,7 +366,7 @@ function ComparisonContent() {
           {shouldShowRow('warranty') && (
             <MobileCompareRow label="Гарантія" diffKey="warranty" hasDiff={hasDifference['warranty']}>
               {products.map(p => (
-                <div key={p._id} className="flex-1 text-center py-2 text-sm">{p.warranty || '—'}</div>
+                <div key={p._id} className={s.mobileCellText}>{p.warranty || '—'}</div>
               ))}
             </MobileCompareRow>
           )}
@@ -377,8 +378,8 @@ function ComparisonContent() {
             return (
               <MobileCompareRow key={specName} label={specName} diffKey={key} hasDiff={hasDifference[key]}>
                 {products.map(p => {
-                  const spec = p.specifications?.find(s => s.name === specName)
-                  return <div key={p._id} className="flex-1 text-center py-2 text-sm">{spec?.value || '—'}</div>
+                  const spec = p.specifications?.find(sp => sp.name === specName)
+                  return <div key={p._id} className={s.mobileCellText}>{spec?.value || '—'}</div>
                 })}
               </MobileCompareRow>
             )
@@ -391,11 +392,11 @@ function ComparisonContent() {
             return (
               <MobileCompareRow key={feature} label={feature} diffKey={key} hasDiff={hasDifference[key]}>
                 {products.map(p => (
-                  <div key={p._id} className="flex-1 text-center py-2">
+                  <div key={p._id} className={s.mobileCellFeature}>
                     {p.features?.includes(feature) ? (
-                      <Check className="h-5 w-5 text-green-500 mx-auto" />
+                      <Check className={s.checkIcon} />
                     ) : (
-                      <Minus className="h-5 w-5 text-muted-foreground/40 mx-auto" />
+                      <Minus className={s.minusIcon} />
                     )}
                   </div>
                 ))}
@@ -406,59 +407,59 @@ function ComparisonContent() {
       </div>
 
       {/* ===== DESKTOP: Table view ===== */}
-      <div className="hidden lg:block overflow-x-auto rounded-xl border bg-card">
-        <table className="w-full border-collapse table-fixed">
+      <div className={s.desktopView}>
+        <table className={s.table}>
           <thead>
-            <tr className="border-b-2">
-              <th className="text-left py-4 px-5 w-52 bg-muted/60 sticky left-0 z-10">
-                <span className="text-sm font-medium text-muted-foreground">Параметр</span>
+            <tr className={s.tableHeadRow}>
+              <th className={s.paramHeader}>
+                <span className={s.paramLabel}>Параметр</span>
               </th>
               {products.map(product => (
-                <th key={product._id} className="py-4 px-4" style={{ width: `${100 / (products.length + 1)}%`, minWidth: '200px' }}>
-                  <div className="relative">
+                <th key={product._id} className={s.productHeader} style={{ width: `${100 / (products.length + 1)}%`, minWidth: '200px' }}>
+                  <div className={s.productHeaderContent}>
                     <button
                       onClick={() => handleRemove(product._id)}
-                      className="absolute -top-1 -right-1 p-1.5 bg-destructive/10 text-destructive rounded-full hover:bg-destructive hover:text-white transition z-10"
+                      className={s.desktopRemoveBtn}
                       title="Видалити з порівняння"
                     >
-                      <X className="h-3.5 w-3.5" />
+                      <X className={s.removeIconXs} />
                     </button>
 
-                    <div className="w-36 h-36 mx-auto bg-muted/50 rounded-xl overflow-hidden mb-3 group">
+                    <div className={`${s.desktopImageWrap} group`}>
                       {product.images?.[0]?.url ? (
                         <Image
                           src={product.images[0].url}
                           alt={product.name}
                           width={144}
                           height={144}
-                          className="object-cover w-full h-full group-hover:scale-105 transition-transform"
+                          className={s.desktopImage}
                         />
                       ) : (
-                        <div className="flex items-center justify-center h-full text-4xl">📱</div>
+                        <div className={s.desktopFallback}>📱</div>
                       )}
                     </div>
 
                     <Link
                       href={`/products/${product.slug}`}
-                      className="font-semibold hover:text-primary transition line-clamp-2 mb-2 block text-sm"
+                      className={s.desktopProductLink}
                     >
                       {product.name}
-                      <ExternalLink className="h-3 w-3 inline-block ml-1 opacity-0 group-hover:opacity-100" />
+                      <ExternalLink className={s.externalIcon} />
                     </Link>
 
-                    <div className="flex items-baseline justify-center gap-2 mb-3">
-                      <span className="text-xl font-bold text-primary">{formatPrice(product.price)}</span>
+                    <div className={s.priceRow}>
+                      <span className={s.desktopPrice}>{formatPrice(product.price)}</span>
                       {product.comparePrice && product.comparePrice > product.price && (
-                        <span className="text-sm text-muted-foreground line-through">{formatPrice(product.comparePrice)}</span>
+                        <span className={s.desktopOldPrice}>{formatPrice(product.comparePrice)}</span>
                       )}
                     </div>
 
                     <button
                       onClick={() => handleAddToCart(product)}
                       disabled={product.stock === 0}
-                      className="w-full btn-primary text-sm py-2.5 disabled:opacity-50 flex items-center justify-center gap-2"
+                      className={`btn-primary ${s.desktopCartBtn}`}
                     >
-                      <ShoppingCart className="h-4 w-4" />
+                      <ShoppingCart className={s.cartIcon} />
                       {product.stock === 0 ? 'Немає в наявності' : 'Додати до кошика'}
                     </button>
                   </div>
@@ -470,28 +471,28 @@ function ComparisonContent() {
           <tbody>
             {/* Rating */}
             {shouldShowRow('rating') && (
-              <tr className={`border-b transition-colors ${hasDifference['rating'] ? '' : 'opacity-70'}`}>
-                <td className="py-3.5 px-5 font-medium text-sm bg-muted/60 sticky left-0">
+              <tr className={`${s.tableRow} ${hasDifference['rating'] ? '' : s.dimmed}`}>
+                <td className={s.rowLabel}>
                   Рейтинг
                   {hasDifference['rating'] && <DiffDot />}
                 </td>
                 {products.map(product => (
-                  <td key={product._id} className={`py-3.5 px-4 text-center ${getCellHighlightClass('rating', product._id)}`}>
-                    <div className="flex items-center justify-center gap-1.5">
-                      <div className="flex">
+                  <td key={product._id} className={`${s.rowValue} ${getCellHighlightClass('rating', product._id)}`}>
+                    <div className={s.ratingDesktopWrap}>
+                      <div className={s.starsWrap}>
                         {[1, 2, 3, 4, 5].map(star => (
                           <Star
                             key={star}
-                            className={`h-4 w-4 ${
+                            className={
                               star <= Math.round(product.rating?.average || 0)
-                                ? 'fill-yellow-400 text-yellow-400'
-                                : 'text-muted-foreground/30'
-                            }`}
+                                ? s.starFilled
+                                : s.starEmpty
+                            }
                           />
                         ))}
                       </div>
-                      <span className="font-medium text-sm">{product.rating?.average?.toFixed(1) || '—'}</span>
-                      <span className="text-xs text-muted-foreground">({product.rating?.count || 0})</span>
+                      <span className={s.ratingDesktopValue}>{product.rating?.average?.toFixed(1) || '—'}</span>
+                      <span className={s.ratingDesktopCount}>({product.rating?.count || 0})</span>
                     </div>
                   </td>
                 ))}
@@ -500,21 +501,21 @@ function ComparisonContent() {
 
             {/* Stock */}
             {shouldShowRow('stock') && (
-              <tr className={`border-b transition-colors ${hasDifference['stock'] ? '' : 'opacity-70'}`}>
-                <td className="py-3.5 px-5 font-medium text-sm bg-muted/60 sticky left-0">
+              <tr className={`${s.tableRow} ${hasDifference['stock'] ? '' : s.dimmed}`}>
+                <td className={s.rowLabel}>
                   Наявність
                   {hasDifference['stock'] && <DiffDot />}
                 </td>
                 {products.map(product => (
-                  <td key={product._id} className={`py-3.5 px-4 text-center ${getCellHighlightClass('stock', product._id)}`}>
+                  <td key={product._id} className={`${s.rowValue} ${getCellHighlightClass('stock', product._id)}`}>
                     {product.stock > 0 ? (
-                      <span className="inline-flex items-center gap-1.5 text-green-600 font-medium text-sm">
-                        <span className="w-2 h-2 bg-green-500 rounded-full" />
+                      <span className={s.stockInDesktop}>
+                        <span className={s.stockDotGreen} />
                         В наявності ({product.stock} шт.)
                       </span>
                     ) : (
-                      <span className="inline-flex items-center gap-1.5 text-red-500 font-medium text-sm">
-                        <span className="w-2 h-2 bg-red-500 rounded-full" />
+                      <span className={s.stockOutDesktop}>
+                        <span className={s.stockDotRed} />
                         Немає в наявності
                       </span>
                     )}
@@ -525,15 +526,15 @@ function ComparisonContent() {
 
             {/* Brand */}
             {shouldShowRow('brand') && (
-              <tr className={`border-b transition-colors ${hasDifference['brand'] ? '' : 'opacity-70'}`}>
-                <td className="py-3.5 px-5 font-medium text-sm bg-muted/60 sticky left-0">
+              <tr className={`${s.tableRow} ${hasDifference['brand'] ? '' : s.dimmed}`}>
+                <td className={s.rowLabel}>
                   Бренд
                   {hasDifference['brand'] && <DiffDot />}
                 </td>
                 {products.map(product => (
-                  <td key={product._id} className="py-3.5 px-4 text-center text-sm">
+                  <td key={product._id} className={s.rowValueText}>
                     {product.brand ? (
-                      <span className="font-medium">{product.brand}</span>
+                      <span className={s.fontMedium}>{product.brand}</span>
                     ) : '—'}
                   </td>
                 ))}
@@ -542,13 +543,13 @@ function ComparisonContent() {
 
             {/* Warranty */}
             {shouldShowRow('warranty') && (
-              <tr className={`border-b transition-colors ${hasDifference['warranty'] ? '' : 'opacity-70'}`}>
-                <td className="py-3.5 px-5 font-medium text-sm bg-muted/60 sticky left-0">
+              <tr className={`${s.tableRow} ${hasDifference['warranty'] ? '' : s.dimmed}`}>
+                <td className={s.rowLabel}>
                   Гарантія
                   {hasDifference['warranty'] && <DiffDot />}
                 </td>
                 {products.map(product => (
-                  <td key={product._id} className="py-3.5 px-4 text-center text-sm">
+                  <td key={product._id} className={s.rowValueText}>
                     {product.warranty || '—'}
                   </td>
                 ))}
@@ -557,9 +558,9 @@ function ComparisonContent() {
 
             {/* Specifications section header */}
             {allSpecs.size > 0 && (
-              <tr className="bg-muted/30">
-                <td colSpan={products.length + 1} className="py-2 px-5">
-                  <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+              <tr className={s.sectionHeaderRow}>
+                <td colSpan={products.length + 1} className={s.sectionHeaderCell}>
+                  <span className={s.sectionHeaderText}>
                     Характеристики
                   </span>
                 </td>
@@ -571,15 +572,15 @@ function ComparisonContent() {
               const key = `spec-${specName}`
               if (!shouldShowRow(key)) return null
               return (
-                <tr key={specName} className={`border-b transition-colors hover:bg-muted/20 ${hasDifference[key] ? '' : 'opacity-70'}`}>
-                  <td className="py-3.5 px-5 font-medium text-sm bg-muted/60 sticky left-0">
+                <tr key={specName} className={`${s.tableRowHover} ${hasDifference[key] ? '' : s.dimmed}`}>
+                  <td className={s.rowLabel}>
                     {specName}
                     {hasDifference[key] && <DiffDot />}
                   </td>
                   {products.map(product => {
-                    const spec = product.specifications?.find(s => s.name === specName)
+                    const spec = product.specifications?.find(sp => sp.name === specName)
                     return (
-                      <td key={product._id} className={`py-3.5 px-4 text-center text-sm ${hasDifference[key] ? 'font-medium' : ''}`}>
+                      <td key={product._id} className={`${s.rowValueText} ${hasDifference[key] ? s.specValueDiff : ''}`}>
                         {spec?.value || '—'}
                       </td>
                     )
@@ -590,9 +591,9 @@ function ComparisonContent() {
 
             {/* Features section header */}
             {allFeatures.length > 0 && (
-              <tr className="bg-muted/30">
-                <td colSpan={products.length + 1} className="py-2 px-5">
-                  <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+              <tr className={s.sectionHeaderRow}>
+                <td colSpan={products.length + 1} className={s.sectionHeaderCell}>
+                  <span className={s.sectionHeaderText}>
                     Особливості
                   </span>
                 </td>
@@ -604,17 +605,17 @@ function ComparisonContent() {
               const key = `feature-${feature}`
               if (!shouldShowRow(key)) return null
               return (
-                <tr key={feature} className={`border-b transition-colors hover:bg-muted/20 ${hasDifference[key] ? '' : 'opacity-70'}`}>
-                  <td className="py-3.5 px-5 font-medium text-sm bg-muted/60 sticky left-0">
+                <tr key={feature} className={`${s.tableRowHover} ${hasDifference[key] ? '' : s.dimmed}`}>
+                  <td className={s.rowLabel}>
                     {feature}
                     {hasDifference[key] && <DiffDot />}
                   </td>
                   {products.map(product => (
-                    <td key={product._id} className="py-3.5 px-4 text-center">
+                    <td key={product._id} className={s.rowValue}>
                       {product.features?.includes(feature) ? (
-                        <Check className="h-5 w-5 text-green-500 mx-auto" />
+                        <Check className={s.checkIcon} />
                       ) : (
-                        <Minus className="h-5 w-5 text-muted-foreground/30 mx-auto" />
+                        <Minus className={s.minusIcon} />
                       )}
                     </td>
                   ))}
@@ -626,22 +627,22 @@ function ComparisonContent() {
 
         {/* No differences message */}
         {showOnlyDifferences && !Object.values(hasDifference).some(v => v) && (
-          <div className="py-12 text-center text-muted-foreground">
-            <p className="text-lg font-medium">Всі параметри однакові</p>
-            <p className="text-sm mt-1">Ці товари мають ідентичні характеристики</p>
+          <div className={s.noDiffMessage}>
+            <p className={s.noDiffTitle}>Всі параметри однакові</p>
+            <p className={s.noDiffText}>Ці товари мають ідентичні характеристики</p>
           </div>
         )}
       </div>
 
       {/* ===== LEGEND ===== */}
       {highlightBest && products.length >= 2 && (
-        <div className="mt-4 flex flex-wrap gap-4 text-xs text-muted-foreground">
-          <div className="flex items-center gap-1.5">
-            <div className="w-3 h-3 rounded bg-green-100 dark:bg-green-950/50 border border-green-300 dark:border-green-800" />
+        <div className={s.legend}>
+          <div className={s.legendItem}>
+            <div className={s.legendGreen} />
             Краще значення
           </div>
-          <div className="flex items-center gap-1.5">
-            <span className="w-2 h-2 bg-orange-400 rounded-full" />
+          <div className={s.legendItem}>
+            <span className={s.legendOrange} />
             Є відмінність
           </div>
         </div>
@@ -653,7 +654,7 @@ function ComparisonContent() {
 // ===== Helper Components =====
 
 function DiffDot() {
-  return <span className="inline-block w-1.5 h-1.5 bg-orange-400 rounded-full ml-1.5 align-middle" />
+  return <span className={s.diffDot} />
 }
 
 function MobileCompareRow({
@@ -668,12 +669,12 @@ function MobileCompareRow({
   children: React.ReactNode
 }) {
   return (
-    <div className={`rounded-lg border p-3 ${hasDiff ? 'border-orange-200 dark:border-orange-800/50' : ''}`}>
-      <div className="text-xs font-semibold text-muted-foreground mb-2 flex items-center gap-1.5">
+    <div className={`${s.mobileRow} ${hasDiff ? s.mobileRowDiff : ''}`}>
+      <div className={s.mobileRowLabel}>
         {label}
         {hasDiff && <DiffDot />}
       </div>
-      <div className="flex gap-2">
+      <div className={s.mobileRowContent}>
         {children}
       </div>
     </div>
@@ -682,11 +683,11 @@ function MobileCompareRow({
 
 function ComparisonLoading() {
   return (
-    <div className="container-custom py-8">
-      <div className="animate-pulse space-y-4">
-        <div className="h-8 bg-muted rounded w-1/4"></div>
-        <div className="h-4 bg-muted rounded w-1/3"></div>
-        <div className="h-64 bg-muted rounded-xl mt-6"></div>
+    <div className={`container-custom ${s.loadingPage}`}>
+      <div className={s.loadingPulse}>
+        <div className={s.loadingTitle}></div>
+        <div className={s.loadingSubtitle}></div>
+        <div className={s.loadingTable}></div>
       </div>
     </div>
   )

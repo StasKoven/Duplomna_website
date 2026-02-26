@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import { useAuthStore } from '@/store/authStore'
 import api from '@/lib/api'
 import { Search, Shield, User as UserIcon } from 'lucide-react'
+import s from './page.module.css'
 
 interface User {
   _id: string
@@ -64,93 +65,93 @@ export default function AdminUsersPage() {
   }
 
   return (
-    <div className="container-custom py-8">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold mb-2">Користувачі</h1>
-        <p className="text-muted-foreground">
+    <div className={`container-custom ${s.page}`}>
+      <div className={s.header}>
+        <h1 className={s.title}>Користувачі</h1>
+        <p className={s.subtitle}>
           Всього користувачів: {users.length}
         </p>
       </div>
 
       {/* Search */}
-      <div className="mb-6">
-        <div className="relative max-w-md">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+      <div className={s.searchWrapper}>
+        <div className={s.searchContainer}>
+          <Search className={s.searchIcon} />
           <input
             type="text"
             placeholder="Пошук користувачів..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
+            className={s.searchInput}
           />
         </div>
       </div>
 
       {loading ? (
-        <div className="text-center py-12">Завантаження...</div>
+        <div className={s.loading}>Завантаження...</div>
       ) : (
-        <div className="bg-card border rounded-lg overflow-hidden">
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead className="bg-muted">
+        <div className={s.tableContainer}>
+          <div className={s.tableScroll}>
+            <table className={s.table}>
+              <thead className={s.thead}>
                 <tr>
-                  <th className="text-left py-3 px-4">Користувач</th>
-                  <th className="text-left py-3 px-4">Email</th>
-                  <th className="text-left py-3 px-4">Роль</th>
-                  <th className="text-left py-3 px-4">Статус</th>
-                  <th className="text-left py-3 px-4">Дата реєстрації</th>
+                  <th className={s.th}>Користувач</th>
+                  <th className={s.th}>Email</th>
+                  <th className={s.th}>Роль</th>
+                  <th className={s.th}>Статус</th>
+                  <th className={s.th}>Дата реєстрації</th>
                 </tr>
               </thead>
               <tbody>
                 {filteredUsers.map((u) => (
-                  <tr key={u._id} className="border-t hover:bg-muted/50">
-                    <td className="py-3 px-4">
-                      <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center">
+                  <tr key={u._id} className={s.tr}>
+                    <td className={s.td}>
+                      <div className={s.userCell}>
+                        <div className={s.avatar}>
                           {u.role === 'admin' ? (
-                            <Shield className="h-5 w-5 text-primary" />
+                            <Shield className={s.avatarIcon} />
                           ) : (
-                            <UserIcon className="h-5 w-5 text-primary" />
+                            <UserIcon className={s.avatarIcon} />
                           )}
                         </div>
                         <div>
-                          <div className="font-medium">
+                          <div className={s.userName}>
                             {u.firstName} {u.lastName}
                           </div>
                         </div>
                       </div>
                     </td>
-                    <td className="py-3 px-4">
-                      <div className="text-sm">{u.email}</div>
+                    <td className={s.td}>
+                      <div className={s.email}>{u.email}</div>
                       {u.emailVerified && (
-                        <div className="text-xs text-green-600">
+                        <div className={s.verified}>
                           ✓ Підтверджено
                         </div>
                       )}
                     </td>
-                    <td className="py-3 px-4">
+                    <td className={s.td}>
                       <span
-                        className={`inline-block px-2 py-1 rounded text-sm ${
+                        className={`${s.badge} ${
                           u.role === 'admin'
-                            ? 'bg-purple-100 text-purple-700'
-                            : 'bg-blue-100 text-blue-700'
+                            ? s.roleAdmin
+                            : s.roleUser
                         }`}
                       >
                         {u.role === 'admin' ? 'Адміністратор' : 'Користувач'}
                       </span>
                     </td>
-                    <td className="py-3 px-4">
+                    <td className={s.td}>
                       <span
-                        className={`inline-block px-2 py-1 rounded text-sm ${
+                        className={`${s.badge} ${
                           u.isActive
-                            ? 'bg-green-100 text-green-700'
-                            : 'bg-gray-100 text-gray-700'
+                            ? s.statusActive
+                            : s.statusInactive
                         }`}
                       >
                         {u.isActive ? 'Активний' : 'Неактивний'}
                       </span>
                     </td>
-                    <td className="py-3 px-4 text-sm text-muted-foreground">
+                    <td className={s.tdDate}>
                       {new Date(u.createdAt).toLocaleDateString('uk-UA')}
                     </td>
                   </tr>
@@ -160,7 +161,7 @@ export default function AdminUsersPage() {
           </div>
 
           {filteredUsers.length === 0 && (
-            <div className="text-center py-12 text-muted-foreground">
+            <div className={s.emptyState}>
               {searchTerm ? 'Користувачів не знайдено' : 'Немає користувачів'}
             </div>
           )}

@@ -6,6 +6,7 @@ import { motion } from 'framer-motion'
 import api from '@/lib/api'
 import { Category } from '@/types'
 import { Smartphone, Laptop, Tablet, Watch, Headphones, Camera, Tv, Gamepad2 } from 'lucide-react'
+import s from './page.module.css'
 
 const categoryIcons: Record<string, any> = {
   smartphone: Smartphone,
@@ -46,11 +47,11 @@ export default function CategoriesPage() {
 
   if (loading) {
     return (
-      <div className="container-custom py-12">
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+      <div className={`container-custom ${s.page}`}>
+        <div className={s.loadingGrid}>
           {[...Array(8)].map((_, i) => (
-            <div key={i} className="animate-pulse">
-              <div className="aspect-square bg-muted rounded-lg" />
+            <div key={i} className={s.skeleton}>
+              <div className={s.skeletonCard} />
             </div>
           ))}
         </div>
@@ -59,15 +60,15 @@ export default function CategoriesPage() {
   }
 
   return (
-    <div className="container-custom py-12">
-      <div className="text-center mb-12">
-        <h1 className="text-4xl font-bold mb-4">Категорії товарів</h1>
-        <p className="text-muted-foreground max-w-2xl mx-auto">
+    <div className={`container-custom ${s.page}`}>
+      <div className={s.headerSection}>
+        <h1 className={s.title}>Категорії товарів</h1>
+        <p className={s.subtitle}>
           Оберіть категорію для перегляду всіх доступних товарів
         </p>
       </div>
 
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+      <div className={s.gridLayout}>
         {categories.map((category, index) => {
           const IconComponent = categoryIcons[category.slug] || Smartphone
 
@@ -80,26 +81,26 @@ export default function CategoriesPage() {
             >
               <Link
                 href={`/products?category=${category._id}`}
-                className="group block"
+                className={`${s.categoryLink} group`}
               >
-                <div className="relative aspect-square bg-gradient-to-br from-primary/10 to-primary/5 rounded-lg p-8 hover:shadow-lg transition-all duration-300 group-hover:scale-105">
-                  <div className="flex flex-col items-center justify-center h-full text-center">
-                    <div className="mb-4 p-4 bg-primary/10 rounded-full group-hover:bg-primary/20 transition-colors">
-                      <IconComponent className="h-12 w-12 text-primary" />
+                <div className={s.categoryCard}>
+                  <div className={s.cardContent}>
+                    <div className={s.iconWrapper}>
+                      <IconComponent className={s.categoryIcon} />
                     </div>
-                    <h3 className="font-semibold text-lg mb-2">
+                    <h3 className={s.categoryName}>
                       {category.name}
                     </h3>
                     {category.description && (
-                      <p className="text-sm text-muted-foreground line-clamp-2">
+                      <p className={s.categoryDescription}>
                         {category.description}
                       </p>
                     )}
                   </div>
 
                   {category.image && (
-                    <div className="absolute inset-0 opacity-0 group-hover:opacity-10 transition-opacity rounded-lg overflow-hidden">
-                      <div className="absolute inset-0 bg-primary" />
+                    <div className={s.hoverOverlay}>
+                      <div className={s.overlayBg} />
                     </div>
                   )}
                 </div>
@@ -110,8 +111,8 @@ export default function CategoriesPage() {
       </div>
 
       {categories.length === 0 && !loading && (
-        <div className="text-center py-12">
-          <p className="text-muted-foreground">Категорії не знайдено</p>
+        <div className={s.emptyState}>
+          <p className={s.emptyText}>Категорії не знайдено</p>
         </div>
       )}
     </div>

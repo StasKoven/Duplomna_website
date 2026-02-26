@@ -6,6 +6,7 @@ import { useAuthStore } from '@/store/authStore'
 import api from '@/lib/api'
 import { Plus, Edit, Trash2, Search, X, Tag } from 'lucide-react'
 import { toast } from 'sonner'
+import s from './page.module.css'
 
 interface Coupon {
   _id: string
@@ -155,116 +156,112 @@ export default function AdminCouponsPage() {
   }
 
   return (
-    <div className="container-custom py-8">
-      <div className="flex flex-wrap items-center justify-between gap-4 mb-8">
+    <div className={`container-custom ${s.page}`}>
+      <div className={s.header}>
         <div>
-          <h1 className="text-3xl font-bold mb-2">Купони та знижки</h1>
-          <p className="text-muted-foreground">
+          <h1 className={s.title}>Купони та знижки</h1>
+          <p className={s.subtitle}>
             Всього купонів: {coupons.length}
           </p>
         </div>
         <button
           onClick={() => handleOpenModal()}
-          className="btn-primary flex items-center gap-2"
+          className={`btn-primary ${s.addButton}`}
         >
-          <Plus className="h-5 w-5" />
+          <Plus className={s.addIcon} />
           Додати купон
         </button>
       </div>
 
       {/* Search */}
-      <div className="mb-6">
-        <div className="relative max-w-md">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+      <div className={s.searchSection}>
+        <div className={s.searchWrapper}>
+          <Search className={s.searchIcon} />
           <input
             type="text"
             placeholder="Пошук купонів..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
+            className={s.searchInput}
           />
         </div>
       </div>
 
       {loading ? (
-        <div className="text-center py-12">Завантаження...</div>
+        <div className={s.loadingState}>Завантаження...</div>
       ) : (
-        <div className="bg-card border rounded-lg overflow-hidden">
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead className="bg-muted">
+        <div className={s.tableCard}>
+          <div className={s.tableScroll}>
+            <table className={s.table}>
+              <thead className={s.tableHead}>
                 <tr>
-                  <th className="text-left py-3 px-4">Код</th>
-                  <th className="text-left py-3 px-4">Опис</th>
-                  <th className="text-left py-3 px-4">Тип</th>
-                  <th className="text-left py-3 px-4">Значення</th>
-                  <th className="text-left py-3 px-4">Використано</th>
-                  <th className="text-left py-3 px-4">Період</th>
-                  <th className="text-left py-3 px-4">Статус</th>
-                  <th className="text-right py-3 px-4">Дії</th>
+                  <th className={s.th}>Код</th>
+                  <th className={s.th}>Опис</th>
+                  <th className={s.th}>Тип</th>
+                  <th className={s.th}>Значення</th>
+                  <th className={s.th}>Використано</th>
+                  <th className={s.th}>Період</th>
+                  <th className={s.th}>Статус</th>
+                  <th className={s.thRight}>Дії</th>
                 </tr>
               </thead>
               <tbody>
                 {filteredCoupons.map((coupon) => (
-                  <tr key={coupon._id} className="border-t hover:bg-muted/50">
-                    <td className="py-3 px-4">
-                      <div className="flex items-center gap-2">
-                        <Tag className="h-4 w-4 text-primary" />
-                        <span className="font-mono font-bold">{coupon.code}</span>
+                  <tr key={coupon._id} className={s.row}>
+                    <td className={s.cell}>
+                      <div className={s.codeCell}>
+                        <Tag className={s.tagIcon} />
+                        <span className={s.codeText}>{coupon.code}</span>
                       </div>
                     </td>
-                    <td className="py-3 px-4 max-w-xs truncate">
+                    <td className={s.descCell}>
                       {coupon.description}
                     </td>
-                    <td className="py-3 px-4">
-                      <span className="text-sm">
+                    <td className={s.cell}>
+                      <span className={s.typeText}>
                         {coupon.type === 'percentage' ? 'Відсоток' : 'Фіксована'}
                       </span>
                     </td>
-                    <td className="py-3 px-4 font-semibold">
+                    <td className={s.valueCell}>
                       {coupon.type === 'percentage' ? `${coupon.value}%` : `${coupon.value} ₴`}
                     </td>
-                    <td className="py-3 px-4">
+                    <td className={s.cell}>
                       {coupon.usageCount}
                       {coupon.usageLimit && ` / ${coupon.usageLimit}`}
                     </td>
-                    <td className="py-3 px-4 text-sm text-muted-foreground">
+                    <td className={s.dateCell}>
                       {new Date(coupon.startDate).toLocaleDateString('uk-UA')} - <br />
                       {new Date(coupon.endDate).toLocaleDateString('uk-UA')}
                     </td>
-                    <td className="py-3 px-4">
-                      <div className="flex flex-col gap-1">
+                    <td className={s.cell}>
+                      <div className={s.statusCell}>
                         <span
-                          className={`inline-block px-2 py-1 rounded text-xs text-center ${
-                            coupon.isActive
-                              ? 'bg-green-100 text-green-700'
-                              : 'bg-gray-100 text-gray-700'
-                          }`}
+                          className={coupon.isActive ? s.statusBadgeActive : s.statusBadgeInactive}
                         >
                           {coupon.isActive ? 'Активний' : 'Неактивний'}
                         </span>
                         {coupon.isPublic && (
-                          <span className="inline-block px-2 py-1 rounded text-xs bg-blue-100 text-blue-700 text-center">
+                          <span className={s.publicBadge}>
                             Публічний
                           </span>
                         )}
                       </div>
                     </td>
-                    <td className="py-3 px-4">
-                      <div className="flex items-center justify-end gap-2">
+                    <td className={s.actionsCell}>
+                      <div className={s.actionsRow}>
                         <button
                           onClick={() => handleOpenModal(coupon)}
-                          className="p-2 hover:bg-muted rounded-md transition-colors"
+                          className={s.actionBtn}
                           title="Редагувати"
                         >
-                          <Edit className="h-4 w-4 text-blue-600" />
+                          <Edit className={s.editIcon} />
                         </button>
                         <button
                           onClick={() => handleDelete(coupon._id, coupon.code)}
-                          className="p-2 hover:bg-muted rounded-md transition-colors"
+                          className={s.actionBtn}
                           title="Видалити"
                         >
-                          <Trash2 className="h-4 w-4 text-red-600" />
+                          <Trash2 className={s.deleteIcon} />
                         </button>
                       </div>
                     </td>
@@ -275,7 +272,7 @@ export default function AdminCouponsPage() {
           </div>
 
           {filteredCoupons.length === 0 && (
-            <div className="text-center py-12 text-muted-foreground">
+            <div className={s.emptyState}>
               {searchTerm ? 'Купонів не знайдено' : 'Немає купонів'}
             </div>
           )}
@@ -284,24 +281,24 @@ export default function AdminCouponsPage() {
 
       {/* Modal */}
       {showModal && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 overflow-y-auto">
-          <div className="bg-card rounded-lg max-w-2xl w-full p-6 my-8">
-            <div className="flex items-center justify-between mb-6">
-              <h2 className="text-2xl font-bold">
+        <div className={s.modalOverlay}>
+          <div className={s.modalContent}>
+            <div className={s.modalHeader}>
+              <h2 className={s.modalTitle}>
                 {editingCoupon ? 'Редагувати купон' : 'Новий купон'}
               </h2>
               <button
                 onClick={handleCloseModal}
-                className="p-2 hover:bg-muted rounded-md transition-colors"
+                className={s.modalCloseBtn}
               >
-                <X className="h-5 w-5" />
+                <X className={s.closeIcon} />
               </button>
             </div>
 
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div className="grid md:grid-cols-2 gap-4">
+            <form onSubmit={handleSubmit} className={s.form}>
+              <div className={s.formGrid2}>
                 <div>
-                  <label className="block text-sm font-medium mb-2">
+                  <label className={s.formLabel}>
                     Код купона *
                   </label>
                   <input
@@ -310,14 +307,14 @@ export default function AdminCouponsPage() {
                     onChange={(e) =>
                       setFormData({ ...formData, code: e.target.value.toUpperCase() })
                     }
-                    className="input w-full font-mono"
+                    className={`input ${s.formInputMono}`}
                     required
                     placeholder="SUMMER2024"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium mb-2">
+                  <label className={s.formLabel}>
                     Тип знижки *
                   </label>
                   <select
@@ -325,7 +322,7 @@ export default function AdminCouponsPage() {
                     onChange={(e) =>
                       setFormData({ ...formData, type: e.target.value as any })
                     }
-                    className="input w-full"
+                    className={`input ${s.formInputFull}`}
                   >
                     <option value="percentage">Відсоток</option>
                     <option value="fixed">Фіксована сума</option>
@@ -334,22 +331,22 @@ export default function AdminCouponsPage() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium mb-2">Опис *</label>
+                <label className={s.formLabel}>Опис *</label>
                 <textarea
                   value={formData.description}
                   onChange={(e) =>
                     setFormData({ ...formData, description: e.target.value })
                   }
-                  className="input w-full"
+                  className={`input ${s.formInputFull}`}
                   rows={2}
                   required
                   placeholder="Літня знижка 20%"
                 />
               </div>
 
-              <div className="grid md:grid-cols-3 gap-4">
+              <div className={s.formGrid3}>
                 <div>
-                  <label className="block text-sm font-medium mb-2">
+                  <label className={s.formLabel}>
                     Значення *
                   </label>
                   <input
@@ -358,18 +355,18 @@ export default function AdminCouponsPage() {
                     onChange={(e) =>
                       setFormData({ ...formData, value: Number(e.target.value) })
                     }
-                    className="input w-full"
+                    className={`input ${s.formInputFull}`}
                     required
                     min="0"
                     step="0.01"
                   />
-                  <p className="text-xs text-muted-foreground mt-1">
+                  <p className={s.formHint}>
                     {formData.type === 'percentage' ? 'Відсоток (%)' : 'Сума (₴)'}
                   </p>
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium mb-2">
+                  <label className={s.formLabel}>
                     Мін. сума покупки
                   </label>
                   <input
@@ -378,13 +375,13 @@ export default function AdminCouponsPage() {
                     onChange={(e) =>
                       setFormData({ ...formData, minPurchase: Number(e.target.value) })
                     }
-                    className="input w-full"
+                    className={`input ${s.formInputFull}`}
                     min="0"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium mb-2">
+                  <label className={s.formLabel}>
                     Макс. знижка
                   </label>
                   <input
@@ -393,15 +390,15 @@ export default function AdminCouponsPage() {
                     onChange={(e) =>
                       setFormData({ ...formData, maxDiscount: Number(e.target.value) })
                     }
-                    className="input w-full"
+                    className={`input ${s.formInputFull}`}
                     min="0"
                   />
                 </div>
               </div>
 
-              <div className="grid md:grid-cols-2 gap-4">
+              <div className={s.formGrid2}>
                 <div>
-                  <label className="block text-sm font-medium mb-2">
+                  <label className={s.formLabel}>
                     Дата початку *
                   </label>
                   <input
@@ -410,13 +407,13 @@ export default function AdminCouponsPage() {
                     onChange={(e) =>
                       setFormData({ ...formData, startDate: e.target.value })
                     }
-                    className="input w-full"
+                    className={`input ${s.formInputFull}`}
                     required
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium mb-2">
+                  <label className={s.formLabel}>
                     Дата закінчення *
                   </label>
                   <input
@@ -425,14 +422,14 @@ export default function AdminCouponsPage() {
                     onChange={(e) =>
                       setFormData({ ...formData, endDate: e.target.value })
                     }
-                    className="input w-full"
+                    className={`input ${s.formInputFull}`}
                     required
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-sm font-medium mb-2">
+                <label className={s.formLabel}>
                   Ліміт використань (0 = необмежено)
                 </label>
                 <input
@@ -441,46 +438,46 @@ export default function AdminCouponsPage() {
                   onChange={(e) =>
                     setFormData({ ...formData, usageLimit: Number(e.target.value) })
                   }
-                  className="input w-full"
+                  className={`input ${s.formInputFull}`}
                   min="0"
                 />
               </div>
 
-              <div className="flex gap-4">
-                <label className="flex items-center gap-2 cursor-pointer">
+              <div className={s.checkboxRow}>
+                <label className={s.checkboxLabel}>
                   <input
                     type="checkbox"
                     checked={formData.isActive}
                     onChange={(e) =>
                       setFormData({ ...formData, isActive: e.target.checked })
                     }
-                    className="cursor-pointer"
+                    className={s.checkboxInput}
                   />
-                  <span className="text-sm">Активний</span>
+                  <span className={s.checkboxText}>Активний</span>
                 </label>
 
-                <label className="flex items-center gap-2 cursor-pointer">
+                <label className={s.checkboxLabel}>
                   <input
                     type="checkbox"
                     checked={formData.isPublic}
                     onChange={(e) =>
                       setFormData({ ...formData, isPublic: e.target.checked })
                     }
-                    className="cursor-pointer"
+                    className={s.checkboxInput}
                   />
-                  <span className="text-sm">Публічний</span>
+                  <span className={s.checkboxText}>Публічний</span>
                 </label>
               </div>
 
-              <div className="flex gap-3 pt-4">
+              <div className={s.formActions}>
                 <button
                   type="button"
                   onClick={handleCloseModal}
-                  className="btn-secondary flex-1"
+                  className={`btn-secondary ${s.formActionBtn}`}
                 >
                   Скасувати
                 </button>
-                <button type="submit" className="btn-primary flex-1">
+                <button type="submit" className={`btn-primary ${s.formActionBtn}`}>
                   {editingCoupon ? 'Зберегти' : 'Створити'}
                 </button>
               </div>

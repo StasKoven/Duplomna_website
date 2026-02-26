@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { Star } from 'lucide-react'
 import { motion } from 'framer-motion'
+import s from './Rating.module.css'
 
 interface RatingInputProps {
   value: number
@@ -11,17 +12,17 @@ interface RatingInputProps {
   readonly?: boolean
 }
 
+const inputStarSizes = {
+  sm: s.starInputSm,
+  md: s.starInputMd,
+  lg: s.starInputLg
+} as const
+
 export function RatingInput({ value, onChange, size = 'md', readonly = false }: RatingInputProps) {
   const [hover, setHover] = useState(0)
 
-  const sizes = {
-    sm: 'h-4 w-4',
-    md: 'h-6 w-6',
-    lg: 'h-8 w-8'
-  }
-
   return (
-    <div className="flex items-center gap-1">
+    <div className={s.inputContainer}>
       {[1, 2, 3, 4, 5].map((star) => (
         <button
           key={star}
@@ -30,13 +31,11 @@ export function RatingInput({ value, onChange, size = 'md', readonly = false }: 
           onClick={() => !readonly && onChange(star)}
           onMouseEnter={() => !readonly && setHover(star)}
           onMouseLeave={() => !readonly && setHover(0)}
-          className={`transition-all ${readonly ? 'cursor-default' : 'cursor-pointer hover:scale-110'}`}
+          className={`${s.starButton} ${readonly ? s.starButtonReadonly : s.starButtonInteractive}`}
         >
           <Star
-            className={`${sizes[size]} ${
-              star <= (hover || value)
-                ? 'fill-yellow-400 text-yellow-400'
-                : 'text-gray-300'
+            className={`${inputStarSizes[size]} ${
+              star <= (hover || value) ? s.starActive : s.starInactive
             }`}
           />
         </button>
@@ -52,38 +51,36 @@ interface RatingDisplayProps {
   showCount?: boolean
 }
 
+const displayStarSizes = {
+  sm: s.starDisplaySm,
+  md: s.starDisplayMd,
+  lg: s.starDisplayLg
+} as const
+
+const textSizes = {
+  sm: s.textSm,
+  md: s.textMd,
+  lg: s.textLg
+} as const
+
 export function RatingDisplay({ rating, count, size = 'md', showCount = true }: RatingDisplayProps) {
-  const sizes = {
-    sm: 'h-3 w-3',
-    md: 'h-4 w-4',
-    lg: 'h-5 w-5'
-  }
-
-  const textSizes = {
-    sm: 'text-xs',
-    md: 'text-sm',
-    lg: 'text-base'
-  }
-
   return (
-    <div className="flex items-center gap-2">
-      <div className="flex items-center gap-0.5">
+    <div className={s.displayContainer}>
+      <div className={s.displayStarsContainer}>
         {[1, 2, 3, 4, 5].map((star) => (
           <Star
             key={star}
-            className={`${sizes[size]} ${
-              star <= Math.round(rating)
-                ? 'fill-yellow-400 text-yellow-400'
-                : 'text-gray-300'
+            className={`${displayStarSizes[size]} ${
+              star <= Math.round(rating) ? s.starActive : s.starInactive
             }`}
           />
         ))}
       </div>
-      <span className={`${textSizes[size]} font-medium`}>
+      <span className={`${textSizes[size]} ${s.ratingText}`}>
         {rating.toFixed(1)}
       </span>
       {showCount && count !== undefined && (
-        <span className={`${textSizes[size]} text-muted-foreground`}>
+        <span className={`${textSizes[size]} ${s.countText}`}>
           ({count})
         </span>
       )}
@@ -108,24 +105,24 @@ export function RatingBreakdown({ ratings, totalCount }: RatingBreakdownProps) {
   }
 
   return (
-    <div className="space-y-2">
+    <div className={s.breakdownContainer}>
       {[5, 4, 3, 2, 1].map((star) => (
-        <div key={star} className="flex items-center gap-3">
-          <div className="flex items-center gap-1 w-12">
-            <span className="text-sm font-medium">{star}</span>
-            <Star className="h-3 w-3 fill-yellow-400 text-yellow-400" />
+        <div key={star} className={s.breakdownRow}>
+          <div className={s.breakdownLabel}>
+            <span className={s.breakdownLabelText}>{star}</span>
+            <Star className={s.breakdownStar} />
           </div>
-          <div className="flex-1">
-            <div className="h-2 bg-muted rounded-full overflow-hidden">
+          <div className={s.breakdownBarContainer}>
+            <div className={s.breakdownBarBg}>
               <motion.div
                 initial={{ width: 0 }}
                 animate={{ width: `${getPercentage(ratings[star as keyof typeof ratings])}%` }}
                 transition={{ duration: 0.5, delay: (5 - star) * 0.1 }}
-                className="h-full bg-yellow-400"
+                className={s.breakdownBarFill}
               />
             </div>
           </div>
-          <span className="text-sm text-muted-foreground w-12 text-right">
+          <span className={s.breakdownCount}>
             {ratings[star as keyof typeof ratings]}
           </span>
         </div>

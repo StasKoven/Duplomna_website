@@ -1,0 +1,141 @@
+/* Сторінка реєстрації — стилі */
+
+/* Обгортка сторінки */
+.wrapper {
+  @apply min-h-[80vh] flex items-center justify-center py-12 px-4;
+}
+
+/* Контейнер форми */
+.container {
+  @apply w-full max-w-2xl;
+}
+
+/* Заголовок сторінки */
+.header {
+  @apply text-center mb-8;
+}
+
+.title {
+  @apply text-3xl font-bold mb-2;
+}
+
+.subtitle {
+  @apply text-muted-foreground;
+}
+
+/* Картка форми */
+.card {
+  @apply bg-card p-8 rounded-lg shadow-lg border;
+}
+
+.form {
+  @apply space-y-6;
+}
+
+/* Сітка для двоколонкових полів */
+.gridRow {
+  @apply grid md:grid-cols-2 gap-6;
+}
+
+/* Мітки та поля вводу */
+.label {
+  @apply block text-sm font-medium mb-2;
+}
+
+.inputWrapper {
+  @apply relative;
+}
+
+.inputIcon {
+  @apply absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground;
+}
+
+.input {
+  @apply w-full pl-10 pr-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary;
+}
+
+.inputWithToggle {
+  @apply w-full pl-10 pr-12 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary;
+}
+
+.error {
+  @apply mt-1 text-sm text-destructive;
+}
+
+/* Перемикач видимості пароля */
+.togglePassword {
+  @apply absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground;
+}
+
+.icon {
+  @apply h-5 w-5;
+}
+
+/* Блок погодження з умовами */
+.termsRow {
+  @apply flex items-start gap-2;
+}
+
+.termsCheckbox {
+  @apply mt-1 rounded border-gray-300 text-primary focus:ring-primary;
+}
+
+.termsLabel {
+  @apply text-sm text-muted-foreground;
+}
+
+.termsLink {
+  @apply text-primary hover:underline;
+}
+
+/* Кнопка відправки */
+.submitBtn {
+  @apply w-full bg-primary text-white py-2 px-4 rounded-md hover:bg-primary/90 transition disabled:opacity-50 disabled:cursor-not-allowed font-medium;
+}
+
+/* Роздільник "або" */
+.dividerSection {
+  @apply mt-6;
+}
+
+.divider {
+  @apply relative;
+}
+
+.dividerLine {
+  @apply absolute inset-0 flex items-center;
+}
+
+.dividerBorder {
+  @apply w-full border-t;
+}
+
+.dividerTextWrap {
+  @apply relative flex justify-center text-sm;
+}
+
+.dividerSpan {
+  @apply px-2 bg-card text-muted-foreground;
+}
+
+/* Кнопка реєстрації через Google */
+.googleBtn {
+  @apply mt-4 w-full flex items-center justify-center gap-3 bg-white text-gray-700 border border-gray-300 py-2 px-4 rounded-md hover:bg-gray-50 transition disabled:opacity-50 disabled:cursor-not-allowed font-medium shadow-sm;
+}
+
+.googleIcon {
+  @apply h-5 w-5;
+}
+
+/* Посилання на вхід */
+.footerText {
+  @apply mt-6 text-center;
+}
+
+.footerP {
+  @apply text-sm text-muted-foreground;
+}
+
+.authLink {
+  @apply text-primary font-medium hover:underline;
+}

@@ -1,0 +1,39 @@
+/* Зовнішній контейнер сторінки помилки */
+.wrapper {
+  @apply min-h-screen flex items-center justify-center bg-background;
+}
+
+/* Картка з повідомленням про помилку */
+.card {
+  @apply max-w-md w-full p-6 bg-card border rounded-lg shadow-lg;
+}
+
+/* Заголовок помилки */
+.title {
+  @apply text-2xl font-bold text-destructive mb-4;
+}
+
+/* Текст повідомлення */
+.message {
+  @apply text-muted-foreground mb-4;
+}
+
+/* Контейнер деталей помилки */
+.details {
+  @apply mb-4;
+}
+
+/* Кнопка розкриття деталей */
+.summary {
+  @apply cursor-pointer text-sm font-medium mb-2;
+}
+
+/* Блок з текстом помилки */
+.errorPre {
+  @apply text-xs bg-muted p-3 rounded overflow-auto max-h-40;
+}
+
+/* Кнопка перезавантаження сторінки */
+.reloadButton {
+  @apply w-full bg-primary text-primary-foreground px-4 py-2 rounded-md hover:bg-primary/90 transition;
+}

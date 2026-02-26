@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import { useAuthStore } from '@/store/authStore'
 import { LayoutDashboard, Package, FolderOpen, Users, ShoppingCart, MessageSquare } from 'lucide-react'
 import Link from 'next/link'
+import s from './page.module.css'
 
 export default function AdminDashboardPage() {
   const router = useRouter()
@@ -62,31 +63,31 @@ export default function AdminDashboardPage() {
   ]
 
   return (
-    <div className="container-custom py-8">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold mb-2">Панель адміністратора</h1>
-        <p className="text-muted-foreground">
+    <div className={`container-custom ${s.page}`}>
+      <div className={s.header}>
+        <h1 className={s.title}>Панель адміністратора</h1>
+        <p className={s.subtitle}>
           Вітаємо, {user.firstName} {user.lastName}!
         </p>
       </div>
 
-      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className={s.menuGrid}>
         {menuItems.map((item) => {
           const Icon = item.icon
           return (
             <Link
               key={item.href}
               href={item.href}
-              className="block group"
+              className={`${s.menuLink} group`}
             >
-              <div className="bg-card border rounded-lg p-6 hover:shadow-lg transition-all group-hover:scale-105">
-                <div className="flex items-center gap-4 mb-4">
-                  <div className="p-3 bg-primary/10 rounded-lg group-hover:bg-primary/20 transition-colors">
-                    <Icon className="h-6 w-6 text-primary" />
+              <div className={s.menuCard}>
+                <div className={s.menuCardContent}>
+                  <div className={s.menuIconWrap}>
+                    <Icon className={s.menuIcon} />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-lg">{item.title}</h3>
-                    <p className="text-sm text-muted-foreground">
+                    <h3 className={s.menuTitle}>{item.title}</h3>
+                    <p className={s.menuDescription}>
                       {item.description}
                     </p>
                   </div>
@@ -98,32 +99,32 @@ export default function AdminDashboardPage() {
       </div>
 
       {/* Quick Stats */}
-      <div className="mt-12">
-        <h2 className="text-2xl font-bold mb-6">Швидка статистика</h2>
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-          <div className="bg-card border rounded-lg p-6">
-            <div className="text-sm text-muted-foreground mb-1">
+      <div className={s.statsSection}>
+        <h2 className={s.statsTitle}>Швидка статистика</h2>
+        <div className={s.statsGrid}>
+          <div className={s.statCard}>
+            <div className={s.statLabel}>
               Всього товарів
             </div>
-            <div className="text-3xl font-bold">-</div>
+            <div className={s.statValue}>-</div>
           </div>
-          <div className="bg-card border rounded-lg p-6">
-            <div className="text-sm text-muted-foreground mb-1">
+          <div className={s.statCard}>
+            <div className={s.statLabel}>
               Активних замовлень
             </div>
-            <div className="text-3xl font-bold">-</div>
+            <div className={s.statValue}>-</div>
           </div>
-          <div className="bg-card border rounded-lg p-6">
-            <div className="text-sm text-muted-foreground mb-1">
+          <div className={s.statCard}>
+            <div className={s.statLabel}>
               Користувачів
             </div>
-            <div className="text-3xl font-bold">-</div>
+            <div className={s.statValue}>-</div>
           </div>
-          <div className="bg-card border rounded-lg p-6">
-            <div className="text-sm text-muted-foreground mb-1">
+          <div className={s.statCard}>
+            <div className={s.statLabel}>
               Дохід (місяць)
             </div>
-            <div className="text-3xl font-bold">-</div>
+            <div className={s.statValue}>-</div>
           </div>
         </div>
       </div>

@@ -10,6 +10,7 @@ import * as z from 'zod'
 import { Mail, Lock, Eye, EyeOff } from 'lucide-react'
 import { useAuthStore } from '@/store/authStore'
 import { toast } from 'sonner'
+import s from './page.module.css'
 
 const loginSchema = z.object({
   email: z.string().email('Невірний формат email'),
@@ -65,83 +66,83 @@ function LoginForm() {
   }
 
   return (
-    <div className="min-h-[80vh] flex items-center justify-center py-12 px-4">
+    <div className={s.wrapper}>
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="w-full max-w-md"
+        className={s.container}
       >
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold mb-2">Вхід до аккаунту</h1>
-          <p className="text-muted-foreground">
+        <div className={s.header}>
+          <h1 className={s.title}>Вхід до аккаунту</h1>
+          <p className={s.subtitle}>
             Введіть свої дані для входу
           </p>
         </div>
 
-        <div className="bg-card p-8 rounded-lg shadow-lg border">
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+        <div className={s.card}>
+          <form onSubmit={handleSubmit(onSubmit)} className={s.form}>
             <div>
-              <label className="block text-sm font-medium mb-2">
+              <label className={s.label}>
                 Email
               </label>
-              <div className="relative">
-                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+              <div className={s.inputWrapper}>
+                <Mail className={s.inputIcon} />
                 <input
                   {...register('email')}
                   type="email"
                   placeholder="your@email.com"
-                  className="w-full pl-10 pr-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
+                  className={s.input}
                 />
               </div>
               {errors.email && (
-                <p className="mt-1 text-sm text-destructive">
+                <p className={s.error}>
                   {errors.email.message}
                 </p>
               )}
             </div>
 
             <div>
-              <label className="block text-sm font-medium mb-2">
+              <label className={s.label}>
                 Пароль
               </label>
-              <div className="relative">
-                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+              <div className={s.inputWrapper}>
+                <Lock className={s.inputIcon} />
                 <input
                   {...register('password')}
                   type={showPassword ? 'text' : 'password'}
                   placeholder="••••••••"
-                  className="w-full pl-10 pr-12 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
+                  className={s.inputWithToggle}
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                  className={s.togglePassword}
                 >
                   {showPassword ? (
-                    <EyeOff className="h-5 w-5" />
+                    <EyeOff className={s.icon} />
                   ) : (
-                    <Eye className="h-5 w-5" />
+                    <Eye className={s.icon} />
                   )}
                 </button>
               </div>
               {errors.password && (
-                <p className="mt-1 text-sm text-destructive">
+                <p className={s.error}>
                   {errors.password.message}
                 </p>
               )}
             </div>
 
-            <div className="flex items-center justify-between">
-              <label className="flex items-center gap-2 cursor-pointer">
+            <div className={s.rememberRow}>
+              <label className={s.checkboxLabel}>
                 <input
                   type="checkbox"
-                  className="rounded border-gray-300 text-primary focus:ring-primary"
+                  className={s.checkbox}
                 />
-                <span className="text-sm">Запам'ятати мене</span>
+                <span className={s.rememberText}>Запам'ятати мене</span>
               </label>
               <Link
                 href="/forgot-password"
-                className="text-sm text-primary hover:underline"
+                className={s.forgotLink}
               >
                 Забули пароль?
               </Link>
@@ -150,19 +151,19 @@ function LoginForm() {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full bg-primary text-white py-2 px-4 rounded-md hover:bg-primary/90 transition disabled:opacity-50 disabled:cursor-not-allowed font-medium"
+              className={s.submitBtn}
             >
               {isLoading ? 'Завантаження...' : 'Увійти'}
             </button>
           </form>
 
-          <div className="mt-6">
-            <div className="relative">
-              <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t"></div>
+          <div className={s.dividerSection}>
+            <div className={s.divider}>
+              <div className={s.dividerLine}>
+                <div className={s.dividerBorder}></div>
               </div>
-              <div className="relative flex justify-center text-sm">
-                <span className="px-2 bg-card text-muted-foreground">
+              <div className={s.dividerTextWrap}>
+                <span className={s.dividerSpan}>
                   або
                 </span>
               </div>
@@ -172,9 +173,9 @@ function LoginForm() {
               type="button"
               onClick={handleGoogleLogin}
               disabled={isGoogleLoading}
-              className="mt-4 w-full flex items-center justify-center gap-3 bg-white text-gray-700 border border-gray-300 py-2 px-4 rounded-md hover:bg-gray-50 transition disabled:opacity-50 disabled:cursor-not-allowed font-medium shadow-sm"
+              className={s.googleBtn}
             >
-              <svg className="h-5 w-5" viewBox="0 0 24 24">
+              <svg className={s.googleIcon} viewBox="0 0 24 24">
                 <path
                   d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z"
                   fill="#4285F4"
@@ -196,33 +197,33 @@ function LoginForm() {
             </button>
           </div>
 
-          <div className="mt-6 text-center">
-            <p className="text-sm text-muted-foreground">
+          <div className={s.footerText}>
+            <p className={s.footerP}>
               Ще немає аккаунту?{' '}
               <Link
                 href="/register"
-                className="text-primary font-medium hover:underline"
+                className={s.authLink}
               >
                 Зареєструватися
               </Link>
             </p>
           </div>
 
-          <div className="mt-6">
-            <div className="relative">
-              <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t"></div>
+          <div className={s.dividerSection}>
+            <div className={s.divider}>
+              <div className={s.dividerLine}>
+                <div className={s.dividerBorder}></div>
               </div>
-              <div className="relative flex justify-center text-sm">
-                <span className="px-2 bg-card text-muted-foreground">
+              <div className={s.dividerTextWrap}>
+                <span className={s.dividerSpan}>
                   Для тестування
                 </span>
               </div>
             </div>
-            <div className="mt-4 p-4 bg-muted rounded-md text-sm">
-              <p className="font-medium mb-2">Тестовий аккаунт адміністратора:</p>
-              <p className="text-muted-foreground">Email: admin@electronics.com</p>
-              <p className="text-muted-foreground">Пароль: Admin123!@#</p>
+            <div className={s.testInfo}>
+              <p className={s.testInfoTitle}>Тестовий аккаунт адміністратора:</p>
+              <p className={s.testInfoText}>Email: admin@electronics.com</p>
+              <p className={s.testInfoText}>Пароль: Admin123!@#</p>
             </div>
           </div>
         </div>
@@ -233,8 +234,8 @@ function LoginForm() {
 
 function LoginLoading() {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-background to-secondary/20">
-      <div className="animate-pulse">Завантаження...</div>
+    <div className={s.loadingWrapper}>
+      <div className={s.loadingText}>Завантаження...</div>
     </div>
   )
 }

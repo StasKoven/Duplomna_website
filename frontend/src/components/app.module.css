@@ -1,0 +1,9 @@
+/* Обгортка всього додатку */
+.wrapper {
+  @apply flex min-h-screen flex-col;
+}
+
+/* Основний контент сторінки */
+.main {
+  @apply flex-1 pb-16 md:pb-0;
+}

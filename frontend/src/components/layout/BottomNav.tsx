@@ -7,7 +7,7 @@ import { Home, Search, ShoppingCart, Heart, User } from 'lucide-react'
 import { useCartStore } from '@/store/cartStore'
 import { useWishlistStore } from '@/store/wishlistStore'
 import { useAuthStore } from '@/store/authStore'
-import { cn } from '@/lib/utils'
+import s from './BottomNav.module.css'
 
 export default function BottomNav() {
   const pathname = usePathname()
@@ -24,6 +24,7 @@ export default function BottomNav() {
   const wishlistItemsCount = mounted ? getWishlistTotal() : 0
   const isAuth = mounted ? isAuthenticated : false
 
+  // Елементи навігації
   const navItems = [
     {
       href: '/',
@@ -60,43 +61,37 @@ export default function BottomNav() {
   ]
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-sm border-t shadow-lg md:hidden">
-      <div className="flex items-stretch h-14 max-w-md mx-auto">
+    // Нижня навігаційна панель
+    <nav className={s.nav}>
+      <div className={s.navContainer}>
         {navItems.map((item) => {
           const Icon = item.icon
           return (
+            // Посилання навігації
             <Link
               key={item.href}
               href={item.href}
-              className={cn(
-                'flex flex-col items-center justify-center flex-1 py-1.5 transition-colors',
-                item.isActive 
-                  ? 'text-primary' 
-                  : 'text-muted-foreground active:text-foreground'
-              )}
+              className={item.isActive ? s.navLinkActive : s.navLink}
             >
-              <div className="relative mb-0.5">
-                <Icon className={cn(
-                  'h-5 w-5',
-                  item.isActive && 'stroke-[2.5px]'
-                )} />
+              {/* Іконка з бейджем */}
+              <div className={s.iconWrapper}>
+                <Icon className={item.isActive ? s.iconActive : s.icon} />
                 {item.badge && (
-                  <span className="absolute -top-1 -right-2 flex h-4 min-w-4 px-1 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-primary-foreground">
+                  <span className={s.badge}>
                     {item.badge > 99 ? '99' : item.badge}
                   </span>
                 )}
               </div>
-              <span className={cn(
-                'text-[10px] leading-tight',
-                item.isActive ? 'font-semibold' : 'font-normal'
-              )}>
+              {/* Текстова мітка */}
+              <span className={item.isActive ? s.labelActive : s.label}>
                 {item.label}
               </span>
             </Link>
           )
         })}
       </div>
-      <div className="h-[env(safe-area-inset-bottom)]" />
+      {/* Безпечна зона для мобільних пристроїв */}
+      <div className={s.safeArea} />
     </nav>
   )
 }

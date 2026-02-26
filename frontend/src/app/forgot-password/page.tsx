@@ -8,6 +8,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
 import { Mail, ArrowLeft } from 'lucide-react'
 import { toast } from 'sonner'
+import s from './page.module.css'
 
 const forgotPasswordSchema = z.object({
   email: z.string().email('Невірний формат email'),
@@ -47,26 +48,26 @@ export default function ForgotPasswordPage() {
 
   if (emailSent) {
     return (
-      <div className="min-h-[80vh] flex items-center justify-center py-12 px-4">
+      <div className={s.wrapper}>
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="w-full max-w-md text-center"
+          className={s.successContainer}
         >
-          <div className="mb-6">
-            <div className="mx-auto w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mb-4">
-              <Mail className="h-8 w-8 text-green-600" />
+          <div className={s.successHeader}>
+            <div className={s.successIconWrap}>
+              <Mail className={s.successIcon} />
             </div>
-            <h1 className="text-3xl font-bold mb-2">Перевірте свою пошту</h1>
-            <p className="text-muted-foreground">
+            <h1 className={s.title}>Перевірте свою пошту</h1>
+            <p className={s.subtitle}>
               Ми надіслали інструкції для відновлення паролю на вказаний email.
               Перевірте свою поштову скриньку.
             </p>
           </div>
 
-          <div className="bg-muted p-4 rounded-lg mb-6 text-sm text-muted-foreground">
-            <p className="mb-2">Не отримали листа?</p>
-            <ul className="space-y-1 text-left">
+          <div className={s.hintBox}>
+            <p className={s.hintTitle}>Не отримали листа?</p>
+            <ul className={s.hintList}>
               <li>• Перевірте папку "Спам"</li>
               <li>• Переконайтесь, що email введено правильно</li>
               <li>• Спробуйте ще раз через кілька хвилин</li>
@@ -75,9 +76,9 @@ export default function ForgotPasswordPage() {
 
           <Link
             href="/login"
-            className="inline-flex items-center gap-2 text-primary hover:underline"
+            className={s.backLink}
           >
-            <ArrowLeft className="h-4 w-4" />
+            <ArrowLeft className={s.backIcon} />
             Повернутися до входу
           </Link>
         </motion.div>
@@ -86,43 +87,43 @@ export default function ForgotPasswordPage() {
   }
 
   return (
-    <div className="min-h-[80vh] flex items-center justify-center py-12 px-4">
+    <div className={s.wrapper}>
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="w-full max-w-md"
+        className={s.container}
       >
-        <div className="mb-6">
+        <div className={s.headerSection}>
           <Link
             href="/login"
-            className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground mb-4"
+            className={s.backToLogin}
           >
-            <ArrowLeft className="h-4 w-4" />
+            <ArrowLeft className={s.backIcon} />
             Назад до входу
           </Link>
-          <h1 className="text-3xl font-bold mb-2">Забули пароль?</h1>
-          <p className="text-muted-foreground">
+          <h1 className={s.title}>Забули пароль?</h1>
+          <p className={s.subtitle}>
             Введіть свій email, і ми надішлемо інструкції для відновлення паролю
           </p>
         </div>
 
-        <div className="bg-card p-8 rounded-lg shadow-lg border">
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+        <div className={s.card}>
+          <form onSubmit={handleSubmit(onSubmit)} className={s.form}>
             <div>
-              <label className="block text-sm font-medium mb-2">
+              <label className={s.label}>
                 Email адреса
               </label>
-              <div className="relative">
-                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+              <div className={s.inputWrapper}>
+                <Mail className={s.inputIcon} />
                 <input
                   {...register('email')}
                   type="email"
                   placeholder="your@email.com"
-                  className="w-full pl-10 pr-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
+                  className={s.input}
                 />
               </div>
               {errors.email && (
-                <p className="mt-1 text-sm text-destructive">
+                <p className={s.error}>
                   {errors.email.message}
                 </p>
               )}
@@ -131,18 +132,18 @@ export default function ForgotPasswordPage() {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full bg-primary text-white py-2 px-4 rounded-md hover:bg-primary/90 transition disabled:opacity-50 disabled:cursor-not-allowed font-medium"
+              className={s.submitBtn}
             >
               {isLoading ? 'Відправка...' : 'Відновити пароль'}
             </button>
           </form>
 
-          <div className="mt-6 text-center">
-            <p className="text-sm text-muted-foreground">
+          <div className={s.footerText}>
+            <p className={s.footerP}>
               Згадали пароль?{' '}
               <Link
                 href="/login"
-                className="text-primary font-medium hover:underline"
+                className={s.authLink}
               >
                 Увійти
               </Link>
@@ -150,8 +151,8 @@ export default function ForgotPasswordPage() {
           </div>
         </div>
 
-        <div className="mt-6 p-4 bg-muted rounded-lg text-sm text-muted-foreground">
-          <p className="font-medium mb-2">💡 Підказка:</p>
+        <div className={s.tipBox}>
+          <p className={s.tipTitle}>💡 Підказка:</p>
           <p>
             Для тестування використовуйте email: <strong>admin@electronics.com</strong>
           </p>

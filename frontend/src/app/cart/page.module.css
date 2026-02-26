@@ -1,0 +1,331 @@
+/* Стан завантаження */
+.loadingPage {
+  @apply py-12;
+}
+
+.loadingWrapper {
+  @apply text-center;
+}
+
+.spinner {
+  @apply animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto;
+}
+
+.loadingText {
+  @apply mt-4 text-muted-foreground;
+}
+
+/* Порожній кошик */
+.emptyPage {
+  @apply py-12;
+}
+
+.emptyWrapper {
+  @apply text-center max-w-md mx-auto;
+}
+
+.emptyIcon {
+  @apply h-24 w-24 mx-auto text-muted-foreground mb-6;
+}
+
+.emptyTitle {
+  @apply text-3xl font-bold mb-4;
+}
+
+.emptyDescription {
+  @apply text-muted-foreground mb-8;
+}
+
+.emptyLink {
+  @apply inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-md hover:bg-primary/90 transition;
+}
+
+.emptyLinkIcon {
+  @apply h-5 w-5;
+}
+
+/* Модальне вікно авторизації */
+.modalOverlay {
+  @apply fixed inset-0 bg-black/50 z-50;
+}
+
+.modalContent {
+  @apply fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-50 w-full max-w-sm bg-background rounded-xl shadow-xl p-6;
+}
+
+.modalCloseBtn {
+  @apply absolute top-4 right-4 p-1 hover:bg-accent rounded-lg transition;
+}
+
+.modalCloseIcon {
+  @apply h-5 w-5;
+}
+
+.modalHeader {
+  @apply text-center mb-6;
+}
+
+.modalIconWrapper {
+  @apply w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4;
+}
+
+.modalIcon {
+  @apply h-8 w-8 text-primary;
+}
+
+.modalTitle {
+  @apply text-xl font-bold mb-2;
+}
+
+.modalDescription {
+  @apply text-sm text-muted-foreground;
+}
+
+.modalActions {
+  @apply space-y-3;
+}
+
+.modalLoginBtn {
+  @apply flex items-center justify-center gap-2 w-full bg-primary text-white py-3 px-4 rounded-lg font-medium hover:bg-primary/90 transition;
+}
+
+.modalRegisterBtn {
+  @apply flex items-center justify-center gap-2 w-full border py-3 px-4 rounded-lg font-medium hover:bg-accent transition;
+}
+
+.modalBtnIcon {
+  @apply h-5 w-5;
+}
+
+.modalFooter {
+  @apply text-xs text-muted-foreground text-center mt-4;
+}
+
+/* Основна сторінка кошика */
+.pageWrapper {
+  @apply py-4 sm:py-8;
+}
+
+.pageTitle {
+  @apply text-2xl sm:text-3xl font-bold mb-4 sm:mb-8;
+}
+
+.gridLayout {
+  @apply grid lg:grid-cols-3 gap-4 sm:gap-8;
+}
+
+/* Список товарів */
+.itemsColumn {
+  @apply lg:col-span-2 space-y-3 sm:space-y-4;
+}
+
+.cartCard {
+  @apply bg-card border rounded-lg p-3 sm:p-4;
+}
+
+/* Мобільний макет товару */
+.mobileLayout {
+  @apply flex gap-3 sm:hidden;
+}
+
+.mobileImageWrapper {
+  @apply relative w-20 h-20 flex-shrink-0 bg-muted rounded-md overflow-hidden;
+}
+
+.objectCover {
+  @apply object-cover;
+}
+
+.mobilePlaceholder {
+  @apply flex items-center justify-center h-full text-3xl;
+}
+
+.mobileInfo {
+  @apply flex-1 min-w-0;
+}
+
+.mobileProductLink {
+  @apply font-medium text-sm hover:text-primary transition line-clamp-2;
+}
+
+.mobilePrice {
+  @apply font-bold text-base mt-1;
+}
+
+.mobileComparePrice {
+  @apply text-xs text-muted-foreground line-through;
+}
+
+/* Мобільні елементи керування */
+.mobileControls {
+  @apply flex items-center justify-between mt-3 sm:hidden;
+}
+
+.mobileQuantityGroup {
+  @apply flex items-center gap-1 border rounded-md;
+}
+
+.mobileQuantityBtn {
+  @apply p-1.5 hover:bg-accent transition;
+}
+
+.mobileQuantityBtnIcon {
+  @apply h-4 w-4;
+}
+
+.mobileQuantityValue {
+  @apply w-8 text-center text-sm font-medium;
+}
+
+.deleteBtn {
+  @apply p-2 text-destructive hover:bg-destructive/10 rounded-md transition;
+}
+
+.deleteBtnIconSm {
+  @apply h-4 w-4;
+}
+
+.deleteBtnIconMd {
+  @apply h-5 w-5;
+}
+
+/* Десктопний макет товару */
+.desktopLayout {
+  @apply hidden sm:flex gap-4;
+}
+
+.desktopImageWrapper {
+  @apply relative w-24 h-24 flex-shrink-0 bg-muted rounded-md overflow-hidden;
+}
+
+.desktopPlaceholder {
+  @apply flex items-center justify-center h-full text-4xl;
+}
+
+.desktopInfo {
+  @apply flex-1;
+}
+
+.desktopProductLink {
+  @apply font-semibold hover:text-primary transition line-clamp-2;
+}
+
+.categoryText {
+  @apply text-sm text-muted-foreground mt-1;
+}
+
+.desktopControlsWrapper {
+  @apply flex items-center gap-4 mt-3;
+}
+
+.desktopQuantityGroup {
+  @apply flex items-center gap-2 border rounded-md;
+}
+
+.desktopQuantityBtn {
+  @apply p-2 hover:bg-accent transition;
+}
+
+.desktopQuantityValue {
+  @apply w-12 text-center font-medium;
+}
+
+.lowStockWarning {
+  @apply text-sm text-orange-600 mt-2;
+}
+
+.outOfStock {
+  @apply text-sm text-destructive mt-2;
+}
+
+/* Ціни (десктоп) */
+.priceColumn {
+  @apply text-right;
+}
+
+.priceMain {
+  @apply font-bold text-lg;
+}
+
+.priceCompare {
+  @apply text-sm text-muted-foreground line-through;
+}
+
+.priceUnit {
+  @apply text-sm text-muted-foreground mt-1;
+}
+
+/* Попередження (мобільний) */
+.mobileStockWarnings {
+  @apply sm:hidden mt-2;
+}
+
+.mobileLowStock {
+  @apply text-xs text-orange-600;
+}
+
+.mobileOutOfStock {
+  @apply text-xs text-destructive;
+}
+
+/* Підсумок замовлення */
+.summaryColumn {
+  @apply lg:col-span-1;
+}
+
+.summaryCard {
+  @apply bg-card border rounded-lg p-4 sm:p-6 sticky top-4;
+}
+
+.summaryTitle {
+  @apply text-lg sm:text-xl font-bold mb-4 sm:mb-6;
+}
+
+.summaryContent {
+  @apply space-y-3 mb-4 sm:mb-6;
+}
+
+.summaryRow {
+  @apply flex justify-between text-sm;
+}
+
+.summaryLabel {
+  @apply text-muted-foreground;
+}
+
+.summaryValue {
+  @apply font-medium;
+}
+
+.freeDelivery {
+  @apply text-green-600;
+}
+
+.deliveryHint {
+  @apply text-xs text-muted-foreground bg-muted p-2 rounded;
+}
+
+.totalDivider {
+  @apply border-t pt-3;
+}
+
+.totalRow {
+  @apply flex justify-between text-base sm:text-lg font-bold;
+}
+
+.checkoutBtn {
+  @apply w-full bg-primary text-white py-2.5 sm:py-3 px-4 rounded-md hover:bg-primary/90 transition font-medium mb-3 text-sm sm:text-base;
+}
+
+.continueLink {
+  @apply block text-center text-sm text-primary hover:underline;
+}
+
+/* Гарантії */
+.guarantees {
+  @apply mt-4 sm:mt-6 pt-4 sm:pt-6 border-t space-y-2 text-xs sm:text-sm text-muted-foreground;
+}
+
+.guaranteeItem {
+  @apply flex items-center gap-2;
+}

@@ -1,0 +1,291 @@
+/* ============================= */
+/* Хедер — основний контейнер    */
+/* ============================= */
+.header {
+  @apply sticky top-0 z-50 w-full border-b transition-all duration-300;
+}
+
+.headerScrolled {
+  @apply bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60;
+}
+
+.headerDefault {
+  @apply bg-background;
+}
+
+/* Панель інструментів */
+.toolbar {
+  @apply flex h-14 sm:h-16 items-center justify-between gap-2;
+}
+
+/* ============================= */
+/* Кнопка мобільного меню        */
+/* ============================= */
+.mobileMenuBtn {
+  @apply md:hidden p-2 -ml-2 hover:bg-accent rounded-md;
+}
+
+/* ============================= */
+/* Іконки різних розмірів        */
+/* ============================= */
+.icon {
+  @apply h-5 w-5;
+}
+
+.iconSm {
+  @apply h-4 w-4;
+}
+
+.iconLogo {
+  @apply h-5 w-5 sm:h-6 sm:w-6 text-primary;
+}
+
+.iconMuted {
+  @apply h-5 w-5 text-muted-foreground;
+}
+
+.iconMutedSm {
+  @apply h-4 w-4 text-muted-foreground;
+}
+
+/* ============================= */
+/* Логотип магазину               */
+/* ============================= */
+.logo {
+  @apply flex items-center space-x-1.5 sm:space-x-2 flex-shrink-0;
+}
+
+.logoText {
+  @apply text-lg sm:text-xl font-bold;
+}
+
+/* ============================= */
+/* Десктоп навігація              */
+/* ============================= */
+.desktopNav {
+  @apply hidden md:flex items-center space-x-6;
+}
+
+.navLink {
+  @apply text-sm font-medium transition-colors hover:text-primary;
+}
+
+/* ============================= */
+/* Пошук — десктоп               */
+/* ============================= */
+.searchForm {
+  @apply hidden lg:flex flex-1 max-w-sm mx-8;
+}
+
+.searchWrapper {
+  @apply relative w-full;
+}
+
+.searchIcon {
+  @apply absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground;
+}
+
+.searchInput {
+  @apply w-full rounded-md border border-input bg-background px-10 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2;
+}
+
+/* ============================= */
+/* Секція дій (праворуч)         */
+/* ============================= */
+.actions {
+  @apply flex items-center;
+}
+
+.mobileSearchBtn {
+  @apply lg:hidden p-2 hover:bg-accent rounded-md;
+}
+
+.actionBtn {
+  @apply relative p-2 hover:bg-accent rounded-md;
+}
+
+.compareBtn {
+  @apply hidden sm:flex relative p-2 hover:bg-accent rounded-md;
+}
+
+/* ============================= */
+/* Бейджі (лічильники)          */
+/* ============================= */
+.badgeBlue {
+  @apply absolute -right-0.5 -top-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-blue-500 text-[10px] font-bold text-white;
+}
+
+.badgeRed {
+  @apply absolute -right-0.5 -top-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-[10px] font-bold text-white;
+}
+
+.badgePrimary {
+  @apply absolute -right-0.5 -top-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-primary-foreground;
+}
+
+/* ============================= */
+/* Меню користувача — десктоп    */
+/* ============================= */
+.userMenuContainer {
+  @apply relative hidden sm:block;
+}
+
+.userMenuBtn {
+  @apply flex items-center p-2 hover:bg-accent rounded-md;
+}
+
+.userAvatar {
+  @apply h-7 w-7 rounded-full object-cover;
+}
+
+.userAvatarPlaceholder {
+  @apply h-7 w-7 rounded-full bg-primary flex items-center justify-center text-primary-foreground text-sm;
+}
+
+.userMenuOverlay {
+  @apply fixed inset-0 z-40;
+}
+
+.userDropdown {
+  @apply absolute right-0 mt-2 w-48 rounded-md border bg-popover p-1 shadow-lg z-50;
+}
+
+.userInfo {
+  @apply px-3 py-2 text-sm border-b;
+}
+
+.userName {
+  @apply font-medium;
+}
+
+.userEmail {
+  @apply text-xs text-muted-foreground truncate;
+}
+
+.dropdownLink {
+  @apply flex items-center space-x-2 px-3 py-2 text-sm hover:bg-accent rounded;
+}
+
+.logoutBtn {
+  @apply flex w-full items-center space-x-2 px-3 py-2 text-sm hover:bg-accent rounded text-red-600;
+}
+
+/* ============================= */
+/* Кнопка входу                  */
+/* ============================= */
+.loginLink {
+  @apply flex items-center space-x-2 p-2 text-sm font-medium hover:bg-accent rounded-md;
+}
+
+.loginText {
+  @apply hidden lg:inline;
+}
+
+/* ============================= */
+/* Мобільний пошук               */
+/* ============================= */
+.mobileSearchSection {
+  @apply lg:hidden border-t py-3;
+}
+
+.mobileSearchInput {
+  @apply w-full rounded-md border border-input bg-background px-10 py-2.5 text-sm;
+}
+
+.mobileSearchClose {
+  @apply absolute right-3 top-1/2 -translate-y-1/2;
+}
+
+/* ============================= */
+/* Мобільне меню — оверлей       */
+/* ============================= */
+.mobileOverlay {
+  @apply fixed inset-0 bg-background/80 backdrop-blur-sm z-40 md:hidden;
+}
+
+.mobilePanel {
+  @apply fixed top-14 left-0 bottom-0 w-[280px] bg-background border-r z-50 md:hidden overflow-y-auto;
+}
+
+.mobilePanelContent {
+  @apply p-4;
+}
+
+/* ============================= */
+/* Мобільна секція користувача   */
+/* ============================= */
+.mobileUserSection {
+  @apply mb-4 p-3 bg-muted rounded-lg;
+}
+
+.mobileUserFlex {
+  @apply flex items-center space-x-3;
+}
+
+.mobileAvatar {
+  @apply h-10 w-10 rounded-full object-cover;
+}
+
+.mobileAvatarPlaceholder {
+  @apply h-10 w-10 rounded-full bg-primary flex items-center justify-center text-primary-foreground;
+}
+
+.mobileUserInfo {
+  @apply flex-1 min-w-0;
+}
+
+.mobileUserName {
+  @apply font-medium truncate;
+}
+
+.mobileUserEmail {
+  @apply text-xs text-muted-foreground truncate;
+}
+
+.mobileLoginLink {
+  @apply flex items-center space-x-3 mb-4 p-3 bg-primary text-primary-foreground rounded-lg;
+}
+
+/* ============================= */
+/* Мобільна навігація            */
+/* ============================= */
+.mobileNav {
+  @apply space-y-1;
+}
+
+.sectionLabel {
+  @apply text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2 px-3;
+}
+
+.mobileNavLink {
+  @apply flex items-center space-x-3 px-3 py-2.5 rounded-md hover:bg-accent;
+}
+
+.mobileBadgeBlue {
+  @apply ml-auto bg-blue-500 text-white text-xs px-2 py-0.5 rounded-full;
+}
+
+.mobileBadgeRed {
+  @apply ml-auto bg-red-500 text-white text-xs px-2 py-0.5 rounded-full;
+}
+
+/* Секція дій авторизованого користувача */
+.userActionsNav {
+  @apply mt-4 pt-4 border-t space-y-1;
+}
+
+/* Секція інформаційних посилань */
+.infoNav {
+  @apply mt-4 pt-4 border-t space-y-1;
+}
+
+/* ============================= */
+/* Секція виходу з акаунту       */
+/* ============================= */
+.logoutSection {
+  @apply mt-4 pt-4 border-t;
+}
+
+.mobileLogoutBtn {
+  @apply flex w-full items-center space-x-3 px-3 py-2.5 rounded-md hover:bg-red-50 text-red-600;
+}

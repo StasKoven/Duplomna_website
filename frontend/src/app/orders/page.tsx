@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import { useAuthStore } from '@/store/authStore'
 import api from '@/lib/api'
 import { Package, CheckCircle, XCircle, Clock, Truck } from 'lucide-react'
+import s from './page.module.css'
 
 interface OrderItem {
   product: {
@@ -61,32 +62,39 @@ export default function OrdersPage() {
   }
 
   const getStatusIcon = (status: string) => {
+    const iconClass = `${s.statusIcon} ${
+      status === 'delivered' ? s.iconDelivered
+        : status === 'cancelled' ? s.iconCancelled
+        : status === 'processing' ? s.iconProcessing
+        : status === 'shipped' ? s.iconShipped
+        : s.iconDefault
+    }`
     switch (status) {
       case 'delivered':
-        return <CheckCircle className="h-5 w-5 text-green-600" />
+        return <CheckCircle className={iconClass} />
       case 'cancelled':
-        return <XCircle className="h-5 w-5 text-red-600" />
+        return <XCircle className={iconClass} />
       case 'processing':
-        return <Clock className="h-5 w-5 text-blue-600" />
+        return <Clock className={iconClass} />
       case 'shipped':
-        return <Truck className="h-5 w-5 text-purple-600" />
+        return <Truck className={iconClass} />
       default:
-        return <Package className="h-5 w-5 text-gray-600" />
+        return <Package className={iconClass} />
     }
   }
 
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'delivered':
-        return 'bg-green-100 text-green-700'
+        return s.statusDelivered
       case 'cancelled':
-        return 'bg-red-100 text-red-700'
+        return s.statusCancelled
       case 'processing':
-        return 'bg-blue-100 text-blue-700'
+        return s.statusProcessing
       case 'shipped':
-        return 'bg-purple-100 text-purple-700'
+        return s.statusShipped
       default:
-        return 'bg-gray-100 text-gray-700'
+        return s.statusDefault
     }
   }
 
@@ -112,23 +120,23 @@ export default function OrdersPage() {
   }
 
   return (
-    <div className="container-custom py-8">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold mb-2">Мої замовлення</h1>
-        <p className="text-muted-foreground">
+    <div className={`container-custom ${s.page}`}>
+      <div className={s.header}>
+        <h1 className={s.title}>Мої замовлення</h1>
+        <p className={s.subtitle}>
           Історія ваших замовлень
         </p>
       </div>
 
       {loading ? (
-        <div className="text-center py-12">Завантаження...</div>
+        <div className={s.loading}>Завантаження...</div>
       ) : orders.length === 0 ? (
-        <div className="text-center py-12">
-          <Package className="h-16 w-16 mx-auto text-muted-foreground mb-4" />
-          <h2 className="text-xl font-semibold mb-2">
+        <div className={s.emptyState}>
+          <Package className={s.emptyIcon} />
+          <h2 className={s.emptyTitle}>
             У вас поки немає замовлень
           </h2>
-          <p className="text-muted-foreground mb-6">
+          <p className={s.emptyText}>
             Почніть робити покупки, щоб побачити свої замовлення тут
           </p>
           <button
@@ -139,17 +147,17 @@ export default function OrdersPage() {
           </button>
         </div>
       ) : (
-        <div className="space-y-6">
+        <div className={s.ordersList}>
           {orders.map((order) => (
-            <div key={order._id} className="bg-card border rounded-lg p-6">
-              <div className="flex flex-wrap items-start justify-between gap-4 mb-4">
+            <div key={order._id} className={s.orderCard}>
+              <div className={s.orderHeader}>
                 <div>
-                  <div className="flex items-center gap-2 mb-1">
-                    <h3 className="font-semibold">
+                  <div className={s.orderNumberRow}>
+                    <h3 className={s.orderNumber}>
                       Замовлення #{order.orderNumber}
                     </h3>
                   </div>
-                  <p className="text-sm text-muted-foreground">
+                  <p className={s.orderDate}>
                     {new Date(order.createdAt).toLocaleDateString('uk-UA', {
                       year: 'numeric',
                       month: 'long',
@@ -159,44 +167,42 @@ export default function OrdersPage() {
                     })}
                   </p>
                 </div>
-                <div className="flex items-center gap-2">
+                <div className={s.statusWrapper}>
                   {getStatusIcon(order.status)}
                   <span
-                    className={`px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(
-                      order.status
-                    )}`}
+                    className={`${s.statusBadge} ${getStatusColor(order.status)}`}
                   >
                     {getStatusText(order.status)}
                   </span>
                 </div>
               </div>
 
-              <div className="border-t pt-4 mb-4">
-                <div className="space-y-3">
+              <div className={s.itemsSection}>
+                <div className={s.itemsList}>
                   {order.items.map((item, index) => (
                     <div
                       key={index}
-                      className="flex items-center gap-4"
+                      className={s.itemRow}
                     >
-                      <div className="w-16 h-16 bg-muted rounded flex-shrink-0">
+                      <div className={s.itemImageWrapper}>
                         {item.product.images && item.product.images[0] && (
                           <img
                             src={item.product.images[0]}
                             alt={item.product.name}
-                            className="w-full h-full object-cover rounded"
+                            className={s.itemImage}
                           />
                         )}
                       </div>
-                      <div className="flex-1 min-w-0">
-                        <h4 className="font-medium truncate">
+                      <div className={s.itemInfo}>
+                        <h4 className={s.itemName}>
                           {item.product.name}
                         </h4>
-                        <p className="text-sm text-muted-foreground">
+                        <p className={s.itemQuantity}>
                           Кількість: {item.quantity}
                         </p>
                       </div>
-                      <div className="text-right">
-                        <p className="font-semibold">
+                      <div className={s.itemPriceWrapper}>
+                        <p className={s.itemPrice}>
                           {item.price.toLocaleString('uk-UA')} ₴
                         </p>
                       </div>
@@ -205,17 +211,17 @@ export default function OrdersPage() {
                 </div>
               </div>
 
-              <div className="border-t pt-4">
-                <div className="flex justify-between items-center mb-3">
-                  <span className="text-muted-foreground">Адреса доставки:</span>
-                  <span className="text-sm">
+              <div className={s.footerSection}>
+                <div className={s.addressRow}>
+                  <span className={s.addressLabel}>Адреса доставки:</span>
+                  <span className={s.addressText}>
                     {order.shippingAddress.street}, {order.shippingAddress.city},{' '}
                     {order.shippingAddress.state} {order.shippingAddress.zipCode}
                   </span>
                 </div>
-                <div className="flex justify-between items-center">
-                  <span className="font-semibold text-lg">Всього:</span>
-                  <span className="font-bold text-xl text-primary">
+                <div className={s.totalRow}>
+                  <span className={s.totalLabel}>Всього:</span>
+                  <span className={s.totalValue}>
                     {order.total.toLocaleString('uk-UA')} ₴
                   </span>
                 </div>

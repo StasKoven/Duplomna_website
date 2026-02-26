@@ -1,6 +1,5 @@
 'use client'
 
-import { useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { motion } from 'framer-motion'
@@ -11,6 +10,7 @@ import { useCartStore } from '@/store/cartStore'
 import { useWishlistStore } from '@/store/wishlistStore'
 import { useComparisonStore } from '@/store/comparisonStore'
 import { toast } from 'sonner'
+import s from './ProductCard.module.css'
 
 interface ProductCardProps {
   product: Product
@@ -95,121 +95,105 @@ export default function ProductCard({ product, compact = false }: ProductCardPro
       <motion.div
         whileHover={{ y: -4 }}
         whileTap={{ scale: 0.98 }}
-        className="group relative rounded-lg border bg-card overflow-hidden transition-shadow hover:shadow-xl active:shadow-lg"
+        className={`group ${s.card}`}
       >
-        {/* ==================== */}
-        {/* Product Badges Section */}
-        {/* Бейджі товару: знижка, хіт продажів, наявність */}
-        {/* Розташовані у лівому верхньому куті */}
-        {/* ==================== */}
-        <div className="absolute top-1.5 sm:top-2 left-1.5 sm:left-2 z-10 flex flex-col gap-1">
+        {/* Бейджі товару */}
+        <div className={s.badgesContainer}>
           {product.isOnSale && product.discountPercentage && (
-            <span className="rounded-full bg-destructive px-1.5 sm:px-2 py-0.5 sm:py-1 text-[10px] sm:text-xs font-semibold text-destructive-foreground">
+            <span className={s.badgeDiscount}>
               -{product.discountPercentage}%
             </span>
           )}
           {product.isFeatured && (
-            <span className="rounded-full bg-primary px-1.5 sm:px-2 py-0.5 sm:py-1 text-[10px] sm:text-xs font-semibold text-primary-foreground">
+            <span className={s.badgeFeatured}>
               ХІТ
             </span>
           )}
           {product.stock === 0 && (
-            <span className="rounded-full bg-muted px-1.5 sm:px-2 py-0.5 sm:py-1 text-[10px] sm:text-xs font-semibold">
+            <span className={s.badgeOutOfStock}>
               Немає
             </span>
           )}
         </div>
 
-        {/* ==================== */}
-        {/* Action Buttons */}
-        {/* Кнопки дій: додати в бажання, порівняння */}
-        {/* Розташовані у правому верхньому куті */}
-        {/* ==================== */}
-        <div className="absolute top-1.5 sm:top-2 right-1.5 sm:right-2 z-10 flex flex-col gap-1">
+        {/* Кнопки дій: бажання, порівняння */}
+        <div className={s.actionsContainer}>
           <button
             onClick={handleToggleWishlist}
-            className="rounded-full bg-background/80 p-1.5 sm:p-2 backdrop-blur-sm transition-colors hover:bg-background active:scale-95"
+            className={s.actionButton}
           >
             <Heart
-              className={`h-4 w-4 sm:h-5 sm:w-5 ${isWishlisted ? 'fill-red-500 text-red-500' : 'text-muted-foreground'}`}
+              className={isWishlisted ? s.heartIconActive : s.heartIcon}
             />
           </button>
           <button
             onClick={handleToggleComparison}
-            className="rounded-full bg-background/80 p-1.5 sm:p-2 backdrop-blur-sm transition-colors hover:bg-background active:scale-95"
+            className={s.actionButton}
           >
             <GitCompare
-              className={`h-4 w-4 sm:h-5 sm:w-5 ${isInComparison() ? 'text-primary' : 'text-muted-foreground'}`}
+              className={isInComparison() ? s.compareIconActive : s.compareIcon}
             />
           </button>
         </div>
 
-        {/* ==================== */}
-        {/* Product Image */}
-        {/* Зображення товару з ефектом збільшення при наведенні */}
-        {/* Використовує Next.js Image для оптимізації */}
-        {/* ==================== */}
-        <div className="relative aspect-square overflow-hidden bg-muted">
+        {/* Зображення товару */}
+        <div className={s.imageWrapper}>
           {mainImage ? (
             <Image
               src={mainImage}
               alt={product.name}
               fill
               sizes="(max-width: 480px) 50vw, (max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
-              className="object-cover transition-transform group-hover:scale-105"
+              className={s.image}
             />
           ) : (
-            <div className="flex h-full items-center justify-center text-4xl sm:text-6xl">📱</div>
+            <div className={s.imagePlaceholder}>📱</div>
           )}
         </div>
 
-        {/* ==================== */}
-        {/* Product Content Section */}
         {/* Основна інформація про товар */}
-        {/* ==================== */}
-        <div className="p-2.5 sm:p-4">
-          {/* Category Name - Назва категорії */}
+        <div className={s.content}>
+          {/* Назва категорії */}
           {product.category && !compact && (
-            <p className="text-[10px] sm:text-xs text-muted-foreground mb-0.5 sm:mb-1">
+            <p className={s.categoryName}>
               {typeof product.category === 'object' ? product.category.name : ''}
             </p>
           )}
 
-          {/* Product Title - Назва товару, обмежена 2 рядками */}
-          <h3 className={`font-semibold line-clamp-2 group-hover:text-primary transition-colors ${compact ? 'text-xs sm:text-sm mb-1' : 'text-sm sm:text-base mb-1.5 sm:mb-2'}`}>
+          {/* Назва товару */}
+          <h3 className={compact ? s.titleCompact : s.title}>
             {product.name}
           </h3>
 
-          {/* Product Rating - Рейтинг та кількість відгуків */}
+          {/* Рейтинг та відгуки */}
           {product.rating.count > 0 && !compact && (
-            <div className="flex items-center gap-1 mb-1.5 sm:mb-2">
-              <Star className="h-3 w-3 sm:h-4 sm:w-4 fill-yellow-400 text-yellow-400" />
-              <span className="text-xs sm:text-sm font-medium">{product.rating.average.toFixed(1)}</span>
-              <span className="text-[10px] sm:text-xs text-muted-foreground">({product.rating.count})</span>
+            <div className={s.ratingContainer}>
+              <Star className={s.starIcon} />
+              <span className={s.ratingValue}>{product.rating.average.toFixed(1)}</span>
+              <span className={s.ratingCount}>({product.rating.count})</span>
             </div>
           )}
 
-          {/* Product Price - Ціна та стара ціна (якщо є знижка) */}
-          <div className="flex items-baseline gap-1.5 sm:gap-2 mb-2 sm:mb-3">
-            <span className={`font-bold ${compact ? 'text-sm sm:text-base' : 'text-base sm:text-xl'}`}>
+          {/* Ціна товару */}
+          <div className={s.priceContainer}>
+            <span className={compact ? s.priceCompact : s.price}>
               {formatPrice(product.price)}
             </span>
             {product.comparePrice && product.comparePrice > product.price && (
-              <span className="text-[10px] sm:text-sm text-muted-foreground line-through">
+              <span className={s.comparePrice}>
                 {formatPrice(product.comparePrice)}
               </span>
             )}
           </div>
 
-          {/* Add to Cart Button - Кнопка додавання до кошика */}
-          {/* Неактивна якщо товар відсутній */}
+          {/* Кнопка "Додати до кошика" */}
           <button
             onClick={handleAddToCart}
             disabled={product.stock === 0}
-            className={`w-full rounded-md bg-primary text-primary-foreground transition-colors hover:bg-primary/90 active:bg-primary/80 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-1.5 sm:gap-2 ${compact ? 'px-2 py-1.5 text-xs' : 'px-3 sm:px-4 py-2 sm:py-2.5 text-xs sm:text-sm'} font-medium`}
+            className={compact ? s.addToCartButtonCompact : s.addToCartButton}
           >
-            <ShoppingCart className={compact ? 'h-3 w-3' : 'h-3.5 w-3.5 sm:h-4 sm:w-4'} />
-            <span className={compact ? 'hidden xs:inline' : ''}>
+            <ShoppingCart className={compact ? s.cartIconCompact : s.cartIcon} />
+            <span className={compact ? s.cartTextCompact : undefined}>
               {product.stock === 0 ? 'Немає' : 'До кошика'}
             </span>
           </button>

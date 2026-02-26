@@ -7,6 +7,7 @@ import { Filter, X, ChevronDown, ChevronUp, RotateCcw } from 'lucide-react'
 import api from '@/lib/api'
 import { Product, Category } from '@/types'
 import ProductCard from '@/components/products/ProductCard'
+import s from './page.module.css'
 
 interface Filters {
   category: string
@@ -220,33 +221,33 @@ function ProductsContent() {
 
   // Filter Sidebar Component
   const FilterSidebar = ({ isMobile = false }: { isMobile?: boolean }) => (
-    <div className="space-y-4">
+    <div className={s.filterSidebar}>
       {/* Reset Filters */}
       {hasActiveFilters && (
         <button
           onClick={resetFilters}
-          className="flex items-center gap-2 text-sm text-primary hover:underline w-full justify-center py-2 border border-primary rounded-lg"
+          className={s.resetFiltersBtn}
         >
-          <RotateCcw className="h-4 w-4" />
+          <RotateCcw className={s.iconSm} />
           Скинути фільтри
         </button>
       )}
 
       {/* Categories */}
-      <div className="border rounded-lg overflow-hidden">
+      <div className={s.filterSection}>
         <button
           onClick={() => toggleSection('categories')}
-          className="flex items-center justify-between w-full p-4 font-semibold hover:bg-accent/50 transition"
+          className={s.sectionToggle}
         >
           <span>Категорії</span>
-          {expandedSections.categories ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+          {expandedSections.categories ? <ChevronUp className={s.iconSm} /> : <ChevronDown className={s.iconSm} />}
         </button>
         {expandedSections.categories && (
-          <div className="px-4 pb-4 space-y-1">
+          <div className={s.categoryList}>
             <button
               onClick={() => handleFilterChange('category', '')}
-              className={`block w-full text-left text-sm py-1.5 px-2 rounded transition ${
-                !filters.category ? 'bg-primary text-primary-foreground' : 'hover:bg-accent'
+              className={`${s.categoryItem} ${
+                !filters.category ? s.categoryItemActive : s.categoryItemInactive
               }`}
             >
               Всі категорії
@@ -258,8 +259,8 @@ function ProductsContent() {
                   handleFilterChange('category', category._id)
                   if (isMobile) setIsFilterOpen(false)
                 }}
-                className={`block w-full text-left text-sm py-1.5 px-2 rounded transition ${
-                  filters.category === category._id ? 'bg-primary text-primary-foreground' : 'hover:bg-accent'
+                className={`${s.categoryItem} ${
+                  filters.category === category._id ? s.categoryItemActive : s.categoryItemInactive
                 }`}
               >
                 {category.name}
@@ -270,47 +271,47 @@ function ProductsContent() {
       </div>
 
       {/* Price Range */}
-      <div className="border rounded-lg overflow-hidden">
+      <div className={s.filterSection}>
         <button
           onClick={() => toggleSection('price')}
-          className="flex items-center justify-between w-full p-4 font-semibold hover:bg-accent/50 transition"
+          className={s.sectionToggle}
         >
           <span>Ціна</span>
-          {expandedSections.price ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+          {expandedSections.price ? <ChevronUp className={s.iconSm} /> : <ChevronDown className={s.iconSm} />}
         </button>
         {expandedSections.price && (
-          <div className="px-4 pb-4 space-y-3">
-            <div className="flex gap-2 items-center">
-              <div className="flex-1">
+          <div className={s.priceBody}>
+            <div className={s.priceInputRow}>
+              <div className={s.priceInputWrapper}>
                 <input
                   type="number"
                   placeholder={`${priceRange.min}`}
                   value={localPriceMin}
                   onChange={(e) => setLocalPriceMin(e.target.value)}
-                  className="w-full px-3 py-2 text-sm border rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
+                  className={s.priceInput}
                 />
               </div>
-              <span className="text-muted-foreground">—</span>
-              <div className="flex-1">
+              <span className={s.priceSeparator}>—</span>
+              <div className={s.priceInputWrapper}>
                 <input
                   type="number"
                   placeholder={`${priceRange.max}`}
                   value={localPriceMax}
                   onChange={(e) => setLocalPriceMax(e.target.value)}
-                  className="w-full px-3 py-2 text-sm border rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
+                  className={s.priceInput}
                 />
               </div>
             </div>
             
             {/* Price Range Slider */}
-            <div className="space-y-2">
+            <div className={s.priceSliderSection}>
               <input
                 type="range"
                 min={priceRange.min}
                 max={priceRange.max}
                 value={localPriceMin || priceRange.min}
                 onChange={(e) => setLocalPriceMin(e.target.value)}
-                className="w-full accent-primary"
+                className={s.priceSlider}
               />
               <input
                 type="range"
@@ -318,9 +319,9 @@ function ProductsContent() {
                 max={priceRange.max}
                 value={localPriceMax || priceRange.max}
                 onChange={(e) => setLocalPriceMax(e.target.value)}
-                className="w-full accent-primary"
+                className={s.priceSlider}
               />
-              <div className="flex justify-between text-xs text-muted-foreground">
+              <div className={s.priceRangeLabels}>
                 <span>{priceRange.min} ₴</span>
                 <span>{priceRange.max} ₴</span>
               </div>
@@ -328,7 +329,7 @@ function ProductsContent() {
             
             <button
               onClick={applyPriceFilter}
-              className="w-full py-2 bg-primary text-primary-foreground text-sm rounded-md hover:bg-primary/90 transition"
+              className={s.applyPriceBtn}
             >
               Застосувати
             </button>
@@ -338,28 +339,28 @@ function ProductsContent() {
 
       {/* Brands */}
       {allBrands.length > 0 && (
-        <div className="border rounded-lg overflow-hidden">
+        <div className={s.filterSection}>
           <button
             onClick={() => toggleSection('brands')}
-            className="flex items-center justify-between w-full p-4 font-semibold hover:bg-accent/50 transition"
+            className={s.sectionToggle}
           >
             <span>Бренд</span>
-            {expandedSections.brands ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+            {expandedSections.brands ? <ChevronUp className={s.iconSm} /> : <ChevronDown className={s.iconSm} />}
           </button>
           {expandedSections.brands && (
-            <div className="px-4 pb-4 space-y-2 max-h-60 overflow-y-auto">
+            <div className={s.brandList}>
               {allBrands.map((brand) => (
                 <label
                   key={brand}
-                  className="flex items-center gap-2 cursor-pointer hover:bg-accent/50 p-1.5 rounded transition"
+                  className={s.brandLabel}
                 >
                   <input
                     type="checkbox"
                     checked={filters.brands.includes(brand)}
                     onChange={() => handleBrandToggle(brand)}
-                    className="w-4 h-4 rounded border-gray-300 text-primary focus:ring-primary"
+                    className={s.checkbox}
                   />
-                  <span className="text-sm">{brand}</span>
+                  <span className={s.brandText}>{brand}</span>
                 </label>
               ))}
             </div>
@@ -368,53 +369,53 @@ function ProductsContent() {
       )}
 
       {/* In Stock */}
-      <div className="border rounded-lg p-4">
-        <label className="flex items-center gap-2 cursor-pointer">
+      <div className={s.stockSection}>
+        <label className={s.stockLabel}>
           <input
             type="checkbox"
             checked={filters.inStock}
             onChange={(e) => handleFilterChange('inStock', e.target.checked)}
-            className="w-4 h-4 rounded border-gray-300 text-primary focus:ring-primary"
+            className={s.checkbox}
           />
-          <span className="text-sm font-medium">Тільки в наявності</span>
+          <span className={s.stockText}>Тільки в наявності</span>
         </label>
       </div>
     </div>
   )
 
   return (
-    <div className="container-custom py-4 sm:py-8">
+    <div className={`container-custom ${s.pageContainer}`}>
       {/* Header */}
-      <div className="mb-4 sm:mb-8">
-        <h1 className="text-2xl sm:text-3xl font-bold mb-1 sm:mb-2">
+      <div className={s.header}>
+        <h1 className={s.title}>
           {filters.search ? `Результати пошуку: "${filters.search}"` : 'Каталог товарів'}
         </h1>
-        <p className="text-sm sm:text-base text-muted-foreground">
+        <p className={s.subtitle}>
           Знайдено {total} товарів
         </p>
         {filters.search && (
           <button
             onClick={() => handleFilterChange('search', '')}
-            className="mt-2 text-sm text-primary hover:underline flex items-center gap-1"
+            className={s.clearSearchBtn}
           >
-            <X className="h-4 w-4" />
+            <X className={s.iconSm} />
             Скинути пошук
           </button>
         )}
       </div>
 
       {/* Mobile Filter & Sort Bar */}
-      <div className="flex gap-2 mb-4 lg:hidden">
+      <div className={s.mobileBar}>
         <button
           onClick={() => setIsFilterOpen(true)}
-          className={`flex-1 flex items-center justify-center gap-2 border rounded-lg py-2.5 px-4 text-sm font-medium transition ${
-            hasActiveFilters ? 'border-primary text-primary' : 'hover:bg-accent'
+          className={`${s.mobileFilterBtn} ${
+            hasActiveFilters ? s.mobileFilterBtnActive : s.mobileFilterBtnInactive
           }`}
         >
-          <Filter className="h-4 w-4" />
+          <Filter className={s.iconSm} />
           Фільтри
           {hasActiveFilters && (
-            <span className="bg-primary text-primary-foreground text-xs px-1.5 py-0.5 rounded-full">
+            <span className={s.filterBadge}>
               {[filters.category, filters.minPrice || filters.maxPrice, filters.brands.length > 0, filters.inStock].filter(Boolean).length}
             </span>
           )}
@@ -422,7 +423,7 @@ function ProductsContent() {
         <select
           value={filters.sort}
           onChange={(e) => handleFilterChange('sort', e.target.value)}
-          className="flex-1 border rounded-lg py-2.5 px-4 text-sm font-medium bg-background"
+          className={s.mobileSortSelect}
         >
           <option value="newest">Новинки</option>
           <option value="popular">Популярні</option>
@@ -434,24 +435,24 @@ function ProductsContent() {
       </div>
 
       {/* Desktop Sort Bar */}
-      <div className="hidden lg:flex items-center justify-between mb-6 pb-4 border-b">
-        <div className="flex items-center gap-4">
+      <div className={s.desktopSortBar}>
+        <div className={s.sortBarLeft}>
           {hasActiveFilters && (
             <button
               onClick={resetFilters}
-              className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition"
+              className={s.resetAllBtn}
             >
-              <X className="h-4 w-4" />
+              <X className={s.iconSm} />
               Скинути всі фільтри
             </button>
           )}
         </div>
-        <div className="flex items-center gap-2">
-          <span className="text-sm text-muted-foreground">Сортування:</span>
+        <div className={s.sortBarRight}>
+          <span className={s.sortLabel}>Сортування:</span>
           <select
             value={filters.sort}
             onChange={(e) => handleFilterChange('sort', e.target.value)}
-            className="border rounded-lg py-2 px-3 text-sm bg-background focus:outline-none focus:ring-2 focus:ring-primary"
+            className={s.desktopSortSelect}
           >
             <option value="newest">Новинки</option>
             <option value="popular">Популярні</option>
@@ -471,7 +472,7 @@ function ProductsContent() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="fixed inset-0 bg-black/50 z-50 lg:hidden"
+              className={s.drawerOverlay}
               onClick={() => setIsFilterOpen(false)}
             />
             <motion.div
@@ -479,16 +480,16 @@ function ProductsContent() {
               animate={{ x: 0 }}
               exit={{ x: '-100%' }}
               transition={{ type: 'tween', duration: 0.3 }}
-              className="fixed inset-y-0 left-0 w-[300px] bg-background z-50 lg:hidden overflow-y-auto"
+              className={s.drawerPanel}
             >
-              <div className="p-4">
-                <div className="flex items-center justify-between mb-6">
-                  <h2 className="text-lg font-semibold">Фільтри</h2>
+              <div className={s.drawerContent}>
+                <div className={s.drawerHeader}>
+                  <h2 className={s.drawerTitle}>Фільтри</h2>
                   <button
                     onClick={() => setIsFilterOpen(false)}
-                    className="p-2 hover:bg-accent rounded-lg transition"
+                    className={s.drawerCloseBtn}
                   >
-                    <X className="h-5 w-5" />
+                    <X className={s.iconMd} />
                   </button>
                 </div>
                 <FilterSidebar isMobile />
@@ -498,48 +499,48 @@ function ProductsContent() {
         )}
       </AnimatePresence>
 
-      <div className="grid lg:grid-cols-4 gap-4 sm:gap-8">
+      <div className={s.mainGrid}>
         {/* Desktop Filters Sidebar */}
-        <aside className="hidden lg:block lg:col-span-1">
-          <div className="sticky top-24">
+        <aside className={s.desktopSidebar}>
+          <div className={s.sidebarSticky}>
             <FilterSidebar />
           </div>
         </aside>
 
         {/* Products Grid */}
-        <div className="lg:col-span-3">
+        <div className={s.productsColumn}>
           {/* Active Filters Tags */}
           {hasActiveFilters && (
-            <div className="flex flex-wrap gap-2 mb-4">
+            <div className={s.activeFilterTags}>
               {filters.category && (
-                <span className="inline-flex items-center gap-1 px-3 py-1 bg-primary/10 text-primary text-sm rounded-full">
+                <span className={s.filterTag}>
                   {categories.find(c => c._id === filters.category)?.name}
-                  <button onClick={() => handleFilterChange('category', '')} className="hover:bg-primary/20 rounded-full p-0.5">
-                    <X className="h-3 w-3" />
+                  <button onClick={() => handleFilterChange('category', '')} className={s.tagRemoveBtn}>
+                    <X className={s.iconXs} />
                   </button>
                 </span>
               )}
               {(filters.minPrice || filters.maxPrice) && (
-                <span className="inline-flex items-center gap-1 px-3 py-1 bg-primary/10 text-primary text-sm rounded-full">
+                <span className={s.filterTag}>
                   {filters.minPrice || 0} - {filters.maxPrice || '∞'} ₴
-                  <button onClick={() => { handleFilterChange('minPrice', ''); handleFilterChange('maxPrice', ''); setLocalPriceMin(''); setLocalPriceMax(''); }} className="hover:bg-primary/20 rounded-full p-0.5">
-                    <X className="h-3 w-3" />
+                  <button onClick={() => { handleFilterChange('minPrice', ''); handleFilterChange('maxPrice', ''); setLocalPriceMin(''); setLocalPriceMax(''); }} className={s.tagRemoveBtn}>
+                    <X className={s.iconXs} />
                   </button>
                 </span>
               )}
               {filters.brands.map(brand => (
-                <span key={brand} className="inline-flex items-center gap-1 px-3 py-1 bg-primary/10 text-primary text-sm rounded-full">
+                <span key={brand} className={s.filterTag}>
                   {brand}
-                  <button onClick={() => handleBrandToggle(brand)} className="hover:bg-primary/20 rounded-full p-0.5">
-                    <X className="h-3 w-3" />
+                  <button onClick={() => handleBrandToggle(brand)} className={s.tagRemoveBtn}>
+                    <X className={s.iconXs} />
                   </button>
                 </span>
               ))}
               {filters.inStock && (
-                <span className="inline-flex items-center gap-1 px-3 py-1 bg-primary/10 text-primary text-sm rounded-full">
+                <span className={s.filterTag}>
                   В наявності
-                  <button onClick={() => handleFilterChange('inStock', false)} className="hover:bg-primary/20 rounded-full p-0.5">
-                    <X className="h-3 w-3" />
+                  <button onClick={() => handleFilterChange('inStock', false)} className={s.tagRemoveBtn}>
+                    <X className={s.iconXs} />
                   </button>
                 </span>
               )}
@@ -547,28 +548,28 @@ function ProductsContent() {
           )}
 
           {loading ? (
-            <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-6">
+            <div className={s.productsGrid}>
               {[...Array(12)].map((_, i) => (
-                <div key={i} className="rounded-lg bg-muted animate-pulse h-64 sm:h-96" />
+                <div key={i} className={s.skeletonCard} />
               ))}
             </div>
           ) : products.length === 0 ? (
-            <div className="text-center py-12">
-              <div className="text-6xl mb-4">🔍</div>
-              <h3 className="text-xl font-semibold mb-2">Товарів не знайдено</h3>
-              <p className="text-muted-foreground mb-4">Спробуйте змінити параметри фільтрації</p>
+            <div className={s.emptyState}>
+              <div className={s.emptyIcon}>🔍</div>
+              <h3 className={s.emptyTitle}>Товарів не знайдено</h3>
+              <p className={s.emptyText}>Спробуйте змінити параметри фільтрації</p>
               {hasActiveFilters && (
                 <button
                   onClick={resetFilters}
-                  className="inline-flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition"
+                  className={s.emptyResetBtn}
                 >
-                  <RotateCcw className="h-4 w-4" />
+                  <RotateCcw className={s.iconSm} />
                   Скинути фільтри
                 </button>
               )}
             </div>
           ) : (
-            <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-6">
+            <div className={s.productsGrid}>
               {products.map((product) => (
                 <ProductCard key={product._id} product={product} compact />
               ))}
@@ -577,11 +578,11 @@ function ProductsContent() {
 
           {/* Pagination */}
           {total > 12 && (
-            <div className="flex justify-center items-center gap-2 mt-6 sm:mt-8">
+            <div className={s.pagination}>
               <button
                 onClick={() => setPage(p => Math.max(1, p - 1))}
                 disabled={page === 1}
-                className="px-3 py-2 border rounded-lg text-sm hover:bg-accent transition disabled:opacity-50 disabled:cursor-not-allowed"
+                className={s.paginationArrow}
               >
                 ←
               </button>
@@ -604,10 +605,10 @@ function ProductsContent() {
                   <button
                     key={pageNum}
                     onClick={() => setPage(pageNum)}
-                    className={`w-10 h-10 rounded-lg text-sm font-medium transition ${
+                    className={`${s.paginationPage} ${
                       page === pageNum 
-                        ? 'bg-primary text-primary-foreground' 
-                        : 'border hover:bg-accent'
+                        ? s.paginationPageActive 
+                        : s.paginationPageInactive
                     }`}
                   >
                     {pageNum}
@@ -618,7 +619,7 @@ function ProductsContent() {
               <button
                 onClick={() => setPage(p => Math.min(Math.ceil(total / 12), p + 1))}
                 disabled={page === Math.ceil(total / 12)}
-                className="px-3 py-2 border rounded-lg text-sm hover:bg-accent transition disabled:opacity-50 disabled:cursor-not-allowed"
+                className={s.paginationArrow}
               >
                 →
               </button>
@@ -632,12 +633,12 @@ function ProductsContent() {
 
 function ProductsLoading() {
   return (
-    <div className="container-custom py-8">
-      <div className="animate-pulse">
-        <div className="h-8 bg-muted rounded w-1/4 mb-4"></div>
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+    <div className={`container-custom ${s.loadingContainer}`}>
+      <div className={s.loadingPulse}>
+        <div className={s.loadingTitle}></div>
+        <div className={s.loadingGrid}>
           {[...Array(8)].map((_, i) => (
-            <div key={i} className="h-64 bg-muted rounded-lg"></div>
+            <div key={i} className={s.loadingCard}></div>
           ))}
         </div>
       </div>

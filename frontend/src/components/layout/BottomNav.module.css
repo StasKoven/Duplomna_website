@@ -1,0 +1,71 @@
+/* ===== Нижня навігація (мобільна) ===== */
+
+/* Контейнер навігації — фіксований внизу екрану */
+.nav {
+  @apply fixed bottom-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-sm border-t shadow-lg md:hidden;
+}
+
+/* Обгортка елементів навігації */
+.navContainer {
+  @apply flex items-stretch h-14 max-w-md mx-auto;
+}
+
+/* ===== Елемент навігації (посилання) ===== */
+
+/* Базовий стиль посилання */
+.navLink {
+  @apply flex flex-col items-center justify-center flex-1 py-1.5 transition-colors text-muted-foreground;
+}
+
+.navLink:active {
+  @apply text-foreground;
+}
+
+/* Активне посилання */
+.navLinkActive {
+  @apply flex flex-col items-center justify-center flex-1 py-1.5 transition-colors text-primary;
+}
+
+/* ===== Іконка навігації ===== */
+
+/* Обгортка іконки з можливістю бейджа */
+.iconWrapper {
+  @apply relative mb-0.5;
+}
+
+/* Базова іконка */
+.icon {
+  @apply h-5 w-5;
+}
+
+/* Активна іконка — товстіший контур */
+.iconActive {
+  @apply h-5 w-5;
+  stroke-width: 2.5px;
+}
+
+/* ===== Бейдж (лічильник) ===== */
+
+/* Лічильник кількості товарів у кошику/бажаннях */
+.badge {
+  @apply absolute -top-1 -right-2 flex h-4 min-w-4 px-1 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-primary-foreground;
+}
+
+/* ===== Текстова мітка ===== */
+
+/* Звичайна мітка під іконкою */
+.label {
+  @apply text-[10px] leading-tight font-normal;
+}
+
+/* Мітка активного елемента */
+.labelActive {
+  @apply text-[10px] leading-tight font-semibold;
+}
+
+/* ===== Безпечна зона (для мобільних пристроїв) ===== */
+
+/* Відступ для нижньої безпечної зони (iPhone тощо) */
+.safeArea {
+  height: env(safe-area-inset-bottom);
+}

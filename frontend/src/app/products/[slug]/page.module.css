@@ -1,0 +1,315 @@
+/* ==============================
+   Сторінка деталей товару
+   ============================== */
+
+/* Контейнер сторінки */
+.pageContainer {
+  @apply py-4 sm:py-8;
+}
+
+/* === Скелетон завантаження === */
+.skeleton {
+  @apply animate-pulse;
+}
+
+.skeletonGrid {
+  @apply grid md:grid-cols-2 gap-4 sm:gap-8;
+}
+
+.skeletonImage {
+  @apply aspect-square bg-muted rounded-lg;
+}
+
+.skeletonInfo {
+  @apply space-y-4;
+}
+
+.skeletonTitle {
+  @apply h-6 sm:h-8 bg-muted rounded w-3/4;
+}
+
+.skeletonRating {
+  @apply h-4 bg-muted rounded w-1/4;
+}
+
+.skeletonPrice {
+  @apply h-10 sm:h-12 bg-muted rounded w-1/3;
+}
+
+/* === Стан "Товар не знайдено" === */
+.notFound {
+  @apply text-center;
+}
+
+.notFoundTitle {
+  @apply text-xl sm:text-2xl font-bold mb-4;
+}
+
+.notFoundLink {
+  @apply text-primary hover:underline;
+}
+
+/* === Основна сітка товару === */
+.mainGrid {
+  @apply grid md:grid-cols-2 gap-4 sm:gap-8 mb-8 sm:mb-12;
+}
+
+/* === Галерея зображень === */
+.mainImageWrapper {
+  @apply relative aspect-square bg-muted rounded-lg overflow-hidden mb-3 sm:mb-4;
+}
+
+.mainImage {
+  @apply w-full h-full object-cover;
+}
+
+.imagePlaceholder {
+  @apply flex items-center justify-center h-full text-5xl sm:text-6xl;
+}
+
+/* Кнопки навігації зображень */
+.imageNavBtn {
+  @apply absolute top-1/2 -translate-y-1/2 bg-background/80 backdrop-blur-sm border shadow-md rounded-full p-2 opacity-0 group-hover:opacity-100 transition-opacity hover:bg-background;
+}
+
+.imageNavLeft {
+  @apply left-2;
+}
+
+.imageNavRight {
+  @apply right-2;
+}
+
+/* Лічильник зображень */
+.imageCounter {
+  @apply absolute bottom-3 left-1/2 -translate-x-1/2 bg-background/80 backdrop-blur-sm rounded-full px-3 py-1 text-xs font-medium;
+}
+
+/* === Мініатюри зображень === */
+.thumbnailsWrapper {
+  @apply relative;
+}
+
+.thumbnailScrollBtn {
+  @apply absolute top-1/2 -translate-y-1/2 z-10 bg-background/90 border shadow-md rounded-full p-1 hover:bg-accent transition;
+}
+
+.thumbnailScrollLeft {
+  @apply left-0 -ml-2;
+}
+
+.thumbnailScrollRight {
+  @apply right-0 -mr-2;
+}
+
+.thumbnailsList {
+  @apply flex gap-1.5 sm:gap-2 overflow-x-auto scroll-smooth;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.thumbnailsList::-webkit-scrollbar {
+  display: none;
+}
+
+.thumbnailBtn {
+  @apply flex-shrink-0 aspect-square w-[calc(25%-6px)] sm:w-[calc(20%-8px)] max-w-[100px] rounded-lg overflow-hidden border-2;
+}
+
+.thumbnailActive {
+  @apply border-primary;
+}
+
+.thumbnailInactive {
+  @apply border-transparent;
+}
+
+.thumbnailImage {
+  @apply w-full h-full object-cover;
+}
+
+/* Розміри іконок */
+.iconSm {
+  @apply h-4 w-4;
+}
+
+.iconMd {
+  @apply h-5 w-5;
+}
+
+/* === Інформація про товар === */
+.productInfoSection {
+  @apply mb-4;
+}
+
+.categoryLabel {
+  @apply text-xs sm:text-sm text-muted-foreground mb-1 sm:mb-2;
+}
+
+.productTitle {
+  @apply text-xl sm:text-3xl font-bold mb-2;
+}
+
+/* Рейтинг */
+.ratingWrapper {
+  @apply flex items-center gap-2 mb-3 sm:mb-4;
+}
+
+.starsWrapper {
+  @apply flex items-center gap-0.5;
+}
+
+.starFilled {
+  @apply h-3.5 w-3.5 sm:h-4 sm:w-4 fill-yellow-400 text-yellow-400;
+}
+
+.starEmpty {
+  @apply h-3.5 w-3.5 sm:h-4 sm:w-4 text-gray-300;
+}
+
+.ratingText {
+  @apply text-xs sm:text-sm text-muted-foreground;
+}
+
+/* === Секція ціни === */
+.priceSection {
+  @apply mb-4 sm:mb-6;
+}
+
+.priceRow {
+  @apply flex items-baseline gap-2 sm:gap-3 mb-2;
+}
+
+.currentPrice {
+  @apply text-2xl sm:text-4xl font-bold;
+}
+
+.oldPrice {
+  @apply text-base sm:text-xl text-muted-foreground line-through;
+}
+
+.discountBadge {
+  @apply text-xs sm:text-sm font-semibold text-destructive;
+}
+
+.stockInfo {
+  @apply text-xs sm:text-sm text-muted-foreground;
+}
+
+.inStock {
+  @apply text-green-600;
+}
+
+.outOfStock {
+  @apply text-red-600;
+}
+
+/* === Кнопки дій === */
+.actionsSection {
+  @apply space-y-3 mb-4 sm:mb-6;
+}
+
+.addToCartBtn {
+  @apply w-full rounded-md bg-primary px-6 sm:px-8 py-2.5 sm:py-3 text-white text-sm sm:text-base font-medium hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2;
+}
+
+.actionButtonsGrid {
+  @apply grid grid-cols-2 gap-3;
+}
+
+.actionBtn {
+  @apply rounded-md border px-4 py-2.5 sm:py-3 text-sm font-medium hover:bg-accent flex items-center justify-center gap-2;
+}
+
+.wishlistActive {
+  @apply border-red-500 text-red-500;
+}
+
+.comparisonActive {
+  @apply border-primary text-primary;
+}
+
+/* Розміри іконок для кнопок дій */
+.actionIcon {
+  @apply h-4 w-4 sm:h-5 sm:w-5;
+}
+
+.iconFilled {
+  @apply fill-current;
+}
+
+/* Приховування елементів на мобільних / десктопі */
+.hiddenMobile {
+  @apply hidden sm:inline;
+}
+
+.hiddenDesktop {
+  @apply sm:hidden;
+}
+
+/* === Інформація про доставку === */
+.deliveryInfo {
+  @apply space-y-2 sm:space-y-3 py-4 sm:py-6 border-t;
+}
+
+.deliveryItem {
+  @apply flex items-center gap-2 sm:gap-3 text-xs sm:text-sm;
+}
+
+.deliveryIcon {
+  @apply h-4 w-4 sm:h-5 sm:w-5 text-primary flex-shrink-0;
+}
+
+/* === Опис та характеристики === */
+.descriptionGrid {
+  @apply grid md:grid-cols-2 gap-6 sm:gap-8;
+}
+
+.sectionTitle {
+  @apply text-xl sm:text-2xl font-bold mb-3 sm:mb-4;
+}
+
+.descriptionText {
+  @apply text-sm sm:text-base text-muted-foreground whitespace-pre-line;
+}
+
+.featuresWrapper {
+  @apply mt-4 sm:mt-6;
+}
+
+.featuresSubtitle {
+  @apply font-semibold mb-2 sm:mb-3;
+}
+
+.featuresList {
+  @apply space-y-1.5 sm:space-y-2;
+}
+
+.featureItem {
+  @apply flex items-start gap-2;
+}
+
+.featureCheck {
+  @apply text-primary mt-0.5;
+}
+
+.featureText {
+  @apply text-xs sm:text-sm;
+}
+
+/* Характеристики товару */
+.specsList {
+  @apply space-y-1.5 sm:space-y-2;
+}
+
+.specRow {
+  @apply flex justify-between py-1.5 sm:py-2 border-b text-xs sm:text-sm;
+}
+
+.specName {
+  @apply font-medium;
+}
+
+.specValue {
+  @apply text-muted-foreground text-right ml-4;
+}

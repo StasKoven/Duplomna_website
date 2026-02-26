@@ -25,6 +25,7 @@ import {
   Inbox,
   Trash2,
 } from 'lucide-react'
+import s from './page.module.css'
 
 interface Message {
   _id: string
@@ -66,9 +67,9 @@ const statusOptions = [
 ]
 
 const priorityOptions = [
-  { value: 'low', label: 'Низький', color: 'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300' },
-  { value: 'medium', label: 'Середній', color: 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400' },
-  { value: 'high', label: 'Високий', color: 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400' },
+  { value: 'low', label: 'Низький' },
+  { value: 'medium', label: 'Середній' },
+  { value: 'high', label: 'Високий' },
 ]
 
 const categoryLabels: Record<string, string> = {
@@ -207,17 +208,17 @@ export default function AdminTicketsPage() {
   }
 
   const getStatusBadge = (status: string) => {
-    const map: Record<string, { color: string; label: string; icon: typeof Clock }> = {
-      open: { color: 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400', label: 'Відкритий', icon: AlertCircle },
-      'in-progress': { color: 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400', label: 'В обробці', icon: Clock },
-      resolved: { color: 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400', label: 'Вирішено', icon: CheckCircle2 },
-      closed: { color: 'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-400', label: 'Закритий', icon: XCircle },
+    const map: Record<string, { className: string; label: string; icon: typeof Clock }> = {
+      open: { className: s.statusOpen, label: 'Відкритий', icon: AlertCircle },
+      'in-progress': { className: s.statusInProgress, label: 'В обробці', icon: Clock },
+      resolved: { className: s.statusResolved, label: 'Вирішено', icon: CheckCircle2 },
+      closed: { className: s.statusClosed, label: 'Закритий', icon: XCircle },
     }
     const badge = map[status] || map.open
     const Icon = badge.icon
     return (
-      <span className={`inline-flex items-center gap-1 text-xs px-2 py-1 rounded-full font-medium ${badge.color}`}>
-        <Icon className="h-3 w-3" />
+      <span className={`${s.statusBadge} ${badge.className}`}>
+        <Icon className={s.badgeIcon} />
         {badge.label}
       </span>
     )
@@ -251,57 +252,55 @@ export default function AdminTicketsPage() {
   }
 
   return (
-    <div className="container-custom py-8">
+    <div className={`container-custom ${s.page}`}>
       {/* Header */}
-      <div className="flex items-center gap-4 mb-6">
+      <div className={s.header}>
         <button
           onClick={() => router.push('/admin')}
-          className="p-2 hover:bg-muted rounded-lg transition"
+          className={s.backButton}
         >
-          <ArrowLeft className="h-5 w-5" />
+          <ArrowLeft className={s.backIcon} />
         </button>
-        <div className="flex-1">
-          <h1 className="text-3xl font-bold flex items-center gap-3">
-            <MessageSquare className="h-8 w-8 text-primary" />
+        <div className={s.headerContent}>
+          <h1 className={s.title}>
+            <MessageSquare className={s.titleIcon} />
             Підтримка
             {unreadCount > 0 && (
-              <span className="bg-red-500 text-white text-sm px-2.5 py-0.5 rounded-full">
+              <span className={s.unreadBadge}>
                 {unreadCount} нових
               </span>
             )}
           </h1>
-          <p className="text-muted-foreground mt-1">
+          <p className={s.subtitle}>
             {pagination.total} звернень загалом
           </p>
         </div>
       </div>
 
       {/* Search & Filters */}
-      <div className="mb-6 space-y-3">
-        <div className="flex gap-3">
-          <div className="relative flex-1">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+      <div className={s.filtersSection}>
+        <div className={s.searchRow}>
+          <div className={s.searchInputWrapper}>
+            <Search className={s.searchIcon} />
             <input
               type="text"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && fetchTickets()}
               placeholder="Пошук за темою, email..."
-              className="w-full pl-10 pr-4 py-2.5 border rounded-lg bg-background text-sm focus:outline-none focus:ring-2 focus:ring-primary/50"
+              className={s.searchInput}
             />
           </div>
           <button
             onClick={() => setShowFilters(!showFilters)}
-            className={`px-4 py-2.5 border rounded-lg flex items-center gap-2 transition ${
-              showFilters ? 'bg-primary text-white' : 'hover:bg-muted'
-            }`}
+            className={showFilters ? s.filterButtonActive : s.filterButton}
           >
-            <Filter className="h-4 w-4" />
-            <span className="text-sm hidden sm:inline">Фільтри</span>
+            <Filter className={s.filterBtnIcon} />
+            <span className={s.filterBtnText}>Фільтри</span>
           </button>
           <button
             onClick={() => fetchTickets()}
-            className="px-4 py-2.5 bg-primary text-white rounded-lg text-sm font-medium hover:bg-primary/90 transition"
+            className={s.searchButton}
           >
             Пошук
           </button>
@@ -313,17 +312,17 @@ export default function AdminTicketsPage() {
               initial={{ height: 0, opacity: 0 }}
               animate={{ height: 'auto', opacity: 1 }}
               exit={{ height: 0, opacity: 0 }}
-              className="overflow-hidden"
+              className={s.filtersAnimated}
             >
-              <div className="flex flex-wrap gap-3 p-4 bg-muted/30 rounded-lg border">
+              <div className={s.filtersContent}>
                 <div>
-                  <label className="text-xs font-medium text-muted-foreground mb-1 block">
+                  <label className={s.filterLabel}>
                     Статус
                   </label>
                   <select
                     value={statusFilter}
                     onChange={(e) => setStatusFilter(e.target.value)}
-                    className="border rounded-lg px-3 py-2 text-sm bg-background focus:outline-none focus:ring-2 focus:ring-primary/50"
+                    className={s.filterSelect}
                   >
                     {statusOptions.map((opt) => (
                       <option key={opt.value} value={opt.value}>
@@ -339,55 +338,55 @@ export default function AdminTicketsPage() {
       </div>
 
       {/* Main Content */}
-      <div className="grid lg:grid-cols-[400px_1fr] gap-6 min-h-[600px]">
+      <div className={s.mainGrid}>
         {/* Tickets List */}
-        <div className="border rounded-xl overflow-hidden bg-card">
-          <div className="p-3 border-b bg-muted/30">
-            <h3 className="font-semibold text-sm">
+        <div className={s.ticketList}>
+          <div className={s.ticketListHeader}>
+            <h3 className={s.ticketListTitle}>
               Звернення ({pagination.total})
             </h3>
           </div>
-          <div className="overflow-y-auto" style={{ maxHeight: '550px' }}>
+          <div className={s.ticketListScroll} style={{ maxHeight: '550px' }}>
             {loading ? (
-              <div className="flex items-center justify-center py-12">
-                <Loader2 className="h-6 w-6 animate-spin text-primary" />
+              <div className={s.loadingCenter}>
+                <Loader2 className={s.spinnerIcon} />
               </div>
             ) : tickets.length === 0 ? (
-              <div className="text-center py-12">
-                <Inbox className="h-10 w-10 text-muted-foreground/30 mx-auto mb-3" />
-                <p className="text-sm text-muted-foreground">Звернень не знайдено</p>
+              <div className={s.emptyState}>
+                <Inbox className={s.emptyIcon} />
+                <p className={s.emptyText}>Звернень не знайдено</p>
               </div>
             ) : (
-              <div className="divide-y">
+              <div className={s.divideY}>
                 {tickets.map((ticket) => (
                   <button
                     key={ticket._id}
                     onClick={() => handleSelectTicket(ticket)}
-                    className={`w-full text-left p-4 hover:bg-muted/50 transition ${
-                      selectedTicket?._id === ticket._id ? 'bg-primary/5 border-l-2 border-l-primary' : ''
-                    } ${!ticket.isRead ? 'bg-blue-50/50 dark:bg-blue-950/10' : ''}`}
+                    className={`${s.ticketItem} ${
+                      selectedTicket?._id === ticket._id ? s.ticketItemSelected : ''
+                    } ${!ticket.isRead ? s.ticketItemUnread : ''}`}
                   >
-                    <div className="flex items-start justify-between gap-2 mb-1">
-                      <div className="flex items-center gap-2 min-w-0">
+                    <div className={s.ticketItemTop}>
+                      <div className={s.ticketItemLeft}>
                         {!ticket.isRead && (
-                          <span className="w-2 h-2 bg-primary rounded-full flex-shrink-0" />
+                          <span className={s.unreadDot} />
                         )}
-                        <span className={`text-sm truncate ${!ticket.isRead ? 'font-bold' : 'font-medium'}`}>
+                        <span className={!ticket.isRead ? s.ticketSubjectUnread : s.ticketSubject}>
                           {ticket.subject}
                         </span>
                       </div>
                     </div>
-                    <div className="flex items-center gap-2 mt-1.5 flex-wrap">
+                    <div className={s.ticketMeta}>
                       {getStatusBadge(ticket.status)}
-                      <span className="text-xs text-muted-foreground">
+                      <span className={s.ticketCategory}>
                         {categoryLabels[ticket.category] || ticket.category}
                       </span>
                     </div>
-                    <div className="flex items-center justify-between mt-2">
-                      <span className="text-xs text-muted-foreground truncate">
+                    <div className={s.ticketFooter}>
+                      <span className={s.ticketAuthor}>
                         {getTicketAuthor(ticket)}
                       </span>
-                      <span className="text-xs text-muted-foreground flex-shrink-0">
+                      <span className={s.ticketDate}>
                         {formatDate(ticket.lastMessageAt || ticket.createdAt)}
                       </span>
                     </div>
@@ -399,21 +398,21 @@ export default function AdminTicketsPage() {
 
           {/* Pagination */}
           {pagination.pages > 1 && (
-            <div className="p-3 border-t flex items-center justify-between">
+            <div className={s.pagination}>
               <button
                 disabled={pagination.page <= 1}
                 onClick={() => fetchTickets(pagination.page - 1)}
-                className="px-3 py-1.5 border rounded-lg text-sm disabled:opacity-50 hover:bg-muted transition"
+                className={s.pageBtn}
               >
                 ← Назад
               </button>
-              <span className="text-xs text-muted-foreground">
+              <span className={s.pageInfo}>
                 {pagination.page} / {pagination.pages}
               </span>
               <button
                 disabled={pagination.page >= pagination.pages}
                 onClick={() => fetchTickets(pagination.page + 1)}
-                className="px-3 py-1.5 border rounded-lg text-sm disabled:opacity-50 hover:bg-muted transition"
+                className={s.pageBtn}
               >
                 Далі →
               </button>
@@ -422,12 +421,12 @@ export default function AdminTicketsPage() {
         </div>
 
         {/* Ticket Detail */}
-        <div className="border rounded-xl overflow-hidden bg-card flex flex-col">
+        <div className={s.detailPanel}>
           {!selectedTicket ? (
-            <div className="flex-1 flex items-center justify-center">
-              <div className="text-center">
-                <MessageSquare className="h-12 w-12 text-muted-foreground/20 mx-auto mb-3" />
-                <p className="text-muted-foreground">
+            <div className={s.detailEmpty}>
+              <div className={s.detailEmptyInner}>
+                <MessageSquare className={s.detailEmptyIcon} />
+                <p className={s.detailEmptyText}>
                   Оберіть звернення зі списку
                 </p>
               </div>
@@ -435,68 +434,64 @@ export default function AdminTicketsPage() {
           ) : (
             <>
               {/* Ticket Header */}
-              <div className="p-4 border-b space-y-3">
-                <div className="flex items-start justify-between gap-3">
-                  <div className="min-w-0 flex-1">
-                    <h2 className="font-bold text-lg truncate">{selectedTicket.subject}</h2>
-                    <div className="flex items-center gap-3 mt-1 text-sm text-muted-foreground">
-                      <span className="flex items-center gap-1">
-                        <User className="h-3.5 w-3.5" />
+              <div className={s.detailHeader}>
+                <div className={s.detailHeaderTop}>
+                  <div className={s.detailHeaderLeft}>
+                    <h2 className={s.detailTitle}>{selectedTicket.subject}</h2>
+                    <div className={s.detailMeta}>
+                      <span className={s.metaItem}>
+                        <User className={s.metaIcon} />
                         {getTicketAuthor(selectedTicket)}
                       </span>
-                      <span className="flex items-center gap-1">
-                        <Mail className="h-3.5 w-3.5" />
+                      <span className={s.metaItem}>
+                        <Mail className={s.metaIcon} />
                         {getTicketEmail(selectedTicket)}
                       </span>
                     </div>
-                    <div className="flex items-center gap-2 mt-2 text-xs text-muted-foreground">
-                      <Calendar className="h-3.5 w-3.5" />
+                    <div className={s.detailSubMeta}>
+                      <Calendar className={s.metaIcon} />
                       {formatDate(selectedTicket.createdAt)}
                       <span>·</span>
-                      <Tag className="h-3.5 w-3.5" />
+                      <Tag className={s.metaIcon} />
                       {categoryLabels[selectedTicket.category] || selectedTicket.category}
                     </div>
                   </div>
                   <button
                     onClick={() => handleDeleteTicket(selectedTicket._id)}
-                    className="p-2 text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition"
+                    className={s.deleteBtn}
                     title="Видалити"
                   >
-                    <Trash2 className="h-4 w-4" />
+                    <Trash2 className={s.deleteBtnIcon} />
                   </button>
                 </div>
 
                 {/* Status & Priority Controls */}
-                <div className="flex flex-wrap items-center gap-3">
-                  <div className="flex items-center gap-2">
-                    <span className="text-xs font-medium text-muted-foreground">Статус:</span>
-                    <div className="flex gap-1">
-                      {['open', 'in-progress', 'resolved', 'closed'].map((s) => (
+                <div className={s.controlsRow}>
+                  <div className={s.controlGroup}>
+                    <span className={s.controlLabel}>Статус:</span>
+                    <div className={s.controlBtns}>
+                      {['open', 'in-progress', 'resolved', 'closed'].map((st) => (
                         <button
-                          key={s}
-                          onClick={() => handleUpdateStatus(s)}
-                          className={`text-xs px-2.5 py-1 rounded-full border transition ${
-                            selectedTicket.status === s
-                              ? 'bg-primary text-white border-primary'
-                              : 'hover:bg-muted'
-                          }`}
+                          key={st}
+                          onClick={() => handleUpdateStatus(st)}
+                          className={selectedTicket.status === st ? s.statusBtnActive : s.statusBtn}
                         >
-                          {{ open: 'Відкритий', 'in-progress': 'В обробці', resolved: 'Вирішено', closed: 'Закритий' }[s]}
+                          {{ open: 'Відкритий', 'in-progress': 'В обробці', resolved: 'Вирішено', closed: 'Закритий' }[st]}
                         </button>
                       ))}
                     </div>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <span className="text-xs font-medium text-muted-foreground">Пріоритет:</span>
-                    <div className="flex gap-1">
+                  <div className={s.controlGroup}>
+                    <span className={s.controlLabel}>Пріоритет:</span>
+                    <div className={s.controlBtns}>
                       {priorityOptions.map((p) => (
                         <button
                           key={p.value}
                           onClick={() => handleUpdatePriority(p.value)}
-                          className={`text-xs px-2.5 py-1 rounded-full border transition ${
+                          className={`${s.priorityBtn} ${
                             selectedTicket.priority === p.value
-                              ? p.color + ' border-current'
-                              : 'hover:bg-muted'
+                              ? { low: s.priorityActiveLow, medium: s.priorityActiveMedium, high: s.priorityActiveHigh }[p.value]
+                              : ''
                           }`}
                         >
                           {p.label}
@@ -508,39 +503,33 @@ export default function AdminTicketsPage() {
               </div>
 
               {/* Messages */}
-              <div className="flex-1 overflow-y-auto p-4 space-y-3" style={{ maxHeight: '350px' }}>
+              <div className={s.messagesArea} style={{ maxHeight: '350px' }}>
                 {selectedTicket.messages?.map((msg) => (
                   <div
                     key={msg._id}
-                    className={`flex ${msg.sender === 'admin' ? 'justify-end' : 'justify-start'}`}
+                    className={msg.sender === 'admin' ? s.msgRowAdmin : s.msgRowUser}
                   >
                     {msg.sender === 'system' ? (
-                      <div className="text-center w-full">
-                        <span className="text-xs text-muted-foreground bg-muted/50 px-3 py-1 rounded-full">
+                      <div className={s.systemMsg}>
+                        <span className={s.systemMsgText}>
                           {msg.text}
                         </span>
                       </div>
                     ) : (
                       <div
-                        className={`max-w-[75%] rounded-2xl px-4 py-2.5 ${
-                          msg.sender === 'admin'
-                            ? 'bg-primary text-white rounded-br-md'
-                            : 'bg-muted rounded-bl-md'
-                        }`}
+                        className={msg.sender === 'admin' ? s.bubbleAdmin : s.bubbleUser}
                       >
-                        <div className="flex items-center gap-1.5 mb-1">
-                          <User className="h-3 w-3" />
-                          <span className="text-xs font-medium">
+                        <div className={s.msgSender}>
+                          <User className={s.msgSenderIcon} />
+                          <span className={s.msgSenderName}>
                             {msg.sender === 'admin'
                               ? msg.senderName || 'Адмін'
                               : getTicketAuthor(selectedTicket)}
                           </span>
                         </div>
-                        <p className="text-sm whitespace-pre-wrap break-words">{msg.text}</p>
+                        <p className={s.msgText}>{msg.text}</p>
                         <p
-                          className={`text-[10px] mt-1 ${
-                            msg.sender === 'admin' ? 'text-white/60' : 'text-muted-foreground'
-                          }`}
+                          className={msg.sender === 'admin' ? s.msgTimeAdmin : s.msgTimeUser}
                         >
                           {formatDate(msg.createdAt)}
                         </p>
@@ -551,8 +540,8 @@ export default function AdminTicketsPage() {
               </div>
 
               {/* Reply Input */}
-              <div className="border-t p-4">
-                <div className="flex gap-3 items-end">
+              <div className={s.replySection}>
+                <div className={s.replyRow}>
                   <textarea
                     value={replyText}
                     onChange={(e) => setReplyText(e.target.value)}
@@ -563,18 +552,18 @@ export default function AdminTicketsPage() {
                       }
                     }}
                     rows={2}
-                    className="flex-1 border rounded-xl px-4 py-2.5 text-sm bg-background focus:outline-none focus:ring-2 focus:ring-primary/50 resize-none"
+                    className={s.replyTextarea}
                     placeholder="Написати відповідь..."
                   />
                   <button
                     onClick={handleSendReply}
                     disabled={sending || !replyText.trim()}
-                    className="px-5 py-2.5 bg-primary text-white rounded-xl hover:bg-primary/90 transition disabled:opacity-50 flex items-center gap-2 font-medium text-sm"
+                    className={s.sendBtn}
                   >
                     {sending ? (
-                      <Loader2 className="h-4 w-4 animate-spin" />
+                      <Loader2 className={s.sendBtnSpinner} />
                     ) : (
-                      <Send className="h-4 w-4" />
+                      <Send className={s.sendBtnIcon} />
                     )}
                     Надіслати
                   </button>

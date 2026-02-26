@@ -1,0 +1,100 @@
+/* Сторінка профілю користувача */
+
+/* Відступ сторінки */
+.page {
+  @apply py-8;
+}
+
+/* Обгортка контенту */
+.contentWrapper {
+  @apply max-w-3xl mx-auto;
+}
+
+/* Секція заголовку */
+.header {
+  @apply mb-8;
+}
+
+.title {
+  @apply text-3xl font-bold mb-2;
+}
+
+.subtitle {
+  @apply text-muted-foreground;
+}
+
+/* Секція вкладок */
+.tabs {
+  @apply flex gap-4 border-b mb-6;
+}
+
+.tabBtn {
+  @apply pb-3 px-4 font-medium transition-colors;
+}
+
+.tabBtnActive {
+  @apply border-b-2 border-primary text-primary;
+}
+
+.tabBtnInactive {
+  @apply text-muted-foreground hover:text-foreground;
+}
+
+.tabBtnContent {
+  @apply flex items-center gap-2;
+}
+
+.tabIcon {
+  @apply h-4 w-4;
+}
+
+/* Картка форми */
+.card {
+  @apply bg-card border rounded-lg p-6;
+}
+
+.form {
+  @apply space-y-6;
+}
+
+/* Сітка полів форми */
+.formGrid {
+  @apply grid md:grid-cols-2 gap-6;
+}
+
+/* Мітка поля */
+.label {
+  @apply block text-sm font-medium mb-2;
+}
+
+/* Поле email */
+.emailWrapper {
+  @apply relative;
+}
+
+.emailIcon {
+  @apply absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground;
+}
+
+.emailInput {
+  @apply w-full pl-10 bg-muted;
+}
+
+/* Підказка під полем */
+.hint {
+  @apply text-sm text-muted-foreground mt-1;
+}
+
+/* Поле вводу на повну ширину */
+.inputFull {
+  @apply w-full;
+}
+
+/* Кнопка збереження */
+.submitBtn {
+  @apply flex items-center gap-2;
+}
+
+.btnIcon {
+  @apply h-4 w-4;
+}

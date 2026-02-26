@@ -1,0 +1,111 @@
+/* Сторінка "Гарантія та повернення" */
+
+/* Загальний контейнер сторінки */
+.page {
+  @apply py-12;
+}
+
+/* Обгортка контенту */
+.wrapper {
+  @apply max-w-3xl mx-auto;
+}
+
+/* Заголовок сторінки */
+.title {
+  @apply text-4xl font-bold mb-6;
+}
+
+/* Контейнер секцій */
+.sections {
+  @apply space-y-8;
+}
+
+/* Заголовок секції */
+.sectionTitle {
+  @apply text-2xl font-bold mb-4;
+}
+
+/* Блок прозового контенту */
+.content {
+  @apply max-w-none leading-relaxed text-muted-foreground;
+}
+
+/* Список гарантійних термінів */
+.guaranteeList {
+  @apply space-y-2 my-4;
+}
+
+/* Список карток */
+.cardList {
+  @apply space-y-4;
+}
+
+/* Картка інформації */
+.card {
+  @apply p-6 bg-card border rounded-lg;
+}
+
+/* Заголовок картки */
+.cardTitle {
+  @apply font-semibold text-lg mb-2;
+}
+
+/* Текст картки з відступом */
+.cardText {
+  @apply text-muted-foreground mb-3;
+}
+
+/* Підпис картки */
+.cardSubtext {
+  @apply text-sm text-muted-foreground;
+}
+
+/* Список умов повернення */
+.conditionList {
+  @apply space-y-1 text-sm text-muted-foreground mt-2;
+}
+
+/* Текст обміну/ремонту */
+.exchangeText {
+  @apply text-muted-foreground;
+}
+
+/* Список кроків */
+.stepList {
+  @apply space-y-3 text-muted-foreground;
+}
+
+/* Крок */
+.step {
+  @apply flex items-start gap-3;
+}
+
+/* Номер кроку */
+.stepNumber {
+  @apply flex-shrink-0 w-8 h-8 bg-primary text-white rounded-full flex items-center justify-center font-semibold;
+}
+
+/* Заголовок кроку */
+.stepTitle {
+  @apply font-medium text-foreground;
+}
+
+/* Опис кроку */
+.stepDesc {
+  @apply text-sm;
+}
+
+/* Інформаційний блок */
+.infoBox {
+  @apply bg-muted p-6 rounded-lg;
+}
+
+/* Заголовок інформаційного блоку */
+.infoTitle {
+  @apply font-semibold mb-3;
+}
+
+/* Список інформаційного блоку */
+.infoList {
+  @apply space-y-2 text-sm text-muted-foreground;
+}

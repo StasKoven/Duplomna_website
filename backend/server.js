@@ -135,7 +135,7 @@ app.use(errorHandler);
 
 // 404 handler
 app.use((req, res) => {
-  console.error(`\n⚠️ 404 - Route not found: ${req.method} ${req.originalUrl}\n`);
+  console.error(`\n 404 - Route not found: ${req.method} ${req.originalUrl}\n`);
   res.status(404).json({ 
     success: false,
     message: 'Route not found',
@@ -155,12 +155,10 @@ const startServer = async () => {
     console.log('✅ MongoDB connected successfully');
 
     server = app.listen(PORT, () => {
-      console.log('\n🚀 ========================================');
       console.log(`🚀 Server running on port ${PORT}`);
       console.log(`🌍 Environment: ${process.env.NODE_ENV}`);
       console.log(`🔗 API Base: http://localhost:${PORT}/api`);
       console.log(`🔗 Health Check: http://localhost:${PORT}/api/health`);
-      console.log('🚀 ========================================\n');
     });
   } catch (err) {
     console.error('❌ MongoDB connection error:', err);
@@ -172,7 +170,7 @@ startServer();
 
 // Handle unhandled promise rejections
 process.on('unhandledRejection', (err) => {
-  console.error('\n💥 UNHANDLED REJECTION! Shutting down...');
+  console.error('\n UNHANDLED REJECTION! Shutting down...');
   console.error('Error:', err);
   if (server) {
     server.close(() => {
@@ -185,7 +183,7 @@ process.on('unhandledRejection', (err) => {
 
 // Handle uncaught exceptions
 process.on('uncaughtException', (err) => {
-  console.error('\n💥 UNCAUGHT EXCEPTION! Shutting down...');
+  console.error('\n UNCAUGHT EXCEPTION! Shutting down...');
   console.error('Error:', err);
   process.exit(1);
 });

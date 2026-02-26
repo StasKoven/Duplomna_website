@@ -1,0 +1,169 @@
+/* Адмін-панель — список товарів */
+
+/* Обгортка сторінки */
+.page {
+  @apply py-8;
+}
+
+/* Заголовок сторінки з кнопкою */
+.headerRow {
+  @apply flex justify-between items-center mb-8;
+}
+
+.title {
+  @apply text-3xl font-bold mb-2;
+}
+
+.subtitle {
+  @apply text-muted-foreground;
+}
+
+/* Кнопка додавання товару */
+.addBtn {
+  @apply flex items-center gap-2 bg-primary text-white px-4 py-2 rounded-md hover:bg-primary/90 transition;
+}
+
+.addBtnIcon {
+  @apply h-5 w-5;
+}
+
+/* Секція пошуку */
+.searchSection {
+  @apply mb-6;
+}
+
+.searchWrap {
+  @apply relative max-w-md;
+}
+
+.searchIcon {
+  @apply absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground;
+}
+
+.searchInput {
+  @apply w-full pl-10 pr-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary;
+}
+
+/* Стан завантаження */
+.loading {
+  @apply text-center py-12;
+}
+
+/* Обгортка таблиці */
+.tableCard {
+  @apply bg-card border rounded-lg overflow-hidden;
+}
+
+.tableScroll {
+  @apply overflow-x-auto;
+}
+
+.table {
+  @apply w-full;
+}
+
+/* Заголовок таблиці */
+.thead {
+  @apply bg-muted;
+}
+
+.th {
+  @apply text-left py-3 px-4;
+}
+
+.thActions {
+  @apply text-right py-3 px-4;
+}
+
+/* Рядок таблиці */
+.tr {
+  @apply border-t hover:bg-muted/50;
+}
+
+/* Комірка таблиці */
+.td {
+  @apply py-3 px-4;
+}
+
+/* Обгортка зображення товару */
+.imageWrap {
+  @apply relative w-16 h-16 bg-muted rounded-md overflow-hidden;
+}
+
+.image {
+  @apply object-cover;
+}
+
+/* Заглушка зображення */
+.imagePlaceholder {
+  @apply flex items-center justify-center h-full text-2xl;
+}
+
+/* Назва товару */
+.productName {
+  @apply font-medium line-clamp-1;
+}
+
+/* Слаг товару */
+.productSlug {
+  @apply text-sm text-muted-foreground;
+}
+
+/* Ціна товару */
+.price {
+  @apply font-medium;
+}
+
+/* Стара ціна (перекреслена) */
+.comparePrice {
+  @apply text-sm text-muted-foreground line-through;
+}
+
+/* Бейдж запасу / статусу */
+.badge {
+  @apply inline-block px-2 py-1 rounded text-sm;
+}
+
+/* Стани бейджу запасу */
+.stockNone {
+  @apply bg-red-100 text-red-700;
+}
+
+.stockLow {
+  @apply bg-yellow-100 text-yellow-700;
+}
+
+.stockOk {
+  @apply bg-green-100 text-green-700;
+}
+
+/* Стани бейджу активності */
+.statusActive {
+  @apply bg-green-100 text-green-700;
+}
+
+.statusInactive {
+  @apply bg-gray-100 text-gray-700;
+}
+
+/* Кнопки дій у рядку */
+.actions {
+  @apply flex items-center justify-end gap-2;
+}
+
+.editBtn {
+  @apply p-2 hover:bg-accent rounded-md transition;
+}
+
+.deleteBtn {
+  @apply p-2 text-destructive hover:bg-destructive/10 rounded-md transition;
+}
+
+.actionIcon {
+  @apply h-4 w-4;
+}
+
+/* Порожній стан таблиці */
+.emptyState {
+  @apply text-center py-12 text-muted-foreground;
+}

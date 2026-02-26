@@ -1,11 +1,14 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Star, ThumbsUp, ThumbsDown, User, CheckCircle, MessageSquare, SlidersHorizontal, ChevronDown, Award } from 'lucide-react'
+import { Star, ThumbsUp, CheckCircle, MessageSquare, SlidersHorizontal, ChevronDown, Award } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import api from '@/lib/api'
 import { useAuthStore } from '@/store/authStore'
 import { toast } from 'sonner'
+import s from './ReviewSection.module.css'
+
+/* ─── Типи ─── */
 
 interface Review {
   _id: string
@@ -25,25 +28,136 @@ interface Review {
 
 interface ReviewSectionProps {
   productId: string
-  productRating: {
-    average: number
-    count: number
-  }
+  productRating: { average: number; count: number }
 }
 
 type SortOption = 'newest' | 'oldest' | 'highest' | 'lowest' | 'helpful'
 
+/* ─── Константи ─── */
+
+const REVIEWS_PER_PAGE = 5
+
+const RATING_LABELS: Record<number, string> = {
+  1: 'Жахливо',
+  2: 'Погано',
+  3: 'Нормально',
+  4: 'Добре',
+  5: 'Відмінно',
+}
+
+const SORT_OPTIONS: { value: SortOption; label: string }[] = [
+  { value: 'newest', label: 'Спочатку нові' },
+  { value: 'oldest', label: 'Спочатку старі' },
+  { value: 'highest', label: 'Висока оцінка' },
+  { value: 'lowest', label: 'Низька оцінка' },
+  { value: 'helpful', label: 'Найкорисніші' },
+]
+
+/* ─── Допоміжні функції ─── */
+
+/** Повертає CSS-клас кольору за значенням рейтингу */
+function getRatingColorClass(rating: number): string {
+  if (rating >= 4.5) return s.ratingExcellent
+  if (rating >= 3.5) return s.ratingGood
+  if (rating >= 2.5) return s.ratingAverage
+  if (rating >= 1.5) return s.ratingBelowAverage
+  return s.ratingPoor
+}
+
+/** Форматує дату у вигляді "25 лютого 2026" */
+function formatDate(dateString: string): string {
+  return new Date(dateString).toLocaleDateString('uk-UA', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  })
+}
+
+/** Повертає відносний час ("Сьогодні", "3 дн. тому" тощо) */
+function getTimeAgo(dateString: string): string {
+  const diffDays = Math.floor(
+    (Date.now() - new Date(dateString).getTime()) / (1000 * 60 * 60 * 24)
+  )
+
+  if (diffDays === 0) return 'Сьогодні'
+  if (diffDays === 1) return 'Вчора'
+  if (diffDays < 7) return `${diffDays} дн. тому`
+  if (diffDays < 30) return `${Math.floor(diffDays / 7)} тиж. тому`
+  if (diffDays < 365) return `${Math.floor(diffDays / 30)} міс. тому`
+  return `${Math.floor(diffDays / 365)} р. тому`
+}
+
+/** Розбирає текст коментаря на основний текст, переваги і недоліки */
+function parseReviewContent(comment: string) {
+  const result = { text: comment, pros: '', cons: '' }
+
+  const prosMatch = comment.match(/✅ Переваги: (.+?)(?=\n❌|$)/s)
+  const consMatch = comment.match(/❌ Недоліки: (.+?)$/s)
+
+  if (prosMatch) {
+    result.pros = prosMatch[1].trim()
+    result.text = comment.replace(/\n\n✅ Переваги:.+$/s, '').trim()
+  }
+  if (consMatch) {
+    result.cons = consMatch[1].trim()
+    if (!prosMatch) {
+      result.text = comment.replace(/\n❌ Недоліки:.+$/s, '').trim()
+    }
+  }
+
+  return result
+}
+
+/** Повертає правильну форму слова "відгук" залежно від кількості */
+function getReviewWord(count: number): string {
+  if (count === 1) return 'відгук'
+  if (count < 5) return 'відгуки'
+  return 'відгуків'
+}
+
+/** Обчислює розподіл оцінок (від 5 до 1) */
+function calcDistribution(reviews: Review[]): number[] {
+  const dist = [0, 0, 0, 0, 0]
+  reviews.forEach((r) => {
+    if (r.rating >= 1 && r.rating <= 5) dist[r.rating - 1]++
+  })
+  return dist.reverse()
+}
+
+/** Сортує та фільтрує список відгуків */
+function sortAndFilter(reviews: Review[], sortBy: SortOption, filterRating: number | null): Review[] {
+  let result = [...reviews]
+
+  if (filterRating !== null) {
+    result = result.filter((r) => r.rating === filterRating)
+  }
+
+  const sorters: Record<SortOption, (a: Review, b: Review) => number> = {
+    newest: (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+    oldest: (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
+    highest: (a, b) => b.rating - a.rating,
+    lowest: (a, b) => a.rating - b.rating,
+    helpful: (a, b) => (b.helpfulVotes || 0) - (a.helpfulVotes || 0),
+  }
+
+  return result.sort(sorters[sortBy])
+}
+
+/* ─── Компонент ─── */
+
 export default function ReviewSection({ productId, productRating }: ReviewSectionProps) {
+  // Стан даних
   const [reviews, setReviews] = useState<Review[]>([])
   const [loading, setLoading] = useState(true)
-  const [showForm, setShowForm] = useState(false)
-  const [submitting, setSubmitting] = useState(false)
+  const [showAllReviews, setShowAllReviews] = useState(false)
+
+  // Фільтрація і сортування
   const [sortBy, setSortBy] = useState<SortOption>('newest')
   const [filterRating, setFilterRating] = useState<number | null>(null)
-  const [showAllReviews, setShowAllReviews] = useState(false)
-  const { user, isAuthenticated } = useAuthStore()
-  
-  // Form state
+
+  // Форма відгуку
+  const [showForm, setShowForm] = useState(false)
+  const [submitting, setSubmitting] = useState(false)
   const [rating, setRating] = useState(5)
   const [title, setTitle] = useState('')
   const [comment, setComment] = useState('')
@@ -51,14 +165,22 @@ export default function ReviewSection({ productId, productRating }: ReviewSectio
   const [cons, setCons] = useState('')
   const [hoverRating, setHoverRating] = useState(0)
 
-  useEffect(() => {
-    fetchReviews()
-  }, [productId])
+  const { isAuthenticated } = useAuthStore()
 
+  // Обчислювані значення
+  const distribution = calcDistribution(reviews)
+  const sortedReviews = sortAndFilter(reviews, sortBy, filterRating)
+  const displayedReviews = showAllReviews ? sortedReviews : sortedReviews.slice(0, REVIEWS_PER_PAGE)
+  const verifiedCount = reviews.filter((r) => r.isVerifiedPurchase).length
+  const activeRating = hoverRating || rating
+
+  /* ── API-запити ── */
+
+  /** Завантажує відгуки для товару */
   const fetchReviews = async () => {
     try {
-      const response = await api.get(`/reviews/product/${productId}`)
-      setReviews(response.data.reviews || [])
+      const { data } = await api.get(`/reviews/product/${productId}`)
+      setReviews(data.reviews || [])
     } catch (error) {
       console.error('Error fetching reviews:', error)
     } finally {
@@ -66,14 +188,30 @@ export default function ReviewSection({ productId, productRating }: ReviewSectio
     }
   }
 
+  useEffect(() => {
+    fetchReviews()
+  }, [productId])
+
+  /* ── Обробники подій ── */
+
+  /** Скидає форму до початкового стану */
+  const resetForm = () => {
+    setShowForm(false)
+    setRating(5)
+    setTitle('')
+    setComment('')
+    setPros('')
+    setCons('')
+  }
+
+  /** Надсилає новий відгук на сервер */
   const handleSubmitReview = async (e: React.FormEvent) => {
     e.preventDefault()
-    
+
     if (!isAuthenticated) {
       toast.error('Увійдіть, щоб залишити відгук')
       return
     }
-
     if (!title.trim() || !comment.trim()) {
       toast.error('Заповніть всі поля')
       return
@@ -84,23 +222,18 @@ export default function ReviewSection({ productId, productRating }: ReviewSectio
       const fullComment = [
         comment.trim(),
         pros.trim() ? `\n\n✅ Переваги: ${pros.trim()}` : '',
-        cons.trim() ? `\n❌ Недоліки: ${cons.trim()}` : ''
+        cons.trim() ? `\n❌ Недоліки: ${cons.trim()}` : '',
       ].join('')
 
       await api.post('/reviews', {
         productId,
         rating,
         title: title.trim(),
-        comment: fullComment
+        comment: fullComment,
       })
-      
+
       toast.success('Дякуємо за відгук!')
-      setShowForm(false)
-      setRating(5)
-      setTitle('')
-      setComment('')
-      setPros('')
-      setCons('')
+      resetForm()
       fetchReviews()
     } catch (error: any) {
       toast.error(error.response?.data?.message || 'Помилка при відправці відгуку')
@@ -109,12 +242,12 @@ export default function ReviewSection({ productId, productRating }: ReviewSectio
     }
   }
 
+  /** Позначає відгук як корисний */
   const handleHelpful = async (reviewId: string) => {
     if (!isAuthenticated) {
       toast.error('Увійдіть, щоб оцінити відгук')
       return
     }
-
     try {
       await api.post(`/reviews/${reviewId}/helpful`)
       fetchReviews()
@@ -123,204 +256,96 @@ export default function ReviewSection({ productId, productRating }: ReviewSectio
     }
   }
 
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('uk-UA', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
-    })
+  /** Перемикає фільтр за оцінкою */
+  const toggleRatingFilter = (star: number) => {
+    setFilterRating((prev) => (prev === star ? null : star))
   }
 
-  const getTimeAgo = (dateString: string) => {
-    const now = new Date()
-    const date = new Date(dateString)
-    const diffMs = now.getTime() - date.getTime()
-    const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24))
-    
-    if (diffDays === 0) return 'Сьогодні'
-    if (diffDays === 1) return 'Вчора'
-    if (diffDays < 7) return `${diffDays} дн. тому`
-    if (diffDays < 30) return `${Math.floor(diffDays / 7)} тиж. тому`
-    if (diffDays < 365) return `${Math.floor(diffDays / 30)} міс. тому`
-    return `${Math.floor(diffDays / 365)} р. тому`
-  }
-
-  const getRatingDistribution = () => {
-    const distribution = [0, 0, 0, 0, 0]
-    reviews.forEach(review => {
-      if (review.rating >= 1 && review.rating <= 5) {
-        distribution[review.rating - 1]++
-      }
-    })
-    return distribution.reverse() // 5 to 1
-  }
-
-  const getRatingLabel = (rating: number) => {
-    switch (rating) {
-      case 1: return 'Жахливо'
-      case 2: return 'Погано'
-      case 3: return 'Нормально'
-      case 4: return 'Добре'
-      case 5: return 'Відмінно'
-      default: return ''
-    }
-  }
-
-  const getRatingColor = (rating: number) => {
-    if (rating >= 4.5) return 'text-green-600'
-    if (rating >= 3.5) return 'text-green-500'
-    if (rating >= 2.5) return 'text-yellow-500'
-    if (rating >= 1.5) return 'text-orange-500'
-    return 'text-red-500'
-  }
-
-  const getSortedAndFilteredReviews = () => {
-    let filtered = [...reviews]
-    
-    // Filter by rating
-    if (filterRating !== null) {
-      filtered = filtered.filter(r => r.rating === filterRating)
-    }
-    
-    // Sort
-    switch (sortBy) {
-      case 'newest':
-        filtered.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
-        break
-      case 'oldest':
-        filtered.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime())
-        break
-      case 'highest':
-        filtered.sort((a, b) => b.rating - a.rating)
-        break
-      case 'lowest':
-        filtered.sort((a, b) => a.rating - b.rating)
-        break
-      case 'helpful':
-        filtered.sort((a, b) => (b.helpfulVotes || 0) - (a.helpfulVotes || 0))
-        break
-    }
-    
-    return filtered
-  }
-
-  const ratingDistribution = getRatingDistribution()
-  const sortedReviews = getSortedAndFilteredReviews()
-  const displayedReviews = showAllReviews ? sortedReviews : sortedReviews.slice(0, 5)
-  const verifiedCount = reviews.filter(r => r.isVerifiedPurchase).length
-
-  // Parse pros/cons from comment
-  const parseReviewContent = (comment: string) => {
-    const parts = { text: comment, pros: '', cons: '' }
-    
-    const prosMatch = comment.match(/✅ Переваги: (.+?)(?=\n❌|$)/s)
-    const consMatch = comment.match(/❌ Недоліки: (.+?)$/s)
-    
-    if (prosMatch) {
-      parts.pros = prosMatch[1].trim()
-      parts.text = comment.replace(/\n\n✅ Переваги:.+$/s, '').trim()
-    }
-    if (consMatch) {
-      parts.cons = consMatch[1].trim()
-      if (!prosMatch) {
-        parts.text = comment.replace(/\n❌ Недоліки:.+$/s, '').trim()
-      }
-    }
-    
-    return parts
-  }
+  /* ── Рендер ── */
 
   return (
-    <div className="mt-8 sm:mt-12 border-t pt-8 sm:pt-12">
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6 sm:mb-8">
-        <div className="flex items-center gap-3">
-          <MessageSquare className="h-6 w-6 text-primary" />
-          <h2 className="text-xl sm:text-2xl font-bold">Відгуки покупців</h2>
+    <div className={s.container}>
+      {/* Заголовок секції */}
+      <div className={s.header}>
+        <div className={s.headerTitle}>
+          <MessageSquare className={s.headerIcon} />
+          <h2 className={s.title}>Відгуки покупців</h2>
           {reviews.length > 0 && (
-            <span className="bg-primary/10 text-primary text-sm font-medium px-2.5 py-0.5 rounded-full">
-              {reviews.length}
-            </span>
+            <span className={s.reviewCount}>{reviews.length}</span>
           )}
         </div>
-        
+
         {isAuthenticated && (
           <motion.button
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             onClick={() => setShowForm(!showForm)}
-            className={`px-5 py-2.5 rounded-lg text-sm font-medium transition-all ${
-              showForm 
-                ? 'bg-muted text-foreground hover:bg-muted/80' 
-                : 'bg-primary text-primary-foreground hover:bg-primary/90 shadow-md'
-            }`}
+            className={`${s.writeReviewBtn} ${showForm ? s.writeReviewBtnActive : s.writeReviewBtnDefault}`}
           >
             {showForm ? 'Скасувати' : '✏️ Написати відгук'}
           </motion.button>
         )}
       </div>
 
-      {/* Rating Summary */}
-      <div className="grid md:grid-cols-[280px_1fr] gap-6 sm:gap-8 mb-8 p-4 sm:p-6 bg-muted/30 rounded-xl border">
-        {/* Left: Overall score */}
-        <div className="flex flex-col items-center justify-center text-center">
-          <div className={`text-5xl sm:text-6xl font-bold ${getRatingColor(productRating.average)}`}>
+      {/* Блок загальної оцінки та розподілу */}
+      <div className={s.ratingSummary}>
+        {/* Загальна оцінка зліва */}
+        <div className={s.overallScore}>
+          <div className={`${s.scoreValue} ${getRatingColorClass(productRating.average)}`}>
             {productRating.average.toFixed(1)}
           </div>
-          <div className="flex items-center justify-center gap-0.5 my-2">
+
+          <div className={s.starsRow}>
             {[...Array(5)].map((_, i) => (
               <Star
                 key={i}
-                className={`h-5 w-5 sm:h-6 sm:w-6 ${
-                  i < Math.round(productRating.average)
-                    ? 'fill-yellow-400 text-yellow-400'
-                    : 'text-gray-300'
-                }`}
+                className={i < Math.round(productRating.average) ? s.starFilled : s.starEmpty}
               />
             ))}
           </div>
-          <div className="text-sm text-muted-foreground">
-            {productRating.count} {productRating.count === 1 ? 'відгук' : productRating.count < 5 ? 'відгуки' : 'відгуків'}
+
+          <div className={s.totalText}>
+            {productRating.count} {getReviewWord(productRating.count)}
           </div>
+
           {verifiedCount > 0 && (
-            <div className="flex items-center gap-1 mt-2 text-xs text-green-600">
-              <CheckCircle className="h-3.5 w-3.5" />
+            <div className={s.verifiedInfo}>
+              <CheckCircle className={s.verifiedIcon} />
               {verifiedCount} підтверджених покупок
             </div>
           )}
         </div>
-        
-        {/* Right: Distribution bars */}
-        <div className="flex flex-col justify-center space-y-2">
+
+        {/* Розподіл оцінок (бари) */}
+        <div className={s.distribution}>
           {[5, 4, 3, 2, 1].map((star, index) => {
-            const count = ratingDistribution[index]
-            const percentage = productRating.count > 0 ? (count / productRating.count) * 100 : 0
+            const count = distribution[index]
+            const pct = productRating.count > 0 ? (count / productRating.count) * 100 : 0
             const isActive = filterRating === star
-            
+            const barClass = star >= 4 ? s.barFillGreen : star === 3 ? s.barFillYellow : s.barFillRed
+
             return (
               <button
                 key={star}
-                onClick={() => setFilterRating(isActive ? null : star)}
-                className={`flex items-center gap-3 py-1.5 px-2 rounded-lg transition-all ${
-                  isActive ? 'bg-primary/10 ring-1 ring-primary/30' : 'hover:bg-muted'
-                }`}
+                onClick={() => toggleRatingFilter(star)}
+                className={`${s.distributionBtn} ${isActive ? s.distributionBtnActive : s.distributionBtnDefault}`}
               >
-                <div className="flex items-center gap-1.5 w-16">
-                  <span className="text-sm font-medium w-3">{star}</span>
-                  <Star className="h-3.5 w-3.5 fill-yellow-400 text-yellow-400" />
+                <div className={s.distributionLabel}>
+                  <span className={s.distributionNumber}>{star}</span>
+                  <Star className={s.distributionStar} />
                 </div>
-                <div className="flex-1 h-2.5 bg-muted rounded-full overflow-hidden">
+
+                <div className={s.distributionBar}>
                   <motion.div
                     initial={{ width: 0 }}
-                    animate={{ width: `${percentage}%` }}
+                    animate={{ width: `${pct}%` }}
                     transition={{ duration: 0.8, ease: 'easeOut' }}
-                    className={`h-full rounded-full ${
-                      star >= 4 ? 'bg-green-500' : star === 3 ? 'bg-yellow-400' : 'bg-red-400'
-                    }`}
+                    className={barClass}
                   />
                 </div>
-                <span className="text-xs text-muted-foreground w-12 text-right">
-                  {count} ({percentage.toFixed(0)}%)
+
+                <span className={s.distributionCount}>
+                  {count} ({pct.toFixed(0)}%)
                 </span>
               </button>
             )
@@ -328,23 +353,20 @@ export default function ReviewSection({ productId, productRating }: ReviewSectio
         </div>
       </div>
 
-      {/* Active filter indicator */}
+      {/* Індикатор активного фільтра */}
       {filterRating !== null && (
-        <div className="flex items-center gap-2 mb-4 p-3 bg-primary/5 rounded-lg border border-primary/20">
-          <SlidersHorizontal className="h-4 w-4 text-primary" />
-          <span className="text-sm">
+        <div className={s.filterIndicator}>
+          <SlidersHorizontal className={s.filterIcon} />
+          <span className={s.filterText}>
             Показано відгуки з оцінкою <strong>{filterRating}</strong> ({sortedReviews.length} з {reviews.length})
           </span>
-          <button
-            onClick={() => setFilterRating(null)}
-            className="ml-auto text-xs text-primary hover:underline font-medium"
-          >
+          <button onClick={() => setFilterRating(null)} className={s.filterReset}>
             Скинути фільтр
           </button>
         </div>
       )}
 
-      {/* Review Form */}
+      {/* Форма написання відгуку */}
       <AnimatePresence>
         {showForm && (
           <motion.form
@@ -352,19 +374,19 @@ export default function ReviewSection({ productId, productRating }: ReviewSectio
             animate={{ opacity: 1, height: 'auto', marginBottom: 32 }}
             exit={{ opacity: 0, height: 0, marginBottom: 0 }}
             onSubmit={handleSubmitReview}
-            className="overflow-hidden"
+            className={s.formWrapper}
           >
-            <div className="p-5 sm:p-6 border-2 border-primary/20 rounded-xl bg-gradient-to-b from-primary/5 to-transparent">
-              <h3 className="text-lg font-semibold mb-5 flex items-center gap-2">
-                <Award className="h-5 w-5 text-primary" />
+            <div className={s.formInner}>
+              <h3 className={s.formTitle}>
+                <Award className={s.formTitleIcon} />
                 Ваш відгук
               </h3>
-              
-              {/* Rating Selection */}
-              <div className="mb-5">
-                <label className="block text-sm font-medium mb-2">Оцінка *</label>
-                <div className="flex items-center gap-2">
-                  <div className="flex items-center gap-0.5">
+
+              {/* Вибір оцінки */}
+              <div className={s.ratingField}>
+                <label className={s.fieldLabel}>Оцінка *</label>
+                <div className={s.ratingPicker}>
+                  <div className={s.ratingStars}>
                     {[1, 2, 3, 4, 5].map((star) => (
                       <button
                         key={star}
@@ -372,92 +394,87 @@ export default function ReviewSection({ productId, productRating }: ReviewSectio
                         onClick={() => setRating(star)}
                         onMouseEnter={() => setHoverRating(star)}
                         onMouseLeave={() => setHoverRating(0)}
-                        className="p-0.5 transition-transform hover:scale-110"
+                        className={s.ratingStarBtn}
                       >
                         <Star
-                          className={`h-7 w-7 sm:h-8 sm:w-8 transition-colors ${
-                            star <= (hoverRating || rating)
-                              ? 'fill-yellow-400 text-yellow-400'
-                              : 'text-gray-300'
+                          className={`${s.ratingStarIcon} ${
+                            star <= activeRating ? s.ratingStarFilled : s.ratingStarEmpty
                           }`}
                         />
                       </button>
                     ))}
                   </div>
-                  <span className={`ml-2 text-sm font-medium ${getRatingColor(hoverRating || rating)}`}>
-                    {getRatingLabel(hoverRating || rating)}
+                  <span className={`${s.ratingLabelText} ${getRatingColorClass(activeRating)}`}>
+                    {RATING_LABELS[activeRating] || ''}
                   </span>
                 </div>
               </div>
-              
-              {/* Title */}
-              <div className="mb-4">
-                <label className="block text-sm font-medium mb-2">Заголовок *</label>
+
+              {/* Заголовок */}
+              <div className={s.inputField}>
+                <label className={s.fieldLabel}>Заголовок *</label>
                 <input
                   type="text"
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
                   placeholder="Коротко опишіть ваші враження"
-                  className="w-full px-4 py-2.5 border rounded-lg bg-background text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary"
+                  className={s.textInput}
                   maxLength={100}
                 />
               </div>
-              
-              {/* Comment */}
-              <div className="mb-4">
-                <label className="block text-sm font-medium mb-2">Детальний відгук *</label>
+
+              {/* Детальний коментар */}
+              <div className={s.inputField}>
+                <label className={s.fieldLabel}>Детальний відгук *</label>
                 <textarea
                   value={comment}
                   onChange={(e) => setComment(e.target.value)}
                   placeholder="Розкажіть детальніше про ваш досвід використання товару..."
                   rows={4}
-                  className="w-full px-4 py-2.5 border rounded-lg bg-background text-sm resize-none focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary"
+                  className={s.textarea}
                   maxLength={1000}
                 />
-                <div className="text-xs text-muted-foreground mt-1 text-right">{comment.length}/1000</div>
+                <div className={s.charCount}>{comment.length}/1000</div>
               </div>
 
-              {/* Pros & Cons */}
-              <div className="grid sm:grid-cols-2 gap-4 mb-5">
+              {/* Переваги та недоліки */}
+              <div className={s.prosConsGrid}>
                 <div>
-                  <label className="block text-sm font-medium mb-2 text-green-600">✅ Переваги</label>
+                  <label className={s.prosLabel}>✅ Переваги</label>
                   <textarea
                     value={pros}
                     onChange={(e) => setPros(e.target.value)}
                     placeholder="Що вам сподобалось?"
                     rows={3}
-                    className="w-full px-4 py-2.5 border border-green-200 rounded-lg bg-green-50/50 dark:bg-green-950/20 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-green-300 focus:border-green-400"
+                    className={s.prosTextarea}
                     maxLength={300}
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium mb-2 text-red-500">❌ Недоліки</label>
+                  <label className={s.consLabel}>❌ Недоліки</label>
                   <textarea
                     value={cons}
                     onChange={(e) => setCons(e.target.value)}
                     placeholder="Що можна покращити?"
                     rows={3}
-                    className="w-full px-4 py-2.5 border border-red-200 rounded-lg bg-red-50/50 dark:bg-red-950/20 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-red-300 focus:border-red-400"
+                    className={s.consTextarea}
                     maxLength={300}
                   />
                 </div>
               </div>
-              
-              <div className="flex items-center gap-3">
+
+              {/* Кнопки форми */}
+              <div className={s.formActions}>
                 <motion.button
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                   type="submit"
                   disabled={submitting}
-                  className="px-8 py-2.5 bg-primary text-primary-foreground rounded-lg text-sm font-medium hover:bg-primary/90 disabled:opacity-50 shadow-md"
+                  className={s.submitBtn}
                 >
                   {submitting ? 'Відправляємо...' : 'Опублікувати відгук'}
                 </motion.button>
-                <button
-                  type="button"
-                  onClick={() => setShowForm(false)}
-                  className="px-6 py-2.5 text-sm text-muted-foreground hover:text-foreground transition"
-                >
+                <button type="button" onClick={resetForm} className={s.cancelBtn}>
                   Скасувати
                 </button>
               </div>
@@ -466,196 +483,219 @@ export default function ReviewSection({ productId, productRating }: ReviewSectio
         )}
       </AnimatePresence>
 
-      {/* Sort controls */}
+      {/* Панель сортування */}
       {reviews.length > 1 && (
-        <div className="flex items-center justify-between mb-4 pb-4 border-b">
-          <div className="flex items-center gap-2">
-            <SlidersHorizontal className="h-4 w-4 text-muted-foreground" />
+        <div className={s.sortBar}>
+          <div className={s.sortControls}>
+            <SlidersHorizontal className={s.sortIcon} />
             <select
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value as SortOption)}
-              className="text-sm bg-transparent border rounded-lg px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-primary/30"
+              className={s.sortSelect}
             >
-              <option value="newest">Спочатку нові</option>
-              <option value="oldest">Спочатку старі</option>
-              <option value="highest">Висока оцінка</option>
-              <option value="lowest">Низька оцінка</option>
-              <option value="helpful">Найкорисніші</option>
+              {SORT_OPTIONS.map((opt) => (
+                <option key={opt.value} value={opt.value}>
+                  {opt.label}
+                </option>
+              ))}
             </select>
           </div>
-          <span className="text-xs text-muted-foreground">
-            {sortedReviews.length} відгуків
-          </span>
+          <span className={s.sortCount}>{sortedReviews.length} відгуків</span>
         </div>
       )}
 
-      {/* Reviews List */}
+      {/* Список відгуків */}
       {loading ? (
-        <div className="space-y-4">
-          {[...Array(3)].map((_, i) => (
-            <div key={i} className="p-5 border rounded-xl animate-pulse">
-              <div className="flex items-center gap-3 mb-3">
-                <div className="w-10 h-10 bg-muted rounded-full" />
-                <div>
-                  <div className="h-4 bg-muted rounded w-28 mb-1.5" />
-                  <div className="h-3 bg-muted rounded w-20" />
-                </div>
-              </div>
-              <div className="h-4 bg-muted rounded w-1/3 mb-2" />
-              <div className="h-3 bg-muted rounded w-full mb-1.5" />
-              <div className="h-3 bg-muted rounded w-2/3" />
-            </div>
-          ))}
-        </div>
+        <LoadingSkeleton />
       ) : sortedReviews.length > 0 ? (
-        <div className="space-y-4">
-          {displayedReviews.map((review, index) => {
-            const parsed = parseReviewContent(review.comment)
-            
-            return (
-              <motion.div
-                key={review._id}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.05 }}
-                className="p-4 sm:p-6 border rounded-xl hover:border-primary/20 hover:shadow-sm transition-all"
-              >
-                {/* Review header */}
-                <div className="flex items-start justify-between gap-4 mb-3">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center text-primary font-semibold text-sm">
-                      {review.user.avatar ? (
-                        <img
-                          src={review.user.avatar}
-                          alt=""
-                          className="w-full h-full rounded-full object-cover"
-                        />
-                      ) : (
-                        <span>{review.user.firstName[0]}{review.user.lastName[0]}</span>
-                      )}
-                    </div>
-                    <div>
-                      <div className="flex items-center gap-2">
-                        <span className="font-semibold text-sm">
-                          {review.user.firstName} {review.user.lastName}
-                        </span>
-                        {review.isVerifiedPurchase && (
-                          <span className="inline-flex items-center gap-1 text-[11px] text-green-600 bg-green-50 dark:bg-green-950/30 px-2 py-0.5 rounded-full font-medium">
-                            <CheckCircle className="h-3 w-3" />
-                            Покупець
-                          </span>
-                        )}
-                      </div>
-                      <div className="flex items-center gap-2 mt-0.5">
-                        <div className="flex items-center gap-0.5">
-                          {[...Array(5)].map((_, i) => (
-                            <Star
-                              key={i}
-                              className={`h-3.5 w-3.5 ${
-                                i < review.rating
-                                  ? 'fill-yellow-400 text-yellow-400'
-                                  : 'text-gray-200'
-                              }`}
-                            />
-                          ))}
-                        </div>
-                        <span className="text-xs text-muted-foreground">
-                          {getTimeAgo(review.createdAt)}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                
-                {/* Title */}
-                {review.title && (
-                  <h4 className="font-semibold mb-2 text-[15px]">{review.title}</h4>
-                )}
-                
-                {/* Comment text */}
-                <p className="text-sm text-foreground/80 leading-relaxed mb-3">{parsed.text}</p>
-                
-                {/* Pros & Cons */}
-                {(parsed.pros || parsed.cons) && (
-                  <div className="grid sm:grid-cols-2 gap-3 mb-4">
-                    {parsed.pros && (
-                      <div className="flex gap-2 p-3 bg-green-50 dark:bg-green-950/20 rounded-lg">
-                        <span className="text-green-500 mt-0.5 flex-shrink-0">👍</span>
-                        <div>
-                          <div className="text-xs font-semibold text-green-600 mb-1">Переваги</div>
-                          <p className="text-sm text-green-800 dark:text-green-300">{parsed.pros}</p>
-                        </div>
-                      </div>
-                    )}
-                    {parsed.cons && (
-                      <div className="flex gap-2 p-3 bg-red-50 dark:bg-red-950/20 rounded-lg">
-                        <span className="text-red-500 mt-0.5 flex-shrink-0">👎</span>
-                        <div>
-                          <div className="text-xs font-semibold text-red-500 mb-1">Недоліки</div>
-                          <p className="text-sm text-red-800 dark:text-red-300">{parsed.cons}</p>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                )}
-                
-                {/* Actions */}
-                <div className="flex items-center gap-4 pt-2 border-t border-dashed">
-                  <button
-                    onClick={() => handleHelpful(review._id)}
-                    className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-primary transition-colors group"
-                  >
-                    <ThumbsUp className="h-3.5 w-3.5 group-hover:scale-110 transition-transform" />
-                    <span>Корисно</span>
-                    {(review.helpfulVotes || 0) > 0 && (
-                      <span className="bg-muted px-1.5 py-0.5 rounded-full text-[11px] font-medium">
-                        {review.helpfulVotes}
-                      </span>
-                    )}
-                  </button>
-                  <span className="text-xs text-muted-foreground/50">{formatDate(review.createdAt)}</span>
-                </div>
-              </motion.div>
-            )
-          })}
-          
-          {/* Show more button */}
-          {sortedReviews.length > 5 && !showAllReviews && (
+        <div className={s.reviewsList}>
+          {displayedReviews.map((review, index) => (
+            <ReviewCard
+              key={review._id}
+              review={review}
+              index={index}
+              onHelpful={handleHelpful}
+            />
+          ))}
+
+          {/* Кнопка "Показати ще" */}
+          {sortedReviews.length > REVIEWS_PER_PAGE && !showAllReviews && (
             <motion.button
               whileHover={{ scale: 1.01 }}
               whileTap={{ scale: 0.99 }}
               onClick={() => setShowAllReviews(true)}
-              className="w-full py-3 border-2 border-dashed rounded-xl text-sm font-medium text-muted-foreground hover:text-foreground hover:border-primary/30 transition-all flex items-center justify-center gap-2"
+              className={s.showMoreBtn}
             >
-              <ChevronDown className="h-4 w-4" />
-              Показати ще {sortedReviews.length - 5} відгуків
+              <ChevronDown className={s.showMoreIcon} />
+              Показати ще {sortedReviews.length - REVIEWS_PER_PAGE} відгуків
             </motion.button>
           )}
         </div>
       ) : (
-        <div className="text-center py-12 sm:py-16">
-          <div className="w-16 h-16 mx-auto mb-4 bg-muted rounded-full flex items-center justify-center">
-            <MessageSquare className="h-8 w-8 text-muted-foreground" />
+        <EmptyState
+          isAuthenticated={isAuthenticated}
+          onWriteReview={() => setShowForm(true)}
+        />
+      )}
+    </div>
+  )
+}
+
+/* ─── Підкомпоненти ─── */
+
+/** Скелетон завантаження відгуків */
+function LoadingSkeleton() {
+  return (
+    <div className={s.skeletonList}>
+      {[0, 1, 2].map((i) => (
+        <div key={i} className={s.skeletonCard}>
+          <div className={s.skeletonHeader}>
+            <div className={s.skeletonAvatar} />
+            <div>
+              <div className={s.skeletonName} />
+              <div className={s.skeletonDate} />
+            </div>
           </div>
-          <h3 className="font-semibold text-lg mb-2">Поки немає відгуків</h3>
-          <p className="text-sm text-muted-foreground mb-6 max-w-sm mx-auto">
-            Станьте першим, хто поділиться своїми враженнями про цей товар
-          </p>
-          {isAuthenticated ? (
-            <motion.button
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              onClick={() => setShowForm(true)}
-              className="px-6 py-2.5 bg-primary text-primary-foreground rounded-lg text-sm font-medium hover:bg-primary/90 shadow-md"
-            >
-              ✏️ Написати перший відгук
-            </motion.button>
-          ) : (
-            <a href="/login" className="text-sm text-primary hover:underline font-medium">
-              Увійдіть, щоб написати відгук
-            </a>
+          <div className={s.skeletonTitle} />
+          <div className={s.skeletonLine1} />
+          <div className={s.skeletonLine2} />
+        </div>
+      ))}
+    </div>
+  )
+}
+
+/** Картка одного відгуку */
+function ReviewCard({
+  review,
+  index,
+  onHelpful,
+}: {
+  review: Review
+  index: number
+  onHelpful: (id: string) => void
+}) {
+  const parsed = parseReviewContent(review.comment)
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: index * 0.05 }}
+      className={s.reviewCard}
+    >
+      {/* Автор відгуку */}
+      <div className={s.reviewHeader}>
+        <div className={s.reviewUser}>
+          <div className={s.avatar}>
+            {review.user.avatar ? (
+              <img src={review.user.avatar} alt="" className={s.avatarImg} />
+            ) : (
+              <span>{review.user.firstName[0]}{review.user.lastName[0]}</span>
+            )}
+          </div>
+
+          <div>
+            <div className={s.userInfo}>
+              <span className={s.userName}>
+                {review.user.firstName} {review.user.lastName}
+              </span>
+              {review.isVerifiedPurchase && (
+                <span className={s.verifiedBadge}>
+                  <CheckCircle className={s.verifiedBadgeIcon} />
+                  Покупець
+                </span>
+              )}
+            </div>
+
+            <div className={s.reviewMeta}>
+              <div className={s.reviewStars}>
+                {[...Array(5)].map((_, i) => (
+                  <Star
+                    key={i}
+                    className={i < review.rating ? s.reviewStarFilled : s.reviewStarEmpty}
+                  />
+                ))}
+              </div>
+              <span className={s.reviewTime}>{getTimeAgo(review.createdAt)}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Заголовок та текст */}
+      {review.title && <h4 className={s.reviewTitle}>{review.title}</h4>}
+      <p className={s.reviewText}>{parsed.text}</p>
+
+      {/* Переваги / Недоліки */}
+      {(parsed.pros || parsed.cons) && (
+        <div className={s.reviewProsConsGrid}>
+          {parsed.pros && (
+            <div className={s.prosBlock}>
+              <span className={s.prosEmoji}>👍</span>
+              <div>
+                <div className={s.prosTitle}>Переваги</div>
+                <p className={s.prosText}>{parsed.pros}</p>
+              </div>
+            </div>
+          )}
+          {parsed.cons && (
+            <div className={s.consBlock}>
+              <span className={s.consEmoji}>👎</span>
+              <div>
+                <div className={s.consTitle}>Недоліки</div>
+                <p className={s.consText}>{parsed.cons}</p>
+              </div>
+            </div>
           )}
         </div>
+      )}
+
+      {/* Кнопка "Корисно" та дата */}
+      <div className={s.reviewActions}>
+        <button onClick={() => onHelpful(review._id)} className={`${s.helpfulBtn} group`}>
+          <ThumbsUp className={s.helpfulIcon} />
+          <span>Корисно</span>
+          {(review.helpfulVotes || 0) > 0 && (
+            <span className={s.helpfulCount}>{review.helpfulVotes}</span>
+          )}
+        </button>
+        <span className={s.reviewDate}>{formatDate(review.createdAt)}</span>
+      </div>
+    </motion.div>
+  )
+}
+
+/** Пустий стан — коли відгуків ще немає */
+function EmptyState({
+  isAuthenticated,
+  onWriteReview,
+}: {
+  isAuthenticated: boolean
+  onWriteReview: () => void
+}) {
+  return (
+    <div className={s.emptyState}>
+      <div className={s.emptyIcon}>
+        <MessageSquare className={s.emptyIconInner} />
+      </div>
+      <h3 className={s.emptyTitle}>Поки немає відгуків</h3>
+      <p className={s.emptyText}>
+        Станьте першим, хто поділиться своїми враженнями про цей товар
+      </p>
+      {isAuthenticated ? (
+        <motion.button
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
+          onClick={onWriteReview}
+          className={s.emptyWriteBtn}
+        >
+          ✏️ Написати перший відгук
+        </motion.button>
+      ) : (
+        <a href="/login" className={s.emptyLoginLink}>
+          Увійдіть, щоб написати відгук
+        </a>
       )}
     </div>
   )

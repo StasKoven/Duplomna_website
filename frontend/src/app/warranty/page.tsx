@@ -1,18 +1,20 @@
+import s from './page.module.css'
+
 export default function WarrantyPage() {
   return (
-    <div className="container-custom py-12">
-      <div className="max-w-3xl mx-auto">
-        <h1 className="text-4xl font-bold mb-6">Гарантія та повернення</h1>
+    <div className={`container-custom ${s.page}`}>
+      <div className={s.wrapper}>
+        <h1 className={s.title}>Гарантія та повернення</h1>
 
-        <div className="space-y-8">
+        <div className={s.sections}>
           <section>
-            <h2 className="text-2xl font-bold mb-4">Гарантійні умови</h2>
-            <div className="prose prose-lg max-w-none text-muted-foreground">
+            <h2 className={s.sectionTitle}>Гарантійні умови</h2>
+            <div className={s.content}>
               <p>
                 На всі товари нашого магазину поширюється офіційна гарантія виробника.
                 Термін гарантії залежить від категорії товару:
               </p>
-              <ul className="space-y-2 my-4">
+              <ul className={s.guaranteeList}>
                 <li>• Смартфони та планшети - 12 місяців</li>
                 <li>• Ноутбуки та комп'ютери - 24 місяці</li>
                 <li>• Аксесуари - 6 місяців</li>
@@ -23,18 +25,18 @@ export default function WarrantyPage() {
           </section>
 
           <section>
-            <h2 className="text-2xl font-bold mb-4">Умови обміну та повернення</h2>
+            <h2 className={s.sectionTitle}>Умови обміну та повернення</h2>
             
-            <div className="space-y-4">
-              <div className="p-6 bg-card border rounded-lg">
-                <h3 className="font-semibold text-lg mb-2">14 днів на повернення</h3>
-                <p className="text-muted-foreground mb-3">
+            <div className={s.cardList}>
+              <div className={s.card}>
+                <h3 className={s.cardTitle}>14 днів на повернення</h3>
+                <p className={s.cardText}>
                   Ви маєте право повернути товар належної якості протягом 14 днів з моменту покупки.
                 </p>
-                <p className="text-sm text-muted-foreground">
+                <p className={s.cardSubtext}>
                   Умови повернення:
                 </p>
-                <ul className="space-y-1 text-sm text-muted-foreground mt-2">
+                <ul className={s.conditionList}>
                   <li>✓ Товар не використовувався</li>
                   <li>✓ Збережена оригінальна упаковка</li>
                   <li>✓ Наявні всі комплектуючі та документи</li>
@@ -42,17 +44,17 @@ export default function WarrantyPage() {
                 </ul>
               </div>
 
-              <div className="p-6 bg-card border rounded-lg">
-                <h3 className="font-semibold text-lg mb-2">Обмін товару</h3>
-                <p className="text-muted-foreground">
+              <div className={s.card}>
+                <h3 className={s.cardTitle}>Обмін товару</h3>
+                <p className={s.exchangeText}>
                   Можливість обміну на аналогічний товар іншого кольору, розміру або комплектації 
                   протягом 14 днів з моменту покупки при дотриманні умов повернення.
                 </p>
               </div>
 
-              <div className="p-6 bg-card border rounded-lg">
-                <h3 className="font-semibold text-lg mb-2">Гарантійний ремонт</h3>
-                <p className="text-muted-foreground">
+              <div className={s.card}>
+                <h3 className={s.cardTitle}>Гарантійний ремонт</h3>
+                <p className={s.exchangeText}>
                   У разі виявлення заводського браку протягом гарантійного терміну, товар 
                   підлягає безкоштовному ремонту або заміні.
                 </p>
@@ -61,51 +63,51 @@ export default function WarrantyPage() {
           </section>
 
           <section>
-            <h2 className="text-2xl font-bold mb-4">Як оформити повернення?</h2>
-            <div className="space-y-3 text-muted-foreground">
-              <div className="flex items-start gap-3">
-                <div className="flex-shrink-0 w-8 h-8 bg-primary text-white rounded-full flex items-center justify-center font-semibold">
+            <h2 className={s.sectionTitle}>Як оформити повернення?</h2>
+            <div className={s.stepList}>
+              <div className={s.step}>
+                <div className={s.stepNumber}>
                   1
                 </div>
                 <div>
-                  <p className="font-medium text-foreground">Зв'яжіться з нами</p>
-                  <p className="text-sm">
+                  <p className={s.stepTitle}>Зв'яжіться з нами</p>
+                  <p className={s.stepDesc}>
                     Напишіть на support@electronics.com або зателефонуйте за номером +380 XX XXX XX XX
                   </p>
                 </div>
               </div>
 
-              <div className="flex items-start gap-3">
-                <div className="flex-shrink-0 w-8 h-8 bg-primary text-white rounded-full flex items-center justify-center font-semibold">
+              <div className={s.step}>
+                <div className={s.stepNumber}>
                   2
                 </div>
                 <div>
-                  <p className="font-medium text-foreground">Отримайте підтвердження</p>
-                  <p className="text-sm">
+                  <p className={s.stepTitle}>Отримайте підтвердження</p>
+                  <p className={s.stepDesc}>
                     Ми розглянемо вашу заявку та надамо інструкції для повернення
                   </p>
                 </div>
               </div>
 
-              <div className="flex items-start gap-3">
-                <div className="flex-shrink-0 w-8 h-8 bg-primary text-white rounded-full flex items-center justify-center font-semibold">
+              <div className={s.step}>
+                <div className={s.stepNumber}>
                   3
                 </div>
                 <div>
-                  <p className="font-medium text-foreground">Відправте товар</p>
-                  <p className="text-sm">
+                  <p className={s.stepTitle}>Відправте товар</p>
+                  <p className={s.stepDesc}>
                     Надішліть товар разом з копією чеку на вказану адресу
                   </p>
                 </div>
               </div>
 
-              <div className="flex items-start gap-3">
-                <div className="flex-shrink-0 w-8 h-8 bg-primary text-white rounded-full flex items-center justify-center font-semibold">
+              <div className={s.step}>
+                <div className={s.stepNumber}>
                   4
                 </div>
                 <div>
-                  <p className="font-medium text-foreground">Отримайте кошти</p>
-                  <p className="text-sm">
+                  <p className={s.stepTitle}>Отримайте кошти</p>
+                  <p className={s.stepDesc}>
                     Після перевірки товару кошти будуть повернені протягом 5-7 робочих днів
                   </p>
                 </div>
@@ -113,9 +115,9 @@ export default function WarrantyPage() {
             </div>
           </section>
 
-          <section className="bg-muted p-6 rounded-lg">
-            <h3 className="font-semibold mb-3">Важливо знати</h3>
-            <ul className="space-y-2 text-sm text-muted-foreground">
+          <section className={s.infoBox}>
+            <h3 className={s.infoTitle}>Важливо знати</h3>
+            <ul className={s.infoList}>
               <li>⚠ Товари не підлягають поверненню, якщо мали сліди використання</li>
               <li>⚠ Вартість доставки при поверненні оплачує покупець</li>
               <li>⚠ Повернення коштів здійснюється тим же способом, яким була проведена оплата</li>

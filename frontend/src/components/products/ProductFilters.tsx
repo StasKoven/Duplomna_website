@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import { Filter, X, SlidersHorizontal } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import api from '@/lib/api'
+import s from './ProductFilters.module.css'
 
 interface Category {
   _id: string
@@ -100,20 +101,17 @@ export default function ProductFilters({ onFilterChange }: FilterProps) {
   }).length
 
   return (
-    <div className="space-y-4">
-      {/* ==================== */}
-      {/* Mobile Toggle Button */}
-      {/* Кнопка для відкриття/закриття фільтрів на мобільних пристроях */}
-      {/* ==================== */}
+    <div className={s.container}>
+      {/* Кнопка фільтрів (мобільна версія) */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="lg:hidden w-full btn-secondary flex items-center justify-between"
+        className={`${s.mobileToggle} btn-secondary`}
       >
-        <div className="flex items-center gap-2">
+        <div className={s.toggleContent}>
           <Filter className="h-4 w-4" />
           Фільтри
           {activeFiltersCount > 0 && (
-            <span className="bg-primary text-primary-foreground text-xs px-2 py-0.5 rounded-full">
+            <span className={s.badge}>
               {activeFiltersCount}
             </span>
           )}
@@ -121,13 +119,9 @@ export default function ProductFilters({ onFilterChange }: FilterProps) {
         <SlidersHorizontal className="h-4 w-4" />
       </button>
 
-      {/* ==================== */}
-      {/* Sort Options Section */}
-      {/* Секція сортування - завжди видима на всіх пристроях */}
-      {/* Опції: новинки, ціна, назва, рейтинг, популярність */}
-      {/* ==================== */}
-      <div className="flex flex-wrap gap-2 items-center">
-        <span className="text-sm font-medium">Сортування:</span>
+      {/* Секція сортування */}
+      <div className={s.sortWrapper}>
+        <span className={s.sortLabel}>Сортування:</span>
         <select
           value={`${filters.sortBy}-${filters.sortOrder}`}
           onChange={(e) => {
@@ -135,7 +129,7 @@ export default function ProductFilters({ onFilterChange }: FilterProps) {
             handleFilterChange('sortBy', sortBy)
             handleFilterChange('sortOrder', sortOrder)
           }}
-          className="input text-sm"
+          className={`input ${s.sortSelect}`}
         >
           <option value="createdAt-desc">Новинки</option>
           <option value="price-asc">Ціна: від низької</option>
@@ -147,140 +141,115 @@ export default function ProductFilters({ onFilterChange }: FilterProps) {
         </select>
       </div>
 
-      {/* ==================== */}
-      {/* Filters Panel Container */}
-      {/* Основна панель фільтрів з анімацією відкриття/закриття */}
-      {/* Використовує Framer Motion для плавної анімації */}
-      {/* ==================== */}
+      {/* Панель фільтрів (анімована) */}
       <AnimatePresence>
         {(isOpen || window.innerWidth >= 1024) && (
           <motion.div
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: 'auto', opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
-            className="overflow-hidden lg:block"
+            className={s.filtersPanel}
           >
-            <div className="bg-card border rounded-lg p-4 space-y-6">
-              {/* Clear All Filters Button */}
-              {/* Кнопка очищення всіх фільтрів - показується тільки якщо є активні фільтри */}
+            <div className={s.filtersCard}>
+              {/* Кнопка очищення фільтрів */}
               {activeFiltersCount > 0 && (
                 <button
                   onClick={clearFilters}
-                  className="text-sm text-red-600 hover:text-red-700 flex items-center gap-2"
+                  className={s.clearButton}
                 >
                   <X className="h-4 w-4" />
                   Очистити фільтри ({activeFiltersCount})
                 </button>
               )}
 
-              {/* ==================== */}
-              {/* Category Filter Section */}
-              {/* Фільтр за категоріями товарів */}
-              {/* Завантажується динамічно з API */}
-              {/* ==================== */}
+              {/* Фільтр за категоріями */}
               <div>
-                <h3 className="font-semibold mb-3">Категорія</h3>
-                <div className="space-y-2">
-                  <label className="flex items-center gap-2 cursor-pointer">
+                <h3 className={s.sectionTitle}>Категорія</h3>
+                <div className={s.optionsList}>
+                  <label className={s.optionLabel}>
                     <input
                       type="radio"
                       name="category"
                       checked={filters.category === ''}
                       onChange={() => handleFilterChange('category', '')}
-                      className="cursor-pointer"
+                      className={s.checkInput}
                     />
-                    <span className="text-sm">Всі категорії</span>
+                    <span className={s.optionText}>Всі категорії</span>
                   </label>
                   {categories.map(cat => (
-                    <label key={cat._id} className="flex items-center gap-2 cursor-pointer">
+                    <label key={cat._id} className={s.optionLabel}>
                       <input
                         type="radio"
                         name="category"
                         checked={filters.category === cat._id}
                         onChange={() => handleFilterChange('category', cat._id)}
-                        className="cursor-pointer"
+                        className={s.checkInput}
                       />
-                      <span className="text-sm">{cat.name}</span>
+                      <span className={s.optionText}>{cat.name}</span>
                     </label>
                   ))}
                 </div>
               </div>
 
-              {/* ==================== */}
-              {/* Price Range Filter */}
-              {/* Фільтр за діапазоном цін */}
-              {/* Мінімальна та максимальна ціна в гривнях */}
-              {/* ==================== */}
+              {/* Фільтр за ціною */}
               <div>
-                <h3 className="font-semibold mb-3">Ціна</h3>
-                <div className="flex items-center gap-2">
+                <h3 className={s.sectionTitle}>Ціна</h3>
+                <div className={s.priceRow}>
                   <input
                     type="number"
                     placeholder="Від"
                     value={filters.minPrice}
                     onChange={(e) => handleFilterChange('minPrice', e.target.value)}
-                    className="input w-full text-sm"
+                    className={`input ${s.priceInput}`}
                   />
-                  <span className="text-muted-foreground">—</span>
+                  <span className={s.priceSeparator}>—</span>
                   <input
                     type="number"
                     placeholder="До"
                     value={filters.maxPrice}
                     onChange={(e) => handleFilterChange('maxPrice', e.target.value)}
-                    className="input w-full text-sm"
+                    className={`input ${s.priceInput}`}
                   />
                 </div>
               </div>
 
-              {/* ==================== */}
-              {/* Stock Status Filter */}
-              {/* Фільтр за наявністю товару */}
-              {/* Показувати тільки товари в наявності */}
-              {/* ==================== */}
+              {/* Фільтр за наявністю */}
               <div>
-                <h3 className="font-semibold mb-3">Наявність</h3>
-                <label className="flex items-center gap-2 cursor-pointer">
+                <h3 className={s.sectionTitle}>Наявність</h3>
+                <label className={s.optionLabel}>
                   <input
                     type="checkbox"
                     checked={filters.inStock}
                     onChange={(e) => handleFilterChange('inStock', e.target.checked)}
-                    className="cursor-pointer"
+                    className={s.checkInput}
                   />
-                  <span className="text-sm">Тільки в наявності</span>
+                  <span className={s.optionText}>Тільки в наявності</span>
                 </label>
               </div>
 
-              {/* ==================== */}
-              {/* On Sale Filter */}
-              {/* Фільтр товарів зі знижкою */}
-              {/* Показувати тільки акційні товари */}
-              {/* ==================== */}
+              {/* Фільтр акційних товарів */}
               <div>
-                <h3 className="font-semibold mb-3">Акції</h3>
-                <label className="flex items-center gap-2 cursor-pointer">
+                <h3 className={s.sectionTitle}>Акції</h3>
+                <label className={s.optionLabel}>
                   <input
                     type="checkbox"
                     checked={filters.onSale}
                     onChange={(e) => handleFilterChange('onSale', e.target.checked)}
-                    className="cursor-pointer"
+                    className={s.checkInput}
                   />
-                  <span className="text-sm">Тільки зі знижкою</span>
+                  <span className={s.optionText}>Тільки зі знижкою</span>
                 </label>
               </div>
 
-              {/* ==================== */}
-              {/* Brand Filter */}
-              {/* Фільтр за брендом/виробником */}
-              {/* Текстовий пошук за назвою бренду */}
-              {/* ==================== */}
+              {/* Фільтр за брендом */}
               <div>
-                <h3 className="font-semibold mb-3">Бренд</h3>
+                <h3 className={s.sectionTitle}>Бренд</h3>
                 <input
                   type="text"
                   placeholder="Введіть бренд..."
                   value={filters.brand}
                   onChange={(e) => handleFilterChange('brand', e.target.value)}
-                  className="input w-full text-sm"
+                  className={`input ${s.brandInput}`}
                 />
               </div>
             </div>

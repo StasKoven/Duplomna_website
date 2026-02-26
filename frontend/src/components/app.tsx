@@ -6,6 +6,7 @@ import Header from '@/components/layout/Header'
 import Footer from '@/components/layout/Footer'
 import BottomNav from '@/components/layout/BottomNav'
 import ChatWidget from '@/components/chat/ChatWidget'
+import s from './app.module.css'
 
 interface AppProps {
   children: ReactNode
@@ -14,9 +15,9 @@ interface AppProps {
 export default function App({ children }: AppProps) {
   return (
     <>
-      <div className="flex min-h-screen flex-col">
+      <div className={s.wrapper}>
         <Header />
-        <main className="flex-1 pb-16 md:pb-0">{children}</main>
+        <main className={s.main}>{children}</main>
         <Footer />
       </div>
       <BottomNav />

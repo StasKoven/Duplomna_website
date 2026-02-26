@@ -1,0 +1,194 @@
+/* ========================= */
+/* Картка товару — ProductCard */
+/* ========================= */
+
+/* Обгортка картки */
+.card {
+  @apply relative rounded-lg border bg-card overflow-hidden transition-shadow hover:shadow-xl active:shadow-lg;
+}
+
+/* === Бейджі товару (ліва верхня частина) === */
+.badgesContainer {
+  @apply absolute top-1.5 left-1.5 z-10 flex flex-col gap-1;
+  @apply sm:top-2 sm:left-2;
+}
+
+/* Бейдж знижки */
+.badgeDiscount {
+  @apply rounded-full bg-destructive px-1.5 py-0.5 text-[10px] font-semibold text-destructive-foreground;
+  @apply sm:px-2 sm:py-1 sm:text-xs;
+}
+
+/* Бейдж "хіт продажів" */
+.badgeFeatured {
+  @apply rounded-full bg-primary px-1.5 py-0.5 text-[10px] font-semibold text-primary-foreground;
+  @apply sm:px-2 sm:py-1 sm:text-xs;
+}
+
+/* Бейдж "немає в наявності" */
+.badgeOutOfStock {
+  @apply rounded-full bg-muted px-1.5 py-0.5 text-[10px] font-semibold;
+  @apply sm:px-2 sm:py-1 sm:text-xs;
+}
+
+/* === Кнопки дій (права верхня частина) === */
+.actionsContainer {
+  @apply absolute top-1.5 right-1.5 z-10 flex flex-col gap-1;
+  @apply sm:top-2 sm:right-2;
+}
+
+/* Кнопка дії (бажання / порівняння) */
+.actionButton {
+  @apply rounded-full bg-background/80 p-1.5 backdrop-blur-sm transition-colors hover:bg-background active:scale-95;
+  @apply sm:p-2;
+}
+
+/* Іконка серця — базовий стан */
+.heartIcon {
+  @apply h-4 w-4 text-muted-foreground;
+  @apply sm:h-5 sm:w-5;
+}
+
+/* Іконка серця — додано до бажань */
+.heartIconActive {
+  @apply h-4 w-4 fill-red-500 text-red-500;
+  @apply sm:h-5 sm:w-5;
+}
+
+/* Іконка порівняння — базовий стан */
+.compareIcon {
+  @apply h-4 w-4 text-muted-foreground;
+  @apply sm:h-5 sm:w-5;
+}
+
+/* Іконка порівняння — активний стан */
+.compareIconActive {
+  @apply h-4 w-4 text-primary;
+  @apply sm:h-5 sm:w-5;
+}
+
+/* === Зображення товару === */
+.imageWrapper {
+  @apply relative aspect-square overflow-hidden bg-muted;
+}
+
+/* Зображення з ефектом збільшення */
+.image {
+  @apply object-cover transition-transform group-hover:scale-105;
+}
+
+/* Заглушка коли немає зображення */
+.imagePlaceholder {
+  @apply flex h-full items-center justify-center text-4xl;
+  @apply sm:text-6xl;
+}
+
+/* === Інформація про товар === */
+.content {
+  @apply p-2.5;
+  @apply sm:p-4;
+}
+
+/* Назва категорії */
+.categoryName {
+  @apply text-[10px] text-muted-foreground mb-0.5;
+  @apply sm:text-xs sm:mb-1;
+}
+
+/* Назва товару — базові стилі */
+.title {
+  @apply font-semibold line-clamp-2 group-hover:text-primary transition-colors;
+  @apply text-sm mb-1.5;
+  @apply sm:text-base sm:mb-2;
+}
+
+/* Назва товару — компактний вигляд */
+.titleCompact {
+  @apply font-semibold line-clamp-2 group-hover:text-primary transition-colors;
+  @apply text-xs mb-1;
+  @apply sm:text-sm;
+}
+
+/* === Рейтинг товару === */
+.ratingContainer {
+  @apply flex items-center gap-1 mb-1.5;
+  @apply sm:mb-2;
+}
+
+/* Іконка зірки */
+.starIcon {
+  @apply h-3 w-3 fill-yellow-400 text-yellow-400;
+  @apply sm:h-4 sm:w-4;
+}
+
+/* Числове значення рейтингу */
+.ratingValue {
+  @apply text-xs font-medium;
+  @apply sm:text-sm;
+}
+
+/* Кількість відгуків */
+.ratingCount {
+  @apply text-[10px] text-muted-foreground;
+  @apply sm:text-xs;
+}
+
+/* === Ціна товару === */
+.priceContainer {
+  @apply flex items-baseline gap-1.5 mb-2;
+  @apply sm:gap-2 sm:mb-3;
+}
+
+/* Поточна ціна */
+.price {
+  @apply font-bold text-base;
+  @apply sm:text-xl;
+}
+
+/* Поточна ціна — компактний вигляд */
+.priceCompact {
+  @apply font-bold text-sm;
+  @apply sm:text-base;
+}
+
+/* Стара ціна (закреслена) */
+.comparePrice {
+  @apply text-[10px] text-muted-foreground line-through;
+  @apply sm:text-sm;
+}
+
+/* === Кнопка "Додати до кошика" === */
+.addToCartButton {
+  @apply w-full rounded-md bg-primary text-primary-foreground transition-colors;
+  @apply hover:bg-primary/90 active:bg-primary/80;
+  @apply disabled:opacity-50 disabled:cursor-not-allowed;
+  @apply flex items-center justify-center gap-1.5 font-medium;
+  @apply px-3 py-2 text-xs;
+  @apply sm:gap-2 sm:px-4 sm:py-2.5 sm:text-sm;
+}
+
+/* Кнопка "Додати до кошика" — компактний вигляд */
+.addToCartButtonCompact {
+  @apply w-full rounded-md bg-primary text-primary-foreground transition-colors;
+  @apply hover:bg-primary/90 active:bg-primary/80;
+  @apply disabled:opacity-50 disabled:cursor-not-allowed;
+  @apply flex items-center justify-center gap-1.5 font-medium;
+  @apply px-2 py-1.5 text-xs;
+  @apply sm:gap-2;
+}
+
+/* Іконка кошика */
+.cartIcon {
+  @apply h-3.5 w-3.5;
+  @apply sm:h-4 sm:w-4;
+}
+
+/* Іконка кошика — компактний вигляд */
+.cartIconCompact {
+  @apply h-3 w-3;
+}
+
+/* Текст кнопки — компактний (прихований на малих екранах) */
+.cartTextCompact {
+  @apply hidden sm:inline;
+}

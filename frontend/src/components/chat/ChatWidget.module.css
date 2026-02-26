@@ -1,0 +1,347 @@
+/* ===== Плаваюча кнопка чату ===== */
+.floatingBtn {
+  @apply fixed bottom-20 right-4 md:bottom-6 md:right-6 z-50 w-14 h-14 rounded-full bg-primary text-white shadow-lg hover:shadow-xl flex items-center justify-center transition-shadow;
+}
+
+.iconMd {
+  @apply h-6 w-6;
+}
+
+.unreadBadge {
+  @apply absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white text-xs rounded-full flex items-center justify-center font-bold;
+}
+
+/* ===== Панель чату ===== */
+.chatPanel {
+  @apply fixed bottom-36 right-4 md:bottom-[5.5rem] md:right-6 z-50 w-[calc(100vw-2rem)] max-w-[400px] bg-background border rounded-2xl shadow-2xl overflow-hidden flex flex-col;
+}
+
+/* ===== Заголовок ===== */
+.header {
+  @apply bg-primary text-white px-4 py-3 flex items-center gap-3;
+}
+
+.headerBtn {
+  @apply hover:bg-white/20 rounded-full p-1 transition;
+}
+
+.headerTitleWrap {
+  @apply flex-1 min-w-0;
+}
+
+.headerTitle {
+  @apply font-semibold text-sm truncate;
+}
+
+.headerSubtitle {
+  @apply text-xs text-white/70;
+}
+
+/* ===== Контент (прокрутка) ===== */
+.content {
+  @apply flex-1 overflow-y-auto;
+}
+
+/* ===== Головне меню ===== */
+.mainView {
+  @apply p-4 space-y-4;
+}
+
+.sectionTitle {
+  @apply text-sm font-semibold text-muted-foreground mb-3 flex items-center gap-2;
+}
+
+.iconSm {
+  @apply h-4 w-4;
+}
+
+.faqList {
+  @apply space-y-2;
+}
+
+.faqBtn {
+  @apply w-full text-left px-3 py-2.5 rounded-lg border hover:bg-muted/50 transition flex items-center gap-3;
+}
+
+.faqIconWrap {
+  @apply p-1.5 bg-primary/10 rounded-lg group-hover:bg-primary/20 transition-colors;
+}
+
+.faqIcon {
+  @apply h-4 w-4 text-primary;
+}
+
+.faqText {
+  @apply text-sm font-medium;
+}
+
+/* Роздільник */
+.divider {
+  @apply border-t pt-4;
+}
+
+.dividerText {
+  @apply text-sm text-muted-foreground mb-3;
+}
+
+/* Кнопки */
+.primaryBtn {
+  @apply w-full bg-primary text-white rounded-lg py-2.5 text-sm font-medium hover:bg-primary/90 transition flex items-center justify-center gap-2;
+}
+
+.secondaryBtn {
+  @apply w-full mt-2 border rounded-lg py-2.5 text-sm font-medium hover:bg-muted/50 transition flex items-center justify-center gap-2;
+}
+
+.unreadBadgeSm {
+  @apply bg-red-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center;
+}
+
+/* ===== FAQ відповідь ===== */
+.faqAnswerView {
+  @apply p-4 space-y-4;
+}
+
+.faqCard {
+  @apply bg-muted/50 rounded-lg p-4;
+}
+
+.faqCardHeader {
+  @apply flex items-center gap-2 mb-2;
+}
+
+.faqCardIcon {
+  @apply h-5 w-5 text-primary;
+}
+
+.faqCardTitle {
+  @apply font-semibold text-sm;
+}
+
+.faqCardAnswer {
+  @apply text-sm text-muted-foreground leading-relaxed;
+}
+
+/* Зворотний зв'язок */
+.feedbackSection {
+  @apply border-t pt-4;
+}
+
+.feedbackText {
+  @apply text-sm text-muted-foreground mb-3;
+}
+
+.feedbackBtns {
+  @apply flex gap-2;
+}
+
+.yesBtn {
+  @apply flex-1 flex items-center justify-center gap-2 border rounded-lg py-2 text-sm font-medium hover:bg-green-50 hover:border-green-200 dark:hover:bg-green-900/20 transition;
+}
+
+.noBtn {
+  @apply flex-1 flex items-center justify-center gap-2 border rounded-lg py-2 text-sm font-medium hover:bg-red-50 hover:border-red-200 dark:hover:bg-red-900/20 transition;
+}
+
+.checkIcon {
+  @apply h-4 w-4 text-green-600;
+}
+
+.alertIcon {
+  @apply h-4 w-4 text-red-500;
+}
+
+/* ===== Форма нового звернення ===== */
+.form {
+  @apply p-4 space-y-3;
+}
+
+.label {
+  @apply text-xs font-medium text-muted-foreground mb-1 block;
+}
+
+.input {
+  @apply w-full border rounded-lg px-3 py-2 text-sm bg-background focus:outline-none focus:ring-2 focus:ring-primary/50;
+}
+
+.textareaField {
+  @apply w-full border rounded-lg px-3 py-2 text-sm bg-background focus:outline-none focus:ring-2 focus:ring-primary/50 resize-none;
+}
+
+.submitBtn {
+  @apply w-full bg-primary text-white rounded-lg py-2.5 text-sm font-medium hover:bg-primary/90 transition disabled:opacity-50 flex items-center justify-center gap-2;
+}
+
+.spinIcon {
+  @apply h-4 w-4 animate-spin;
+}
+
+/* ===== Список тікетів ===== */
+.ticketsView {
+  @apply p-4;
+}
+
+.emptyState {
+  @apply text-center py-8;
+}
+
+.emptyIcon {
+  @apply h-10 w-10 text-muted-foreground/30 mx-auto mb-3;
+}
+
+.emptyText {
+  @apply text-sm text-muted-foreground;
+}
+
+.ticketsList {
+  @apply space-y-2;
+}
+
+.ticketItem {
+  @apply w-full text-left p-3 rounded-lg border hover:bg-muted/50 transition;
+}
+
+.ticketHeader {
+  @apply flex items-start justify-between gap-2 mb-1;
+}
+
+.ticketTitle {
+  @apply text-sm font-medium truncate flex-1;
+}
+
+.unreadDot {
+  @apply inline-block w-2 h-2 bg-primary rounded-full mr-2 flex-shrink-0;
+}
+
+.ticketMeta {
+  @apply text-xs text-muted-foreground;
+}
+
+/* ===== Деталі тікета (чат) ===== */
+.ticketDetail {
+  @apply flex flex-col;
+}
+
+.statusBar {
+  @apply px-4 py-2 border-b flex items-center justify-between bg-muted/30;
+}
+
+.categoryLabel {
+  @apply text-xs text-muted-foreground;
+}
+
+.messages {
+  @apply flex-1 overflow-y-auto p-4 space-y-3;
+}
+
+/* Рядок повідомлення */
+.messageRow {
+  @apply flex;
+}
+
+.messageRowUser {
+  @apply justify-end;
+}
+
+.messageRowOther {
+  @apply justify-start;
+}
+
+/* Системне повідомлення */
+.systemMsg {
+  @apply text-center w-full;
+}
+
+.systemMsgText {
+  @apply text-xs text-muted-foreground bg-muted/50 px-3 py-1 rounded-full;
+}
+
+/* Бульбашка повідомлення */
+.messageBubble {
+  @apply max-w-[80%] rounded-2xl px-3.5 py-2;
+}
+
+.messageBubbleUser {
+  @apply bg-primary text-white rounded-br-md;
+}
+
+.messageBubbleAdmin {
+  @apply bg-muted rounded-bl-md;
+}
+
+/* Адмін-інфо */
+.adminHeader {
+  @apply flex items-center gap-1 mb-1;
+}
+
+.adminIcon {
+  @apply h-3 w-3;
+}
+
+.adminName {
+  @apply text-xs font-medium;
+}
+
+/* Текст повідомлення */
+.msgText {
+  @apply text-sm whitespace-pre-wrap break-words;
+}
+
+.msgTime {
+  @apply text-[10px] mt-1;
+}
+
+.msgTimeUser {
+  @apply text-white/60;
+}
+
+.msgTimeOther {
+  @apply text-muted-foreground;
+}
+
+/* Поле вводу */
+.inputArea {
+  @apply border-t p-3;
+}
+
+.inputRow {
+  @apply flex gap-2 items-end;
+}
+
+.chatInput {
+  @apply flex-1 border rounded-xl px-3 py-2 text-sm bg-background focus:outline-none focus:ring-2 focus:ring-primary/50 resize-none max-h-24;
+}
+
+.sendBtn {
+  @apply p-2.5 bg-primary text-white rounded-xl hover:bg-primary/90 transition disabled:opacity-50;
+}
+
+/* Закритий тікет */
+.closedArea {
+  @apply border-t p-3 text-center;
+}
+
+.closedText {
+  @apply text-xs text-muted-foreground;
+}
+
+/* ===== Статус-бейджі ===== */
+.statusBadge {
+  @apply text-xs px-2 py-0.5 rounded-full font-medium;
+}
+
+.statusOpen {
+  @apply bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400;
+}
+
+.statusInProgress {
+  @apply bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400;
+}
+
+.statusResolved {
+  @apply bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400;
+}
+
+.statusClosed {
+  @apply bg-gray-100 text-gray-700 dark:bg-gray-900/30 dark:text-gray-400;
+}

@@ -1,0 +1,143 @@
+/* ==========================================
+   Компонент рейтингу — Rating
+   ========================================== */
+
+/* --- Введення рейтингу (RatingInput) --- */
+
+/* Контейнер зірок для введення */
+.inputContainer {
+  @apply flex items-center gap-1;
+}
+
+/* Кнопка зірки — базовий стиль */
+.starButton {
+  @apply transition-all;
+}
+
+/* Кнопка зірки — лише для читання */
+.starButtonReadonly {
+  @apply cursor-default;
+}
+
+/* Кнопка зірки — інтерактивна */
+.starButtonInteractive {
+  @apply cursor-pointer hover:scale-110;
+}
+
+/* Розміри зірок введення */
+.starInputSm {
+  @apply h-4 w-4;
+}
+
+.starInputMd {
+  @apply h-6 w-6;
+}
+
+.starInputLg {
+  @apply h-8 w-8;
+}
+
+/* Активна зірка (заповнена) */
+.starActive {
+  @apply fill-yellow-400 text-yellow-400;
+}
+
+/* Неактивна зірка (порожня) */
+.starInactive {
+  @apply text-gray-300;
+}
+
+/* --- Відображення рейтингу (RatingDisplay) --- */
+
+/* Контейнер відображення рейтингу */
+.displayContainer {
+  @apply flex items-center gap-2;
+}
+
+/* Контейнер зірок відображення */
+.displayStarsContainer {
+  @apply flex items-center gap-0.5;
+}
+
+/* Розміри зірок відображення */
+.starDisplaySm {
+  @apply h-3 w-3;
+}
+
+.starDisplayMd {
+  @apply h-4 w-4;
+}
+
+.starDisplayLg {
+  @apply h-5 w-5;
+}
+
+/* Текст рейтингу — базовий стиль */
+.ratingText {
+  @apply font-medium;
+}
+
+/* Розміри тексту рейтингу */
+.textSm {
+  @apply text-xs;
+}
+
+.textMd {
+  @apply text-sm;
+}
+
+.textLg {
+  @apply text-base;
+}
+
+/* Текст кількості відгуків */
+.countText {
+  @apply text-muted-foreground;
+}
+
+/* --- Розбивка рейтингу (RatingBreakdown) --- */
+
+/* Контейнер розбивки */
+.breakdownContainer {
+  @apply space-y-2;
+}
+
+/* Рядок шкали */
+.breakdownRow {
+  @apply flex items-center gap-3;
+}
+
+/* Мітка зірки у рядку */
+.breakdownLabel {
+  @apply flex items-center gap-1 w-12;
+}
+
+/* Текст номера зірки */
+.breakdownLabelText {
+  @apply text-sm font-medium;
+}
+
+/* Зірка у мітці (завжди заповнена) */
+.breakdownStar {
+  @apply h-3 w-3 fill-yellow-400 text-yellow-400;
+}
+
+/* Обгортка шкали прогресу */
+.breakdownBarContainer {
+  @apply flex-1;
+}
+
+/* Фон шкали прогресу */
+.breakdownBarBg {
+  @apply h-2 bg-muted rounded-full overflow-hidden;
+}
+
+/* Заповнення шкали прогресу */
+.breakdownBarFill {
+  @apply h-full bg-yellow-400;
+}
+
+/* Кількість відгуків у рядку */
+.breakdownCount {
+  @apply text-sm text-muted-foreground w-12 text-right;
+}

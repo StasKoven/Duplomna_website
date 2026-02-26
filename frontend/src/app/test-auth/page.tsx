@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { useAuthStore } from '@/store/authStore'
+import s from './page.module.css'
 
 export default function TestAuthPage() {
   const { user, isAuthenticated, accessToken } = useAuthStore()
@@ -14,30 +15,30 @@ export default function TestAuthPage() {
   }, [])
 
   return (
-    <div className="container-custom py-8">
-      <h1 className="text-3xl font-bold mb-6">🔐 Тест автентифікації</h1>
+    <div className={`container-custom ${s.page}`}>
+      <h1 className={s.title}>🔐 Тест автентифікації</h1>
       
-      <div className="space-y-6">
-        <div className="bg-card border rounded-lg p-6">
-          <h2 className="text-xl font-semibold mb-4">Auth Store State</h2>
-          <div className="space-y-2 font-mono text-sm">
-            <p><span className="text-muted-foreground">isAuthenticated:</span> {isAuthenticated ? '✅ true' : '❌ false'}</p>
-            <p><span className="text-muted-foreground">user:</span> {user ? JSON.stringify(user, null, 2) : 'null'}</p>
-            <p><span className="text-muted-foreground">accessToken (store):</span> {accessToken ? `${accessToken.substring(0, 30)}...` : 'null'}</p>
+      <div className={s.sections}>
+        <div className={s.card}>
+          <h2 className={s.cardTitle}>Auth Store State</h2>
+          <div className={s.infoList}>
+            <p><span className={s.label}>isAuthenticated:</span> {isAuthenticated ? '✅ true' : '❌ false'}</p>
+            <p><span className={s.label}>user:</span> {user ? JSON.stringify(user, null, 2) : 'null'}</p>
+            <p><span className={s.label}>accessToken (store):</span> {accessToken ? `${accessToken.substring(0, 30)}...` : 'null'}</p>
           </div>
         </div>
 
-        <div className="bg-card border rounded-lg p-6">
-          <h2 className="text-xl font-semibold mb-4">LocalStorage</h2>
-          <div className="space-y-2 font-mono text-sm">
-            <p><span className="text-muted-foreground">accessToken:</span> {localStorageToken ? `${localStorageToken.substring(0, 30)}...` : 'null'}</p>
-            <p><span className="text-muted-foreground">refreshToken:</span> {typeof window !== 'undefined' ? (localStorage.getItem('refreshToken') ? 'Present' : 'null') : 'SSR'}</p>
+        <div className={s.card}>
+          <h2 className={s.cardTitle}>LocalStorage</h2>
+          <div className={s.infoList}>
+            <p><span className={s.label}>accessToken:</span> {localStorageToken ? `${localStorageToken.substring(0, 30)}...` : 'null'}</p>
+            <p><span className={s.label}>refreshToken:</span> {typeof window !== 'undefined' ? (localStorage.getItem('refreshToken') ? 'Present' : 'null') : 'SSR'}</p>
           </div>
         </div>
 
-        <div className="bg-card border rounded-lg p-6">
-          <h2 className="text-xl font-semibold mb-4">Дії</h2>
-          <div className="flex gap-4">
+        <div className={s.card}>
+          <h2 className={s.cardTitle}>Дії</h2>
+          <div className={s.actions}>
             <button
               onClick={() => {
                 if (typeof window !== 'undefined') {

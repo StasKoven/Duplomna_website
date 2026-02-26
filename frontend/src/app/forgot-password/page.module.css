@@ -1,0 +1,124 @@
+/* Сторінка відновлення паролю — стилі */
+
+/* Обгортка сторінки */
+.wrapper {
+  @apply min-h-[80vh] flex items-center justify-center py-12 px-4;
+}
+
+/* Контейнер (стан успішної відправки) */
+.successContainer {
+  @apply w-full max-w-md text-center;
+}
+
+.successHeader {
+  @apply mb-6;
+}
+
+.successIconWrap {
+  @apply mx-auto w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mb-4;
+}
+
+.successIcon {
+  @apply h-8 w-8 text-green-600;
+}
+
+/* Заголовок */
+.title {
+  @apply text-3xl font-bold mb-2;
+}
+
+.subtitle {
+  @apply text-muted-foreground;
+}
+
+/* Блок підказки (стан успіху) */
+.hintBox {
+  @apply bg-muted p-4 rounded-lg mb-6 text-sm text-muted-foreground;
+}
+
+.hintTitle {
+  @apply mb-2;
+}
+
+.hintList {
+  @apply space-y-1 text-left;
+}
+
+/* Посилання "назад до входу" */
+.backLink {
+  @apply inline-flex items-center gap-2 text-primary hover:underline;
+}
+
+.backIcon {
+  @apply h-4 w-4;
+}
+
+/* Контейнер форми */
+.container {
+  @apply w-full max-w-md;
+}
+
+.headerSection {
+  @apply mb-6;
+}
+
+.backToLogin {
+  @apply inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground mb-4;
+}
+
+/* Картка форми */
+.card {
+  @apply bg-card p-8 rounded-lg shadow-lg border;
+}
+
+.form {
+  @apply space-y-6;
+}
+
+/* Мітки та поля вводу */
+.label {
+  @apply block text-sm font-medium mb-2;
+}
+
+.inputWrapper {
+  @apply relative;
+}
+
+.inputIcon {
+  @apply absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground;
+}
+
+.input {
+  @apply w-full pl-10 pr-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary;
+}
+
+.error {
+  @apply mt-1 text-sm text-destructive;
+}
+
+/* Кнопка відправки */
+.submitBtn {
+  @apply w-full bg-primary text-white py-2 px-4 rounded-md hover:bg-primary/90 transition disabled:opacity-50 disabled:cursor-not-allowed font-medium;
+}
+
+/* Посилання на вхід */
+.footerText {
+  @apply mt-6 text-center;
+}
+
+.footerP {
+  @apply text-sm text-muted-foreground;
+}
+
+.authLink {
+  @apply text-primary font-medium hover:underline;
+}
+
+/* Блок підказки (нижній) */
+.tipBox {
+  @apply mt-6 p-4 bg-muted rounded-lg text-sm text-muted-foreground;
+}
+
+.tipTitle {
+  @apply font-medium mb-2;
+}

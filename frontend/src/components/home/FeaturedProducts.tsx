@@ -7,6 +7,7 @@ import { ArrowRight } from 'lucide-react'
 import api from '@/lib/api'
 import { Product } from '@/types'
 import ProductCard from '@/components/products/ProductCard'
+import s from './FeaturedProducts.module.css'
 
 export default function FeaturedProducts() {
   const [products, setProducts] = useState<Product[]>([])
@@ -27,6 +28,7 @@ export default function FeaturedProducts() {
     }
   }
 
+  // Анімація контейнера
   const container = {
     hidden: { opacity: 0 },
     show: {
@@ -37,24 +39,26 @@ export default function FeaturedProducts() {
     }
   }
 
+  // Анімація елемента
   const item = {
     hidden: { opacity: 0, y: 20 },
     show: { opacity: 1, y: 0 }
   }
 
+  // Стан завантаження — скелетон
   if (loading) {
     return (
-      <section className="py-8 sm:py-12 md:py-16">
+      <section className={s.section}>
         <div className="container-custom">
-          <div className="flex items-center justify-between mb-4 sm:mb-6 md:mb-8">
+          <div className={s.header}>
             <div>
-              <h2 className="text-xl sm:text-2xl md:text-3xl font-bold tracking-tight">Рекомендовані товари</h2>
-              <p className="text-sm sm:text-base text-muted-foreground mt-1 sm:mt-2">Найкращі пропозиції цього тижня</p>
+              <h2 className={s.title}>Рекомендовані товари</h2>
+              <p className={s.subtitle}>Найкращі пропозиції цього тижня</p>
             </div>
           </div>
-          <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
+          <div className={s.gridLayout}>
             {[...Array(8)].map((_, i) => (
-              <div key={i} className="rounded-lg bg-muted animate-pulse aspect-[3/4] sm:h-96" />
+              <div key={i} className={s.skeleton} />
             ))}
           </div>
         </div>
@@ -63,28 +67,31 @@ export default function FeaturedProducts() {
   }
 
   return (
-    <section className="py-8 sm:py-12 md:py-16">
+    <section className={s.section}>
       <div className="container-custom">
-        <div className="flex items-center justify-between mb-4 sm:mb-6 md:mb-8">
+        {/* Заголовок секції */}
+        <div className={s.header}>
           <div>
-            <h2 className="text-xl sm:text-2xl md:text-3xl font-bold tracking-tight">Рекомендовані товари</h2>
-            <p className="text-sm sm:text-base text-muted-foreground mt-1 sm:mt-2">Найкращі пропозиції цього тижня</p>
+            <h2 className={s.title}>Рекомендовані товари</h2>
+            <p className={s.subtitle}>Найкращі пропозиції цього тижня</p>
           </div>
+          {/* Посилання "Дивитись всі" — десктоп */}
           <Link 
             href="/products?featured=true" 
-            className="hidden sm:flex items-center text-sm font-medium text-primary hover:underline"
+            className={s.viewAllDesktop}
           >
             Дивитись всі
-            <ArrowRight className="ml-1 h-4 w-4" />
+            <ArrowRight className={s.arrowIconDesktop} />
           </Link>
         </div>
 
+        {/* Сітка товарів з анімацією */}
         <motion.div
           variants={container}
           initial="hidden"
           whileInView="show"
           viewport={{ once: true }}
-          className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-6"
+          className={s.gridLayout}
         >
           {products.map((product) => (
             <motion.div key={product._id} variants={item}>
@@ -93,18 +100,14 @@ export default function FeaturedProducts() {
           ))}
         </motion.div>
 
-        {/* ==================== */}
-        {/* Mobile "View All" Link */}
         {/* Кнопка "Дивитись всі" для мобільних */}
-        {/* Видима тільки на екранах < sm */}
-        {/* ==================== */}
-        <div className="mt-6 sm:hidden text-center">
+        <div className={s.mobileLink}>
           <Link 
             href="/products?featured=true" 
-            className="inline-flex items-center justify-center px-6 py-2.5 text-sm font-medium text-primary border border-primary rounded-md hover:bg-primary/5"
+            className={s.viewAllMobile}
           >
             Дивитись всі товари
-            <ArrowRight className="ml-2 h-4 w-4" />
+            <ArrowRight className={s.arrowIconMobile} />
           </Link>
         </div>
       </div>

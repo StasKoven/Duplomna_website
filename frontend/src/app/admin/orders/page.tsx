@@ -6,6 +6,7 @@ import { useAuthStore } from '@/store/authStore'
 import api from '@/lib/api'
 import { formatPrice } from '@/lib/utils'
 import { Package, Clock, CheckCircle, XCircle, Search } from 'lucide-react'
+import s from './page.module.css'
 
 interface Order {
   _id: string
@@ -58,28 +59,28 @@ export default function AdminOrdersPage() {
   const getStatusIcon = (status: string) => {
     switch (status) {
       case 'delivered':
-        return <CheckCircle className="h-5 w-5 text-green-600" />
+        return <CheckCircle className={s.iconDelivered} />
       case 'cancelled':
-        return <XCircle className="h-5 w-5 text-red-600" />
+        return <XCircle className={s.iconCancelled} />
       case 'processing':
-        return <Clock className="h-5 w-5 text-blue-600" />
+        return <Clock className={s.iconProcessing} />
       default:
-        return <Package className="h-5 w-5 text-gray-600" />
+        return <Package className={s.iconDefault} />
     }
   }
 
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'delivered':
-        return 'bg-green-100 text-green-700'
+        return s.statusDelivered
       case 'cancelled':
-        return 'bg-red-100 text-red-700'
+        return s.statusCancelled
       case 'processing':
-        return 'bg-blue-100 text-blue-700'
+        return s.statusProcessing
       case 'shipped':
-        return 'bg-purple-100 text-purple-700'
+        return s.statusShipped
       default:
-        return 'bg-gray-100 text-gray-700'
+        return s.statusDefault
     }
   }
 
@@ -94,89 +95,87 @@ export default function AdminOrdersPage() {
   }
 
   return (
-    <div className="container-custom py-8">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold mb-2">Замовлення</h1>
-        <p className="text-muted-foreground">
+    <div className={`container-custom ${s.page}`}>
+      <div className={s.header}>
+        <h1 className={s.title}>Замовлення</h1>
+        <p className={s.subtitle}>
           Всього замовлень: {orders.length}
         </p>
       </div>
 
       {/* Search */}
-      <div className="mb-6">
-        <div className="relative max-w-md">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+      <div className={s.searchWrapper}>
+        <div className={s.searchContainer}>
+          <Search className={s.searchIcon} />
           <input
             type="text"
             placeholder="Пошук за номером або email..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
+            className={s.searchInput}
           />
         </div>
       </div>
 
       {loading ? (
-        <div className="text-center py-12">Завантаження...</div>
+        <div className={s.loading}>Завантаження...</div>
       ) : filteredOrders.length === 0 ? (
-        <div className="text-center py-12 bg-card border rounded-lg">
-          <Package className="h-16 w-16 mx-auto text-muted-foreground mb-4" />
-          <h3 className="text-lg font-semibold mb-2">
+        <div className={s.emptyState}>
+          <Package className={s.emptyIcon} />
+          <h3 className={s.emptyTitle}>
             {searchTerm ? 'Замовлення не знайдено' : 'Немає замовлень'}
           </h3>
-          <p className="text-muted-foreground">
+          <p className={s.emptyText}>
             {searchTerm
               ? 'Спробуйте змінити параметри пошуку'
               : 'Замовлення з\'являться тут після оформлення'}
           </p>
         </div>
       ) : (
-        <div className="space-y-4">
+        <div className={s.ordersList}>
           {filteredOrders.map((order) => (
             <div
               key={order._id}
-              className="bg-card border rounded-lg p-6 hover:shadow-md transition"
+              className={s.orderCard}
             >
-              <div className="flex items-start justify-between mb-4">
+              <div className={s.orderHeader}>
                 <div>
-                  <div className="flex items-center gap-3 mb-2">
-                    <h3 className="text-lg font-semibold">
+                  <div className={s.orderNumberRow}>
+                    <h3 className={s.orderNumber}>
                       #{order.orderNumber}
                     </h3>
                     <div
-                      className={`inline-flex items-center gap-1 px-2 py-1 rounded text-sm ${getStatusColor(
-                        order.status
-                      )}`}
+                      className={`${s.statusBadge} ${getStatusColor(order.status)}`}
                     >
                       {getStatusIcon(order.status)}
-                      <span className="capitalize">{order.status}</span>
+                      <span className={s.statusText}>{order.status}</span>
                     </div>
                   </div>
-                  <p className="text-sm text-muted-foreground">
+                  <p className={s.detailText}>
                     Клієнт: {order.user.firstName} {order.user.lastName} (
                     {order.user.email})
                   </p>
-                  <p className="text-sm text-muted-foreground">
+                  <p className={s.detailText}>
                     Дата: {new Date(order.createdAt).toLocaleDateString('uk-UA')}
                   </p>
                 </div>
-                <div className="text-right">
-                  <p className="text-2xl font-bold">
+                <div className={s.orderRight}>
+                  <p className={s.orderPrice}>
                     {formatPrice(order.totalAmount)}
                   </p>
-                  <p className="text-sm text-muted-foreground">
+                  <p className={s.detailText}>
                     {order.items.length} товар(ів)
                   </p>
                 </div>
               </div>
 
-              <div className="border-t pt-4">
-                <h4 className="font-semibold mb-2">Товари:</h4>
-                <div className="space-y-2">
+              <div className={s.itemsSection}>
+                <h4 className={s.itemsTitle}>Товари:</h4>
+                <div className={s.itemsList}>
                   {order.items.map((item, index) => (
                     <div
                       key={index}
-                      className="flex justify-between text-sm"
+                      className={s.itemRow}
                     >
                       <span>
                         {item.product?.name || 'Товар видалено'} x{' '}

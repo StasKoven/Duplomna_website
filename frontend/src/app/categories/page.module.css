@@ -1,0 +1,108 @@
+/* ==========================================
+   Сторінка категорій товарів
+   ========================================== */
+
+/* Контейнер сторінки */
+.page {
+  @apply py-12;
+}
+
+/* ===== Стан завантаження ===== */
+
+/* Сітка скелетонів */
+.loadingGrid {
+  @apply grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6;
+}
+
+/* Анімація скелетону */
+.skeleton {
+  @apply animate-pulse;
+}
+
+/* Заповнювач скелетону */
+.skeletonCard {
+  @apply aspect-square bg-muted rounded-lg;
+}
+
+/* ===== Заголовна секція ===== */
+
+/* Обгортка заголовка */
+.headerSection {
+  @apply text-center mb-12;
+}
+
+/* Заголовок сторінки */
+.title {
+  @apply text-4xl font-bold mb-4;
+}
+
+/* Підзаголовок */
+.subtitle {
+  @apply text-muted-foreground max-w-2xl mx-auto;
+}
+
+/* ===== Сітка категорій ===== */
+
+/* Адаптивна сітка */
+.gridLayout {
+  @apply grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6;
+}
+
+/* Посилання на категорію */
+.categoryLink {
+  @apply block;
+}
+
+/* Картка категорії */
+.categoryCard {
+  @apply relative aspect-square bg-gradient-to-br from-primary/10 to-primary/5 rounded-lg p-8 hover:shadow-lg transition-all duration-300 group-hover:scale-105;
+}
+
+/* Вміст картки */
+.cardContent {
+  @apply flex flex-col items-center justify-center h-full text-center;
+}
+
+/* Обгортка іконки */
+.iconWrapper {
+  @apply mb-4 p-4 bg-primary/10 rounded-full group-hover:bg-primary/20 transition-colors;
+}
+
+/* Іконка категорії */
+.categoryIcon {
+  @apply h-12 w-12 text-primary;
+}
+
+/* Назва категорії */
+.categoryName {
+  @apply font-semibold text-lg mb-2;
+}
+
+/* Опис категорії */
+.categoryDescription {
+  @apply text-sm text-muted-foreground line-clamp-2;
+}
+
+/* ===== Ефект hover overlay ===== */
+
+/* Напівпрозорий шар при наведенні */
+.hoverOverlay {
+  @apply absolute inset-0 opacity-0 group-hover:opacity-10 transition-opacity rounded-lg overflow-hidden;
+}
+
+/* Фон overlay */
+.overlayBg {
+  @apply absolute inset-0 bg-primary;
+}
+
+/* ===== Пустий стан ===== */
+
+/* Контейнер пустого стану */
+.emptyState {
+  @apply text-center py-12;
+}
+
+/* Текст пустого стану */
+.emptyText {
+  @apply text-muted-foreground;
+}

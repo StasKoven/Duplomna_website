@@ -22,6 +22,7 @@ import {
 import { useAuthStore } from '@/store/authStore'
 import api from '@/lib/api'
 import { toast } from 'sonner'
+import s from './ChatWidget.module.css'
 
 interface Message {
   _id: string
@@ -115,7 +116,7 @@ export default function ChatWidget() {
   const inputRef = useRef<HTMLTextAreaElement>(null)
   const prevIsAuthenticated = useRef(isAuthenticated)
 
-  // Reset chat state when user logs out
+  // Скидання стану чату при виході
   useEffect(() => {
     if (prevIsAuthenticated.current && !isAuthenticated) {
       setView('main')
@@ -134,7 +135,7 @@ export default function ChatWidget() {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [])
 
-  // Fetch user tickets
+  // Завантаження тікетів
   const fetchTickets = useCallback(async () => {
     if (!isAuthenticated) return
     try {
@@ -153,7 +154,7 @@ export default function ChatWidget() {
     }
   }, [isAuthenticated, isOpen, fetchTickets])
 
-  // Scroll to bottom when messages change
+  // Прокрутка донизу при зміні повідомлень
   useEffect(() => {
     if (view === 'ticket-detail') {
       setTimeout(scrollToBottom, 100)
@@ -248,21 +249,23 @@ export default function ChatWidget() {
     }
   }
 
+  // Статус-бейдж тікета
   const getStatusBadge = (status: string) => {
-    const map: Record<string, { color: string; label: string }> = {
-      open: { color: 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400', label: 'Відкритий' },
-      'in-progress': { color: 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400', label: 'В обробці' },
-      resolved: { color: 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400', label: 'Вирішено' },
-      closed: { color: 'bg-gray-100 text-gray-700 dark:bg-gray-900/30 dark:text-gray-400', label: 'Закритий' },
+    const map: Record<string, { cls: string; label: string }> = {
+      open: { cls: s.statusOpen, label: 'Відкритий' },
+      'in-progress': { cls: s.statusInProgress, label: 'В обробці' },
+      resolved: { cls: s.statusResolved, label: 'Вирішено' },
+      closed: { cls: s.statusClosed, label: 'Закритий' },
     }
     const badge = map[status] || map.open
     return (
-      <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${badge.color}`}>
+      <span className={`${s.statusBadge} ${badge.cls}`}>
         {badge.label}
       </span>
     )
   }
 
+  // Форматування часу
   const formatTime = (date: string) => {
     const d = new Date(date)
     const now = new Date()
@@ -278,6 +281,7 @@ export default function ChatWidget() {
     return d.toLocaleDateString('uk-UA')
   }
 
+  // Заголовок поточного виду
   const getViewTitle = () => {
     switch (view) {
       case 'main':
@@ -295,10 +299,10 @@ export default function ChatWidget() {
 
   return (
     <>
-      {/* Floating Button */}
+      {/* Плаваюча кнопка */}
       <motion.button
         onClick={() => setIsOpen(!isOpen)}
-        className="fixed bottom-20 right-4 md:bottom-6 md:right-6 z-50 w-14 h-14 rounded-full bg-primary text-white shadow-lg hover:shadow-xl flex items-center justify-center transition-shadow"
+        className={s.floatingBtn}
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
       >
@@ -311,7 +315,7 @@ export default function ChatWidget() {
               exit={{ rotate: 90, opacity: 0 }}
               transition={{ duration: 0.2 }}
             >
-              <X className="h-6 w-6" />
+              <X className={s.iconMd} />
             </motion.div>
           ) : (
             <motion.div
@@ -321,18 +325,18 @@ export default function ChatWidget() {
               exit={{ rotate: -90, opacity: 0 }}
               transition={{ duration: 0.2 }}
             >
-              <MessageCircle className="h-6 w-6" />
+              <MessageCircle className={s.iconMd} />
             </motion.div>
           )}
         </AnimatePresence>
         {unreadCount > 0 && !isOpen && (
-          <span className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white text-xs rounded-full flex items-center justify-center font-bold">
+          <span className={s.unreadBadge}>
             {unreadCount}
           </span>
         )}
       </motion.button>
 
-      {/* Chat Panel */}
+      {/* Панель чату */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
@@ -340,70 +344,70 @@ export default function ChatWidget() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.95 }}
             transition={{ duration: 0.2 }}
-            className="fixed bottom-36 right-4 md:bottom-22 md:right-6 z-50 w-[calc(100vw-2rem)] max-w-[400px] bg-background border rounded-2xl shadow-2xl overflow-hidden flex flex-col"
+            className={s.chatPanel}
             style={{ maxHeight: 'min(580px, calc(100vh - 160px))' }}
           >
-            {/* Header */}
-            <div className="bg-primary text-white px-4 py-3 flex items-center gap-3">
+            {/* Заголовок */}
+            <div className={s.header}>
               {view !== 'main' && (
-                <button onClick={handleBack} className="hover:bg-white/20 rounded-full p-1 transition">
-                  <ChevronLeft className="h-5 w-5" />
+                <button onClick={handleBack} className={s.headerBtn}>
+                  <ChevronLeft className={s.iconSm} />
                 </button>
               )}
-              <div className="flex-1 min-w-0">
-                <h3 className="font-semibold text-sm truncate">{getViewTitle()}</h3>
+              <div className={s.headerTitleWrap}>
+                <h3 className={s.headerTitle}>{getViewTitle()}</h3>
                 {view === 'main' && (
-                  <p className="text-xs text-white/70">Як ми можемо допомогти?</p>
+                  <p className={s.headerSubtitle}>Як ми можемо допомогти?</p>
                 )}
               </div>
               <button
                 onClick={() => setIsOpen(false)}
-                className="hover:bg-white/20 rounded-full p-1 transition"
+                className={s.headerBtn}
               >
-                <X className="h-5 w-5" />
+                <X className={s.iconSm} />
               </button>
             </div>
 
-            {/* Content */}
-            <div className="flex-1 overflow-y-auto">
-              {/* MAIN VIEW */}
+            {/* Контент */}
+            <div className={s.content}>
+              {/* ГОЛОВНЕ МЕНЮ */}
               {view === 'main' && (
-                <div className="p-4 space-y-4">
-                  {/* Quick answers section */}
+                <div className={s.mainView}>
+                  {/* Популярні питання */}
                   <div>
-                    <h4 className="text-sm font-semibold text-muted-foreground mb-3 flex items-center gap-2">
-                      <HelpCircle className="h-4 w-4" />
+                    <h4 className={s.sectionTitle}>
+                      <HelpCircle className={s.iconSm} />
                       Популярні питання
                     </h4>
-                    <div className="space-y-2">
+                    <div className={s.faqList}>
                       {popularQuestions.map((faq, i) => {
                         const Icon = faq.icon
                         return (
                           <button
                             key={i}
                             onClick={() => handleOpenFaq(faq)}
-                            className="w-full text-left px-3 py-2.5 rounded-lg border hover:bg-muted/50 transition flex items-center gap-3 group"
+                            className={`group ${s.faqBtn}`}
                           >
-                            <div className="p-1.5 bg-primary/10 rounded-lg group-hover:bg-primary/20 transition-colors">
-                              <Icon className="h-4 w-4 text-primary" />
+                            <div className={s.faqIconWrap}>
+                              <Icon className={s.faqIcon} />
                             </div>
-                            <span className="text-sm font-medium">{faq.question}</span>
+                            <span className={s.faqText}>{faq.question}</span>
                           </button>
                         )
                       })}
                     </div>
                   </div>
 
-                  {/* Divider */}
-                  <div className="border-t pt-4">
-                    <p className="text-sm text-muted-foreground mb-3">
+                  {/* Роздільник */}
+                  <div className={s.divider}>
+                    <p className={s.dividerText}>
                       Не знайшли відповідь? Напишіть нам!
                     </p>
                     <button
                       onClick={() => setView('new-ticket')}
-                      className="w-full bg-primary text-white rounded-lg py-2.5 text-sm font-medium hover:bg-primary/90 transition flex items-center justify-center gap-2"
+                      className={s.primaryBtn}
                     >
-                      <Send className="h-4 w-4" />
+                      <Send className={s.iconSm} />
                       Написати в підтримку
                     </button>
 
@@ -413,12 +417,12 @@ export default function ChatWidget() {
                           setView('tickets')
                           fetchTickets()
                         }}
-                        className="w-full mt-2 border rounded-lg py-2.5 text-sm font-medium hover:bg-muted/50 transition flex items-center justify-center gap-2"
+                        className={s.secondaryBtn}
                       >
-                        <MessageCircle className="h-4 w-4" />
+                        <MessageCircle className={s.iconSm} />
                         Мої звернення
                         {unreadCount > 0 && (
-                          <span className="bg-red-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">
+                          <span className={s.unreadBadgeSm}>
                             {unreadCount}
                           </span>
                         )}
@@ -428,31 +432,31 @@ export default function ChatWidget() {
                 </div>
               )}
 
-              {/* FAQ ANSWER */}
+              {/* FAQ ВІДПОВІДЬ */}
               {view === 'faq-answer' && selectedFaq && (
-                <div className="p-4 space-y-4">
-                  <div className="bg-muted/50 rounded-lg p-4">
-                    <div className="flex items-center gap-2 mb-2">
-                      <selectedFaq.icon className="h-5 w-5 text-primary" />
-                      <h4 className="font-semibold text-sm">{selectedFaq.question}</h4>
+                <div className={s.faqAnswerView}>
+                  <div className={s.faqCard}>
+                    <div className={s.faqCardHeader}>
+                      <selectedFaq.icon className={s.faqCardIcon} />
+                      <h4 className={s.faqCardTitle}>{selectedFaq.question}</h4>
                     </div>
-                    <p className="text-sm text-muted-foreground leading-relaxed">
+                    <p className={s.faqCardAnswer}>
                       {selectedFaq.answer}
                     </p>
                   </div>
-                  <div className="border-t pt-4">
-                    <p className="text-sm text-muted-foreground mb-3">
+                  <div className={s.feedbackSection}>
+                    <p className={s.feedbackText}>
                       Це допомогло?
                     </p>
-                    <div className="flex gap-2">
+                    <div className={s.feedbackBtns}>
                       <button
                         onClick={() => {
                           toast.success('Дякуємо за відгук!')
                           setView('main')
                         }}
-                        className="flex-1 flex items-center justify-center gap-2 border rounded-lg py-2 text-sm font-medium hover:bg-green-50 hover:border-green-200 dark:hover:bg-green-900/20 transition"
+                        className={s.yesBtn}
                       >
-                        <CheckCircle2 className="h-4 w-4 text-green-600" />
+                        <CheckCircle2 className={s.checkIcon} />
                         Так
                       </button>
                       <button
@@ -463,9 +467,9 @@ export default function ChatWidget() {
                           }))
                           setView('new-ticket')
                         }}
-                        className="flex-1 flex items-center justify-center gap-2 border rounded-lg py-2 text-sm font-medium hover:bg-red-50 hover:border-red-200 dark:hover:bg-red-900/20 transition"
+                        className={s.noBtn}
                       >
-                        <AlertCircle className="h-4 w-4 text-red-500" />
+                        <AlertCircle className={s.alertIcon} />
                         Ні, потрібна допомога
                       </button>
                     </div>
@@ -473,13 +477,13 @@ export default function ChatWidget() {
                 </div>
               )}
 
-              {/* NEW TICKET FORM */}
+              {/* ФОРМА НОВОГО ЗВЕРНЕННЯ */}
               {view === 'new-ticket' && (
-                <div className="p-4 space-y-3">
+                <div className={s.form}>
                   {!isAuthenticated && (
                     <>
                       <div>
-                        <label className="text-xs font-medium text-muted-foreground mb-1 block">
+                        <label className={s.label}>
                           Ваше ім&apos;я *
                         </label>
                         <input
@@ -488,12 +492,12 @@ export default function ChatWidget() {
                           onChange={(e) =>
                             setNewTicketData((prev) => ({ ...prev, guestName: e.target.value }))
                           }
-                          className="w-full border rounded-lg px-3 py-2 text-sm bg-background focus:outline-none focus:ring-2 focus:ring-primary/50"
+                          className={s.input}
                           placeholder="Ваше ім'я"
                         />
                       </div>
                       <div>
-                        <label className="text-xs font-medium text-muted-foreground mb-1 block">
+                        <label className={s.label}>
                           Email *
                         </label>
                         <input
@@ -502,14 +506,14 @@ export default function ChatWidget() {
                           onChange={(e) =>
                             setNewTicketData((prev) => ({ ...prev, guestEmail: e.target.value }))
                           }
-                          className="w-full border rounded-lg px-3 py-2 text-sm bg-background focus:outline-none focus:ring-2 focus:ring-primary/50"
+                          className={s.input}
                           placeholder="your@email.com"
                         />
                       </div>
                     </>
                   )}
                   <div>
-                    <label className="text-xs font-medium text-muted-foreground mb-1 block">
+                    <label className={s.label}>
                       Категорія
                     </label>
                     <select
@@ -517,7 +521,7 @@ export default function ChatWidget() {
                       onChange={(e) =>
                         setNewTicketData((prev) => ({ ...prev, category: e.target.value }))
                       }
-                      className="w-full border rounded-lg px-3 py-2 text-sm bg-background focus:outline-none focus:ring-2 focus:ring-primary/50"
+                      className={s.input}
                     >
                       {categoryOptions.map((opt) => (
                         <option key={opt.value} value={opt.value}>
@@ -527,7 +531,7 @@ export default function ChatWidget() {
                     </select>
                   </div>
                   <div>
-                    <label className="text-xs font-medium text-muted-foreground mb-1 block">
+                    <label className={s.label}>
                       Тема *
                     </label>
                     <input
@@ -536,12 +540,12 @@ export default function ChatWidget() {
                       onChange={(e) =>
                         setNewTicketData((prev) => ({ ...prev, subject: e.target.value }))
                       }
-                      className="w-full border rounded-lg px-3 py-2 text-sm bg-background focus:outline-none focus:ring-2 focus:ring-primary/50"
+                      className={s.input}
                       placeholder="Коротко опишіть проблему"
                     />
                   </div>
                   <div>
-                    <label className="text-xs font-medium text-muted-foreground mb-1 block">
+                    <label className={s.label}>
                       Повідомлення *
                     </label>
                     <textarea
@@ -550,53 +554,53 @@ export default function ChatWidget() {
                         setNewTicketData((prev) => ({ ...prev, message: e.target.value }))
                       }
                       rows={4}
-                      className="w-full border rounded-lg px-3 py-2 text-sm bg-background focus:outline-none focus:ring-2 focus:ring-primary/50 resize-none"
+                      className={s.textareaField}
                       placeholder="Детально опишіть вашу проблему або запитання..."
                     />
                   </div>
                   <button
                     onClick={handleCreateTicket}
                     disabled={isLoading}
-                    className="w-full bg-primary text-white rounded-lg py-2.5 text-sm font-medium hover:bg-primary/90 transition disabled:opacity-50 flex items-center justify-center gap-2"
+                    className={s.submitBtn}
                   >
                     {isLoading ? (
-                      <Loader2 className="h-4 w-4 animate-spin" />
+                      <Loader2 className={s.spinIcon} />
                     ) : (
-                      <Send className="h-4 w-4" />
+                      <Send className={s.iconSm} />
                     )}
                     Відправити
                   </button>
                 </div>
               )}
 
-              {/* TICKETS LIST */}
+              {/* СПИСОК ТІКЕТІВ */}
               {view === 'tickets' && (
-                <div className="p-4">
+                <div className={s.ticketsView}>
                   {tickets.length === 0 ? (
-                    <div className="text-center py-8">
-                      <MessageCircle className="h-10 w-10 text-muted-foreground/30 mx-auto mb-3" />
-                      <p className="text-sm text-muted-foreground">
+                    <div className={s.emptyState}>
+                      <MessageCircle className={s.emptyIcon} />
+                      <p className={s.emptyText}>
                         У вас поки немає звернень
                       </p>
                     </div>
                   ) : (
-                    <div className="space-y-2">
+                    <div className={s.ticketsList}>
                       {tickets.map((ticket) => (
                         <button
                           key={ticket._id}
                           onClick={() => handleOpenTicket(ticket)}
-                          className="w-full text-left p-3 rounded-lg border hover:bg-muted/50 transition"
+                          className={s.ticketItem}
                         >
-                          <div className="flex items-start justify-between gap-2 mb-1">
-                            <span className="text-sm font-medium truncate flex-1">
+                          <div className={s.ticketHeader}>
+                            <span className={s.ticketTitle}>
                               {!ticket.isReadByUser && (
-                                <span className="inline-block w-2 h-2 bg-primary rounded-full mr-2 flex-shrink-0" />
+                                <span className={s.unreadDot} />
                               )}
                               {ticket.subject}
                             </span>
                             {getStatusBadge(ticket.status)}
                           </div>
-                          <p className="text-xs text-muted-foreground">
+                          <p className={s.ticketMeta}>
                             {formatTime(ticket.lastMessageAt || ticket.createdAt)}
                             {' · '}
                             {ticket.messages?.length || 0} повідомл.
@@ -608,50 +612,50 @@ export default function ChatWidget() {
                 </div>
               )}
 
-              {/* TICKET DETAIL (CHAT) */}
+              {/* ДЕТАЛІ ТІКЕТА (ЧАТ) */}
               {view === 'ticket-detail' && currentTicket && (
-                <div className="flex flex-col" style={{ height: 'calc(min(580px, calc(100vh - 160px)) - 52px)' }}>
-                  {/* Status bar */}
-                  <div className="px-4 py-2 border-b flex items-center justify-between bg-muted/30">
+                <div className={s.ticketDetail} style={{ height: 'calc(min(580px, calc(100vh - 160px)) - 52px)' }}>
+                  {/* Статус */}
+                  <div className={s.statusBar}>
                     {getStatusBadge(currentTicket.status)}
-                    <span className="text-xs text-muted-foreground">
+                    <span className={s.categoryLabel}>
                       {categoryOptions.find((c) => c.value === currentTicket.category)?.label || currentTicket.category}
                     </span>
                   </div>
 
-                  {/* Messages */}
-                  <div className="flex-1 overflow-y-auto p-4 space-y-3">
+                  {/* Повідомлення */}
+                  <div className={s.messages}>
                     {currentTicket.messages?.map((msg) => (
                       <div
                         key={msg._id}
-                        className={`flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}
+                        className={`${s.messageRow} ${msg.sender === 'user' ? s.messageRowUser : s.messageRowOther}`}
                       >
                         {msg.sender === 'system' ? (
-                          <div className="text-center w-full">
-                            <span className="text-xs text-muted-foreground bg-muted/50 px-3 py-1 rounded-full">
+                          <div className={s.systemMsg}>
+                            <span className={s.systemMsgText}>
                               {msg.text}
                             </span>
                           </div>
                         ) : (
                           <div
-                            className={`max-w-[80%] rounded-2xl px-3.5 py-2 ${
+                            className={`${s.messageBubble} ${
                               msg.sender === 'user'
-                                ? 'bg-primary text-white rounded-br-md'
-                                : 'bg-muted rounded-bl-md'
+                                ? s.messageBubbleUser
+                                : s.messageBubbleAdmin
                             }`}
                           >
                             {msg.sender === 'admin' && (
-                              <div className="flex items-center gap-1 mb-1">
-                                <User className="h-3 w-3" />
-                                <span className="text-xs font-medium">
+                              <div className={s.adminHeader}>
+                                <User className={s.adminIcon} />
+                                <span className={s.adminName}>
                                   {msg.senderName || 'Підтримка'}
                                 </span>
                               </div>
                             )}
-                            <p className="text-sm whitespace-pre-wrap break-words">{msg.text}</p>
+                            <p className={s.msgText}>{msg.text}</p>
                             <p
-                              className={`text-[10px] mt-1 ${
-                                msg.sender === 'user' ? 'text-white/60' : 'text-muted-foreground'
+                              className={`${s.msgTime} ${
+                                msg.sender === 'user' ? s.msgTimeUser : s.msgTimeOther
                               }`}
                             >
                               {new Date(msg.createdAt).toLocaleString('uk-UA', {
@@ -668,36 +672,36 @@ export default function ChatWidget() {
                     <div ref={messagesEndRef} />
                   </div>
 
-                  {/* Input */}
+                  {/* Поле вводу */}
                   {currentTicket.status !== 'closed' && (
-                    <div className="border-t p-3">
-                      <div className="flex gap-2 items-end">
+                    <div className={s.inputArea}>
+                      <div className={s.inputRow}>
                         <textarea
                           ref={inputRef}
                           value={messageText}
                           onChange={(e) => setMessageText(e.target.value)}
                           onKeyDown={handleKeyDown}
                           rows={1}
-                          className="flex-1 border rounded-xl px-3 py-2 text-sm bg-background focus:outline-none focus:ring-2 focus:ring-primary/50 resize-none max-h-24"
+                          className={s.chatInput}
                           placeholder="Напишіть повідомлення..."
                         />
                         <button
                           onClick={handleSendMessage}
                           disabled={isLoading || !messageText.trim()}
-                          className="p-2.5 bg-primary text-white rounded-xl hover:bg-primary/90 transition disabled:opacity-50"
+                          className={s.sendBtn}
                         >
                           {isLoading ? (
-                            <Loader2 className="h-4 w-4 animate-spin" />
+                            <Loader2 className={s.spinIcon} />
                           ) : (
-                            <Send className="h-4 w-4" />
+                            <Send className={s.iconSm} />
                           )}
                         </button>
                       </div>
                     </div>
                   )}
                   {currentTicket.status === 'closed' && (
-                    <div className="border-t p-3 text-center">
-                      <p className="text-xs text-muted-foreground">
+                    <div className={s.closedArea}>
+                      <p className={s.closedText}>
                         Це звернення закрито. Створіть нове, якщо маєте запитання.
                       </p>
                     </div>

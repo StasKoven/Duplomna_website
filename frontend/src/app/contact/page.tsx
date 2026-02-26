@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { Mail, Phone, MapPin, Send } from 'lucide-react'
 import { toast } from 'sonner'
+import s from './page.module.css'
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({
@@ -19,69 +20,69 @@ export default function ContactPage() {
   }
 
   return (
-    <div className="container-custom py-12">
-      <div className="max-w-5xl mx-auto">
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold mb-4">Зв'яжіться з нами</h1>
-          <p className="text-muted-foreground max-w-2xl mx-auto">
+    <div className={`container-custom ${s.page}`}>
+      <div className={s.wrapper}>
+        <div className={s.header}>
+          <h1 className={s.title}>Зв'яжіться з нами</h1>
+          <p className={s.subtitle}>
             Маєте питання? Ми завжди раді допомогти!
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-8">
+        <div className={s.gridLayout}>
           {/* Contact Info */}
           <div>
-            <h2 className="text-2xl font-bold mb-6">Контактна інформація</h2>
+            <h2 className={s.sectionTitle}>Контактна інформація</h2>
             
-            <div className="space-y-6">
-              <div className="flex items-start gap-4">
-                <div className="p-3 bg-primary/10 rounded-lg">
-                  <Phone className="h-6 w-6 text-primary" />
+            <div className={s.contactList}>
+              <div className={s.contactItem}>
+                <div className={s.iconBox}>
+                  <Phone className={s.icon} />
                 </div>
                 <div>
-                  <h3 className="font-semibold mb-1">Телефон</h3>
-                  <p className="text-muted-foreground">+380 XX XXX XX XX</p>
-                  <p className="text-sm text-muted-foreground">Пн-Пт: 9:00 - 18:00</p>
+                  <h3 className={s.contactLabel}>Телефон</h3>
+                  <p className={s.contactText}>+380 XX XXX XX XX</p>
+                  <p className={s.contactSubtext}>Пн-Пт: 9:00 - 18:00</p>
                 </div>
               </div>
 
-              <div className="flex items-start gap-4">
-                <div className="p-3 bg-primary/10 rounded-lg">
-                  <Mail className="h-6 w-6 text-primary" />
+              <div className={s.contactItem}>
+                <div className={s.iconBox}>
+                  <Mail className={s.icon} />
                 </div>
                 <div>
-                  <h3 className="font-semibold mb-1">Email</h3>
-                  <p className="text-muted-foreground">support@electronics.com</p>
-                  <p className="text-sm text-muted-foreground">Відповідаємо протягом 24 годин</p>
+                  <h3 className={s.contactLabel}>Email</h3>
+                  <p className={s.contactText}>support@electronics.com</p>
+                  <p className={s.contactSubtext}>Відповідаємо протягом 24 годин</p>
                 </div>
               </div>
 
-              <div className="flex items-start gap-4">
-                <div className="p-3 bg-primary/10 rounded-lg">
-                  <MapPin className="h-6 w-6 text-primary" />
+              <div className={s.contactItem}>
+                <div className={s.iconBox}>
+                  <MapPin className={s.icon} />
                 </div>
                 <div>
-                  <h3 className="font-semibold mb-1">Адреса</h3>
-                  <p className="text-muted-foreground">м. Київ, вул. Хрещатик, 1</p>
-                  <p className="text-sm text-muted-foreground">Офіс та шоу-рум</p>
+                  <h3 className={s.contactLabel}>Адреса</h3>
+                  <p className={s.contactText}>м. Київ, вул. Хрещатик, 1</p>
+                  <p className={s.contactSubtext}>Офіс та шоу-рум</p>
                 </div>
               </div>
             </div>
 
-            <div className="mt-8 p-6 bg-muted rounded-lg">
-              <h3 className="font-semibold mb-3">Години роботи</h3>
-              <div className="space-y-2 text-sm">
-                <div className="flex justify-between">
-                  <span className="text-muted-foreground">Понеділок - П'ятниця:</span>
-                  <span className="font-medium">9:00 - 18:00</span>
+            <div className={s.hoursBox}>
+              <h3 className={s.hoursTitle}>Години роботи</h3>
+              <div className={s.hoursList}>
+                <div className={s.hoursRow}>
+                  <span className={s.hoursLabel}>Понеділок - П'ятниця:</span>
+                  <span className={s.hoursValue}>9:00 - 18:00</span>
                 </div>
-                <div className="flex justify-between">
-                  <span className="text-muted-foreground">Субота:</span>
-                  <span className="font-medium">10:00 - 16:00</span>
+                <div className={s.hoursRow}>
+                  <span className={s.hoursLabel}>Субота:</span>
+                  <span className={s.hoursValue}>10:00 - 16:00</span>
                 </div>
-                <div className="flex justify-between">
-                  <span className="text-muted-foreground">Неділя:</span>
-                  <span className="font-medium">Вихідний</span>
+                <div className={s.hoursRow}>
+                  <span className={s.hoursLabel}>Неділя:</span>
+                  <span className={s.hoursValue}>Вихідний</span>
                 </div>
               </div>
             </div>
@@ -89,11 +90,11 @@ export default function ContactPage() {
 
           {/* Contact Form */}
           <div>
-            <h2 className="text-2xl font-bold mb-6">Напишіть нам</h2>
+            <h2 className={s.sectionTitle}>Напишіть нам</h2>
             
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form onSubmit={handleSubmit} className={s.form}>
               <div>
-                <label className="block text-sm font-medium mb-2">
+                <label className={s.label}>
                   Ім'я *
                 </label>
                 <input
@@ -101,13 +102,13 @@ export default function ContactPage() {
                   required
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
+                  className={s.input}
                   placeholder="Ваше ім'я"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium mb-2">
+                <label className={s.label}>
                   Email *
                 </label>
                 <input
@@ -115,26 +116,26 @@ export default function ContactPage() {
                   required
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
+                  className={s.input}
                   placeholder="your@email.com"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium mb-2">
+                <label className={s.label}>
                   Тема
                 </label>
                 <input
                   type="text"
                   value={formData.subject}
                   onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
-                  className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
+                  className={s.input}
                   placeholder="Тема повідомлення"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium mb-2">
+                <label className={s.label}>
                   Повідомлення *
                 </label>
                 <textarea
@@ -142,16 +143,16 @@ export default function ContactPage() {
                   rows={5}
                   value={formData.message}
                   onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                  className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary resize-none"
+                  className={s.textarea}
                   placeholder="Ваше повідомлення..."
                 />
               </div>
 
               <button
                 type="submit"
-                className="w-full bg-primary text-white py-3 px-4 rounded-md hover:bg-primary/90 transition font-medium flex items-center justify-center gap-2"
+                className={s.submitBtn}
               >
-                <Send className="h-5 w-5" />
+                <Send className={s.sendIcon} />
                 Відправити
               </button>
             </form>

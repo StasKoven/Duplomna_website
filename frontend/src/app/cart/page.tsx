@@ -10,6 +10,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { Trash2, Plus, Minus, ShoppingBag, ArrowRight, X, LogIn, UserPlus } from 'lucide-react'
 import { formatPrice } from '@/lib/utils'
 import { Product } from '@/types'
+import s from './page.module.css'
 
 export default function CartPage() {
   const { items, removeItem, updateQuantity, getTotalItems, getTotalPrice, fetchCart, isLoading } = useCartStore()
@@ -34,36 +35,35 @@ export default function CartPage() {
     }
   }
 
+  /* Стан завантаження */
   if (isLoading) {
     return (
-      <div className="container-custom py-12">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
-          <p className="mt-4 text-muted-foreground">Завантаження кошика...</p>
+      <div className={`container-custom ${s.loadingPage}`}>
+        <div className={s.loadingWrapper}>
+          <div className={s.spinner}></div>
+          <p className={s.loadingText}>Завантаження кошика...</p>
         </div>
       </div>
     )
   }
 
+  /* Порожній кошик */
   if (items.length === 0) {
     return (
-      <div className="container-custom py-12">
+      <div className={`container-custom ${s.emptyPage}`}>
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-center max-w-md mx-auto"
+          className={s.emptyWrapper}
         >
-          <ShoppingBag className="h-24 w-24 mx-auto text-muted-foreground mb-6" />
-          <h1 className="text-3xl font-bold mb-4">Ваш кошик порожній</h1>
-          <p className="text-muted-foreground mb-8">
+          <ShoppingBag className={s.emptyIcon} />
+          <h1 className={s.emptyTitle}>Ваш кошик порожній</h1>
+          <p className={s.emptyDescription}>
             Додайте товари до кошика, щоб продовжити покупки
           </p>
-          <Link
-            href="/products"
-            className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-md hover:bg-primary/90 transition"
-          >
+          <Link href="/products" className={s.emptyLink}>
             Перейти до покупок
-            <ArrowRight className="h-5 w-5" />
+            <ArrowRight className={s.emptyLinkIcon} />
           </Link>
         </motion.div>
       </div>
@@ -72,7 +72,7 @@ export default function CartPage() {
 
   return (
     <>
-      {/* Auth Modal */}
+      {/* Модальне вікно авторизації */}
       <AnimatePresence>
         {showAuthModal && (
           <>
@@ -80,50 +80,50 @@ export default function CartPage() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="fixed inset-0 bg-black/50 z-50"
+              className={s.modalOverlay}
               onClick={() => setShowAuthModal(false)}
             />
             <motion.div
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-50 w-full max-w-sm bg-background rounded-xl shadow-xl p-6"
+              className={s.modalContent}
             >
               <button
                 onClick={() => setShowAuthModal(false)}
-                className="absolute top-4 right-4 p-1 hover:bg-accent rounded-lg transition"
+                className={s.modalCloseBtn}
               >
-                <X className="h-5 w-5" />
+                <X className={s.modalCloseIcon} />
               </button>
               
-              <div className="text-center mb-6">
-                <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <ShoppingBag className="h-8 w-8 text-primary" />
+              <div className={s.modalHeader}>
+                <div className={s.modalIconWrapper}>
+                  <ShoppingBag className={s.modalIcon} />
                 </div>
-                <h3 className="text-xl font-bold mb-2">Оформлення замовлення</h3>
-                <p className="text-sm text-muted-foreground">
+                <h3 className={s.modalTitle}>Оформлення замовлення</h3>
+                <p className={s.modalDescription}>
                   Для оформлення замовлення потрібно увійти в акаунт або зареєструватися
                 </p>
               </div>
 
-              <div className="space-y-3">
+              <div className={s.modalActions}>
                 <Link
                   href="/login?redirect=/cart"
-                  className="flex items-center justify-center gap-2 w-full bg-primary text-white py-3 px-4 rounded-lg font-medium hover:bg-primary/90 transition"
+                  className={s.modalLoginBtn}
                 >
-                  <LogIn className="h-5 w-5" />
+                  <LogIn className={s.modalBtnIcon} />
                   Увійти
                 </Link>
                 <Link
                   href="/register?redirect=/cart"
-                  className="flex items-center justify-center gap-2 w-full border py-3 px-4 rounded-lg font-medium hover:bg-accent transition"
+                  className={s.modalRegisterBtn}
                 >
-                  <UserPlus className="h-5 w-5" />
+                  <UserPlus className={s.modalBtnIcon} />
                   Зареєструватися
                 </Link>
               </div>
 
-              <p className="text-xs text-muted-foreground text-center mt-4">
+              <p className={s.modalFooter}>
                 Ваш кошик збережеться після входу
               </p>
             </motion.div>
@@ -131,12 +131,13 @@ export default function CartPage() {
         )}
       </AnimatePresence>
 
-      <div className="container-custom py-4 sm:py-8">
-        <h1 className="text-2xl sm:text-3xl font-bold mb-4 sm:mb-8">Кошик ({itemCount})</h1>
+      {/* Основна частина кошика */}
+      <div className={`container-custom ${s.pageWrapper}`}>
+        <h1 className={s.pageTitle}>Кошик ({itemCount})</h1>
 
-        <div className="grid lg:grid-cols-3 gap-4 sm:gap-8">
-          {/* Cart Items */}
-          <div className="lg:col-span-2 space-y-3 sm:space-y-4">
+        <div className={s.gridLayout}>
+          {/* Список товарів */}
+          <div className={s.itemsColumn}>
             {items.map((item) => {
               const product = item.product as Product
               return (
@@ -145,56 +146,56 @@ export default function CartPage() {
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: 20 }}
-                className="bg-card border rounded-lg p-3 sm:p-4"
+                className={s.cartCard}
               >
-                {/* Mobile Layout */}
-                <div className="flex gap-3 sm:hidden">
-                <div className="relative w-20 h-20 flex-shrink-0 bg-muted rounded-md overflow-hidden">
+                {/* Мобільний макет */}
+                <div className={s.mobileLayout}>
+                <div className={s.mobileImageWrapper}>
                   {product.images[0]?.url ? (
                     <Image
                       src={product.images[0].url}
                       alt={product.name}
                       fill
                       sizes="80px"
-                      className="object-cover"
+                      className={s.objectCover}
                     />
                   ) : (
-                    <div className="flex items-center justify-center h-full text-3xl">
+                    <div className={s.mobilePlaceholder}>
                       📱
                     </div>
                   )}
                 </div>
-                <div className="flex-1 min-w-0">
+                <div className={s.mobileInfo}>
                   <Link
                     href={`/products/${product.slug}`}
-                    className="font-medium text-sm hover:text-primary transition line-clamp-2"
+                    className={s.mobileProductLink}
                   >
                     {product.name}
                   </Link>
-                  <div className="font-bold text-base mt-1">
+                  <div className={s.mobilePrice}>
                     {formatPrice(product.price * item.quantity)}
                   </div>
                   {product.comparePrice && product.comparePrice > product.price && (
-                    <div className="text-xs text-muted-foreground line-through">
+                    <div className={s.mobileComparePrice}>
                       {formatPrice(product.comparePrice * item.quantity)}
                     </div>
                   )}
                 </div>
               </div>
               
-              {/* Mobile Controls */}
-              <div className="flex items-center justify-between mt-3 sm:hidden">
-                <div className="flex items-center gap-1 border rounded-md">
+              {/* Мобільні елементи керування */}
+              <div className={s.mobileControls}>
+                <div className={s.mobileQuantityGroup}>
                   <button
                     onClick={() =>
                       updateQuantity(product._id, Math.max(1, item.quantity - 1))
                     }
-                    className="p-1.5 hover:bg-accent transition"
+                    className={s.mobileQuantityBtn}
                     disabled={item.quantity <= 1}
                   >
-                    <Minus className="h-4 w-4" />
+                    <Minus className={s.mobileQuantityBtnIcon} />
                   </button>
-                  <span className="w-8 text-center text-sm font-medium">
+                  <span className={s.mobileQuantityValue}>
                     {item.quantity}
                   </span>
                   <button
@@ -204,64 +205,64 @@ export default function CartPage() {
                         Math.min(product.stock, item.quantity + 1)
                       )
                     }
-                    className="p-1.5 hover:bg-accent transition"
+                    className={s.mobileQuantityBtn}
                     disabled={item.quantity >= product.stock}
                   >
-                    <Plus className="h-4 w-4" />
+                    <Plus className={s.mobileQuantityBtnIcon} />
                   </button>
                 </div>
                 <button
                   onClick={() => removeItem(product._id)}
-                  className="p-2 text-destructive hover:bg-destructive/10 rounded-md transition"
+                  className={s.deleteBtn}
                 >
-                  <Trash2 className="h-4 w-4" />
+                  <Trash2 className={s.deleteBtnIconSm} />
                 </button>
               </div>
               
-              {/* Desktop Layout */}
-              <div className="hidden sm:flex gap-4">
-                <div className="relative w-24 h-24 flex-shrink-0 bg-muted rounded-md overflow-hidden">
+              {/* Десктопний макет */}
+              <div className={s.desktopLayout}>
+                <div className={s.desktopImageWrapper}>
                   {product.images[0]?.url ? (
                     <Image
                       src={product.images[0].url}
                       alt={product.name}
                       fill
                       sizes="(max-width: 640px) 25vw, (max-width: 1024px) 15vw, 96px"
-                      className="object-cover"
+                      className={s.objectCover}
                     />
                   ) : (
-                    <div className="flex items-center justify-center h-full text-4xl">
+                    <div className={s.desktopPlaceholder}>
                       📱
                     </div>
                   )}
                 </div>
 
-                <div className="flex-1">
+                <div className={s.desktopInfo}>
                   <Link
                     href={`/products/${product.slug}`}
-                    className="font-semibold hover:text-primary transition line-clamp-2"
+                    className={s.desktopProductLink}
                   >
                     {product.name}
                   </Link>
 
                   {product.category && typeof product.category === 'object' && (
-                    <p className="text-sm text-muted-foreground mt-1">
+                    <p className={s.categoryText}>
                       {product.category.name}
                     </p>
                   )}
 
-                  <div className="flex items-center gap-4 mt-3">
-                    <div className="flex items-center gap-2 border rounded-md">
+                  <div className={s.desktopControlsWrapper}>
+                    <div className={s.desktopQuantityGroup}>
                       <button
                         onClick={() =>
                           updateQuantity(product._id, Math.max(1, item.quantity - 1))
                         }
-                        className="p-2 hover:bg-accent transition"
+                        className={s.desktopQuantityBtn}
                         disabled={item.quantity <= 1}
                       >
-                        <Minus className="h-4 w-4" />
+                        <Minus className={s.mobileQuantityBtnIcon} />
                       </button>
-                      <span className="w-12 text-center font-medium">
+                      <span className={s.desktopQuantityValue}>
                         {item.quantity}
                       </span>
                       <button
@@ -271,58 +272,58 @@ export default function CartPage() {
                             Math.min(product.stock, item.quantity + 1)
                           )
                         }
-                        className="p-2 hover:bg-accent transition"
+                        className={s.desktopQuantityBtn}
                         disabled={item.quantity >= product.stock}
                       >
-                        <Plus className="h-4 w-4" />
+                        <Plus className={s.mobileQuantityBtnIcon} />
                       </button>
                     </div>
 
                     <button
                       onClick={() => removeItem(product._id)}
-                      className="p-2 text-destructive hover:bg-destructive/10 rounded-md transition"
+                      className={s.deleteBtn}
                     >
-                      <Trash2 className="h-5 w-5" />
+                      <Trash2 className={s.deleteBtnIconMd} />
                     </button>
                   </div>
 
                   {product.stock < 5 && product.stock > 0 && (
-                    <p className="text-sm text-orange-600 mt-2">
+                    <p className={s.lowStockWarning}>
                       Залишилось лише {product.stock} шт.
                     </p>
                   )}
 
                   {product.stock === 0 && (
-                    <p className="text-sm text-destructive mt-2">
+                    <p className={s.outOfStock}>
                       Немає в наявності
                     </p>
                   )}
                 </div>
 
-                <div className="text-right">
-                  <div className="font-bold text-lg">
+                <div className={s.priceColumn}>
+                  <div className={s.priceMain}>
                     {formatPrice(product.price * item.quantity)}
                   </div>
                   {product.comparePrice && product.comparePrice > product.price && (
-                    <div className="text-sm text-muted-foreground line-through">
+                    <div className={s.priceCompare}>
                       {formatPrice(product.comparePrice * item.quantity)}
                     </div>
                   )}
-                  <div className="text-sm text-muted-foreground mt-1">
+                  <div className={s.priceUnit}>
                     {formatPrice(product.price)} / шт.
                   </div>
                 </div>
               </div>
               
-              {/* Stock warnings for both layouts */}
-              <div className="sm:hidden mt-2">
+              {/* Попередження про залишки (мобільний) */}
+              <div className={s.mobileStockWarnings}>
                 {product.stock < 5 && product.stock > 0 && (
-                  <p className="text-xs text-orange-600">
+                  <p className={s.mobileLowStock}>
                     Залишилось лише {product.stock} шт.
                   </p>
                 )}
                 {product.stock === 0 && (
-                  <p className="text-xs text-destructive">
+                  <p className={s.mobileOutOfStock}>
                     Немає в наявності
                   </p>
                 )}
@@ -331,21 +332,21 @@ export default function CartPage() {
           )})}
         </div>
 
-        {/* Order Summary */}
-        <div className="lg:col-span-1">
-          <div className="bg-card border rounded-lg p-4 sm:p-6 sticky top-4">
-            <h2 className="text-lg sm:text-xl font-bold mb-4 sm:mb-6">Разом</h2>
+        {/* Підсумок замовлення */}
+        <div className={s.summaryColumn}>
+          <div className={s.summaryCard}>
+            <h2 className={s.summaryTitle}>Разом</h2>
 
-            <div className="space-y-3 mb-4 sm:mb-6">
-              <div className="flex justify-between text-sm">
-                <span className="text-muted-foreground">Товари ({itemCount})</span>
-                <span className="font-medium">{formatPrice(total)}</span>
+            <div className={s.summaryContent}>
+              <div className={s.summaryRow}>
+                <span className={s.summaryLabel}>Товари ({itemCount})</span>
+                <span className={s.summaryValue}>{formatPrice(total)}</span>
               </div>
-              <div className="flex justify-between text-sm">
-                <span className="text-muted-foreground">Доставка</span>
-                <span className="font-medium">
+              <div className={s.summaryRow}>
+                <span className={s.summaryLabel}>Доставка</span>
+                <span className={s.summaryValue}>
                   {total >= 1000 ? (
-                    <span className="text-green-600">Безкоштовно</span>
+                    <span className={s.freeDelivery}>Безкоштовно</span>
                   ) : (
                     formatPrice(50)
                   )}
@@ -353,14 +354,14 @@ export default function CartPage() {
               </div>
 
               {total < 1000 && (
-                <div className="text-xs text-muted-foreground bg-muted p-2 rounded">
+                <div className={s.deliveryHint}>
                   Додайте товарів на {formatPrice(1000 - total)} для безкоштовної
                   доставки
                 </div>
               )}
 
-              <div className="border-t pt-3">
-                <div className="flex justify-between text-base sm:text-lg font-bold">
+              <div className={s.totalDivider}>
+                <div className={s.totalRow}>
                   <span>До сплати</span>
                   <span>{formatPrice(total + (total >= 1000 ? 0 : 50))}</span>
                 </div>
@@ -369,28 +370,29 @@ export default function CartPage() {
 
             <button 
               onClick={handleCheckout}
-              className="w-full bg-primary text-white py-2.5 sm:py-3 px-4 rounded-md hover:bg-primary/90 transition font-medium mb-3 text-sm sm:text-base"
+              className={s.checkoutBtn}
             >
               Оформити замовлення
             </button>
 
             <Link
               href="/products"
-              className="block text-center text-sm text-primary hover:underline"
+              className={s.continueLink}
             >
               Продовжити покупки
             </Link>
 
-            <div className="mt-4 sm:mt-6 pt-4 sm:pt-6 border-t space-y-2 text-xs sm:text-sm text-muted-foreground">
-              <div className="flex items-center gap-2">
+            {/* Гарантії */}
+            <div className={s.guarantees}>
+              <div className={s.guaranteeItem}>
                 <span>✓</span>
                 <span>Безпечна оплата</span>
               </div>
-              <div className="flex items-center gap-2">
+              <div className={s.guaranteeItem}>
                 <span>✓</span>
                 <span>Гарантія повернення коштів</span>
               </div>
-              <div className="flex items-center gap-2">
+              <div className={s.guaranteeItem}>
                 <span>✓</span>
                 <span>Офіційна гарантія</span>
               </div>

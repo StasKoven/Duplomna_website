@@ -3,25 +3,27 @@
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { Percent, Package, Clock } from 'lucide-react'
+import s from './PromoSection.module.css'
 
 export default function PromoSection() {
+  // Дані промо-акцій
   const promos = [
     {
-      icon: <Percent className="h-8 w-8" />,
+      icon: <Percent className={s.icon} />,
       title: 'Знижки до 50%',
       description: 'На обрані моделі смартфонів',
       link: '/products?onSale=true',
       gradient: 'from-blue-500 to-cyan-500'
     },
     {
-      icon: <Package className="h-8 w-8" />,
+      icon: <Package className={s.icon} />,
       title: 'Безкоштовна доставка',
       description: 'При замовленні від 1000 грн',
       link: '/delivery',
       gradient: 'from-purple-500 to-pink-500'
     },
     {
-      icon: <Clock className="h-8 w-8" />,
+      icon: <Clock className={s.icon} />,
       title: 'Швидка доставка',
       description: 'Доставка протягом 1-3 днів',
       link: '/delivery',
@@ -30,13 +32,15 @@ export default function PromoSection() {
   ]
 
   return (
-    <section className="py-16 bg-muted/30">
+    // Секція промо-пропозицій
+    <section className={s.section}>
       <div className="container-custom">
-        <h2 className="text-3xl font-bold tracking-tight mb-8 text-center">
+        <h2 className={s.title}>
           Спеціальні пропозиції
         </h2>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {/* Сітка карток */}
+        <div className={s.gridLayout}>
           {promos.map((promo, index) => (
             <motion.div
               key={index}
@@ -46,12 +50,13 @@ export default function PromoSection() {
               viewport={{ once: true }}
             >
               <Link href={promo.link}>
-                <div className={`relative overflow-hidden rounded-xl bg-gradient-to-br ${promo.gradient} p-6 text-white transition-transform hover:scale-105`}>
-                  <div className="absolute top-0 right-0 -mt-4 -mr-4 h-24 w-24 rounded-full bg-white/10" />
-                  <div className="relative">
-                    <div className="mb-4">{promo.icon}</div>
-                    <h3 className="text-xl font-bold mb-2">{promo.title}</h3>
-                    <p className="text-sm text-white/90">{promo.description}</p>
+                {/* Картка з динамічним градієнтом */}
+                <div className={`${s.card} ${promo.gradient}`}>
+                  <div className={s.circle} />
+                  <div className={s.content}>
+                    <div className={s.iconWrap}>{promo.icon}</div>
+                    <h3 className={s.cardTitle}>{promo.title}</h3>
+                    <p className={s.cardDescription}>{promo.description}</p>
                   </div>
                 </div>
               </Link>

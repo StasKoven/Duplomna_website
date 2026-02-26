@@ -1,0 +1,414 @@
+/* Адмін-панель: сторінка підтримки (тікети) */
+
+/* Обгортка сторінки */
+.page {
+  @apply py-8;
+}
+
+/* Шапка сторінки */
+.header {
+  @apply flex items-center gap-4 mb-6;
+}
+
+.backButton {
+  @apply p-2 hover:bg-muted rounded-lg transition;
+}
+
+.backIcon {
+  @apply h-5 w-5;
+}
+
+.headerContent {
+  @apply flex-1;
+}
+
+.title {
+  @apply text-3xl font-bold flex items-center gap-3;
+}
+
+.titleIcon {
+  @apply h-8 w-8 text-primary;
+}
+
+.unreadBadge {
+  @apply bg-red-500 text-white text-sm px-2.5 py-0.5 rounded-full;
+}
+
+.subtitle {
+  @apply text-muted-foreground mt-1;
+}
+
+/* Секція пошуку та фільтрів */
+.filtersSection {
+  @apply mb-6 space-y-3;
+}
+
+.searchRow {
+  @apply flex gap-3;
+}
+
+.searchInputWrapper {
+  @apply relative flex-1;
+}
+
+.searchIcon {
+  @apply absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground;
+}
+
+.searchInput {
+  @apply w-full pl-10 pr-4 py-2.5 border rounded-lg bg-background text-sm focus:outline-none focus:ring-2 focus:ring-primary/50;
+}
+
+.filterButton {
+  @apply px-4 py-2.5 border rounded-lg flex items-center gap-2 transition hover:bg-muted;
+}
+
+.filterButtonActive {
+  @apply px-4 py-2.5 border rounded-lg flex items-center gap-2 transition bg-primary text-white;
+}
+
+.filterBtnIcon {
+  @apply h-4 w-4;
+}
+
+.filterBtnText {
+  @apply text-sm hidden sm:inline;
+}
+
+.searchButton {
+  @apply px-4 py-2.5 bg-primary text-white rounded-lg text-sm font-medium hover:bg-primary/90 transition;
+}
+
+.filtersAnimated {
+  @apply overflow-hidden;
+}
+
+.filtersContent {
+  @apply flex flex-wrap gap-3 p-4 bg-muted/30 rounded-lg border;
+}
+
+.filterLabel {
+  @apply text-xs font-medium text-muted-foreground mb-1 block;
+}
+
+.filterSelect {
+  @apply border rounded-lg px-3 py-2 text-sm bg-background focus:outline-none focus:ring-2 focus:ring-primary/50;
+}
+
+/* Основний макет */
+.mainGrid {
+  @apply grid lg:grid-cols-[400px_1fr] gap-6 min-h-[600px];
+}
+
+/* Список тікетів */
+.ticketList {
+  @apply border rounded-xl overflow-hidden bg-card;
+}
+
+.ticketListHeader {
+  @apply p-3 border-b bg-muted/30;
+}
+
+.ticketListTitle {
+  @apply font-semibold text-sm;
+}
+
+.ticketListScroll {
+  @apply overflow-y-auto;
+}
+
+.loadingCenter {
+  @apply flex items-center justify-center py-12;
+}
+
+.spinnerIcon {
+  @apply h-6 w-6 animate-spin text-primary;
+}
+
+.emptyState {
+  @apply text-center py-12;
+}
+
+.emptyIcon {
+  @apply h-10 w-10 text-muted-foreground/30 mx-auto mb-3;
+}
+
+.emptyText {
+  @apply text-sm text-muted-foreground;
+}
+
+.divideY {
+  @apply divide-y;
+}
+
+/* Елемент тікета у списку */
+.ticketItem {
+  @apply w-full text-left p-4 hover:bg-muted/50 transition;
+}
+
+.ticketItemSelected {
+  @apply bg-primary/5 border-l-2 border-l-primary;
+}
+
+.ticketItemUnread {
+  @apply bg-blue-50/50 dark:bg-blue-950/10;
+}
+
+.ticketItemTop {
+  @apply flex items-start justify-between gap-2 mb-1;
+}
+
+.ticketItemLeft {
+  @apply flex items-center gap-2 min-w-0;
+}
+
+.unreadDot {
+  @apply w-2 h-2 bg-primary rounded-full flex-shrink-0;
+}
+
+.ticketSubject {
+  @apply text-sm truncate font-medium;
+}
+
+.ticketSubjectUnread {
+  @apply text-sm truncate font-bold;
+}
+
+.ticketMeta {
+  @apply flex items-center gap-2 mt-1.5 flex-wrap;
+}
+
+.ticketCategory {
+  @apply text-xs text-muted-foreground;
+}
+
+.ticketFooter {
+  @apply flex items-center justify-between mt-2;
+}
+
+.ticketAuthor {
+  @apply text-xs text-muted-foreground truncate;
+}
+
+.ticketDate {
+  @apply text-xs text-muted-foreground flex-shrink-0;
+}
+
+/* Пагінація */
+.pagination {
+  @apply p-3 border-t flex items-center justify-between;
+}
+
+.pageBtn {
+  @apply px-3 py-1.5 border rounded-lg text-sm disabled:opacity-50 hover:bg-muted transition;
+}
+
+.pageInfo {
+  @apply text-xs text-muted-foreground;
+}
+
+/* Панель деталей тікета */
+.detailPanel {
+  @apply border rounded-xl overflow-hidden bg-card flex flex-col;
+}
+
+.detailEmpty {
+  @apply flex-1 flex items-center justify-center;
+}
+
+.detailEmptyInner {
+  @apply text-center;
+}
+
+.detailEmptyIcon {
+  @apply h-12 w-12 text-muted-foreground/20 mx-auto mb-3;
+}
+
+.detailEmptyText {
+  @apply text-muted-foreground;
+}
+
+/* Шапка деталей тікета */
+.detailHeader {
+  @apply p-4 border-b space-y-3;
+}
+
+.detailHeaderTop {
+  @apply flex items-start justify-between gap-3;
+}
+
+.detailHeaderLeft {
+  @apply min-w-0 flex-1;
+}
+
+.detailTitle {
+  @apply font-bold text-lg truncate;
+}
+
+.detailMeta {
+  @apply flex items-center gap-3 mt-1 text-sm text-muted-foreground;
+}
+
+.metaItem {
+  @apply flex items-center gap-1;
+}
+
+.metaIcon {
+  @apply h-3.5 w-3.5;
+}
+
+.detailSubMeta {
+  @apply flex items-center gap-2 mt-2 text-xs text-muted-foreground;
+}
+
+.deleteBtn {
+  @apply p-2 text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition;
+}
+
+.deleteBtnIcon {
+  @apply h-4 w-4;
+}
+
+/* Контролі статусу та пріоритету */
+.controlsRow {
+  @apply flex flex-wrap items-center gap-3;
+}
+
+.controlGroup {
+  @apply flex items-center gap-2;
+}
+
+.controlLabel {
+  @apply text-xs font-medium text-muted-foreground;
+}
+
+.controlBtns {
+  @apply flex gap-1;
+}
+
+.statusBtn {
+  @apply text-xs px-2.5 py-1 rounded-full border transition hover:bg-muted;
+}
+
+.statusBtnActive {
+  @apply text-xs px-2.5 py-1 rounded-full border transition bg-primary text-white border-primary;
+}
+
+.priorityBtn {
+  @apply text-xs px-2.5 py-1 rounded-full border transition hover:bg-muted;
+}
+
+.priorityActiveLow {
+  @apply bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300 border-current;
+}
+
+.priorityActiveMedium {
+  @apply bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400 border-current;
+}
+
+.priorityActiveHigh {
+  @apply bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400 border-current;
+}
+
+/* Бейджі статусу */
+.statusBadge {
+  @apply inline-flex items-center gap-1 text-xs px-2 py-1 rounded-full font-medium;
+}
+
+.statusOpen {
+  @apply bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400;
+}
+
+.statusInProgress {
+  @apply bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400;
+}
+
+.statusResolved {
+  @apply bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400;
+}
+
+.statusClosed {
+  @apply bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-400;
+}
+
+.badgeIcon {
+  @apply h-3 w-3;
+}
+
+/* Повідомлення */
+.messagesArea {
+  @apply flex-1 overflow-y-auto p-4 space-y-3;
+}
+
+.msgRowAdmin {
+  @apply flex justify-end;
+}
+
+.msgRowUser {
+  @apply flex justify-start;
+}
+
+.systemMsg {
+  @apply text-center w-full;
+}
+
+.systemMsgText {
+  @apply text-xs text-muted-foreground bg-muted/50 px-3 py-1 rounded-full;
+}
+
+.bubbleAdmin {
+  @apply max-w-[75%] rounded-2xl px-4 py-2.5 bg-primary text-white rounded-br-md;
+}
+
+.bubbleUser {
+  @apply max-w-[75%] rounded-2xl px-4 py-2.5 bg-muted rounded-bl-md;
+}
+
+.msgSender {
+  @apply flex items-center gap-1.5 mb-1;
+}
+
+.msgSenderIcon {
+  @apply h-3 w-3;
+}
+
+.msgSenderName {
+  @apply text-xs font-medium;
+}
+
+.msgText {
+  @apply text-sm whitespace-pre-wrap break-words;
+}
+
+.msgTimeAdmin {
+  @apply text-[10px] mt-1 text-white/60;
+}
+
+.msgTimeUser {
+  @apply text-[10px] mt-1 text-muted-foreground;
+}
+
+/* Поле відповіді */
+.replySection {
+  @apply border-t p-4;
+}
+
+.replyRow {
+  @apply flex gap-3 items-end;
+}
+
+.replyTextarea {
+  @apply flex-1 border rounded-xl px-4 py-2.5 text-sm bg-background focus:outline-none focus:ring-2 focus:ring-primary/50 resize-none;
+}
+
+.sendBtn {
+  @apply px-5 py-2.5 bg-primary text-white rounded-xl hover:bg-primary/90 transition disabled:opacity-50 flex items-center gap-2 font-medium text-sm;
+}
+
+.sendBtnIcon {
+  @apply h-4 w-4;
+}
+
+.sendBtnSpinner {
+  @apply h-4 w-4 animate-spin;
+}

@@ -17,6 +17,7 @@ import {
 import Link from 'next/link'
 import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
+import s from './page.module.css'
 
 const productSchema = z.object({
   name: z.string().min(3, 'Назва має містити мінімум 3 символи'),
@@ -191,7 +192,7 @@ export default function CreateProductPage() {
   const addSpecification = () => setSpecifications(prev => [...prev, { name: '', value: '' }])
   const removeSpecification = (index: number) => setSpecifications(prev => prev.filter((_, i) => i !== index))
   const updateSpecification = (index: number, field: 'name' | 'value', value: string) => {
-    setSpecifications(prev => prev.map((s, i) => i === index ? { ...s, [field]: value } : s))
+    setSpecifications(prev => prev.map((sp, i) => i === index ? { ...sp, [field]: value } : sp))
   }
 
   // ===== Tags =====
@@ -228,7 +229,7 @@ export default function CreateProductPage() {
       const productData: Record<string, any> = {
         ...data,
         features: features.filter(f => f.trim() !== ''),
-        specifications: specifications.filter(s => s.name.trim() && s.value.trim()),
+        specifications: specifications.filter(sp => sp.name.trim() && sp.value.trim()),
         tags: tags.filter(t => t.trim() !== ''),
         images: images.map(img => ({
           url: img.url,
@@ -275,56 +276,56 @@ export default function CreateProductPage() {
     <button
       type="button"
       onClick={() => toggleSection(sectionKey)}
-      className="w-full flex items-center justify-between py-3 group"
+      className={`${s.sectionHeaderBtn} group`}
     >
-      <div className="flex items-center gap-3">
-        <div className="p-2 rounded-lg bg-primary/10 text-primary group-hover:bg-primary/20 transition">
-          <Icon className="h-5 w-5" />
+      <div className={s.sectionHeaderLeft}>
+        <div className={s.sectionIconWrap}>
+          <Icon className={s.sectionIcon} />
         </div>
-        <div className="text-left">
-          <div className="flex items-center gap-2">
-            <h2 className="text-lg font-semibold">{title}</h2>
+        <div className={s.sectionTextWrap}>
+          <div className={s.sectionTitleRow}>
+            <h2 className={s.sectionTitle}>{title}</h2>
             {count !== undefined && count > 0 && (
-              <span className="px-2 py-0.5 text-xs font-medium bg-primary/10 text-primary rounded-full">
+              <span className={s.sectionCount}>
                 {count}
               </span>
             )}
           </div>
           {description && (
-            <p className="text-sm text-muted-foreground">{description}</p>
+            <p className={s.sectionDescription}>{description}</p>
           )}
         </div>
       </div>
       {openSections[sectionKey] ? (
-        <ChevronUp className="h-5 w-5 text-muted-foreground" />
+        <ChevronUp className={s.chevronIcon} />
       ) : (
-        <ChevronDown className="h-5 w-5 text-muted-foreground" />
+        <ChevronDown className={s.chevronIcon} />
       )}
     </button>
   )
 
   return (
-    <div className="container-custom py-8">
-      <div className="mb-6">
+    <div className={`container-custom ${s.page}`}>
+      <div className={s.topSection}>
         <Link
           href="/admin/products"
-          className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground mb-4"
+          className={s.backLink}
         >
-          <ArrowLeft className="h-4 w-4" />
+          <ArrowLeft className={s.backIcon} />
           Назад до списку товарів
         </Link>
-        <h1 className="text-3xl font-bold">Створити новий товар</h1>
+        <h1 className={s.pageTitle}>Створити новий товар</h1>
         {slugPreview && (
-          <p className="text-sm text-muted-foreground mt-1">
-            URL: /products/<span className="text-primary font-medium">{slugPreview}</span>-...
+          <p className={s.slugPreview}>
+            URL: /products/<span className={s.slugHighlight}>{slugPreview}</span>-...
           </p>
         )}
       </div>
 
-      <form onSubmit={handleSubmit(onSubmit)} className="max-w-4xl space-y-4">
+      <form onSubmit={handleSubmit(onSubmit)} className={s.form}>
         {/* ===== BASIC INFO ===== */}
-        <div className="bg-card border rounded-lg overflow-hidden">
-          <div className="px-6 border-b">
+        <div className={s.sectionCard}>
+          <div className={s.sectionHeaderWrap}>
             <SectionHeader
               title="Основна інформація"
               icon={Info}
@@ -338,72 +339,72 @@ export default function CreateProductPage() {
                 initial={{ height: 0 }}
                 animate={{ height: 'auto' }}
                 exit={{ height: 0 }}
-                className="overflow-hidden"
+                className={s.collapseWrap}
               >
-                <div className="p-6 space-y-4">
+                <div className={s.sectionBody}>
                   <div>
-                    <label className="block text-sm font-medium mb-2">Назва товару *</label>
+                    <label className={s.label}>Назва товару *</label>
                     <input
                       {...register('name')}
                       type="text"
-                      className="w-full px-4 py-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition"
+                      className={s.input}
                       placeholder="iPhone 15 Pro Max 256GB"
                     />
                     {errors.name && (
-                      <p className="mt-1 text-sm text-destructive flex items-center gap-1">
-                        <AlertCircle className="h-3.5 w-3.5" />
+                      <p className={s.fieldError}>
+                        <AlertCircle className={s.errorIcon} />
                         {errors.name.message}
                       </p>
                     )}
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium mb-2">Короткий опис</label>
+                    <label className={s.label}>Короткий опис</label>
                     <input
                       {...register('shortDescription')}
                       type="text"
-                      className="w-full px-4 py-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition"
+                      className={s.input}
                       placeholder="Найновіший флагман від Apple з чіпом A17 Pro"
                       maxLength={500}
                     />
-                    <p className="mt-1 text-xs text-muted-foreground">Для каталогу (до 500 символів)</p>
+                    <p className={s.fieldHint}>Для каталогу (до 500 символів)</p>
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium mb-2">Повний опис *</label>
+                    <label className={s.label}>Повний опис *</label>
                     <textarea
                       {...register('description')}
                       rows={6}
-                      className="w-full px-4 py-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition resize-y"
+                      className={s.textarea}
                       placeholder="Детальний опис товару, переваги, комплектація..."
                     />
                     {errors.description && (
-                      <p className="mt-1 text-sm text-destructive flex items-center gap-1">
-                        <AlertCircle className="h-3.5 w-3.5" />
+                      <p className={s.fieldError}>
+                        <AlertCircle className={s.errorIcon} />
                         {errors.description.message}
                       </p>
                     )}
                   </div>
 
-                  <div className="flex flex-wrap gap-6 pt-2">
-                    <label className="relative inline-flex items-center gap-3 cursor-pointer">
-                      <input type="checkbox" {...register('isActive')} className="sr-only peer" />
-                      <div className="relative w-10 h-6 bg-muted rounded-full peer-checked:bg-green-500 transition-colors flex-shrink-0">
-                        <div className="absolute top-0.5 left-0.5 bg-white rounded-full h-5 w-5 shadow-sm transition-transform peer-checked:translate-x-4" />
+                  <div className={s.togglesRow}>
+                    <label className={s.toggleLabel}>
+                      <input type="checkbox" {...register('isActive')} className={s.srOnly + ' peer'} />
+                      <div className={s.toggleTrackGreen}>
+                        <div className={s.toggleKnob} />
                       </div>
                       <div>
-                        <span className="text-sm font-medium">Активний товар</span>
-                        <p className="text-xs text-muted-foreground">Відображається на сайті</p>
+                        <span className={s.toggleTitle}>Активний товар</span>
+                        <p className={s.toggleHint}>Відображається на сайті</p>
                       </div>
                     </label>
-                    <label className="relative inline-flex items-center gap-3 cursor-pointer">
-                      <input type="checkbox" {...register('isFeatured')} className="sr-only peer" />
-                      <div className="relative w-10 h-6 bg-muted rounded-full peer-checked:bg-yellow-500 transition-colors flex-shrink-0">
-                        <div className="absolute top-0.5 left-0.5 bg-white rounded-full h-5 w-5 shadow-sm transition-transform peer-checked:translate-x-4" />
+                    <label className={s.toggleLabel}>
+                      <input type="checkbox" {...register('isFeatured')} className={s.srOnly + ' peer'} />
+                      <div className={s.toggleTrackYellow}>
+                        <div className={s.toggleKnob} />
                       </div>
                       <div>
-                        <span className="text-sm font-medium">Рекомендований</span>
-                        <p className="text-xs text-muted-foreground">Показується на головній</p>
+                        <span className={s.toggleTitle}>Рекомендований</span>
+                        <p className={s.toggleHint}>Показується на головній</p>
                       </div>
                     </label>
                   </div>
@@ -414,35 +415,35 @@ export default function CreateProductPage() {
         </div>
 
         {/* ===== PRICING ===== */}
-        <div className="bg-card border rounded-lg overflow-hidden">
-          <div className="px-6 border-b">
+        <div className={s.sectionCard}>
+          <div className={s.sectionHeaderWrap}>
             <SectionHeader title="Ціноутворення" icon={DollarSign} sectionKey="pricing" description="Ціни та знижки" />
           </div>
           <AnimatePresence initial={false}>
             {openSections.pricing && (
-              <motion.div initial={{ height: 0 }} animate={{ height: 'auto' }} exit={{ height: 0 }} className="overflow-hidden">
-                <div className="p-6 space-y-4">
-                  <div className="grid sm:grid-cols-3 gap-4">
+              <motion.div initial={{ height: 0 }} animate={{ height: 'auto' }} exit={{ height: 0 }} className={s.collapseWrap}>
+                <div className={s.sectionBody}>
+                  <div className={s.priceGrid}>
                     <div>
-                      <label className="block text-sm font-medium mb-2">Ціна продажу * <span className="text-muted-foreground">(₴)</span></label>
-                      <div className="relative">
-                        <input {...register('price', { valueAsNumber: true })} type="number" step="0.01" min="0" className="w-full pl-8 pr-4 py-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition" placeholder="29999" />
-                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">₴</span>
+                      <label className={s.label}>Ціна продажу * <span className={s.labelHint}>(₴)</span></label>
+                      <div className={s.inputWrap}>
+                        <input {...register('price', { valueAsNumber: true })} type="number" step="0.01" min="0" className={s.priceInput} placeholder="29999" />
+                        <span className={s.currencySymbol}>₴</span>
                       </div>
-                      {errors.price && <p className="mt-1 text-sm text-destructive flex items-center gap-1"><AlertCircle className="h-3.5 w-3.5" />{errors.price.message}</p>}
+                      {errors.price && <p className={s.fieldError}><AlertCircle className={s.errorIcon} />{errors.price.message}</p>}
                     </div>
                     <div>
-                      <label className="block text-sm font-medium mb-2">Стара ціна <span className="text-muted-foreground">(для знижки)</span></label>
-                      <div className="relative">
-                        <input {...register('comparePrice')} type="number" step="0.01" min="0" className="w-full pl-8 pr-4 py-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition" placeholder="34999" />
-                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">₴</span>
+                      <label className={s.label}>Стара ціна <span className={s.labelHint}>(для знижки)</span></label>
+                      <div className={s.inputWrap}>
+                        <input {...register('comparePrice')} type="number" step="0.01" min="0" className={s.priceInput} placeholder="34999" />
+                        <span className={s.currencySymbol}>₴</span>
                       </div>
                     </div>
                     <div>
-                      <label className="block text-sm font-medium mb-2">Собівартість</label>
-                      <div className="relative">
-                        <input {...register('cost', { valueAsNumber: true })} type="number" step="0.01" min="0" className="w-full pl-8 pr-4 py-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition" placeholder="25000" />
-                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">₴</span>
+                      <label className={s.label}>Собівартість</label>
+                      <div className={s.inputWrap}>
+                        <input {...register('cost', { valueAsNumber: true })} type="number" step="0.01" min="0" className={s.priceInput} placeholder="25000" />
+                        <span className={s.currencySymbol}>₴</span>
                       </div>
                     </div>
                   </div>
@@ -451,14 +452,14 @@ export default function CreateProductPage() {
                     <motion.div
                       initial={{ opacity: 0, y: -10 }}
                       animate={{ opacity: 1, y: 0 }}
-                      className="flex items-center gap-3 p-3 bg-green-50 dark:bg-green-950/30 border border-green-200 dark:border-green-800 rounded-lg"
+                      className={s.discountBanner}
                     >
-                      <div className="p-1.5 bg-green-500 text-white rounded-full">
-                        <Tag className="h-4 w-4" />
+                      <div className={s.discountIconWrap}>
+                        <Tag className={s.discountIconInner} />
                       </div>
                       <div>
-                        <p className="text-sm font-medium text-green-700 dark:text-green-400">Знижка {discountPercent}%</p>
-                        <p className="text-xs text-green-600 dark:text-green-500">Економія: {((watchComparePrice || 0) - (watchPrice || 0)).toLocaleString('uk-UA')} ₴</p>
+                        <p className={s.discountText}>Знижка {discountPercent}%</p>
+                        <p className={s.discountSavings}>Економія: {((watchComparePrice || 0) - (watchPrice || 0)).toLocaleString('uk-UA')} ₴</p>
                       </div>
                     </motion.div>
                   )}
@@ -469,43 +470,43 @@ export default function CreateProductPage() {
         </div>
 
         {/* ===== DETAILS ===== */}
-        <div className="bg-card border rounded-lg overflow-hidden">
-          <div className="px-6 border-b">
+        <div className={s.sectionCard}>
+          <div className={s.sectionHeaderWrap}>
             <SectionHeader title="Деталі товару" icon={Package} sectionKey="details" description="Категорія, бренд, склад та гарантія" />
           </div>
           <AnimatePresence initial={false}>
             {openSections.details && (
-              <motion.div initial={{ height: 0 }} animate={{ height: 'auto' }} exit={{ height: 0 }} className="overflow-hidden">
-                <div className="p-6">
-                  <div className="grid sm:grid-cols-2 gap-4">
+              <motion.div initial={{ height: 0 }} animate={{ height: 'auto' }} exit={{ height: 0 }} className={s.collapseWrap}>
+                <div className={s.sectionBodyPlain}>
+                  <div className={s.detailsGrid}>
                     <div>
-                      <label className="block text-sm font-medium mb-2">Категорія *</label>
-                      <select {...register('category')} className="w-full px-4 py-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition bg-background">
+                      <label className={s.label}>Категорія *</label>
+                      <select {...register('category')} className={s.select}>
                         <option value="">Оберіть категорію</option>
                         {categories.map(cat => (<option key={cat._id} value={cat._id}>{cat.name}</option>))}
                       </select>
-                      {errors.category && <p className="mt-1 text-sm text-destructive flex items-center gap-1"><AlertCircle className="h-3.5 w-3.5" />{errors.category.message}</p>}
+                      {errors.category && <p className={s.fieldError}><AlertCircle className={s.errorIcon} />{errors.category.message}</p>}
                     </div>
                     <div>
-                      <label className="block text-sm font-medium mb-2">Бренд</label>
-                      <input {...register('brand')} type="text" className="w-full px-4 py-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition" placeholder="Apple" />
+                      <label className={s.label}>Бренд</label>
+                      <input {...register('brand')} type="text" className={s.input} placeholder="Apple" />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium mb-2">SKU (Артикул) *</label>
-                      <div className="flex gap-2">
-                        <input {...register('sku')} type="text" className="flex-1 px-4 py-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition font-mono uppercase" placeholder="IPHONE-15-PRO-MAX" />
-                        <button type="button" onClick={generateSku} className="px-3 py-2 text-xs font-medium bg-muted hover:bg-muted/80 rounded-lg transition whitespace-nowrap" title="Згенерувати з назви">Авто</button>
+                      <label className={s.label}>SKU (Артикул) *</label>
+                      <div className={s.skuRow}>
+                        <input {...register('sku')} type="text" className={s.skuInput} placeholder="IPHONE-15-PRO-MAX" />
+                        <button type="button" onClick={generateSku} className={s.autoBtn} title="Згенерувати з назви">Авто</button>
                       </div>
-                      {errors.sku && <p className="mt-1 text-sm text-destructive flex items-center gap-1"><AlertCircle className="h-3.5 w-3.5" />{errors.sku.message}</p>}
+                      {errors.sku && <p className={s.fieldError}><AlertCircle className={s.errorIcon} />{errors.sku.message}</p>}
                     </div>
                     <div>
-                      <label className="block text-sm font-medium mb-2">Кількість на складі *</label>
-                      <input {...register('stock', { valueAsNumber: true })} type="number" min="0" className="w-full px-4 py-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition" placeholder="50" />
-                      {errors.stock && <p className="mt-1 text-sm text-destructive flex items-center gap-1"><AlertCircle className="h-3.5 w-3.5" />{errors.stock.message}</p>}
+                      <label className={s.label}>Кількість на складі *</label>
+                      <input {...register('stock', { valueAsNumber: true })} type="number" min="0" className={s.input} placeholder="50" />
+                      {errors.stock && <p className={s.fieldError}><AlertCircle className={s.errorIcon} />{errors.stock.message}</p>}
                     </div>
                     <div>
-                      <label className="block text-sm font-medium mb-2">Гарантія</label>
-                      <input {...register('warranty')} type="text" className="w-full px-4 py-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition" placeholder="12 місяців" />
+                      <label className={s.label}>Гарантія</label>
+                      <input {...register('warranty')} type="text" className={s.input} placeholder="12 місяців" />
                     </div>
                   </div>
                 </div>
@@ -515,31 +516,31 @@ export default function CreateProductPage() {
         </div>
 
         {/* ===== IMAGES ===== */}
-        <div className="bg-card border rounded-lg overflow-hidden">
-          <div className="px-6 border-b">
+        <div className={s.sectionCard}>
+          <div className={s.sectionHeaderWrap}>
             <SectionHeader title="Зображення" icon={ImageIcon} sectionKey="images" count={images.length} description="Фотографії товару (перше = головне)" />
           </div>
           <AnimatePresence initial={false}>
             {openSections.images && (
-              <motion.div initial={{ height: 0 }} animate={{ height: 'auto' }} exit={{ height: 0 }} className="overflow-hidden">
-                <div className="p-6 space-y-4">
-                  <div className="flex gap-2">
+              <motion.div initial={{ height: 0 }} animate={{ height: 'auto' }} exit={{ height: 0 }} className={s.collapseWrap}>
+                <div className={s.sectionBody}>
+                  <div className={s.imageUrlRow}>
                     <input
                       type="url"
                       value={newImageUrl}
                       onChange={e => setNewImageUrl(e.target.value)}
                       onKeyDown={e => { if (e.key === 'Enter') { e.preventDefault(); addImage() } }}
-                      className="flex-1 px-4 py-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition"
+                      className={s.imageUrlInput}
                       placeholder="https://example.com/image.jpg"
                     />
-                    <button type="button" onClick={addImage} disabled={!newImageUrl.trim()} className="px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2">
-                      <Plus className="h-4 w-4" />
+                    <button type="button" onClick={addImage} disabled={!newImageUrl.trim()} className={s.addImageBtn}>
+                      <Plus className={s.addImageBtnIcon} />
                       Додати
                     </button>
                   </div>
 
                   {images.length > 0 ? (
-                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+                    <div className={s.imageGrid}>
                       {images.map((img) => (
                         <motion.div
                           key={img.id}
@@ -547,37 +548,37 @@ export default function CreateProductPage() {
                           initial={{ opacity: 0, scale: 0.8 }}
                           animate={{ opacity: 1, scale: 1 }}
                           exit={{ opacity: 0, scale: 0.8 }}
-                          className={`relative group aspect-square rounded-lg overflow-hidden border-2 transition-colors ${img.isMain ? 'border-primary ring-2 ring-primary/20' : 'border-transparent hover:border-muted-foreground/30'}`}
+                          className={`${s.imageCard} group ${img.isMain ? s.imageCardMain : s.imageCardDefault}`}
                         >
                           {!imageError[img.id] ? (
-                            <Image src={img.url} alt="Product" fill className="object-cover" onError={() => handleImageError(img.id)} onLoad={() => handleImageLoad(img.id)} />
+                            <Image src={img.url} alt="Product" fill className={s.imageCover} onError={() => handleImageError(img.id)} onLoad={() => handleImageLoad(img.id)} />
                           ) : (
-                            <div className="flex flex-col items-center justify-center h-full bg-muted text-muted-foreground p-2 text-center">
-                              <AlertCircle className="h-6 w-6 mb-1" />
-                              <span className="text-xs">Помилка</span>
+                            <div className={s.imageErrorPlaceholder}>
+                              <AlertCircle className={s.imageErrorIcon} />
+                              <span className={s.imageErrorText}>Помилка</span>
                             </div>
                           )}
                           {img.isMain && (
-                            <div className="absolute top-1.5 left-1.5 px-2 py-0.5 bg-primary text-primary-foreground text-[10px] font-medium rounded-full">Головне</div>
+                            <div className={s.mainBadge}>Головне</div>
                           )}
-                          <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-colors flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100">
+                          <div className={s.imageOverlay}>
                             {!img.isMain && (
-                              <button type="button" onClick={() => setMainImage(img.id)} className="p-2 bg-white rounded-full text-primary hover:bg-primary hover:text-white transition" title="Зробити головним">
-                                <Star className="h-4 w-4" />
+                              <button type="button" onClick={() => setMainImage(img.id)} className={s.setMainBtn} title="Зробити головним">
+                                <Star className={s.smallIcon} />
                               </button>
                             )}
-                            <button type="button" onClick={() => removeImage(img.id)} className="p-2 bg-white rounded-full text-destructive hover:bg-destructive hover:text-white transition" title="Видалити">
-                              <X className="h-4 w-4" />
+                            <button type="button" onClick={() => removeImage(img.id)} className={s.removeImgBtn} title="Видалити">
+                              <X className={s.smallIcon} />
                             </button>
                           </div>
                         </motion.div>
                       ))}
                     </div>
                   ) : (
-                    <div className="border-2 border-dashed rounded-lg p-8 text-center text-muted-foreground">
-                      <ImageIcon className="h-10 w-10 mx-auto mb-2 opacity-50" />
-                      <p className="text-sm">Додайте URL зображень товару</p>
-                      <p className="text-xs mt-1">Перше додане зображення стане головним</p>
+                    <div className={s.emptyImages}>
+                      <ImageIcon className={s.emptyImagesIcon} />
+                      <p className={s.emptyImagesText}>Додайте URL зображень товару</p>
+                      <p className={s.emptyImagesHint}>Перше додане зображення стане головним</p>
                     </div>
                   )}
                 </div>
@@ -587,25 +588,25 @@ export default function CreateProductPage() {
         </div>
 
         {/* ===== FEATURES ===== */}
-        <div className="bg-card border rounded-lg overflow-hidden">
-          <div className="px-6 border-b">
+        <div className={s.sectionCard}>
+          <div className={s.sectionHeaderWrap}>
             <SectionHeader title="Особливості" icon={CheckCircle} sectionKey="features" count={features.filter(f => f.trim()).length} description="Ключові переваги товару" />
           </div>
           <AnimatePresence initial={false}>
             {openSections.features && (
-              <motion.div initial={{ height: 0 }} animate={{ height: 'auto' }} exit={{ height: 0 }} className="overflow-hidden">
-                <div className="p-6 space-y-3">
+              <motion.div initial={{ height: 0 }} animate={{ height: 'auto' }} exit={{ height: 0 }} className={s.collapseWrap}>
+                <div className={s.sectionBodyCompact}>
                   {features.map((feature, index) => (
-                    <motion.div key={index} initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} className="flex gap-2 items-center">
-                      <CheckCircle className="h-4 w-4 text-green-500 flex-shrink-0" />
-                      <input type="text" value={feature} onChange={e => updateFeature(index, e.target.value)} className="flex-1 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition" placeholder="Камера 48MP з оптичною стабілізацією" />
-                      <button type="button" onClick={() => removeFeature(index)} className="p-2 text-destructive/60 hover:text-destructive hover:bg-destructive/10 rounded-lg transition">
-                        <X className="h-4 w-4" />
+                    <motion.div key={index} initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} className={s.featureRow}>
+                      <CheckCircle className={s.featureCheckIcon} />
+                      <input type="text" value={feature} onChange={e => updateFeature(index, e.target.value)} className={s.featureInput} placeholder="Камера 48MP з оптичною стабілізацією" />
+                      <button type="button" onClick={() => removeFeature(index)} className={s.removeItemBtn}>
+                        <X className={s.removeItemIcon} />
                       </button>
                     </motion.div>
                   ))}
-                  <button type="button" onClick={addFeature} className="flex items-center gap-2 text-sm text-primary hover:text-primary/80 font-medium transition">
-                    <Plus className="h-4 w-4" />
+                  <button type="button" onClick={addFeature} className={s.addItemBtn}>
+                    <Plus className={s.addItemIcon} />
                     Додати особливість
                   </button>
                 </div>
@@ -615,25 +616,25 @@ export default function CreateProductPage() {
         </div>
 
         {/* ===== SPECIFICATIONS ===== */}
-        <div className="bg-card border rounded-lg overflow-hidden">
-          <div className="px-6 border-b">
-            <SectionHeader title="Характеристики" icon={Settings} sectionKey="specs" count={specifications.filter(s => s.name.trim() && s.value.trim()).length} description="Технічні характеристики (дисплей, процесор...)" />
+        <div className={s.sectionCard}>
+          <div className={s.sectionHeaderWrap}>
+            <SectionHeader title="Характеристики" icon={Settings} sectionKey="specs" count={specifications.filter(sp => sp.name.trim() && sp.value.trim()).length} description="Технічні характеристики (дисплей, процесор...)" />
           </div>
           <AnimatePresence initial={false}>
             {openSections.specs && (
-              <motion.div initial={{ height: 0 }} animate={{ height: 'auto' }} exit={{ height: 0 }} className="overflow-hidden">
-                <div className="p-6 space-y-3">
+              <motion.div initial={{ height: 0 }} animate={{ height: 'auto' }} exit={{ height: 0 }} className={s.collapseWrap}>
+                <div className={s.sectionBodyCompact}>
                   {specifications.map((spec, index) => (
-                    <motion.div key={index} initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} className="flex gap-2">
-                      <input type="text" value={spec.name} onChange={e => updateSpecification(index, 'name', e.target.value)} className="flex-1 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition" placeholder="Назва (Дисплей)" />
-                      <input type="text" value={spec.value} onChange={e => updateSpecification(index, 'value', e.target.value)} className="flex-1 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition" placeholder={'Значення (6.7" OLED 120Hz)'} />
-                      <button type="button" onClick={() => removeSpecification(index)} className="p-2 text-destructive/60 hover:text-destructive hover:bg-destructive/10 rounded-lg transition">
-                        <X className="h-4 w-4" />
+                    <motion.div key={index} initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} className={s.specRow}>
+                      <input type="text" value={spec.name} onChange={e => updateSpecification(index, 'name', e.target.value)} className={s.specInput} placeholder="Назва (Дисплей)" />
+                      <input type="text" value={spec.value} onChange={e => updateSpecification(index, 'value', e.target.value)} className={s.specInput} placeholder={'Значення (6.7" OLED 120Hz)'} />
+                      <button type="button" onClick={() => removeSpecification(index)} className={s.removeItemBtn}>
+                        <X className={s.removeItemIcon} />
                       </button>
                     </motion.div>
                   ))}
-                  <button type="button" onClick={addSpecification} className="flex items-center gap-2 text-sm text-primary hover:text-primary/80 font-medium transition">
-                    <Plus className="h-4 w-4" />
+                  <button type="button" onClick={addSpecification} className={s.addItemBtn}>
+                    <Plus className={s.addItemIcon} />
                     Додати характеристику
                   </button>
                 </div>
@@ -643,27 +644,27 @@ export default function CreateProductPage() {
         </div>
 
         {/* ===== TAGS ===== */}
-        <div className="bg-card border rounded-lg overflow-hidden">
-          <div className="px-6 border-b">
+        <div className={s.sectionCard}>
+          <div className={s.sectionHeaderWrap}>
             <SectionHeader title="Теги" icon={Tag} sectionKey="tags" count={tags.length} description="Додаткові ключові слова для пошуку" />
           </div>
           <AnimatePresence initial={false}>
             {openSections.tags && (
-              <motion.div initial={{ height: 0 }} animate={{ height: 'auto' }} exit={{ height: 0 }} className="overflow-hidden">
-                <div className="p-6 space-y-3">
-                  <div className="flex gap-2">
-                    <input type="text" value={tagInput} onChange={e => setTagInput(e.target.value)} onKeyDown={handleTagKeyDown} className="flex-1 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition" placeholder="Введіть тег та натисніть Enter" />
-                    <button type="button" onClick={addTag} disabled={!tagInput.trim()} className="px-4 py-2 bg-muted hover:bg-muted/80 rounded-lg transition disabled:opacity-50">
-                      <Plus className="h-4 w-4" />
+              <motion.div initial={{ height: 0 }} animate={{ height: 'auto' }} exit={{ height: 0 }} className={s.collapseWrap}>
+                <div className={s.sectionBodyCompact}>
+                  <div className={s.tagInputRow}>
+                    <input type="text" value={tagInput} onChange={e => setTagInput(e.target.value)} onKeyDown={handleTagKeyDown} className={s.tagInput} placeholder="Введіть тег та натисніть Enter" />
+                    <button type="button" onClick={addTag} disabled={!tagInput.trim()} className={s.addTagBtn}>
+                      <Plus className={s.addTagIcon} />
                     </button>
                   </div>
                   {tags.length > 0 && (
-                    <div className="flex flex-wrap gap-2">
+                    <div className={s.tagsList}>
                       {tags.map((tag, index) => (
-                        <motion.span key={tag} initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} className="inline-flex items-center gap-1 px-3 py-1 bg-primary/10 text-primary rounded-full text-sm">
+                        <motion.span key={tag} initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} className={s.tag}>
                           #{tag}
-                          <button type="button" onClick={() => removeTag(index)} className="ml-1 hover:text-destructive transition">
-                            <X className="h-3 w-3" />
+                          <button type="button" onClick={() => removeTag(index)} className={s.removeTagBtn}>
+                            <X className={s.removeTagIcon} />
                           </button>
                         </motion.span>
                       ))}
@@ -676,17 +677,17 @@ export default function CreateProductPage() {
         </div>
 
         {/* ===== ACTIONS ===== */}
-        <div className="bg-card border rounded-lg p-6">
-          <div className="flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between">
-            <div className="text-sm text-muted-foreground">
-              <span className="text-destructive">*</span> — обов&apos;язкові поля
+        <div className={s.actionsCard}>
+          <div className={s.actionsRow}>
+            <div className={s.requiredNote}>
+              <span className={s.asterisk}>*</span> — обов&apos;язкові поля
             </div>
-            <div className="flex gap-3">
-              <Link href="/admin/products" className="px-6 py-2.5 border rounded-lg hover:bg-accent transition font-medium">
+            <div className={s.actionButtons}>
+              <Link href="/admin/products" className={s.cancelBtn}>
                 Скасувати
               </Link>
-              <button type="submit" disabled={isLoading} className="bg-primary text-primary-foreground px-8 py-2.5 rounded-lg hover:bg-primary/90 transition disabled:opacity-50 disabled:cursor-not-allowed font-medium flex items-center gap-2">
-                {isLoading ? (<><Loader2 className="h-4 w-4 animate-spin" />Створення...</>) : (<><CheckCircle className="h-4 w-4" />Створити товар</>)}
+              <button type="submit" disabled={isLoading} className={s.submitBtn}>
+                {isLoading ? (<><Loader2 className={s.spinIcon} />Створення...</>) : (<><CheckCircle className={s.submitIcon} />Створити товар</>)}
               </button>
             </div>
           </div>
