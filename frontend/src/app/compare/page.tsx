@@ -152,7 +152,6 @@ function ComparisonContent() {
   const handleAddToCart = (product: Product) => {
     if (product.stock === 0) return
     addItem(product, 1)
-    toast.success('Товар додано до кошика')
   }
 
   const getCellHighlightClass = (key: string, productId: string) => {

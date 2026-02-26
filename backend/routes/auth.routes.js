@@ -85,7 +85,9 @@ router.put('/password', verifyToken, [
   body('currentPassword').notEmpty().withMessage('Current password is required'),
   body('newPassword')
     .isLength({ min: 8 })
-    .withMessage('New password must be at least 8 characters'),
+    .withMessage('New password must be at least 8 characters')
+    .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/)
+    .withMessage('Password must contain uppercase, lowercase, and number'),
   validate
 ], authController.changePassword);
 

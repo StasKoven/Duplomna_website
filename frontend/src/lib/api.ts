@@ -58,6 +58,9 @@ api.interceptors.request.use(
   (error) => Promise.reject(error)
 )
 
+// Shared refresh promise to prevent concurrent refresh attempts
+let refreshPromise: Promise<string> | null = null
+
 api.interceptors.response.use(
   (response) => response,
   async (error: AxiosError) => {
@@ -77,17 +80,27 @@ api.interceptors.response.use(
           return Promise.reject(error)
         }
 
-        const response = await axios.post(`${API_BASE}/auth/refresh`, { refreshToken })
+        // Share a single refresh call across all concurrent 401 responses
+        if (!refreshPromise) {
+          refreshPromise = (async () => {
+            const response = await axios.post(`${API_BASE}/auth/refresh`, { refreshToken })
+            const { accessToken, refreshToken: newRefreshToken } = response.data
 
-        const { accessToken, refreshToken: newRefreshToken } = response.data
+            if (typeof window !== 'undefined') {
+              localStorage.setItem('accessToken', accessToken)
+              localStorage.setItem('refreshToken', newRefreshToken)
+            }
 
-        if (typeof window !== 'undefined') {
-          localStorage.setItem('accessToken', accessToken)
-          localStorage.setItem('refreshToken', newRefreshToken)
+            return accessToken
+          })().finally(() => {
+            refreshPromise = null
+          })
         }
 
+        const newAccessToken = await refreshPromise
+
         if (originalRequest.headers) {
-          originalRequest.headers.Authorization = `Bearer ${accessToken}`
+          originalRequest.headers.Authorization = `Bearer ${newAccessToken}`
         }
 
         return api(originalRequest)

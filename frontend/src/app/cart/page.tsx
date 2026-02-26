@@ -138,6 +138,7 @@ export default function CartPage() {
         <div className={s.gridLayout}>
           {/* Список товарів */}
           <div className={s.itemsColumn}>
+            <AnimatePresence>
             {items.map((item) => {
               const product = item.product as Product
               return (
@@ -330,9 +331,8 @@ export default function CartPage() {
               </div>
             </motion.div>
           )})}
+            </AnimatePresence>
         </div>
-
-        {/* Підсумок замовлення */}
         <div className={s.summaryColumn}>
           <div className={s.summaryCard}>
             <h2 className={s.summaryTitle}>Разом</h2>

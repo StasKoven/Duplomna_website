@@ -151,10 +151,11 @@ exports.getAllTickets = async (req, res) => {
     if (priority) filter.priority = priority;
     if (category) filter.category = category;
     if (search) {
+      const escapedSearch = search.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
       filter.$or = [
-        { subject: { $regex: search, $options: 'i' } },
-        { guestName: { $regex: search, $options: 'i' } },
-        { guestEmail: { $regex: search, $options: 'i' } }
+        { subject: { $regex: escapedSearch, $options: 'i' } },
+        { guestName: { $regex: escapedSearch, $options: 'i' } },
+        { guestEmail: { $regex: escapedSearch, $options: 'i' } }
       ];
     }
 

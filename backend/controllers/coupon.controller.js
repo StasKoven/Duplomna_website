@@ -140,15 +140,10 @@ exports.applyCoupon = async (req, res) => {
       });
     }
 
-    // Validate coupon before applying
-    if (!coupon.isActive) {
-      return res.status(400).json({ success: false, message: 'Coupon is not active' });
-    }
-    if (coupon.expiresAt && coupon.expiresAt < new Date()) {
-      return res.status(400).json({ success: false, message: 'Coupon has expired' });
-    }
-    if (coupon.maxUsage && coupon.usageCount >= coupon.maxUsage) {
-      return res.status(400).json({ success: false, message: 'Coupon usage limit reached' });
+    // Validate coupon using model's isValid() method
+    const validCheck = coupon.isValid();
+    if (!validCheck.valid) {
+      return res.status(400).json({ success: false, message: validCheck.message });
     }
     if (coupon.usedBy.some(u => u.user.toString() === req.user.id)) {
       return res.status(400).json({ success: false, message: 'You have already used this coupon' });

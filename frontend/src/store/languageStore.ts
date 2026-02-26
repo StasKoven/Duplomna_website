@@ -29,6 +29,7 @@ export const useLanguageStore = create<LanguageStore>()(
       loadTranslations: async (lang: Language) => {
         try {
           const response = await fetch(`/locales/${lang}/translation.json`)
+          if (!response.ok) throw new Error(`HTTP ${response.status}`)
           const translations = await response.json()
           set({ translations })
         } catch (error) {

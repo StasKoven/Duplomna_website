@@ -16,6 +16,7 @@ const wishlistRoutes = require('../routes/wishlist.routes');
 const cartRoutes = require('../routes/cart.routes');
 const comparisonRoutes = require('../routes/comparison.routes');
 const couponRoutes = require('../routes/coupon.routes');
+const ticketRoutes = require('../routes/ticket.routes');
 
 const errorHandler = require('../middleware/errorHandler');
 
@@ -115,6 +116,7 @@ app.use('/api/wishlist', wishlistRoutes);
 app.use('/api/cart', cartRoutes);
 app.use('/api/comparisons', comparisonRoutes);
 app.use('/api/coupons', couponRoutes);
+app.use('/api/tickets', ticketRoutes);
 
 // Health check
 app.get('/api/health', (req, res) => {

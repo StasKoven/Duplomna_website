@@ -229,6 +229,13 @@ exports.syncCart = async (req, res) => {
   try {
     const { items } = req.body;
 
+    if (!Array.isArray(items)) {
+      return res.status(400).json({
+        success: false,
+        message: 'Items must be an array'
+      });
+    }
+
     const user = await User.findById(req.user.id);
     
     // Validate all products exist and have stock

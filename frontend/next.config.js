@@ -1,8 +1,5 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Output configuration for Vercel
-  output: 'standalone',
-  
   // Disable powered by header
   poweredByHeader: false,
   
@@ -24,7 +21,7 @@ const nextConfig = {
         hostname: '**',
       },
     ],
-    // Optimize images for Vercel
+    // Optimize images
     unoptimized: false,
   },
   

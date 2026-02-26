@@ -1,6 +1,7 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 import { Product } from '@/types'
+import { toast } from 'sonner'
 
 interface ComparisonItem {
   categoryId: string
@@ -29,11 +30,13 @@ export const useComparisonStore = create<ComparisonStore>()(
           if (existing) {
             // Check if product already exists
             if (existing.products.some(p => p._id === product._id)) {
+              toast.info('Товар вже у порівнянні')
               return state
             }
             
             // Check max limit
             if (existing.products.length >= 4) {
+              toast.error('Максимум 4 товари для порівняння')
               return state
             }
             

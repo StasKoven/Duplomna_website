@@ -10,7 +10,12 @@ const errorHandler = (err, req, res, next) => {
   console.error('📊 Status Code:', err.statusCode || 500);
   
   if (req.body && Object.keys(req.body).length > 0) {
-    console.error('📦 Request Body:', JSON.stringify(req.body, null, 2));
+    const sanitizedBody = { ...req.body };
+    delete sanitizedBody.password;
+    delete sanitizedBody.currentPassword;
+    delete sanitizedBody.newPassword;
+    delete sanitizedBody.confirmPassword;
+    console.error('📦 Request Body:', JSON.stringify(sanitizedBody, null, 2));
   }
   
   if (req.params && Object.keys(req.params).length > 0) {

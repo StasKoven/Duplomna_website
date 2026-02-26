@@ -200,7 +200,8 @@ export const useCartStore = create<CartState>()(
       getTotalPrice: () => {
         const items = get().items || []
         return items.reduce((total, item) => {
-          const product = item.product as Product
+          const product = item.product
+          if (typeof product === 'string') return total
           return total + product.price * item.quantity
         }, 0)
       },

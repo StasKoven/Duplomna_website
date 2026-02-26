@@ -103,7 +103,7 @@ exports.addToComparison = async (req, res) => {
     }
 
     // Check if product already in comparison
-    if (comparison.products.includes(productId)) {
+    if (comparison.products.some(id => id.toString() === productId)) {
       return res.status(400).json({
         success: false,
         message: 'Product already in comparison'

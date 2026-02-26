@@ -48,7 +48,11 @@ exports.register = async (req, res) => {
     // Generate tokens
     const { accessToken, refreshToken } = generateTokens(user._id);
 
-    // Save refresh token to user
+    // Save refresh token to user (cleanup expired tokens)
+    const SEVEN_DAYS = 7 * 24 * 60 * 60 * 1000;
+    user.refreshTokens = user.refreshTokens.filter(
+      t => (Date.now() - new Date(t.createdAt).getTime()) < SEVEN_DAYS
+    );
     user.refreshTokens.push({ token: refreshToken });
     await user.save();
 
@@ -136,7 +140,11 @@ exports.googleAuth = async (req, res) => {
     // Generate JWT tokens
     const { accessToken, refreshToken } = generateTokens(user._id);
 
-    // Save refresh token to user
+    // Save refresh token to user (cleanup expired tokens)
+    const SEVEN_DAYS = 7 * 24 * 60 * 60 * 1000;
+    user.refreshTokens = user.refreshTokens.filter(
+      t => (Date.now() - new Date(t.createdAt).getTime()) < SEVEN_DAYS
+    );
     user.refreshTokens.push({ token: refreshToken });
     await user.save();
 
@@ -212,7 +220,11 @@ exports.login = async (req, res) => {
     // Generate tokens
     const { accessToken, refreshToken } = generateTokens(user._id);
 
-    // Save refresh token to user
+    // Save refresh token to user (cleanup expired tokens)
+    const SEVEN_DAYS = 7 * 24 * 60 * 60 * 1000;
+    user.refreshTokens = user.refreshTokens.filter(
+      t => (Date.now() - new Date(t.createdAt).getTime()) < SEVEN_DAYS
+    );
     user.refreshTokens.push({ token: refreshToken });
     await user.save();
 
@@ -273,8 +285,11 @@ exports.refreshToken = async (req, res) => {
     // Generate new tokens
     const tokens = generateTokens(user._id);
 
-    // Remove old refresh token and add new one
-    user.refreshTokens = user.refreshTokens.filter(t => t.token !== refreshToken);
+    // Remove old refresh token, cleanup expired, and add new one
+    const SEVEN_DAYS = 7 * 24 * 60 * 60 * 1000;
+    user.refreshTokens = user.refreshTokens.filter(
+      t => t.token !== refreshToken && (Date.now() - new Date(t.createdAt).getTime()) < SEVEN_DAYS
+    );
     user.refreshTokens.push({ token: tokens.refreshToken });
     await user.save();
 

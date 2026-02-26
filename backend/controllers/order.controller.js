@@ -58,11 +58,20 @@ exports.createOrder = async (req, res) => {
 
     await order.save();
 
-    // Update product stock
+    // Atomically decrement stock with guard to prevent overselling
     for (const item of items) {
-      await Product.findByIdAndUpdate(item.product, {
-        $inc: { stock: -item.quantity }
-      });
+      const result = await Product.findOneAndUpdate(
+        { _id: item.product, stock: { $gte: item.quantity } },
+        { $inc: { stock: -item.quantity } },
+        { new: true }
+      );
+      if (!result) {
+        // Rollback: delete the order and restore already decremented items
+        await Order.findByIdAndDelete(order._id);
+        return res.status(400).json({ 
+          message: 'Stock changed during order creation. Please try again.' 
+        });
+      }
     }
 
     res.status(201).json({
@@ -193,6 +202,7 @@ exports.updateOrderStatus = async (req, res) => {
       return res.status(404).json({ message: 'Order not found' });
     }
 
+    const previousStatus = order.orderStatus;
     order.orderStatus = orderStatus;
     
     if (trackingNumber) {
@@ -203,11 +213,11 @@ exports.updateOrderStatus = async (req, res) => {
       order.deliveredAt = new Date();
     }
 
-    if (orderStatus === 'cancelled') {
+    if (orderStatus === 'cancelled' && previousStatus !== 'cancelled') {
       order.cancelledAt = new Date();
       if (note) order.cancellationReason = note;
 
-      // Restore product stock
+      // Restore product stock (only on first cancellation)
       for (const item of order.items) {
         await Product.findByIdAndUpdate(item.product, {
           $inc: { stock: item.quantity }
