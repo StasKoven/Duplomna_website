@@ -172,39 +172,36 @@ app.use((req, res) => {
 
 const PORT = process.env.PORT || 5000;
 
-// Database connection - start server ONLY after MongoDB is connected
-let server;
+// Start HTTP server immediately so Railway healthcheck passes,
+// then connect to MongoDB in the background.
+const server = app.listen(PORT, () => {
+  console.log(`🚀 Server running on port ${PORT}`);
+  console.log(`🌍 Environment: ${process.env.NODE_ENV}`);
+  console.log(`🔗 API Base: http://localhost:${PORT}/api`);
+  console.log(`🔗 Health Check: http://localhost:${PORT}/api/health`);
+});
 
-const startServer = async () => {
+const connectDB = async () => {
   try {
     await mongoose.connect(process.env.MONGODB_URI);
     console.log('✅ MongoDB connected successfully');
-
-    server = app.listen(PORT, () => {
-      console.log(`🚀 Server running on port ${PORT}`);
-      console.log(`🌍 Environment: ${process.env.NODE_ENV}`);
-      console.log(`🔗 API Base: http://localhost:${PORT}/api`);
-      console.log(`🔗 Health Check: http://localhost:${PORT}/api/health`);
-    });
   } catch (err) {
     console.error('❌ MongoDB connection error:', err);
-    process.exit(1);
+    // Retry after 5 seconds instead of crashing
+    console.log('🔄 Retrying MongoDB connection in 5s...');
+    setTimeout(connectDB, 5000);
   }
 };
 
-startServer();
+connectDB();
 
 // Handle unhandled promise rejections
 process.on('unhandledRejection', (err) => {
   console.error('\n UNHANDLED REJECTION! Shutting down...');
   console.error('Error:', err);
-  if (server) {
-    server.close(() => {
-      process.exit(1);
-    });
-  } else {
+  server.close(() => {
     process.exit(1);
-  }
+  });
 });
 
 // Handle uncaught exceptions
