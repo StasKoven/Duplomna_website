@@ -24,6 +24,9 @@ const errorHandler = require('./middleware/errorHandler');
 
 const app = express();
 
+// Trust Railway's reverse proxy (required for express-rate-limit and correct IP detection)
+app.set('trust proxy', 1);
+
 // Security Middleware
 app.use(helmet({
   crossOriginResourcePolicy: { policy: "cross-origin" },
@@ -143,6 +146,11 @@ app.use('/api/tickets', ticketRoutes);
 // Chrome sometimes requests this well-known URL; respond with 204 to avoid 404 logs
 app.get('/.well-known/appspecific/com.chrome.devtools.json', (req, res) => {
   return res.status(204).end();
+});
+
+// Root route (Railway healthcheck hits /)
+app.get('/', (req, res) => {
+  res.json({ status: 'OK', message: 'Electronics Store API' });
 });
 
 // Health check
