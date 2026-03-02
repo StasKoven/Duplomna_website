@@ -25,7 +25,10 @@ const errorHandler = require('./middleware/errorHandler');
 const app = express();
 
 // Security Middleware
-app.use(helmet());
+app.use(helmet({
+  crossOriginResourcePolicy: { policy: "cross-origin" },
+  crossOriginOpenerPolicy: { policy: "unsafe-none" },
+}));
 app.use(mongoSanitize());
 
 // In development, disable HTTP caching/ETag for API responses to avoid 304 affecting client state
