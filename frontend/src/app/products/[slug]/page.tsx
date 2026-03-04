@@ -17,8 +17,18 @@ import s from './page.module.css'
 
 export default function ProductDetailPage() {
   const params = useParams()
-  const [product, setProduct] = useState<Product | null>(null)
-  const [loading, setLoading] = useState(true)
+  const slug = params.slug as string
+
+  const getCachedProduct = (): Product | null => {
+    try {
+      const raw = sessionStorage.getItem(`product_${slug}`)
+      return raw ? JSON.parse(raw) : null
+    } catch { return null }
+  }
+
+  const cached = typeof window !== 'undefined' ? getCachedProduct() : null
+  const [product, setProduct] = useState<Product | null>(cached)
+  const [loading, setLoading] = useState(!cached)
   const [selectedImage, setSelectedImage] = useState(0)
   const { addItem } = useCartStore()
   const { addToWishlist, isInWishlist } = useWishlistStore()
@@ -70,10 +80,10 @@ export default function ProductDetailPage() {
   }
 
   useEffect(() => {
-    if (params.slug) {
+    if (slug) {
       fetchProduct()
     }
-  }, [params.slug])
+  }, [slug])
 
   useEffect(() => {
     if (product) {
@@ -86,12 +96,14 @@ export default function ProductDetailPage() {
 
   const fetchProduct = async () => {
     try {
-      setLoading(true)
-      const response = await api.get(`/products/${params.slug}`)
-      setProduct(response.data.product)
+      if (!product) setLoading(true)
+      const response = await api.get(`/products/${slug}`)
+      const data: Product = response.data.product
+      setProduct(data)
+      try { sessionStorage.setItem(`product_${slug}`, JSON.stringify(data)) } catch {}
     } catch (error) {
       console.error('Error fetching product:', error)
-      toast.error('Товар не знайдено')
+      if (!product) toast.error('Товар не знайдено')
     } finally {
       setLoading(false)
     }
