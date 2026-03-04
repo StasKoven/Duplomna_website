@@ -21,8 +21,8 @@ interface Order {
     quantity: number
     price: number
   }>
-  totalAmount: number
-  status: string
+  total: number
+  orderStatus: string
   paymentStatus: string
   createdAt: string
 }
@@ -47,7 +47,7 @@ export default function AdminOrdersPage() {
   const fetchOrders = async () => {
     try {
       setLoading(true)
-      const response = await api.get('/orders')
+      const response = await api.get('/orders/all')
       setOrders(response.data.orders || [])
     } catch (error) {
       console.error('Error fetching orders:', error)
@@ -145,10 +145,10 @@ export default function AdminOrdersPage() {
                       #{order.orderNumber}
                     </h3>
                     <div
-                      className={`${s.statusBadge} ${getStatusColor(order.status)}`}
+                      className={`${s.statusBadge} ${getStatusColor(order.orderStatus)}`}
                     >
-                      {getStatusIcon(order.status)}
-                      <span className={s.statusText}>{order.status}</span>
+                      {getStatusIcon(order.orderStatus)}
+                      <span className={s.statusText}>{order.orderStatus}</span>
                     </div>
                   </div>
                   <p className={s.detailText}>
@@ -161,7 +161,7 @@ export default function AdminOrdersPage() {
                 </div>
                 <div className={s.orderRight}>
                   <p className={s.orderPrice}>
-                    {formatPrice(order.totalAmount)}
+                    {formatPrice(order.total)}
                   </p>
                   <p className={s.detailText}>
                     {order.items.length} товар(ів)

@@ -10,7 +10,7 @@ exports.getCart = async (req, res) => {
   try {
     const user = await User.findById(req.user.id).populate({
       path: 'cart.product',
-      select: 'name slug price images stock'
+      select: 'name slug price comparePrice images stock'
     });
 
     res.status(200).json({
@@ -77,7 +77,7 @@ exports.addToCart = async (req, res) => {
 
     await user.populate({
       path: 'cart.product',
-      select: 'name slug price images stock'
+      select: 'name slug price comparePrice images stock'
     });
 
     res.status(200).json({
@@ -144,7 +144,7 @@ exports.updateCartItem = async (req, res) => {
 
     await user.populate({
       path: 'cart.product',
-      select: 'name slug price images stock'
+      select: 'name slug price comparePrice images stock'
     });
 
     res.status(200).json({
@@ -178,7 +178,7 @@ exports.removeFromCart = async (req, res) => {
 
     await user.populate({
       path: 'cart.product',
-      select: 'name slug price images stock'
+      select: 'name slug price comparePrice images stock'
     });
 
     res.status(200).json({
@@ -265,7 +265,7 @@ exports.syncCart = async (req, res) => {
 
     await user.populate({
       path: 'cart.product',
-      select: 'name slug price images stock'
+      select: 'name slug price comparePrice images stock'
     });
 
     res.status(200).json({

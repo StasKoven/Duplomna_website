@@ -23,7 +23,7 @@ export const useWishlistStore = create<WishlistStore>((set, get) => ({
       set({ isLoading: true })
       const response = await api.get('/wishlist')
       // Backend returns { wishlist: Product[] }
-      set({ items: response.data?.wishlist || [], isLoading: false })
+      set({ items: (response.data?.wishlist || []).filter((item: any) => item != null), isLoading: false })
     } catch (error: any) {
       console.error('Error fetching wishlist:', error)
       // Don't show error if user is not authenticated

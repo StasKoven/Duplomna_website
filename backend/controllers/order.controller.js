@@ -1,12 +1,13 @@
 const Order = require('../models/Order.model');
 const Product = require('../models/Product.model');
+const Coupon = require('../models/Coupon.model');
 
 /**
  * Create new order
  */
 exports.createOrder = async (req, res) => {
   try {
-    const { items, shippingAddress, paymentMethod } = req.body;
+    const { items, shippingAddress, paymentMethod, couponCode } = req.body;
     const userId = req.user._id;
 
     // Validate and calculate order totals
@@ -42,7 +43,29 @@ exports.createOrder = async (req, res) => {
     // Calculate totals
     const shippingCost = subtotal > 1000 ? 0 : 50; // Free shipping over 1000
     const tax = subtotal * 0.2; // 20% tax
-    const total = subtotal + shippingCost + tax;
+    let discount = 0;
+
+    // Apply coupon if provided
+    if (couponCode) {
+      const coupon = await Coupon.findOne({ code: couponCode.toUpperCase() })
+        .populate('applicableProducts')
+        .populate('applicableCategories');
+
+      if (coupon) {
+        const validCheck = coupon.isValid();
+        if (validCheck.valid && !coupon.usedBy.some(u => u.user.toString() === userId.toString())) {
+          const result = coupon.calculateDiscount(subtotal, items);
+          discount = result.discount || 0;
+
+          // Mark coupon as used
+          coupon.usageCount += 1;
+          coupon.usedBy.push({ user: userId, usedAt: new Date() });
+          await coupon.save();
+        }
+      }
+    }
+
+    const total = subtotal + shippingCost + tax - discount;
 
     // Create order
     const order = new Order({
@@ -53,6 +76,7 @@ exports.createOrder = async (req, res) => {
       subtotal,
       shippingCost,
       tax,
+      discount,
       total
     });
 

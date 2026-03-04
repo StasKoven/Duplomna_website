@@ -253,11 +253,11 @@ export default function RegisterPage() {
               />
               <label className={s.termsLabel}>
                 Я погоджуюся з{' '}
-                <Link href="/terms" className={s.termsLink}>
+                <Link href="/about" className={s.termsLink}>
                   умовами використання
                 </Link>{' '}
                 та{' '}
-                <Link href="/privacy" className={s.termsLink}>
+                <Link href="/about" className={s.termsLink}>
                   політикою конфіденційності
                 </Link>
               </label>

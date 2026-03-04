@@ -64,7 +64,7 @@ export const useCartStore = create<CartState>()(
 
           // Отримуємо оновлений кошик з сервера
           const response = await api.get('/cart')
-          set({ items: response.data?.cart || [] })
+          set({ items: (response.data?.cart || []).filter((i: any) => i.product != null) })
         } catch (error) {
           console.error('Error syncing cart:', error)
         }
@@ -77,7 +77,7 @@ export const useCartStore = create<CartState>()(
         try {
           set({ isLoading: true })
           const response = await api.get('/cart')
-          set({ items: response.data?.cart || [], isLoading: false })
+          set({ items: (response.data?.cart || []).filter((i: any) => i.product != null), isLoading: false })
         } catch (error: any) {
           console.error('Error fetching cart:', error)
           if (error.response?.status !== 401) {
@@ -201,7 +201,7 @@ export const useCartStore = create<CartState>()(
         const items = get().items || []
         return items.reduce((total, item) => {
           const product = item.product
-          if (typeof product === 'string') return total
+          if (!product || typeof product === 'string') return total
           return total + product.price * item.quantity
         }, 0)
       },

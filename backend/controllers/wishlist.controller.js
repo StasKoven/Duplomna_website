@@ -10,7 +10,7 @@ exports.getWishlist = async (req, res) => {
   try {
     const user = await User.findById(req.user.id).populate({
       path: 'wishlist',
-      select: 'name slug price images stock rating category'
+      select: 'name slug price comparePrice images stock rating category'
     });
 
     res.status(200).json({
@@ -59,7 +59,7 @@ exports.addToWishlist = async (req, res) => {
 
     await user.populate({
       path: 'wishlist',
-      select: 'name slug price images stock rating category'
+      select: 'name slug price comparePrice images stock rating category'
     });
 
     res.status(200).json({
@@ -91,7 +91,7 @@ exports.removeFromWishlist = async (req, res) => {
 
     await user.populate({
       path: 'wishlist',
-      select: 'name slug price images stock rating category'
+      select: 'name slug price comparePrice images stock rating category'
     });
 
     res.status(200).json({

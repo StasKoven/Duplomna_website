@@ -8,7 +8,6 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { useWishlistStore } from '@/store/wishlistStore'
 import { useCartStore } from '@/store/cartStore'
 import { useAuthStore } from '@/store/authStore'
-import { toast } from 'sonner'
 import s from './page.module.css'
 
 export default function WishlistPage() {
@@ -103,7 +102,6 @@ export default function WishlistPage() {
             onClick={() => {
               if (confirm('Ви впевнені, що хочете очистити весь список бажань?')) {
                 clearWishlist()
-                toast.success('Список бажань очищено')
               }
             }}
             className={s.clearBtn}

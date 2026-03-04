@@ -8,7 +8,6 @@ import { signInWithPopup } from 'firebase/auth'
 import { auth, googleProvider } from '@/lib/firebase'
 import { useCartStore } from '@/store/cartStore'
 import { useWishlistStore } from '@/store/wishlistStore'
-import { useComparisonStore } from '@/store/comparisonStore'
 
 interface AuthState {
   user: User | null
@@ -172,13 +171,11 @@ export const useAuthStore = create<AuthState>()(
           isAuthenticated: false,
         })
 
-        // Очищуємо кошик, список бажань та порівняння при виході
+        // Очищуємо кошик та список бажань при виході (серверні дані)
         if (typeof window !== 'undefined') {
-          // Очищуємо кошик повністю при виході з акаунта
           useCartStore.setState({ items: [], isAuthenticated: false })
           useWishlistStore.setState({ items: [] })
-          // Очищуємо порівняння при виході з акаунта
-          useComparisonStore.setState({ comparisons: [] })
+          // Порівняння НЕ очищуємо — воно зберігається локально і не прив'язане до акаунта
         }
 
         toast.success('Ви вийшли з системи')
