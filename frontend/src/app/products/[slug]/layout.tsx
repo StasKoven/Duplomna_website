@@ -14,7 +14,7 @@ interface ProductData {
 }
 
 type Props = {
-  params: Promise<{ slug: string }>
+  params: { slug: string }
 }
 
 async function getProduct(slug: string): Promise<ProductData | null> {
@@ -34,7 +34,7 @@ export async function generateMetadata(
   { params }: Props,
   parent: ResolvingMetadata
 ): Promise<Metadata> {
-  const { slug } = await params
+  const slug = params.slug
   const product = await getProduct(slug)
 
   if (!product) {
