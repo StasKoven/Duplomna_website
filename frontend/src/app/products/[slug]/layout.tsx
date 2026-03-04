@@ -1,87 +1,15 @@
-import type { Metadata, ResolvingMetadata } from 'next'
+import type { Metadata } from 'next'
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api'
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://techstore.ua'
-
-interface ProductData {
-  name: string
-  description?: string
-  price: number
-  images?: string[]
-  brand?: string
-  category?: { name: string }
-  slug: string
-}
-
-type Props = {
-  params: { slug: string }
-}
-
-async function getProduct(slug: string): Promise<ProductData | null> {
-  try {
-    const res = await fetch(`${API_URL}/products/${slug}`, {
-      next: { revalidate: 3600 },
-      signal: AbortSignal.timeout(5000),
-    })
-    if (!res.ok) return null
-    const data = await res.json()
-    return data.product || data || null
-  } catch {
-    return null
-  }
-}
-
-export async function generateMetadata(
-  { params }: Props,
-  parent: ResolvingMetadata
-): Promise<Metadata> {
-  try {
-    const slug = params.slug
-    const product = await getProduct(slug)
-
-    if (!product) {
-      return {
-        title: 'Товар — TechStore',
-        description: 'Інтернет-магазин електроніки TechStore. Смартфони, ноутбуки, планшети за найкращими цінами.',
-      }
-    }
-
-    const title = `${product.name} — купити в TechStore`
-    const description = product.description
-      ? product.description.slice(0, 160)
-      : `Купити ${product.name} за ${product.price} грн в TechStore. Офіційна гарантія, швидка доставка по Україні.`
-
-    return {
-      title,
-      description,
-      alternates: { canonical: `/products/${slug}` },
-      openGraph: {
-        title,
-        description,
-        type: 'website',
-        url: `${SITE_URL}/products/${slug}`,
-        images: product.images?.length
-          ? product.images.map((img) => ({
-              url: img,
-              width: 800,
-              height: 600,
-              alt: product.name,
-            }))
-          : undefined,
-      },
-      twitter: {
-        card: 'summary_large_image',
-        title,
-        description,
-        images: product.images?.[0] ? [product.images[0]] : undefined,
-      },
-    }
-  } catch {
-    return {
-      title: 'Товар — TechStore',
-      description: 'Інтернет-магазин електроніки TechStore.',
-    }
-  }
+export const metadata: Metadata = {
+  title: 'Товар — TechStore',
+  description:
+    'Купуйте електроніку в TechStore за найкращими цінами. Офіційна гарантія, швидка доставка по всій Україні.',
+  openGraph: {
+    title: 'Товар — TechStore',
+    description:
+      'Інтернет-магазин електроніки TechStore. Смартфони, ноутбуки, планшети та аксесуари.',
+    type: 'website',
+  },
 }
 
 export default function ProductLayout({ children }: { children: React.ReactNode }) {
