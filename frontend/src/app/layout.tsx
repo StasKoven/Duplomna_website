@@ -74,7 +74,11 @@ export const metadata: Metadata = {
     },
   },
   verification: {
-    google: process.env.NEXT_PUBLIC_GOOGLE_VERIFICATION || '',
+    google: [
+      'googlec02f0b95ebec5bf4',
+      'oiDZXHlmyAMUHdPhSJkmp1-HsQtXbA_obKPQFITaHYY',
+      'x-x4jnQzGr50KEfbgiXIUCREVkaUem90NPFiYeuGsYo',
+    ],
   },
   category: 'ecommerce',
 }
