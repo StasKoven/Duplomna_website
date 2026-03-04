@@ -59,7 +59,7 @@ export default function ProfilePage() {
     setProfileLoading(true)
 
     try {
-      const response = await api.put('/users/profile', {
+      const response = await api.put('/auth/profile', {
         firstName: profileData.firstName,
         lastName: profileData.lastName,
         phone: profileData.phone,
@@ -105,7 +105,7 @@ export default function ProfilePage() {
     setPasswordLoading(true)
 
     try {
-      await api.put('/users/change-password', {
+      await api.put('/auth/password', {
         currentPassword: passwordData.currentPassword,
         newPassword: passwordData.newPassword,
       })

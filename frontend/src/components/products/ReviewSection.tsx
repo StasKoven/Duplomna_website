@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { Star, ThumbsUp, CheckCircle, MessageSquare, SlidersHorizontal, ChevronDown, Award } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import api from '@/lib/api'
+import Image from 'next/image'
 import { useAuthStore } from '@/store/authStore'
 import { toast } from 'sonner'
 import s from './ReviewSection.module.css'
@@ -589,7 +590,7 @@ function ReviewCard({
         <div className={s.reviewUser}>
           <div className={s.avatar}>
             {review.user.avatar ? (
-              <img src={review.user.avatar} alt="" className={s.avatarImg} />
+              <Image src={review.user.avatar} alt="" width={40} height={40} className={s.avatarImg} />
             ) : (
               <span>{review.user.firstName[0]}{review.user.lastName[0]}</span>
             )}

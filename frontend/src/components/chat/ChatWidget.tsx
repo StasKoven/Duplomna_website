@@ -111,7 +111,7 @@ export default function ChatWidget() {
   })
   const [unreadCount, setUnreadCount] = useState(0)
 
-  const { user, isAuthenticated } = useAuthStore()
+  const { isAuthenticated } = useAuthStore()
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLTextAreaElement>(null)
   const prevIsAuthenticated = useRef(isAuthenticated)

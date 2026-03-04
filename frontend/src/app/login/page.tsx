@@ -9,7 +9,6 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
 import { Mail, Lock, Eye, EyeOff } from 'lucide-react'
 import { useAuthStore } from '@/store/authStore'
-import { toast } from 'sonner'
 import s from './page.module.css'
 
 const loginSchema = z.object({

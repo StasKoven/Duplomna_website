@@ -9,7 +9,6 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
 import { Mail, Lock, User, Eye, EyeOff, Phone } from 'lucide-react'
 import { useAuthStore } from '@/store/authStore'
-import { toast } from 'sonner'
 import s from './page.module.css'
 
 const registerSchema = z.object({
@@ -65,7 +64,7 @@ export default function RegisterPage() {
         phone: data.phone,
       })
       router.push('/')
-    } catch (error: any) {
+    } catch {
       // Error toast is already shown in authStore
     } finally {
       setIsLoading(false)

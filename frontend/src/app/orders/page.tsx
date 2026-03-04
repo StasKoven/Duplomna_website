@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import { useAuthStore } from '@/store/authStore'
 import api from '@/lib/api'
 import { Package, CheckCircle, XCircle, Clock, Truck } from 'lucide-react'
+import Image from 'next/image'
 import s from './page.module.css'
 
 interface OrderItem {
@@ -12,11 +13,14 @@ interface OrderItem {
     _id: string
     name: string
     slug: string
-    images: string[]
+    images: { url: string; alt?: string; isMain: boolean }[]
     price: number
   }
+  name: string
+  image?: string
   quantity: number
   price: number
+  subtotal: number
 }
 
 interface Order {
@@ -24,8 +28,11 @@ interface Order {
   orderNumber: string
   items: OrderItem[]
   total: number
-  status: string
+  orderStatus: string
+  paymentMethod: string
   shippingAddress: {
+    firstName?: string
+    lastName?: string
     street: string
     city: string
     state: string
@@ -168,11 +175,11 @@ export default function OrdersPage() {
                   </p>
                 </div>
                 <div className={s.statusWrapper}>
-                  {getStatusIcon(order.status)}
+                  {getStatusIcon(order.orderStatus)}
                   <span
-                    className={`${s.statusBadge} ${getStatusColor(order.status)}`}
+                    className={`${s.statusBadge} ${getStatusColor(order.orderStatus)}`}
                   >
-                    {getStatusText(order.status)}
+                    {getStatusText(order.orderStatus)}
                   </span>
                 </div>
               </div>
@@ -185,17 +192,19 @@ export default function OrdersPage() {
                       className={s.itemRow}
                     >
                       <div className={s.itemImageWrapper}>
-                        {item.product?.images && item.product.images[0] && (
-                          <img
-                            src={item.product.images[0]}
-                            alt={item.product?.name || 'Товар'}
+                        {(item.image || item.product?.images?.[0]?.url) && (
+                          <Image
+                            src={item.image || item.product.images[0].url}
+                            alt={item.name || item.product?.name || 'Товар'}
+                            width={64}
+                            height={64}
                             className={s.itemImage}
                           />
                         )}
                       </div>
                       <div className={s.itemInfo}>
                         <h4 className={s.itemName}>
-                          {item.product?.name || 'Товар видалено'}
+                          {item.name || item.product?.name || 'Товар видалено'}
                         </h4>
                         <p className={s.itemQuantity}>
                           Кількість: {item.quantity}

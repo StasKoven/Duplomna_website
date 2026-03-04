@@ -6,6 +6,9 @@ import { toast } from 'sonner'
 import { logError, logInfo } from '@/lib/errorLogger'
 import { signInWithPopup } from 'firebase/auth'
 import { auth, googleProvider } from '@/lib/firebase'
+import { useCartStore } from '@/store/cartStore'
+import { useWishlistStore } from '@/store/wishlistStore'
+import { useComparisonStore } from '@/store/comparisonStore'
 
 interface AuthState {
   user: User | null
@@ -171,9 +174,6 @@ export const useAuthStore = create<AuthState>()(
 
         // Очищуємо кошик, список бажань та порівняння при виході
         if (typeof window !== 'undefined') {
-          const { useCartStore } = require('@/store/cartStore')
-          const { useWishlistStore } = require('@/store/wishlistStore')
-          const { useComparisonStore } = require('@/store/comparisonStore')
           // Очищуємо кошик повністю при виході з акаунта
           useCartStore.setState({ items: [], isAuthenticated: false })
           useWishlistStore.setState({ items: [] })
@@ -230,8 +230,6 @@ export const useAuthStore = create<AuthState>()(
       syncStores: async () => {
         // Sync cart and wishlist after login
         if (typeof window !== 'undefined') {
-          const { useCartStore } = require('@/store/cartStore')
-          const { useWishlistStore } = require('@/store/wishlistStore')
           // Встановлюємо статус авторизації - це синхронізує локальний кошик з сервером
           useCartStore.getState().setAuthenticated(true)
           await useWishlistStore.getState().fetchWishlist()

@@ -10,7 +10,6 @@ import {
   MessageSquare,
   Search,
   Filter,
-  ChevronLeft,
   Send,
   Clock,
   CheckCircle2,

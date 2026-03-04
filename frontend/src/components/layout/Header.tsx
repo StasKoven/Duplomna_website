@@ -195,6 +195,7 @@ export default function Header() {
                       className={s.userMenuBtn}
                     >
                       {currentUser?.avatar ? (
+                        // eslint-disable-next-line @next/next/no-img-element
                         <img
                           src={currentUser.avatar}
                           alt={currentUser.firstName || ''}
@@ -339,6 +340,7 @@ export default function Header() {
                   <div className={s.mobileUserSection}>
                     <div className={s.mobileUserFlex}>
                       {currentUser?.avatar ? (
+                        // eslint-disable-next-line @next/next/no-img-element
                         <img
                           src={currentUser.avatar}
                           alt={currentUser.firstName || ''}

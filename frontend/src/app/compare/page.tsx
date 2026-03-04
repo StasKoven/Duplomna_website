@@ -5,10 +5,9 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
 import { X, ArrowLeft, ShoppingCart, Eye, EyeOff, Star, Check, Minus, BarChart3, Trash2, ExternalLink } from 'lucide-react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion } from 'framer-motion'
 import { useComparisonStore } from '@/store/comparisonStore'
 import { useCartStore } from '@/store/cartStore'
-import { useWishlistStore } from '@/store/wishlistStore'
 import { formatPrice } from '@/lib/utils'
 import { toast } from 'sonner'
 import { Product } from '@/types'
@@ -21,7 +20,6 @@ function ComparisonContent() {
 
   const { comparisons, removeFromComparison, clearComparison } = useComparisonStore()
   const { addItem } = useCartStore()
-  const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlistStore()
 
   const [showOnlyDifferences, setShowOnlyDifferences] = useState(false)
   const [highlightBest, setHighlightBest] = useState(true)
@@ -658,12 +656,12 @@ function DiffDot() {
 
 function MobileCompareRow({
   label,
-  diffKey,
+  diffKey: _diffKey,
   hasDiff,
   children,
 }: {
   label: string
-  diffKey: string
+  diffKey?: string
   hasDiff: boolean
   children: React.ReactNode
 }) {

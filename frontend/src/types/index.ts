@@ -166,7 +166,7 @@ export interface AuthResponse {
   refreshToken: string
 }
 
-export interface PaginationResponse<T> {
+export interface PaginationResponse<_T = unknown> {
   [key: string]: any
   pagination: {
     page: number

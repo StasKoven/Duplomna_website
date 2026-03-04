@@ -8,11 +8,6 @@ interface ProductItem {
   updatedAt?: string
 }
 
-interface CategoryItem {
-  slug: string
-  updatedAt?: string
-}
-
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   /* Статичні сторінки */
   const staticPages: MetadataRoute.Sitemap = [
