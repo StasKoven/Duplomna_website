@@ -8,6 +8,7 @@ import { signInWithPopup } from 'firebase/auth'
 import { auth, googleProvider } from '@/lib/firebase'
 import { useCartStore } from '@/store/cartStore'
 import { useWishlistStore } from '@/store/wishlistStore'
+import { useComparisonStore } from '@/store/comparisonStore'
 
 interface AuthState {
   user: User | null
@@ -171,11 +172,11 @@ export const useAuthStore = create<AuthState>()(
           isAuthenticated: false,
         })
 
-        // Очищуємо кошик та список бажань при виході (серверні дані)
+        // Очищуємо кошик, список бажань та порівняння при виході (серверні дані)
         if (typeof window !== 'undefined') {
           useCartStore.setState({ items: [], isAuthenticated: false })
           useWishlistStore.setState({ items: [] })
-          // Порівняння НЕ очищуємо — воно зберігається локально і не прив'язане до акаунта
+          useComparisonStore.setState({ comparisons: [], isAuthenticated: false })
         }
 
         toast.success('Ви вийшли з системи')
@@ -225,11 +226,14 @@ export const useAuthStore = create<AuthState>()(
       },
 
       syncStores: async () => {
-        // Sync cart and wishlist after login
+        // Sync cart, wishlist & comparisons after login
         if (typeof window !== 'undefined') {
           // Встановлюємо статус авторизації - це синхронізує локальний кошик з сервером
           useCartStore.getState().setAuthenticated(true)
           await useWishlistStore.getState().fetchWishlist()
+          // Синхронізуємо порівняння з сервером
+          useComparisonStore.getState().setAuthenticated(true)
+          await useComparisonStore.getState().fetchComparisons()
         }
       },
     }),

@@ -79,7 +79,6 @@ export default function ProductCard({ product, compact = false }: ProductCardPro
 
     if (isInComparison()) {
       removeFromComparison(categoryId, product._id)
-      toast.success('Видалено з порівняння')
     } else {
       const comparison = getComparisonByCategory(categoryId)
       if (comparison && comparison.products.length >= 4) {
@@ -87,7 +86,6 @@ export default function ProductCard({ product, compact = false }: ProductCardPro
         return
       }
       addToComparison(categoryId, categoryName, product)
-      toast.success('Додано до порівняння')
     }
   }
 

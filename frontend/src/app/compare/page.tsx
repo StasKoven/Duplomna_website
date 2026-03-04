@@ -9,7 +9,6 @@ import { motion } from 'framer-motion'
 import { useComparisonStore } from '@/store/comparisonStore'
 import { useCartStore } from '@/store/cartStore'
 import { formatPrice } from '@/lib/utils'
-import { toast } from 'sonner'
 import { Product } from '@/types'
 import s from './page.module.css'
 
@@ -135,14 +134,12 @@ function ComparisonContent() {
   const handleRemove = (productId: string) => {
     if (comparison) {
       removeFromComparison(comparison.categoryId, productId)
-      toast.success('Товар видалено з порівняння')
     }
   }
 
   const handleClear = () => {
     if (comparison && confirm('Ви впевнені, що хочете очистити список порівняння?')) {
       clearComparison(comparison.categoryId)
-      toast.success('Список порівняння очищено')
       router.push('/products')
     }
   }

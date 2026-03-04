@@ -12,7 +12,7 @@ exports.getComparisons = async (req, res) => {
       .populate('category', 'name slug')
       .populate({
         path: 'products',
-        select: 'name slug price images specifications features rating stock'
+        select: 'name slug price comparePrice images specifications features rating stock category'
       });
 
     res.status(200).json({
@@ -44,7 +44,7 @@ exports.getComparisonByCategory = async (req, res) => {
       .populate('category', 'name slug')
       .populate({
         path: 'products',
-        select: 'name slug price images specifications features rating stock'
+        select: 'name slug price comparePrice images specifications features rating stock category'
       });
 
     if (!comparison) {
@@ -123,7 +123,7 @@ exports.addToComparison = async (req, res) => {
 
     await comparison.populate([
       { path: 'category', select: 'name slug' },
-      { path: 'products', select: 'name slug price images specifications features rating stock' }
+      { path: 'products', select: 'name slug price comparePrice images specifications features rating stock category' }
     ]);
 
     res.status(200).json({
@@ -176,7 +176,7 @@ exports.removeFromComparison = async (req, res) => {
 
     await comparison.populate([
       { path: 'category', select: 'name slug' },
-      { path: 'products', select: 'name slug price images specifications features rating stock' }
+      { path: 'products', select: 'name slug price comparePrice images specifications features rating stock category' }
     ]);
 
     res.status(200).json({
