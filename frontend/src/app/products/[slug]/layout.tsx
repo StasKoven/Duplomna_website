@@ -21,6 +21,7 @@ async function getProduct(slug: string): Promise<ProductData | null> {
   try {
     const res = await fetch(`${API_URL}/products/${slug}`, {
       next: { revalidate: 3600 },
+      signal: AbortSignal.timeout(5000),
     })
     if (!res.ok) return null
     const data = await res.json()
@@ -34,45 +35,52 @@ export async function generateMetadata(
   { params }: Props,
   parent: ResolvingMetadata
 ): Promise<Metadata> {
-  const slug = params.slug
-  const product = await getProduct(slug)
+  try {
+    const slug = params.slug
+    const product = await getProduct(slug)
 
-  if (!product) {
-    return {
-      title: 'Товар не знайдено',
-      description: 'Цей товар відсутній або був видалений.',
+    if (!product) {
+      return {
+        title: 'Товар — TechStore',
+        description: 'Інтернет-магазин електроніки TechStore. Смартфони, ноутбуки, планшети за найкращими цінами.',
+      }
     }
-  }
 
-  const title = `${product.name} — купити в TechStore`
-  const description = product.description
-    ? product.description.slice(0, 160)
-    : `Купити ${product.name} за ${product.price} грн в TechStore. Офіційна гарантія, швидка доставка по Україні.`
+    const title = `${product.name} — купити в TechStore`
+    const description = product.description
+      ? product.description.slice(0, 160)
+      : `Купити ${product.name} за ${product.price} грн в TechStore. Офіційна гарантія, швидка доставка по Україні.`
 
-  return {
-    title,
-    description,
-    alternates: { canonical: `/products/${slug}` },
-    openGraph: {
+    return {
       title,
       description,
-      type: 'website',
-      url: `${SITE_URL}/products/${slug}`,
-      images: product.images?.length
-        ? product.images.map((img) => ({
-            url: img,
-            width: 800,
-            height: 600,
-            alt: product.name,
-          }))
-        : undefined,
-    },
-    twitter: {
-      card: 'summary_large_image',
-      title,
-      description,
-      images: product.images?.[0] ? [product.images[0]] : undefined,
-    },
+      alternates: { canonical: `/products/${slug}` },
+      openGraph: {
+        title,
+        description,
+        type: 'website',
+        url: `${SITE_URL}/products/${slug}`,
+        images: product.images?.length
+          ? product.images.map((img) => ({
+              url: img,
+              width: 800,
+              height: 600,
+              alt: product.name,
+            }))
+          : undefined,
+      },
+      twitter: {
+        card: 'summary_large_image',
+        title,
+        description,
+        images: product.images?.[0] ? [product.images[0]] : undefined,
+      },
+    }
+  } catch {
+    return {
+      title: 'Товар — TechStore',
+      description: 'Інтернет-магазин електроніки TechStore.',
+    }
   }
 }
 
