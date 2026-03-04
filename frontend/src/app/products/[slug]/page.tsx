@@ -75,6 +75,15 @@ export default function ProductDetailPage() {
     }
   }, [params.slug])
 
+  useEffect(() => {
+    if (product) {
+      document.title = `${product.name} — купити в TechStore`
+    }
+    return () => {
+      document.title = 'TechStore — Інтернет-магазин електроніки'
+    }
+  }, [product])
+
   const fetchProduct = async () => {
     try {
       setLoading(true)
