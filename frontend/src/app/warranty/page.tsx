@@ -1,4 +1,18 @@
+import type { Metadata } from 'next'
 import s from './page.module.css'
+
+export const metadata: Metadata = {
+  title: 'Гарантія та повернення',
+  description:
+    'Гарантійні умови та правила повернення товарів у TechStore. Офіційна гарантія від виробника, повернення протягом 14 днів, простий процес обміну.',
+  alternates: { canonical: '/warranty' },
+  openGraph: {
+    title: 'Гарантія та повернення — TechStore',
+    description:
+      'Офіційна гарантія на всю техніку, повернення протягом 14 днів, швидкий обмін товарів.',
+    type: 'website',
+  },
+}
 
 export default function WarrantyPage() {
   return (

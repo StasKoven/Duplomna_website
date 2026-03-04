@@ -1,4 +1,18 @@
+import type { Metadata } from 'next'
 import s from './page.module.css'
+
+export const metadata: Metadata = {
+  title: 'Доставка та оплата',
+  description:
+    'Умови доставки та способи оплати в TechStore. Нова Пошта, кур\'єрська доставка, самовивіз. Оплата при отриманні, онлайн-оплата, безготівковий розрахунок.',
+  alternates: { canonical: '/delivery' },
+  openGraph: {
+    title: 'Доставка та оплата — TechStore',
+    description:
+      'Швидка доставка по всій Україні: Нова Пошта, кур\'єр, самовивіз. Зручні способи оплати.',
+    type: 'website',
+  },
+}
 
 export default function DeliveryPage() {
   return (

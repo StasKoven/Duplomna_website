@@ -1,4 +1,18 @@
+import type { Metadata } from 'next'
 import s from './page.module.css'
+
+export const metadata: Metadata = {
+  title: 'Про нас — TechStore інтернет-магазин електроніки',
+  description:
+    'Дізнайтеся більше про інтернет-магазин TechStore: наша місія, переваги, офіційна гарантія, професійна консультація та швидка доставка по всій Україні.',
+  alternates: { canonical: '/about' },
+  openGraph: {
+    title: 'Про нас — TechStore',
+    description:
+      'TechStore — надійний інтернет-магазин електроніки з офіційною гарантією та доставкою по Україні.',
+    type: 'website',
+  },
+}
 
 export default function AboutPage() {
   return (
