@@ -166,6 +166,10 @@ export default function ReviewSection({ productId, productRating }: ReviewSectio
   const [cons, setCons] = useState('')
   const [hoverRating, setHoverRating] = useState(0)
 
+  // Перевірка можливості залишити відгук
+  const [canReview, setCanReview] = useState(false)
+  const [reviewDenyReason, setReviewDenyReason] = useState<string | null>(null)
+
   const { isAuthenticated } = useAuthStore()
 
   // Обчислювані значення
@@ -189,9 +193,26 @@ export default function ReviewSection({ productId, productRating }: ReviewSectio
     }
   }
 
+  /** Перевіряє чи користувач може написати відгук */
+  const checkCanReview = async () => {
+    if (!isAuthenticated) {
+      setCanReview(false)
+      setReviewDenyReason('not_authenticated')
+      return
+    }
+    try {
+      const { data } = await api.get(`/reviews/can-review/${productId}`)
+      setCanReview(data.canReview)
+      setReviewDenyReason(data.reason || null)
+    } catch {
+      setCanReview(false)
+    }
+  }
+
   useEffect(() => {
     fetchReviews()
-  }, [productId])
+    checkCanReview()
+  }, [productId, isAuthenticated])
 
   /* ── Обробники подій ── */
 
@@ -276,7 +297,7 @@ export default function ReviewSection({ productId, productRating }: ReviewSectio
           )}
         </div>
 
-        {isAuthenticated && (
+        {isAuthenticated && canReview && (
           <motion.button
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
@@ -285,6 +306,18 @@ export default function ReviewSection({ productId, productRating }: ReviewSectio
           >
             {showForm ? 'Скасувати' : '✏️ Написати відгук'}
           </motion.button>
+        )}
+        {isAuthenticated && !canReview && reviewDenyReason === 'not_purchased' && (
+          <span className={s.verifiedInfo} style={{ fontSize: '0.85rem' }}>
+            <CheckCircle className={s.verifiedIcon} />
+            Відгук можна залишити лише після отримання товару
+          </span>
+        )}
+        {isAuthenticated && !canReview && reviewDenyReason === 'already_reviewed' && (
+          <span className={s.verifiedInfo} style={{ fontSize: '0.85rem' }}>
+            <CheckCircle className={s.verifiedIcon} />
+            Ви вже залишили відгук
+          </span>
         )}
       </div>
 

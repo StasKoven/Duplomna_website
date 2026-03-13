@@ -4,8 +4,9 @@ import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useAuthStore } from '@/store/authStore'
 import api from '@/lib/api'
-import { Package, CheckCircle, XCircle, Clock, Truck } from 'lucide-react'
+import { Package, CheckCircle, XCircle, Clock, Truck, Eye } from 'lucide-react'
 import Image from 'next/image'
+import Link from 'next/link'
 import s from './page.module.css'
 
 interface OrderItem {
@@ -234,6 +235,13 @@ export default function OrdersPage() {
                     {order.total.toLocaleString('uk-UA')} ₴
                   </span>
                 </div>
+                <Link
+                  href={`/orders/${order._id}`}
+                  className={s.detailsLink}
+                >
+                  <Eye className={s.detailsIcon} />
+                  Деталі замовлення
+                </Link>
               </div>
             </div>
           ))}

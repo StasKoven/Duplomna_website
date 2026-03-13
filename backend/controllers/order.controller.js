@@ -1,6 +1,8 @@
 const Order = require('../models/Order.model');
 const Product = require('../models/Product.model');
 const Coupon = require('../models/Coupon.model');
+const User = require('../models/User.model');
+const { createNotification } = require('./notification.controller');
 
 /**
  * Create new order
@@ -97,6 +99,14 @@ exports.createOrder = async (req, res) => {
         });
       }
     }
+
+    createNotification({
+      userId,
+      type: 'order_status',
+      title: 'Замовлення створено',
+      message: `Ваше замовлення #${order.orderNumber} успішно оформлено!`,
+      link: `/orders/${order._id}`,
+    });
 
     res.status(201).json({
       message: 'Order created successfully',
@@ -235,6 +245,23 @@ exports.updateOrderStatus = async (req, res) => {
 
     if (orderStatus === 'delivered') {
       order.deliveredAt = new Date();
+
+      // Award loyalty points: 1 point per 10 UAH spent
+      const pointsToAward = Math.floor(order.total / 10);
+      if (pointsToAward > 0) {
+        await User.findByIdAndUpdate(order.user, {
+          $inc: { loyaltyPoints: pointsToAward },
+          $push: {
+            loyaltyHistory: {
+              amount: pointsToAward,
+              type: 'earned',
+              description: `Замовлення #${order.orderNumber}`,
+              orderId: order._id,
+              date: new Date()
+            }
+          }
+        });
+      }
     }
 
     if (orderStatus === 'cancelled' && previousStatus !== 'cancelled') {
@@ -250,6 +277,24 @@ exports.updateOrderStatus = async (req, res) => {
     }
 
     await order.save();
+
+    // Send notification to user about order status change
+    const STATUS_MESSAGES = {
+      processing: { title: 'Замовлення обробляється', message: `Ваше замовлення #${order.orderNumber} прийнято в обробку.` },
+      shipped: { title: 'Замовлення відправлено', message: `Ваше замовлення #${order.orderNumber} відправлено.${trackingNumber ? ` ТТН: ${trackingNumber}` : ''}` },
+      delivered: { title: 'Замовлення доставлено', message: `Ваше замовлення #${order.orderNumber} доставлено. Дякуємо за покупку!` },
+      cancelled: { title: 'Замовлення скасовано', message: `Ваше замовлення #${order.orderNumber} було скасовано.${note ? ` Причина: ${note}` : ''}` },
+    };
+
+    if (STATUS_MESSAGES[orderStatus] && previousStatus !== orderStatus) {
+      createNotification({
+        userId: order.user,
+        type: 'order_status',
+        title: STATUS_MESSAGES[orderStatus].title,
+        message: STATUS_MESSAGES[orderStatus].message,
+        link: `/orders/${order._id}`,
+      });
+    }
 
     res.json({
       message: 'Order status updated successfully',

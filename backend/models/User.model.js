@@ -88,6 +88,27 @@ const userSchema = new mongoose.Schema({
     type: Boolean,
     default: false
   },
+  loyaltyPoints: {
+    type: Number,
+    default: 0,
+    min: 0
+  },
+  loyaltyHistory: [{
+    amount: Number,
+    type: {
+      type: String,
+      enum: ['earned', 'spent']
+    },
+    description: String,
+    orderId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Order'
+    },
+    date: {
+      type: Date,
+      default: Date.now
+    }
+  }],
   refreshTokens: [{
     token: String,
     createdAt: {

@@ -3,6 +3,7 @@ import HeroSection from '@/components/home/HeroSection'
 import FeaturedProducts from '@/components/home/FeaturedProducts'
 import Categories from '@/components/home/Categories'
 import PromoSection from '@/components/home/PromoSection'
+import RecentlyViewed from '@/components/home/RecentlyViewed'
 
 export const metadata: Metadata = {
   title: 'TechStore — Інтернет-магазин електроніки | Смартфони, Ноутбуки, Планшети',
@@ -17,6 +18,7 @@ export default function HomePage() {
       <HeroSection />
       <Categories />
       <FeaturedProducts />
+      <RecentlyViewed />
       <PromoSection />
     </>
   )

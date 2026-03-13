@@ -4,8 +4,9 @@ import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useAuthStore } from '@/store/authStore'
 import api from '@/lib/api'
-import { User, Mail, Lock, Save } from 'lucide-react'
+import { User, Mail, Lock, Save, Award, Star } from 'lucide-react'
 import { toast } from 'sonner'
+import { LoyaltyHistoryItem } from '@/types'
 import s from './page.module.css'
 
 interface ProfileData {
@@ -26,7 +27,12 @@ export default function ProfilePage() {
   const { user, isAuthenticated, setUser } = useAuthStore()
   const [profileLoading, setProfileLoading] = useState(false)
   const [passwordLoading, setPasswordLoading] = useState(false)
-  const [activeTab, setActiveTab] = useState<'profile' | 'password'>('profile')
+  const [activeTab, setActiveTab] = useState<'profile' | 'password' | 'loyalty'>('profile')
+
+  // Loyalty
+  const [loyaltyPoints, setLoyaltyPoints] = useState(0)
+  const [loyaltyHistory, setLoyaltyHistory] = useState<LoyaltyHistoryItem[]>([])
+  const [loyaltyLoading, setLoyaltyLoading] = useState(false)
 
   const [profileData, setProfileData] = useState<ProfileData>({
     firstName: '',
@@ -51,8 +57,22 @@ export default function ProfilePage() {
         email: user.email || '',
         phone: user.phone || '',
       })
+      fetchLoyalty()
     }
   }, [isAuthenticated, user, router])
+
+  const fetchLoyalty = async () => {
+    try {
+      setLoyaltyLoading(true)
+      const { data } = await api.get('/users/loyalty')
+      setLoyaltyPoints(data.loyaltyPoints || 0)
+      setLoyaltyHistory(data.history || [])
+    } catch {
+      // silent
+    } finally {
+      setLoyaltyLoading(false)
+    }
+  }
 
   const handleProfileUpdate = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -163,6 +183,19 @@ export default function ProfilePage() {
             <div className={s.tabBtnContent}>
               <Lock className={s.tabIcon} />
               Змінити пароль
+            </div>
+          </button>
+          <button
+            onClick={() => setActiveTab('loyalty')}
+            className={`${s.tabBtn} ${
+              activeTab === 'loyalty'
+                ? s.tabBtnActive
+                : s.tabBtnInactive
+            }`}
+          >
+            <div className={s.tabBtnContent}>
+              <Award className={s.tabIcon} />
+              Бонуси
             </div>
           </button>
         </div>
@@ -319,6 +352,74 @@ export default function ProfilePage() {
                 {passwordLoading ? 'Зміна паролю...' : 'Змінити пароль'}
               </button>
             </form>
+          </div>
+        )}
+
+        {/* Loyalty Tab */}
+        {activeTab === 'loyalty' && (
+          <div className={s.card}>
+            <div className={s.form}>
+              {/* Баланс балів */}
+              <div style={{ textAlign: 'center', padding: '1.5rem 0' }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, marginBottom: 8 }}>
+                  <Star style={{ width: 32, height: 32, color: 'var(--color-primary)', fill: 'var(--color-primary)' }} />
+                  <span style={{ fontSize: '2.5rem', fontWeight: 700 }}>
+                    {loyaltyPoints}
+                  </span>
+                </div>
+                <p style={{ color: 'var(--color-muted-foreground)', fontSize: '0.9rem' }}>
+                  Бонусних балів
+                </p>
+                <p style={{ color: 'var(--color-muted-foreground)', fontSize: '0.8rem', marginTop: 8 }}>
+                  1 бал за кожні 10  ₴ в замовленні
+                </p>
+              </div>
+
+              {/* Історія */}
+              <div>
+                <h3 style={{ fontWeight: 600, marginBottom: 12 }}>Історія балів</h3>
+                {loyaltyLoading ? (
+                  <p style={{ textAlign: 'center', padding: '1rem', color: 'var(--color-muted-foreground)' }}>Завантаження...</p>
+                ) : loyaltyHistory.length === 0 ? (
+                  <p style={{ textAlign: 'center', padding: '2rem 0', color: 'var(--color-muted-foreground)' }}>
+                    Поки немає записів. Робіть покупки, щоб накопичувати бали!
+                  </p>
+                ) : (
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                    {loyaltyHistory.map((entry, idx) => (
+                      <div
+                        key={idx}
+                        style={{
+                          display: 'flex',
+                          justifyContent: 'space-between',
+                          alignItems: 'center',
+                          padding: '0.75rem',
+                          border: '1px solid var(--color-border)',
+                          borderRadius: 8,
+                        }}
+                      >
+                        <div>
+                          <div style={{ fontWeight: 500, fontSize: '0.9rem' }}>{entry.description}</div>
+                          <div style={{ fontSize: '0.8rem', color: 'var(--color-muted-foreground)' }}>
+                            {new Date(entry.date).toLocaleDateString('uk-UA', {
+                              day: 'numeric',
+                              month: 'long',
+                              year: 'numeric'
+                            })}
+                          </div>
+                        </div>
+                        <span style={{
+                          fontWeight: 600,
+                          color: entry.type === 'earned' ? 'var(--color-green-600, #16a34a)' : 'var(--color-red-600, #dc2626)'
+                        }}>
+                          {entry.type === 'earned' ? '+' : '-'}{entry.amount} балів
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
           </div>
         )}
       </div>

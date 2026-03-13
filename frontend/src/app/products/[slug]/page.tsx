@@ -11,6 +11,7 @@ import { formatPrice } from '@/lib/utils'
 import { useCartStore } from '@/store/cartStore'
 import { useWishlistStore } from '@/store/wishlistStore'
 import { useComparisonStore } from '@/store/comparisonStore'
+import { useRecentlyViewedStore } from '@/store/recentlyViewedStore'
 import { toast } from 'sonner'
 import ReviewSection from '@/components/products/ReviewSection'
 import s from './page.module.css'
@@ -33,6 +34,7 @@ export default function ProductDetailPage() {
   const { addItem } = useCartStore()
   const { addToWishlist, isInWishlist } = useWishlistStore()
   const { addToComparison, removeFromComparison, getComparisonByCategory } = useComparisonStore()
+  const { addProduct: addToRecentlyViewed } = useRecentlyViewedStore()
 
   const getCategoryId = () => {
     if (product?.category && typeof product.category === 'object') {
@@ -86,6 +88,7 @@ export default function ProductDetailPage() {
   useEffect(() => {
     if (product) {
       document.title = `${product.name} — купити в TechStore`
+      addToRecentlyViewed(product)
     }
     return () => {
       document.title = 'TechStore — Інтернет-магазин електроніки'

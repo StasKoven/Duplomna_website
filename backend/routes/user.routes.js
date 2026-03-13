@@ -4,6 +4,13 @@ const userController = require('../controllers/user.controller');
 const { verifyToken, requireAdmin } = require('../middleware/auth');
 
 /**
+ * @route   GET /api/users/loyalty
+ * @desc    Get user loyalty points and history
+ * @access  Private
+ */
+router.get('/loyalty', verifyToken, userController.getLoyaltyPoints);
+
+/**
  * @route   POST /api/users/wishlist
  * @desc    Add product to wishlist
  * @access  Private

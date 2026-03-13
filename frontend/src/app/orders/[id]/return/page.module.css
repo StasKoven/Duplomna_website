@@ -1,0 +1,147 @@
+/* Форма повернення/обміну */
+
+.page {
+  @apply py-8;
+}
+
+.backLink {
+  @apply flex items-center gap-2 text-muted-foreground hover:text-foreground mb-6 text-sm transition-colors;
+}
+
+.backIcon {
+  @apply h-4 w-4;
+}
+
+.title {
+  @apply text-2xl font-bold mb-2;
+}
+
+.subtitle {
+  @apply text-muted-foreground mb-8;
+}
+
+.form {
+  @apply space-y-6;
+}
+
+/* Тип заявки */
+.typeSection {
+  @apply bg-card border rounded-lg p-6;
+}
+
+.sectionTitle {
+  @apply font-semibold mb-4;
+}
+
+.typeGrid {
+  @apply grid grid-cols-2 gap-4;
+}
+
+.typeOption {
+  @apply flex items-center gap-3 p-4 border rounded-lg cursor-pointer transition-all hover:border-primary;
+}
+
+.typeOptionActive {
+  @apply border-primary bg-primary/5 ring-2 ring-primary/20;
+}
+
+.typeRadio {
+  @apply accent-primary;
+}
+
+.typeLabel {
+  @apply font-medium;
+}
+
+.typeDesc {
+  @apply text-sm text-muted-foreground;
+}
+
+/* Товари для повернення */
+.itemsSection {
+  @apply bg-card border rounded-lg p-6;
+}
+
+.itemsList {
+  @apply space-y-4;
+}
+
+.itemCard {
+  @apply flex items-start gap-4 p-4 border rounded-lg;
+}
+
+.itemCheckbox {
+  @apply mt-1 accent-primary;
+}
+
+.itemImage {
+  @apply w-12 h-12 bg-muted rounded flex-shrink-0 overflow-hidden;
+}
+
+.itemImg {
+  @apply w-full h-full object-cover;
+}
+
+.itemDetails {
+  @apply flex-1 min-w-0;
+}
+
+.itemName {
+  @apply font-medium;
+}
+
+.itemMeta {
+  @apply text-sm text-muted-foreground mt-1;
+}
+
+.reasonSelect {
+  @apply mt-2 w-full p-2 border rounded text-sm bg-background;
+}
+
+/* Опис */
+.descSection {
+  @apply bg-card border rounded-lg p-6;
+}
+
+.textarea {
+  @apply w-full p-3 border rounded-lg bg-background resize-none focus:outline-none focus:ring-2 focus:ring-primary/30;
+}
+
+.charCount {
+  @apply text-xs text-muted-foreground text-right mt-1;
+}
+
+/* Інфо-блок */
+.infoBox {
+  @apply bg-amber-50 border border-amber-200 rounded-lg p-4 text-sm text-amber-800;
+}
+
+.infoTitle {
+  @apply font-semibold mb-1;
+}
+
+.infoList {
+  @apply list-disc pl-5 space-y-1;
+}
+
+/* Кнопки */
+.actions {
+  @apply flex gap-4;
+}
+
+.submitBtn {
+  @apply px-6 py-3 bg-primary text-white rounded-lg font-medium hover:opacity-90 transition-opacity disabled:opacity-50;
+}
+
+.cancelBtn {
+  @apply px-6 py-3 border rounded-lg font-medium hover:bg-muted transition-colors;
+}
+
+/* Стани */
+.loading {
+  @apply text-center py-12;
+}
+
+.errorState {
+  @apply text-center py-12;
+}

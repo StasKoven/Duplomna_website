@@ -26,6 +26,7 @@ import { useCartStore } from '@/store/cartStore'
 import { useWishlistStore } from '@/store/wishlistStore'
 import { useComparisonStore } from '@/store/comparisonStore'
 import { cn } from '@/lib/utils'
+import NotificationBell from './NotificationBell'
 import s from './Header.module.css'
 
 export default function Header() {
@@ -175,6 +176,9 @@ export default function Header() {
                   </span>
                 )}
               </Link>
+
+              {/* Сповіщення */}
+              <NotificationBell />
 
               {/* Кошик */}
               <Link href="/cart" className={s.actionBtn}>

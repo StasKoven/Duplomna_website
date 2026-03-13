@@ -19,6 +19,8 @@ const cartRoutes = require('./routes/cart.routes');
 const comparisonRoutes = require('./routes/comparison.routes');
 const couponRoutes = require('./routes/coupon.routes');
 const ticketRoutes = require('./routes/ticket.routes');
+const returnRoutes = require('./routes/return.routes');
+const notificationRoutes = require('./routes/notification.routes');
 
 const errorHandler = require('./middleware/errorHandler');
 
@@ -141,6 +143,8 @@ app.use('/api/cart', cartRoutes);
 app.use('/api/comparisons', comparisonRoutes);
 app.use('/api/coupons', couponRoutes);
 app.use('/api/tickets', ticketRoutes);
+app.use('/api/returns', returnRoutes);
+app.use('/api/notifications', notificationRoutes);
 
 // Silence Chrome DevTools probe noise
 // Chrome sometimes requests this well-known URL; respond with 204 to avoid 404 logs

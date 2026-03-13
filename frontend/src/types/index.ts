@@ -10,8 +10,18 @@ export interface User {
   emailVerified: boolean
   wishlist: string[]
   cart: CartItem[]
+  loyaltyPoints: number
+  loyaltyHistory?: LoyaltyHistoryItem[]
   createdAt: string
   updatedAt: string
+}
+
+export interface LoyaltyHistoryItem {
+  amount: number
+  type: 'earned' | 'spent'
+  description: string
+  orderId?: string
+  date: string
 }
 
 export interface Category {

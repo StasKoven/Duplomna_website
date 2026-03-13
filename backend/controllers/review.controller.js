@@ -17,12 +17,16 @@ exports.createReview = async (req, res) => {
       return res.status(400).json({ message: 'You have already reviewed this product' });
     }
 
-    // Check if user purchased this product
+    // Only users who purchased and received the product can leave a review
     const hasPurchased = await Order.findOne({
       user: userId,
       'items.product': productId,
       orderStatus: 'delivered'
     });
+
+    if (!hasPurchased) {
+      return res.status(403).json({ message: 'Тільки покупці, які отримали товар, можуть залишати відгук' });
+    }
 
     const review = new Review({
       product: productId,
@@ -31,7 +35,7 @@ exports.createReview = async (req, res) => {
       title,
       comment,
       images,
-      isVerifiedPurchase: !!hasPurchased
+      isVerifiedPurchase: true
     });
 
     await review.save();
@@ -111,6 +115,39 @@ exports.markHelpful = async (req, res) => {
   } catch (error) {
     console.error('Mark helpful error:', error);
     res.status(500).json({ message: 'Failed to update review' });
+  }
+};
+
+/**
+ * Delete review (Admin or owner)
+ */
+/**
+ * Check if user can review a product
+ */
+exports.canReview = async (req, res) => {
+  try {
+    const { productId } = req.params;
+    const userId = req.user._id;
+
+    const existingReview = await Review.findOne({ product: productId, user: userId });
+    if (existingReview) {
+      return res.json({ canReview: false, reason: 'already_reviewed' });
+    }
+
+    const hasPurchased = await Order.findOne({
+      user: userId,
+      'items.product': productId,
+      orderStatus: 'delivered'
+    });
+
+    if (!hasPurchased) {
+      return res.json({ canReview: false, reason: 'not_purchased' });
+    }
+
+    return res.json({ canReview: true });
+  } catch (error) {
+    console.error('Can review check error:', error);
+    res.status(500).json({ message: 'Failed to check review eligibility' });
   }
 };
 

@@ -1,6 +1,33 @@
 const User = require('../models/User.model');
 
 /**
+ * Get user loyalty points and history
+ */
+exports.getLoyaltyPoints = async (req, res) => {
+  try {
+    const userId = req.user._id;
+    const user = await User.findById(userId).select('loyaltyPoints loyaltyHistory').lean();
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Sort history by date descending
+    const history = (user.loyaltyHistory || []).sort(
+      (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+    );
+
+    res.json({
+      loyaltyPoints: user.loyaltyPoints || 0,
+      history
+    });
+  } catch (error) {
+    console.error('Get loyalty points error:', error);
+    res.status(500).json({ message: 'Failed to fetch loyalty points' });
+  }
+};
+
+/**
  * Get all users (Admin only)
  */
 exports.getAllUsers = async (req, res) => {

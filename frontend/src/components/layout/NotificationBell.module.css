@@ -1,0 +1,91 @@
+.wrapper {
+  @apply relative;
+}
+
+.bellBtn {
+  @apply relative p-2 hover:bg-accent rounded-md;
+}
+
+.bellIcon {
+  @apply h-5 w-5;
+}
+
+.badge {
+  @apply absolute -right-0.5 -top-0.5 flex h-4 min-w-[16px] items-center justify-center rounded-full bg-red-500 text-[10px] font-bold text-white px-0.5;
+}
+
+.dropdown {
+  @apply absolute right-0 top-full mt-2 w-80 sm:w-96 bg-background border rounded-lg shadow-lg z-50 overflow-hidden;
+}
+
+.dropdownHeader {
+  @apply flex items-center justify-between px-4 py-3 border-b;
+}
+
+.dropdownTitle {
+  @apply font-semibold text-sm;
+}
+
+.markAllBtn {
+  @apply flex items-center gap-1 text-xs text-primary hover:underline;
+}
+
+.markAllIcon {
+  @apply h-3.5 w-3.5;
+}
+
+.list {
+  @apply max-h-80 overflow-y-auto;
+}
+
+.empty {
+  @apply py-8 text-center text-sm text-muted-foreground;
+}
+
+.item {
+  @apply flex items-start gap-2 px-4 py-3 border-b last:border-b-0 transition-colors;
+}
+
+.itemUnread {
+  @apply bg-primary/5;
+}
+
+.itemContent {
+  @apply flex items-start gap-2 flex-1 text-left;
+}
+
+.itemIcon {
+  @apply flex-shrink-0 mt-0.5;
+}
+
+.typeIcon {
+  @apply h-4 w-4 text-muted-foreground;
+}
+
+.itemText {
+  @apply flex-1 min-w-0;
+}
+
+.itemTitle {
+  @apply text-sm font-medium leading-tight;
+}
+
+.itemMessage {
+  @apply text-xs text-muted-foreground mt-0.5 line-clamp-2;
+}
+
+.itemTime {
+  @apply text-[11px] text-muted-foreground/70 mt-1;
+}
+
+.itemActions {
+  @apply flex flex-col gap-1 flex-shrink-0;
+}
+
+.itemActionBtn {
+  @apply p-1 hover:bg-accent rounded;
+}
+
+.itemActionIcon {
+  @apply h-3.5 w-3.5 text-muted-foreground;
+}

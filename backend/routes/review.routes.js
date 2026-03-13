@@ -18,6 +18,13 @@ router.post('/', verifyToken, [
 ], reviewController.createReview);
 
 /**
+ * @route   GET /api/reviews/can-review/:productId
+ * @desc    Check if user can review a product
+ * @access  Private
+ */
+router.get('/can-review/:productId', verifyToken, reviewController.canReview);
+
+/**
  * @route   GET /api/reviews/product/:productId
  * @desc    Get product reviews
  * @access  Public
