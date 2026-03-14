@@ -304,27 +304,42 @@ function ProductsContent() {
               </div>
             </div>
             
-            {/* Price Range Slider */}
+            {/* Dual Price Range Slider */}
             <div className={s.priceSliderSection}>
+              <div className={s.sliderTrack}>
+                <div
+                  className={s.sliderRange}
+                  style={{
+                    left: `${((Number(localPriceMin) || priceRange.min) - priceRange.min) / (priceRange.max - priceRange.min) * 100}%`,
+                    right: `${100 - ((Number(localPriceMax) || priceRange.max) - priceRange.min) / (priceRange.max - priceRange.min) * 100}%`,
+                  }}
+                />
+              </div>
               <input
                 type="range"
                 min={priceRange.min}
                 max={priceRange.max}
-                value={localPriceMin || priceRange.min}
-                onChange={(e) => setLocalPriceMin(e.target.value)}
-                className={s.priceSlider}
+                value={Number(localPriceMin) || priceRange.min}
+                onChange={(e) => {
+                  const val = Math.min(Number(e.target.value), (Number(localPriceMax) || priceRange.max) - 1)
+                  setLocalPriceMin(String(val))
+                }}
+                className={`${s.priceSlider} ${s.priceSliderMin}`}
               />
               <input
                 type="range"
                 min={priceRange.min}
                 max={priceRange.max}
-                value={localPriceMax || priceRange.max}
-                onChange={(e) => setLocalPriceMax(e.target.value)}
-                className={s.priceSlider}
+                value={Number(localPriceMax) || priceRange.max}
+                onChange={(e) => {
+                  const val = Math.max(Number(e.target.value), (Number(localPriceMin) || priceRange.min) + 1)
+                  setLocalPriceMax(String(val))
+                }}
+                className={`${s.priceSlider} ${s.priceSliderMax}`}
               />
               <div className={s.priceRangeLabels}>
-                <span>{priceRange.min} ₴</span>
-                <span>{priceRange.max} ₴</span>
+                <span>{Number(localPriceMin) || priceRange.min} ₴</span>
+                <span>{Number(localPriceMax) || priceRange.max} ₴</span>
               </div>
             </div>
             

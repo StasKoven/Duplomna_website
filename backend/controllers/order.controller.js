@@ -342,3 +342,94 @@ exports.getOrderStats = async (req, res) => {
     res.status(500).json({ message: 'Failed to fetch order statistics' });
   }
 };
+
+/**
+ * Get dashboard statistics (Admin only)
+ */
+exports.getDashboardStats = async (req, res) => {
+  try {
+    // Date ranges
+    const now = new Date();
+    const last30Days = new Date(now - 30 * 24 * 60 * 60 * 1000);
+    const last7Days = new Date(now - 7 * 24 * 60 * 60 * 1000);
+
+    // Basic counts
+    const [totalOrders, totalUsers, totalProducts, totalRevenue] = await Promise.all([
+      Order.countDocuments(),
+      User.countDocuments({ role: 'user' }),
+      Product.countDocuments({ isActive: true }),
+      Order.aggregate([
+        { $match: { orderStatus: { $ne: 'cancelled' } } },
+        { $group: { _id: null, total: { $sum: '$total' } } }
+      ]),
+    ]);
+
+    // Revenue per day (last 7 days)
+    const revenueByDay = await Order.aggregate([
+      { $match: { createdAt: { $gte: last7Days }, orderStatus: { $ne: 'cancelled' } } },
+      {
+        $group: {
+          _id: { $dateToString: { format: '%Y-%m-%d', date: '$createdAt' } },
+          revenue: { $sum: '$total' },
+          orders: { $sum: 1 },
+        }
+      },
+      { $sort: { _id: 1 } }
+    ]);
+
+    // Fill missing days
+    const dailyStats = [];
+    for (let i = 6; i >= 0; i--) {
+      const d = new Date(now);
+      d.setDate(d.getDate() - i);
+      const dateStr = d.toISOString().split('T')[0];
+      const found = revenueByDay.find(r => r._id === dateStr);
+      dailyStats.push({
+        date: dateStr,
+        revenue: found ? found.revenue : 0,
+        orders: found ? found.orders : 0,
+      });
+    }
+
+    // Orders by status
+    const ordersByStatus = await Order.aggregate([
+      { $group: { _id: '$orderStatus', count: { $sum: 1 } } }
+    ]);
+
+    // Top 5 products by quantity sold
+    const topProducts = await Order.aggregate([
+      { $match: { orderStatus: { $ne: 'cancelled' } } },
+      { $unwind: '$items' },
+      {
+        $group: {
+          _id: '$items.name',
+          totalSold: { $sum: '$items.quantity' },
+          totalRevenue: { $sum: '$items.subtotal' },
+        }
+      },
+      { $sort: { totalSold: -1 } },
+      { $limit: 5 }
+    ]);
+
+    // New orders (last 30 days)
+    const newOrders = await Order.countDocuments({ createdAt: { $gte: last30Days } });
+    const newUsers = await User.countDocuments({ createdAt: { $gte: last30Days } });
+
+    res.json({
+      totals: {
+        orders: totalOrders,
+        users: totalUsers,
+        products: totalProducts,
+        revenue: totalRevenue[0]?.total || 0,
+        newOrders,
+        newUsers,
+      },
+      dailyStats,
+      ordersByStatus: ordersByStatus.map(s => ({ status: s._id, count: s.count })),
+      topProducts: topProducts.map(p => ({ name: p._id, sold: p.totalSold, revenue: p.totalRevenue })),
+    });
+  } catch (error) {
+    console.error('Dashboard stats error:', error);
+    res.status(500).json({ message: 'Помилка отримання статистики' });
+  }
+};

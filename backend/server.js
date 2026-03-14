@@ -21,6 +21,7 @@ const couponRoutes = require('./routes/coupon.routes');
 const ticketRoutes = require('./routes/ticket.routes');
 const returnRoutes = require('./routes/return.routes');
 const notificationRoutes = require('./routes/notification.routes');
+const novaPoshtaRoutes = require('./routes/novaposhta.routes');
 
 const errorHandler = require('./middleware/errorHandler');
 
@@ -56,13 +57,12 @@ const corsOptions = {
     const allowedOrigins = [
       process.env.CLIENT_URL,
       'http://localhost:3000',
-      /\.vercel\.app$/,
-      /\.railway\.app$/,
+      'https://duplomna-website-1dy7.vercel.app',
+      'https://duplomnawebsite-production.up.railway.app',
     ];
 
     const isAllowed = allowedOrigins.some(allowed => {
       if (!allowed) return false;
-      if (allowed instanceof RegExp) return allowed.test(origin);
       return allowed === origin;
     });
 
@@ -145,6 +145,7 @@ app.use('/api/coupons', couponRoutes);
 app.use('/api/tickets', ticketRoutes);
 app.use('/api/returns', returnRoutes);
 app.use('/api/notifications', notificationRoutes);
+app.use('/api/novaposhta', novaPoshtaRoutes);
 
 // Silence Chrome DevTools probe noise
 // Chrome sometimes requests this well-known URL; respond with 204 to avoid 404 logs

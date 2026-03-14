@@ -39,6 +39,13 @@ router.get('/stats', verifyToken, requireAdmin, orderController.getOrderStats);
 router.get('/all', verifyToken, requireAdmin, orderController.getAllOrders);
 
 /**
+ * @route   GET /api/orders/dashboard-stats
+ * @desc    Get dashboard statistics
+ * @access  Private (Admin)
+ */
+router.get('/dashboard-stats', verifyToken, requireAdmin, orderController.getDashboardStats);
+
+/**
  * @route   GET /api/orders/:id
  * @desc    Get single order
  * @access  Private

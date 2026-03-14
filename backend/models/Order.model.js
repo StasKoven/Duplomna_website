@@ -60,6 +60,14 @@ const orderSchema = new mongoose.Schema({
     country: {
       type: String,
       required: true
+    },
+    novaPoshtaCityRef: String,
+    novaPoshtaWarehouseRef: String,
+    novaPoshtaWarehouse: String,
+    deliveryMethod: {
+      type: String,
+      enum: ['nova_poshta', 'courier', 'pickup'],
+      default: 'nova_poshta'
     }
   },
   paymentMethod: {

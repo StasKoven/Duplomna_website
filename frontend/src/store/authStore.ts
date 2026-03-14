@@ -10,6 +10,21 @@ import { useCartStore } from '@/store/cartStore'
 import { useWishlistStore } from '@/store/wishlistStore'
 import { useComparisonStore } from '@/store/comparisonStore'
 
+// Helper function to set auth cookie for middleware
+const setAuthCookie = (token: string) => {
+  if (typeof document !== 'undefined') {
+    // Set cookie that expires in 7 days (same as refresh token)
+    const expires = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toUTCString()
+    document.cookie = `auth-token=${token}; path=/; expires=${expires}; SameSite=Lax`
+  }
+}
+
+const removeAuthCookie = () => {
+  if (typeof document !== 'undefined') {
+    document.cookie = 'auth-token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT'
+  }
+}
+
 interface AuthState {
   user: User | null
   accessToken: string | null
@@ -55,6 +70,7 @@ export const useAuthStore = create<AuthState>()(
 
           localStorage.setItem('accessToken', accessToken)
           localStorage.setItem('refreshToken', refreshToken)
+          setAuthCookie(accessToken)
 
           set({
             user,
@@ -92,6 +108,7 @@ export const useAuthStore = create<AuthState>()(
 
           localStorage.setItem('accessToken', accessToken)
           localStorage.setItem('refreshToken', refreshToken)
+          setAuthCookie(accessToken)
 
           set({
             user,
@@ -129,6 +146,7 @@ export const useAuthStore = create<AuthState>()(
 
           localStorage.setItem('accessToken', accessToken)
           localStorage.setItem('refreshToken', refreshToken)
+          setAuthCookie(accessToken)
 
           set({
             user,
@@ -164,6 +182,7 @@ export const useAuthStore = create<AuthState>()(
       logout: () => {
         localStorage.removeItem('accessToken')
         localStorage.removeItem('refreshToken')
+        removeAuthCookie()
 
         set({
           user: null,
@@ -208,16 +227,17 @@ export const useAuthStore = create<AuthState>()(
           
           if (isAuthError && !isNetworkError) {
             // Clear auth state only on auth errors
-            set({ 
-              user: null, 
+            set({
+              user: null,
               accessToken: null,
               refreshToken: null,
-              isAuthenticated: false 
+              isAuthenticated: false
             })
-            // Clear localStorage tokens
+            // Clear localStorage tokens and cookie
             if (typeof window !== 'undefined') {
               localStorage.removeItem('accessToken')
               localStorage.removeItem('refreshToken')
+              removeAuthCookie()
             }
           }
           // Don't throw - just log the error

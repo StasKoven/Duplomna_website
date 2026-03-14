@@ -17,6 +17,9 @@ const cartRoutes = require('../routes/cart.routes');
 const comparisonRoutes = require('../routes/comparison.routes');
 const couponRoutes = require('../routes/coupon.routes');
 const ticketRoutes = require('../routes/ticket.routes');
+const returnRoutes = require('../routes/return.routes');
+const notificationRoutes = require('../routes/notification.routes');
+const novaPoshtaRoutes = require('../routes/novaposhta.routes');
 
 const errorHandler = require('../middleware/errorHandler');
 
@@ -37,13 +40,12 @@ const corsOptions = {
     const allowedOrigins = [
       process.env.CLIENT_URL,
       'http://localhost:3000',
-      /\.vercel\.app$/
+      'https://duplomna-website-1dy7.vercel.app',
+      'https://duplomnawebsite-production.up.railway.app',
     ];
-    
+
     const isAllowed = allowedOrigins.some(allowed => {
-      if (allowed instanceof RegExp) {
-        return allowed.test(origin);
-      }
+      if (!allowed) return false;
       return allowed === origin;
     });
     
@@ -117,6 +119,9 @@ app.use('/api/cart', cartRoutes);
 app.use('/api/comparisons', comparisonRoutes);
 app.use('/api/coupons', couponRoutes);
 app.use('/api/tickets', ticketRoutes);
+app.use('/api/returns', returnRoutes);
+app.use('/api/notifications', notificationRoutes);
+app.use('/api/novaposhta', novaPoshtaRoutes);
 
 // Health check
 app.get('/api/health', (req, res) => {

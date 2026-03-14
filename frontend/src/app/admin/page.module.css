@@ -1,88 +1,98 @@
-/* Адмін-панель — головна сторінка */
-
-/* Обгортка сторінки */
 .page {
-  @apply py-8;
+  @apply py-6 min-h-screen;
 }
 
-/* Секція заголовка */
-.header {
-  @apply mb-8;
-}
-
-.title {
-  @apply text-3xl font-bold mb-2;
-}
-
-.subtitle {
-  @apply text-muted-foreground;
-}
-
-/* Сітка меню навігації */
-.menuGrid {
-  @apply grid md:grid-cols-2 lg:grid-cols-3 gap-6;
-}
-
-/* Посилання картки меню */
-.menuLink {
-  @apply block;
-}
-
-/* Картка меню */
-.menuCard {
-  @apply bg-card border rounded-lg p-6 hover:shadow-lg transition-all group-hover:scale-105;
-}
-
-/* Верхня частина картки з іконкою та текстом */
-.menuCardContent {
-  @apply flex items-center gap-4 mb-4;
-}
-
-/* Обгортка іконки */
-.menuIconWrap {
-  @apply p-3 bg-primary/10 rounded-lg group-hover:bg-primary/20 transition-colors;
-}
-
-/* Іконка меню */
-.menuIcon {
-  @apply h-6 w-6 text-primary;
-}
-
-/* Назва пункту меню */
-.menuTitle {
-  @apply font-semibold text-lg;
-}
-
-/* Опис пункту меню */
-.menuDescription {
-  @apply text-sm text-muted-foreground;
-}
-
-/* Секція швидкої статистики */
-.statsSection {
-  @apply mt-12;
-}
-
-.statsTitle {
+.pageTitle {
   @apply text-2xl font-bold mb-6;
 }
 
-/* Сітка статистичних карток */
+.loadingGrid {
+  @apply grid grid-cols-2 lg:grid-cols-4 gap-4;
+}
+
+.loadingCard {
+  @apply h-28 bg-muted rounded-xl animate-pulse;
+}
+
+/* Stat Cards */
 .statsGrid {
-  @apply grid md:grid-cols-2 lg:grid-cols-4 gap-6;
+  @apply grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8;
 }
 
-/* Окрема картка статистики */
 .statCard {
-  @apply bg-card border rounded-lg p-6;
+  @apply flex items-center gap-4 p-5 bg-card border rounded-xl;
 }
 
-/* Підпис статистичного показника */
+.statIconWrap {
+  @apply p-3 rounded-xl flex-shrink-0;
+}
+
+.statIcon {
+  @apply w-6 h-6;
+}
+
 .statLabel {
-  @apply text-sm text-muted-foreground mb-1;
+  @apply text-sm text-muted-foreground;
 }
 
-/* Значення статистичного показника */
 .statValue {
-  @apply text-3xl font-bold;
+  @apply text-xl font-bold;
+}
+
+.statExtra {
+  @apply text-xs text-muted-foreground mt-0.5;
+}
+
+/* Charts */
+.chartsGrid {
+  @apply grid lg:grid-cols-2 gap-6 mb-6;
+}
+
+.chartCard {
+  @apply bg-card border rounded-xl p-5 mb-6;
+}
+
+.chartHeader {
+  @apply flex items-center gap-2 mb-4;
+}
+
+.chartIcon {
+  @apply w-5 h-5 text-primary;
+}
+
+.chartTitle {
+  @apply text-lg font-semibold;
+}
+
+.chartBody {
+  @apply w-full;
+}
+
+/* Admin Links */
+.sectionTitle {
+  @apply text-lg font-semibold mb-4;
+}
+
+.linksGrid {
+  @apply grid sm:grid-cols-2 lg:grid-cols-3 gap-4;
+}
+
+.linkCard {
+  @apply flex items-center gap-4 p-4 bg-card border rounded-xl hover:border-primary/50 transition;
+}
+
+.linkIcon {
+  @apply w-10 h-10 p-2 bg-primary/10 text-primary rounded-lg flex-shrink-0;
+}
+
+.linkLabel {
+  @apply font-medium;
+}
+
+.linkDesc {
+  @apply text-sm text-muted-foreground;
+}
+
+.linkArrow {
+  @apply w-5 h-5 text-muted-foreground ml-auto flex-shrink-0;
 }

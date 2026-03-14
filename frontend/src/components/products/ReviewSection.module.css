@@ -513,3 +513,49 @@
 .ratingPoor {
   @apply text-red-500;
 }
+
+/* === Review Images (Form) === */
+.imageUploadArea {
+  @apply flex flex-wrap gap-3;
+}
+
+.imagePreview {
+  @apply relative w-20 h-20 rounded-lg overflow-hidden border;
+}
+
+.imagePreviewImg {
+  @apply w-full h-full object-cover;
+}
+
+.imageRemoveBtn {
+  @apply absolute top-0 right-0 w-5 h-5 bg-red-500 text-white text-xs rounded-bl-lg flex items-center justify-center cursor-pointer hover:bg-red-600;
+}
+
+.imageAddBtn {
+  @apply w-20 h-20 rounded-lg border-2 border-dashed border-muted-foreground/30 flex flex-col items-center justify-center cursor-pointer hover:border-primary hover:bg-primary/5 transition;
+}
+
+.hiddenInput {
+  @apply hidden;
+}
+
+.imageAddIcon {
+  @apply text-xl text-muted-foreground;
+}
+
+.imageAddText {
+  @apply text-xs text-muted-foreground;
+}
+
+/* === Review Images (Display) === */
+.reviewImages {
+  @apply flex flex-wrap gap-2 mt-3;
+}
+
+.reviewImageWrapper {
+  @apply w-24 h-24 rounded-lg overflow-hidden border cursor-pointer hover:opacity-80 transition;
+}
+
+.reviewImage {
+  @apply w-full h-full object-cover;
+}

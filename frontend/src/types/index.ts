@@ -146,6 +146,10 @@ export interface ShippingAddress {
   state?: string
   zipCode: string
   country: string
+  novaPoshtaCityRef?: string
+  novaPoshtaWarehouseRef?: string
+  novaPoshtaWarehouse?: string
+  deliveryMethod?: 'nova_poshta' | 'courier' | 'pickup'
 }
 
 export interface StatusHistory {

@@ -116,15 +116,81 @@
 }
 
 .priceSliderSection {
-  @apply space-y-2;
+  position: relative;
+  height: 40px;
+  margin-top: 0.5rem;
+}
+
+.sliderTrack {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 100%;
+  height: 4px;
+  border-radius: 9999px;
+  background-color: hsl(var(--border));
+}
+
+.sliderRange {
+  position: absolute;
+  height: 100%;
+  border-radius: 9999px;
+  background-color: hsl(var(--primary));
 }
 
 .priceSlider {
-  @apply w-full accent-primary;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 100%;
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  pointer-events: none;
+  height: 4px;
+  margin: 0;
+}
+
+.priceSlider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  pointer-events: auto;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background-color: hsl(var(--primary));
+  border: 2px solid hsl(var(--background));
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+}
+
+.priceSlider::-moz-range-thumb {
+  pointer-events: auto;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background-color: hsl(var(--primary));
+  border: 2px solid hsl(var(--background));
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+}
+
+.priceSliderMin {
+  z-index: 3;
+}
+
+.priceSliderMax {
+  z-index: 4;
 }
 
 .priceRangeLabels {
-  @apply flex justify-between text-xs text-muted-foreground;
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  color: hsl(var(--muted-foreground));
 }
 
 .applyPriceBtn {

@@ -98,10 +98,10 @@ const jsonLd = {
       },
       contactPoint: {
         '@type': 'ContactPoint',
-        telephone: '+380-XX-XXX-XXXX',
+        email: 'support@techstore.ua',
         contactType: 'customer service',
         areaServed: 'UA',
-        availableLanguage: 'Ukrainian',
+        availableLanguage: ['Ukrainian', 'English'],
       },
       sameAs: [],
     },

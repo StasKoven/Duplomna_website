@@ -22,6 +22,7 @@ interface Review {
   rating: number
   title: string
   comment: string
+  images?: string[]
   isVerifiedPurchase: boolean
   helpfulVotes: number
   createdAt: string
@@ -165,6 +166,7 @@ export default function ReviewSection({ productId, productRating }: ReviewSectio
   const [pros, setPros] = useState('')
   const [cons, setCons] = useState('')
   const [hoverRating, setHoverRating] = useState(0)
+  const [reviewImages, setReviewImages] = useState<string[]>([])
 
   // Перевірка можливості залишити відгук
   const [canReview, setCanReview] = useState(false)
@@ -224,6 +226,36 @@ export default function ReviewSection({ productId, productRating }: ReviewSectio
     setComment('')
     setPros('')
     setCons('')
+    setReviewImages([])
+  }
+
+  /** Handles image file selection and converts to base64 */
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files || [])
+    if (reviewImages.length + files.length > 3) {
+      toast.error('Максимум 3 фотографії')
+      return
+    }
+
+    files.forEach(file => {
+      if (file.size > 2 * 1024 * 1024) {
+        toast.error(`Файл ${file.name} занадто великий (макс. 2 МБ)`)
+        return
+      }
+      const reader = new FileReader()
+      reader.onload = () => {
+        setReviewImages(prev => [...prev, reader.result as string])
+      }
+      reader.readAsDataURL(file)
+    })
+
+    // Reset input
+    e.target.value = ''
+  }
+
+  /** Removes an image from the list */
+  const removeReviewImage = (index: number) => {
+    setReviewImages(prev => prev.filter((_, i) => i !== index))
   }
 
   /** Надсилає новий відгук на сервер */
@@ -252,6 +284,7 @@ export default function ReviewSection({ productId, productRating }: ReviewSectio
         rating,
         title: title.trim(),
         comment: fullComment,
+        images: reviewImages.length > 0 ? reviewImages : undefined,
       })
 
       toast.success('Дякуємо за відгук!')
@@ -497,6 +530,32 @@ export default function ReviewSection({ productId, productRating }: ReviewSectio
                 </div>
               </div>
 
+              {/* Фотографії */}
+              <div className={s.inputField}>
+                <label className={s.fieldLabel}>Фотографії (до 3 шт.)</label>
+                <div className={s.imageUploadArea}>
+                  {reviewImages.map((img, i) => (
+                    <div key={i} className={s.imagePreview}>
+                      <Image src={img} alt="" width={80} height={80} className={s.imagePreviewImg} />
+                      <button type="button" onClick={() => removeReviewImage(i)} className={s.imageRemoveBtn}>×</button>
+                    </div>
+                  ))}
+                  {reviewImages.length < 3 && (
+                    <label className={s.imageAddBtn}>
+                      <input
+                        type="file"
+                        accept="image/*"
+                        multiple
+                        onChange={handleImageUpload}
+                        className={s.hiddenInput}
+                      />
+                      <span className={s.imageAddIcon}>+</span>
+                      <span className={s.imageAddText}>Додати фото</span>
+                    </label>
+                  )}
+                </div>
+              </div>
+
               {/* Кнопки форми */}
               <div className={s.formActions}>
                 <motion.button
@@ -682,6 +741,17 @@ function ReviewCard({
               </div>
             </div>
           )}
+        </div>
+      )}
+
+      {/* Фотографії відгуку */}
+      {review.images && review.images.length > 0 && (
+        <div className={s.reviewImages}>
+          {review.images.map((img, i) => (
+            <div key={i} className={s.reviewImageWrapper}>
+              <Image src={img} alt={`Фото ${i + 1}`} width={120} height={120} className={s.reviewImage} />
+            </div>
+          ))}
         </div>
       )}
 

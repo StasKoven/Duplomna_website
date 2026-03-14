@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 import Image from 'next/image'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
-import { ShoppingBag, Truck, CreditCard, Wallet, ArrowLeft, CheckCircle } from 'lucide-react'
+import { ShoppingBag, Truck, CreditCard, Wallet, ArrowLeft, CheckCircle, MapPin } from 'lucide-react'
 import { useCartStore } from '@/store/cartStore'
 import { useAuthStore } from '@/store/authStore'
 import { Product } from '@/types'
@@ -27,6 +27,20 @@ interface ShippingAddress {
   country: string
 }
 
+interface NovaPoshtaCity {
+  ref: string
+  name: string
+  mainDescription: string
+  area: string
+}
+
+interface NovaPoshtaWarehouse {
+  ref: string
+  number: string
+  description: string
+  shortAddress: string
+}
+
 export default function CheckoutPage() {
   const router = useRouter()
   const { items, getTotalPrice, clearCart } = useCartStore()
@@ -39,6 +53,20 @@ export default function CheckoutPage() {
   const [paymentMethod, setPaymentMethod] = useState<'cash_on_delivery' | 'card'>('cash_on_delivery')
   const [couponDiscount, setCouponDiscount] = useState(0)
   const [couponCode, setCouponCode] = useState('')
+
+  const [deliveryMethod, setDeliveryMethod] = useState<'nova_poshta' | 'courier'>('nova_poshta')
+
+  // Nova Poshta state
+  const [citySearch, setCitySearch] = useState('')
+  const [cities, setCities] = useState<NovaPoshtaCity[]>([])
+  const [selectedCity, setSelectedCity] = useState<NovaPoshtaCity | null>(null)
+  const [warehouses, setWarehouses] = useState<NovaPoshtaWarehouse[]>([])
+  const [selectedWarehouse, setSelectedWarehouse] = useState<NovaPoshtaWarehouse | null>(null)
+  const [warehouseSearch, setWarehouseSearch] = useState('')
+  const [showCityDropdown, setShowCityDropdown] = useState(false)
+  const [showWarehouseDropdown, setShowWarehouseDropdown] = useState(false)
+  const [loadingCities, setLoadingCities] = useState(false)
+  const [loadingWarehouses, setLoadingWarehouses] = useState(false)
 
   const [address, setAddress] = useState<ShippingAddress>({
     firstName: '',
@@ -76,6 +104,65 @@ export default function CheckoutPage() {
     }
   }, [items, isAuthenticated, orderPlaced, router])
 
+  // Search cities with debounce
+  useEffect(() => {
+    if (deliveryMethod !== 'nova_poshta' || citySearch.length < 2) {
+      setCities([])
+      return
+    }
+
+    const timer = setTimeout(async () => {
+      setLoadingCities(true)
+      try {
+        const { data } = await api.get(`/novaposhta/cities?q=${encodeURIComponent(citySearch)}`)
+        setCities(data.cities || [])
+        setShowCityDropdown(true)
+      } catch {
+        setCities([])
+      } finally {
+        setLoadingCities(false)
+      }
+    }, 300)
+
+    return () => clearTimeout(timer)
+  }, [citySearch, deliveryMethod])
+
+  // Fetch warehouses when city is selected
+  useEffect(() => {
+    if (!selectedCity) {
+      setWarehouses([])
+      return
+    }
+
+    const fetchWarehouses = async () => {
+      setLoadingWarehouses(true)
+      try {
+        const params = new URLSearchParams({ cityRef: selectedCity.ref })
+        if (warehouseSearch) params.set('q', warehouseSearch)
+        const { data } = await api.get(`/novaposhta/warehouses?${params}`)
+        setWarehouses(data.warehouses || [])
+        setShowWarehouseDropdown(true)
+      } catch {
+        setWarehouses([])
+      } finally {
+        setLoadingWarehouses(false)
+      }
+    }
+
+    const timer = setTimeout(fetchWarehouses, 300)
+    return () => clearTimeout(timer)
+  }, [selectedCity, warehouseSearch])
+
+  // Close dropdowns on click outside
+  useEffect(() => {
+    const handleClick = () => {
+      setShowCityDropdown(false)
+      setShowWarehouseDropdown(false)
+    }
+    document.addEventListener('click', handleClick)
+    return () => document.removeEventListener('click', handleClick)
+  }, [])
+
   const subtotal = getTotalPrice()
   const shippingCost = subtotal > 1000 ? 0 : 50
   const tax = Math.round(subtotal * 0.2)
@@ -90,10 +177,24 @@ export default function CheckoutPage() {
     e.preventDefault()
 
     // Basic validation
-    const required: (keyof ShippingAddress)[] = ['firstName', 'lastName', 'email', 'phone', 'street', 'city', 'zipCode', 'country']
+    const required: (keyof ShippingAddress)[] = ['firstName', 'lastName', 'email', 'phone']
+    if (deliveryMethod === 'courier') {
+      required.push('street', 'city', 'zipCode', 'country')
+    }
     for (const key of required) {
       if (!address[key]?.trim()) {
         toast.error(`Поле "${fieldLabel(key)}" обов'язкове`)
+        return
+      }
+    }
+
+    if (deliveryMethod === 'nova_poshta') {
+      if (!selectedCity) {
+        toast.error('Оберіть місто доставки')
+        return
+      }
+      if (!selectedWarehouse) {
+        toast.error('Оберіть відділення Нової Пошти')
         return
       }
     }
@@ -107,7 +208,15 @@ export default function CheckoutPage() {
 
       const response = await api.post('/orders', {
         items: orderItems,
-        shippingAddress: address,
+        shippingAddress: {
+          ...address,
+          city: selectedCity?.mainDescription || address.city,
+          novaPoshtaCityRef: selectedCity?.ref || '',
+          novaPoshtaWarehouseRef: selectedWarehouse?.ref || '',
+          novaPoshtaWarehouse: selectedWarehouse?.description || '',
+          deliveryMethod,
+          street: deliveryMethod === 'nova_poshta' ? (selectedWarehouse?.description || address.street) : address.street,
+        },
         paymentMethod,
         couponCode: couponCode || undefined,
       })
@@ -167,124 +276,167 @@ export default function CheckoutPage() {
       <form onSubmit={handleSubmit} className={s.layout}>
         {/* ===== LEFT: form ===== */}
         <div className={s.formSection}>
-          {/* Shipping */}
+          {/* Delivery Method */}
           <div className={s.card}>
             <div className={s.cardHeader}>
               <Truck className={s.cardIcon} />
-              <h2 className={s.cardTitle}>Адреса доставки</h2>
+              <h2 className={s.cardTitle}>Доставка</h2>
+            </div>
+
+            {/* Delivery method toggle */}
+            <div className={s.paymentOptions} style={{ marginBottom: '1.25rem' }}>
+              <label className={`${s.paymentOption} ${deliveryMethod === 'nova_poshta' ? s.paymentOptionActive : ''}`}>
+                <input type="radio" name="delivery" value="nova_poshta" checked={deliveryMethod === 'nova_poshta'} onChange={() => setDeliveryMethod('nova_poshta')} className={s.radioInput} />
+                <MapPin className={s.paymentIcon} />
+                <div>
+                  <span className={s.paymentTitle}>Нова Пошта</span>
+                  <span className={s.paymentDesc}>Доставка у відділення</span>
+                </div>
+              </label>
+              <label className={`${s.paymentOption} ${deliveryMethod === 'courier' ? s.paymentOptionActive : ''}`}>
+                <input type="radio" name="delivery" value="courier" checked={deliveryMethod === 'courier'} onChange={() => setDeliveryMethod('courier')} className={s.radioInput} />
+                <Truck className={s.paymentIcon} />
+                <div>
+                  <span className={s.paymentTitle}>Кур&apos;єрська доставка</span>
+                  <span className={s.paymentDesc}>За вказаною адресою</span>
+                </div>
+              </label>
             </div>
 
             <div className={s.formGrid}>
               <div className={s.fieldGroup}>
                 <label className={s.label}>Ім&apos;я *</label>
-                <input
-                  type="text"
-                  name="firstName"
-                  value={address.firstName}
-                  onChange={handleChange}
-                  className={s.input}
-                  placeholder="Ваше ім'я"
-                  required
-                />
+                <input type="text" name="firstName" value={address.firstName} onChange={handleChange} className={s.input} placeholder="Ваше ім'я" required />
               </div>
               <div className={s.fieldGroup}>
                 <label className={s.label}>Прізвище *</label>
-                <input
-                  type="text"
-                  name="lastName"
-                  value={address.lastName}
-                  onChange={handleChange}
-                  className={s.input}
-                  placeholder="Ваше прізвище"
-                  required
-                />
+                <input type="text" name="lastName" value={address.lastName} onChange={handleChange} className={s.input} placeholder="Ваше прізвище" required />
               </div>
               <div className={s.fieldGroup}>
                 <label className={s.label}>Email *</label>
-                <input
-                  type="email"
-                  name="email"
-                  value={address.email}
-                  onChange={handleChange}
-                  className={s.input}
-                  placeholder="your@email.com"
-                  required
-                />
+                <input type="email" name="email" value={address.email} onChange={handleChange} className={s.input} placeholder="your@email.com" required />
               </div>
               <div className={s.fieldGroup}>
                 <label className={s.label}>Телефон *</label>
-                <input
-                  type="tel"
-                  name="phone"
-                  value={address.phone}
-                  onChange={handleChange}
-                  className={s.input}
-                  placeholder="+380XXXXXXXXX"
-                  required
-                />
+                <input type="tel" name="phone" value={address.phone} onChange={handleChange} className={s.input} placeholder="+380XXXXXXXXX" required />
               </div>
-              <div className={`${s.fieldGroup} ${s.fullWidth}`}>
-                <label className={s.label}>Вулиця, будинок, квартира *</label>
-                <input
-                  type="text"
-                  name="street"
-                  value={address.street}
-                  onChange={handleChange}
-                  className={s.input}
-                  placeholder="вул. Хрещатик, 1, кв. 5"
-                  required
-                />
-              </div>
-              <div className={s.fieldGroup}>
-                <label className={s.label}>Місто *</label>
-                <input
-                  type="text"
-                  name="city"
-                  value={address.city}
-                  onChange={handleChange}
-                  className={s.input}
-                  placeholder="Київ"
-                  required
-                />
-              </div>
-              <div className={s.fieldGroup}>
-                <label className={s.label}>Область</label>
-                <input
-                  type="text"
-                  name="state"
-                  value={address.state}
-                  onChange={handleChange}
-                  className={s.input}
-                  placeholder="Київська"
-                />
-              </div>
-              <div className={s.fieldGroup}>
-                <label className={s.label}>Поштовий індекс *</label>
-                <input
-                  type="text"
-                  name="zipCode"
-                  value={address.zipCode}
-                  onChange={handleChange}
-                  className={s.input}
-                  placeholder="01001"
-                  required
-                />
-              </div>
-              <div className={s.fieldGroup}>
-                <label className={s.label}>Країна *</label>
-                <select
-                  name="country"
-                  value={address.country}
-                  onChange={handleChange}
-                  className={s.input}
-                  required
-                >
-                  <option value="Ukraine">Україна</option>
-                  <option value="Poland">Польща</option>
-                  <option value="Germany">Німеччина</option>
-                  <option value="Other">Інша</option>
-                </select>
-              </div>
+
+              {deliveryMethod === 'nova_poshta' ? (
+                <>
+                  {/* City search */}
+                  <div className={`${s.fieldGroup} ${s.fullWidth}`} style={{ position: 'relative' }} onClick={(e) => e.stopPropagation()}>
+                    <label className={s.label}>Місто *</label>
+                    <input
+                      type="text"
+                      value={selectedCity ? selectedCity.mainDescription : citySearch}
+                      onChange={(e) => {
+                        setCitySearch(e.target.value)
+                        setSelectedCity(null)
+                        setSelectedWarehouse(null)
+                        setWarehouses([])
+                      }}
+                      onFocus={() => cities.length > 0 && setShowCityDropdown(true)}
+                      className={s.input}
+                      placeholder="Почніть вводити назву міста..."
+                      required
+                    />
+                    {loadingCities && <div style={{ position: 'absolute', right: 12, top: 38, fontSize: '0.75rem', color: 'var(--muted-foreground)' }}>Пошук...</div>}
+                    {showCityDropdown && cities.length > 0 && (
+                      <div style={{ position: 'absolute', top: '100%', left: 0, right: 0, zIndex: 50, background: 'var(--card, #fff)', border: '1px solid var(--border, #e5e7eb)', borderRadius: '0.5rem', maxHeight: '200px', overflowY: 'auto', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}>
+                        {cities.map(city => (
+                          <button
+                            key={city.ref}
+                            type="button"
+                            onClick={() => {
+                              setSelectedCity(city)
+                              setCitySearch('')
+                              setShowCityDropdown(false)
+                              setSelectedWarehouse(null)
+                              setWarehouseSearch('')
+                              setAddress(prev => ({ ...prev, city: city.mainDescription }))
+                            }}
+                            style={{ display: 'block', width: '100%', textAlign: 'left', padding: '0.625rem 0.875rem', fontSize: '0.875rem', borderBottom: '1px solid var(--border, #f3f4f6)', cursor: 'pointer', background: 'transparent' }}
+                            onMouseEnter={(e) => (e.currentTarget.style.background = 'var(--accent, #f3f4f6)')}
+                            onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
+                          >
+                            {city.name}
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Warehouse search */}
+                  {selectedCity && (
+                    <div className={`${s.fieldGroup} ${s.fullWidth}`} style={{ position: 'relative' }} onClick={(e) => e.stopPropagation()}>
+                      <label className={s.label}>Відділення Нової Пошти *</label>
+                      <input
+                        type="text"
+                        value={selectedWarehouse ? selectedWarehouse.description : warehouseSearch}
+                        onChange={(e) => {
+                          setWarehouseSearch(e.target.value)
+                          setSelectedWarehouse(null)
+                        }}
+                        onFocus={() => warehouses.length > 0 && setShowWarehouseDropdown(true)}
+                        className={s.input}
+                        placeholder="Пошук відділення за номером або адресою..."
+                        required
+                      />
+                      {loadingWarehouses && <div style={{ position: 'absolute', right: 12, top: 38, fontSize: '0.75rem', color: 'var(--muted-foreground)' }}>Завантаження...</div>}
+                      {showWarehouseDropdown && warehouses.length > 0 && (
+                        <div style={{ position: 'absolute', top: '100%', left: 0, right: 0, zIndex: 50, background: 'var(--card, #fff)', border: '1px solid var(--border, #e5e7eb)', borderRadius: '0.5rem', maxHeight: '250px', overflowY: 'auto', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}>
+                          {warehouses.map(wh => (
+                            <button
+                              key={wh.ref}
+                              type="button"
+                              onClick={() => {
+                                setSelectedWarehouse(wh)
+                                setShowWarehouseDropdown(false)
+                                setWarehouseSearch('')
+                                setAddress(prev => ({ ...prev, street: wh.description, zipCode: wh.number }))
+                              }}
+                              style={{ display: 'block', width: '100%', textAlign: 'left', padding: '0.625rem 0.875rem', fontSize: '0.875rem', borderBottom: '1px solid var(--border, #f3f4f6)', cursor: 'pointer', background: 'transparent' }}
+                              onMouseEnter={(e) => (e.currentTarget.style.background = 'var(--accent, #f3f4f6)')}
+                              onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
+                            >
+                              <div style={{ fontWeight: 500 }}>{wh.description}</div>
+                              <div style={{ fontSize: '0.75rem', color: 'var(--muted-foreground)' }}>{wh.shortAddress}</div>
+                            </button>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </>
+              ) : (
+                <>
+                  <div className={`${s.fieldGroup} ${s.fullWidth}`}>
+                    <label className={s.label}>Вулиця, будинок, квартира *</label>
+                    <input type="text" name="street" value={address.street} onChange={handleChange} className={s.input} placeholder="вул. Хрещатик, 1, кв. 5" required />
+                  </div>
+                  <div className={s.fieldGroup}>
+                    <label className={s.label}>Місто *</label>
+                    <input type="text" name="city" value={address.city} onChange={handleChange} className={s.input} placeholder="Київ" required />
+                  </div>
+                  <div className={s.fieldGroup}>
+                    <label className={s.label}>Область</label>
+                    <input type="text" name="state" value={address.state} onChange={handleChange} className={s.input} placeholder="Київська" />
+                  </div>
+                  <div className={s.fieldGroup}>
+                    <label className={s.label}>Поштовий індекс *</label>
+                    <input type="text" name="zipCode" value={address.zipCode} onChange={handleChange} className={s.input} placeholder="01001" required />
+                  </div>
+                  <div className={s.fieldGroup}>
+                    <label className={s.label}>Країна *</label>
+                    <select name="country" value={address.country} onChange={handleChange} className={s.input} required>
+                      <option value="Ukraine">Україна</option>
+                      <option value="Poland">Польща</option>
+                      <option value="Germany">Німеччина</option>
+                      <option value="Other">Інша</option>
+                    </select>
+                  </div>
+                </>
+              )}
             </div>
           </div>
 
