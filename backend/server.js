@@ -58,6 +58,7 @@ const corsOptions = {
       process.env.CLIENT_URL,
       'http://localhost:3000',
       'https://duplomna-website-1dy7.vercel.app',
+      'https://duplomna-website-p786.vercel.app',
       'https://duplomnawebsite-production.up.railway.app',
     ];
 
