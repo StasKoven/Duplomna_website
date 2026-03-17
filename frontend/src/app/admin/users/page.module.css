@@ -7,7 +7,7 @@
 
 /* Заголовок секції */
 .header {
-  @apply mb-8;
+  @apply mb-6;
 }
 
 .title {
@@ -16,6 +16,22 @@
 
 .subtitle {
   @apply text-muted-foreground;
+}
+
+.statsGrid {
+  @apply grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6;
+}
+
+.statCard {
+  @apply rounded-lg border bg-card px-4 py-4;
+}
+
+.statLabel {
+  @apply block text-sm text-muted-foreground mb-2;
+}
+
+.statValue {
+  @apply text-2xl font-semibold;
 }
 
 /* Пошук */
@@ -61,12 +77,20 @@
   @apply text-left py-3 px-4;
 }
 
+.thActions {
+  @apply text-right py-3 px-4;
+}
+
 .tr {
   @apply border-t hover:bg-muted/50;
 }
 
 .td {
   @apply py-3 px-4;
+}
+
+.actionsCell {
+  @apply py-3 px-4 text-right;
 }
 
 /* Комірка користувача */
@@ -86,6 +110,10 @@
   @apply font-medium;
 }
 
+.currentUserNote {
+  @apply text-xs text-muted-foreground;
+}
+
 /* Комірка email */
 .email {
   @apply text-sm;
@@ -93,6 +121,14 @@
 
 .verified {
   @apply text-xs text-green-600;
+}
+
+.roleCell {
+  @apply flex flex-col gap-2 min-w-[180px];
+}
+
+.select {
+  @apply w-full rounded-md border bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary disabled:cursor-not-allowed disabled:opacity-60;
 }
 
 /* Бейджі */
@@ -113,7 +149,23 @@
 }
 
 .statusInactive {
-  @apply bg-gray-100 text-gray-700;
+  @apply bg-rose-100 text-rose-700;
+}
+
+.statusCell {
+  @apply flex flex-col gap-2 min-w-[150px];
+}
+
+.secondaryAction {
+  @apply inline-flex items-center justify-center rounded-md border px-3 py-2 text-sm font-medium transition-colors hover:bg-muted disabled:cursor-not-allowed disabled:opacity-60;
+}
+
+.deleteAction {
+  @apply inline-flex items-center justify-center gap-2 rounded-md border border-red-200 px-3 py-2 text-sm font-medium text-red-600 transition-colors hover:bg-red-50 disabled:cursor-not-allowed disabled:opacity-60;
+}
+
+.deleteIcon {
+  @apply h-4 w-4;
 }
 
 /* Комірка дати */

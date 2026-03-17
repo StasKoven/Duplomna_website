@@ -1,5 +1,18 @@
 const User = require('../models/User.model');
 
+const ADMIN_ROLE = 'admin';
+const USER_ROLE = 'user';
+const ALLOWED_ROLES = [USER_ROLE, ADMIN_ROLE];
+
+const isLastAdmin = async (userId) => {
+  const remainingAdmins = await User.countDocuments({
+    role: ADMIN_ROLE,
+    _id: { $ne: userId }
+  });
+
+  return remainingAdmins === 0;
+};
+
 /**
  * Get user loyalty points and history
  */
@@ -107,19 +120,58 @@ exports.updateUser = async (req, res) => {
     const { id } = req.params;
     const { role, isActive } = req.body;
 
-    const user = await User.findByIdAndUpdate(
-      id,
-      { role, isActive },
-      { new: true, runValidators: true }
-    ).select('-password -refreshTokens');
+    const user = await User.findById(id);
 
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
 
+    const isSelfAction = req.user._id.toString() === id;
+
+    if (role !== undefined && !ALLOWED_ROLES.includes(role)) {
+      return res.status(400).json({ message: 'Invalid user role' });
+    }
+
+    if (isActive !== undefined && typeof isActive !== 'boolean') {
+      return res.status(400).json({ message: 'isActive must be a boolean value' });
+    }
+
+    if (role === undefined && isActive === undefined) {
+      return res.status(400).json({ message: 'No user changes provided' });
+    }
+
+    if (isSelfAction && role !== undefined && role !== user.role) {
+      return res.status(400).json({ message: 'You cannot change your own role' });
+    }
+
+    if (isSelfAction && isActive === false) {
+      return res.status(400).json({ message: 'You cannot deactivate your own account' });
+    }
+
+    const isDemotingAdmin = user.role === ADMIN_ROLE && role === USER_ROLE;
+    const isDeletingAdminAccess = user.role === ADMIN_ROLE && isActive === false;
+
+    if ((isDemotingAdmin || isDeletingAdminAccess) && await isLastAdmin(user._id)) {
+      return res.status(400).json({ message: 'At least one active admin account must remain' });
+    }
+
+    if (role !== undefined) {
+      user.role = role;
+    }
+
+    if (isActive !== undefined) {
+      user.isActive = isActive;
+
+      if (!isActive) {
+        user.refreshTokens = [];
+      }
+    }
+
+    await user.save();
+
     res.json({
       message: 'User updated successfully',
-      user
+      user: user.toJSON()
     });
   } catch (error) {
     console.error('Update user error:', error);
@@ -134,11 +186,21 @@ exports.deleteUser = async (req, res) => {
   try {
     const { id } = req.params;
 
-    const user = await User.findByIdAndDelete(id);
+    if (req.user._id.toString() === id) {
+      return res.status(400).json({ message: 'You cannot delete your own account' });
+    }
+
+    const user = await User.findById(id);
 
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
+
+    if (user.role === ADMIN_ROLE && await isLastAdmin(user._id)) {
+      return res.status(400).json({ message: 'At least one admin account must remain' });
+    }
+
+    await user.deleteOne();
 
     res.json({ message: 'User deleted successfully' });
   } catch (error) {
