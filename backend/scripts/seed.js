@@ -41,7 +41,7 @@ const seedDatabase = async () => {
     const admin = await User.create({
       firstName: 'Станіслав',
       lastName: 'Бабенко',
-      email: process.env.ADMIN_EMAIL || 'admin@techstore.ua',
+      email: process.env.ADMIN_EMAIL || 'admin@electronics.com',
       password: process.env.ADMIN_PASSWORD || 'Admin123!@#',
       role: 'admin',
       isActive: true,
