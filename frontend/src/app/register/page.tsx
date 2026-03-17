@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { useForm } from 'react-hook-form'
@@ -31,6 +31,8 @@ type RegisterFormData = z.infer<typeof registerSchema>
 
 export default function RegisterPage() {
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const redirectTo = searchParams.get('redirect') || '/'
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
@@ -41,9 +43,9 @@ export default function RegisterPage() {
 
   useEffect(() => {
     if (isAuthenticated) {
-      router.replace('/')
+      router.replace(redirectTo)
     }
-  }, [isAuthenticated, router])
+  }, [isAuthenticated, redirectTo, router])
 
   const {
     register: registerField,
@@ -63,7 +65,7 @@ export default function RegisterPage() {
         password: data.password,
         phone: data.phone,
       })
-      router.push('/')
+      router.replace(redirectTo)
     } catch {
       // Error toast is already shown in authStore
     } finally {
@@ -75,7 +77,7 @@ export default function RegisterPage() {
     setIsGoogleLoading(true)
     try {
       await googleLogin()
-      router.push('/')
+      router.replace(redirectTo)
     } catch (error: any) {
       console.error('Google register error:', error)
     } finally {

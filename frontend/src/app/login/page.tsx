@@ -21,6 +21,7 @@ type LoginFormData = z.infer<typeof loginSchema>
 function LoginForm() {
   const router = useRouter()
   const searchParams = useSearchParams()
+  const redirectTo = searchParams.get('redirect') || '/'
   const [showPassword, setShowPassword] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [isGoogleLoading, setIsGoogleLoading] = useState(false)
@@ -30,9 +31,9 @@ function LoginForm() {
 
   useEffect(() => {
     if (isAuthenticated) {
-      router.replace('/')
+      router.replace(redirectTo)
     }
-  }, [isAuthenticated, router])
+  }, [isAuthenticated, redirectTo, router])
 
   const {
     register,
@@ -48,8 +49,7 @@ function LoginForm() {
       await login(data.email, data.password)
       // toast вже показується в authStore
       
-      const redirectTo = searchParams.get('redirect') || '/'
-      router.push(redirectTo)
+      router.replace(redirectTo)
     } catch (error: any) {
       // Помилка вже показується в authStore, але на всяк випадок
       console.error('Login error:', error)
@@ -62,8 +62,7 @@ function LoginForm() {
     setIsGoogleLoading(true)
     try {
       await googleLogin()
-      const redirectTo = searchParams.get('redirect') || '/'
-      router.push(redirectTo)
+      router.replace(redirectTo)
     } catch (error: any) {
       console.error('Google login error:', error)
     } finally {

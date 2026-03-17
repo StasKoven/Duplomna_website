@@ -108,14 +108,14 @@ export default function CartPage() {
 
               <div className={s.modalActions}>
                 <Link
-                  href="/login?redirect=/cart"
+                  href="/login?redirect=/checkout"
                   className={s.modalLoginBtn}
                 >
                   <LogIn className={s.modalBtnIcon} />
                   Увійти
                 </Link>
                 <Link
-                  href="/register?redirect=/cart"
+                  href="/register?redirect=/checkout"
                   className={s.modalRegisterBtn}
                 >
                   <UserPlus className={s.modalBtnIcon} />
