@@ -243,6 +243,7 @@
   display: flex;
   align-items: center;
   gap: 0.75rem;
+  min-width: 0;
 }
 
 .itemImg {
@@ -263,6 +264,7 @@
 .itemInfo {
   flex: 1;
   min-width: 0;
+  overflow: hidden;
 }
 
 .itemName {
@@ -283,11 +285,12 @@
 }
 
 .itemPrice {
-  font-size: 0.9375rem;
+  font-size: 0.875rem;
   font-weight: 600;
   color: var(--foreground, #111827);
   white-space: nowrap;
   flex-shrink: 0;
+  padding-left: 0.25rem;
 }
 
 .divider {
@@ -307,17 +310,21 @@
 .totalRow {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: baseline;
+  gap: 0.5rem;
   font-size: 0.9375rem;
 }
 
 .totalLabel {
   color: var(--muted-foreground, #6b7280);
+  flex-shrink: 0;
 }
 
 .totalValue {
   font-weight: 500;
   color: var(--foreground, #111827);
+  text-align: right;
+  word-break: keep-all;
 }
 
 .freeShipping {
@@ -345,12 +352,15 @@
   font-size: 1rem;
   font-weight: 700;
   color: var(--foreground, #111827);
+  flex-shrink: 0;
 }
 
 .grandTotalValue {
-  font-size: 1.25rem;
+  font-size: 1.125rem;
   font-weight: 700;
   color: var(--primary, #2563eb);
+  text-align: right;
+  word-break: keep-all;
 }
 
 /* ===== SUBMIT ===== */
