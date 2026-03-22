@@ -157,6 +157,34 @@
   box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
 }
 
+/* ===== DROPDOWN ===== */
+.fieldHint {
+  font-size: 0.75rem;
+  color: var(--muted-foreground, #6b7280);
+  margin-top: 0.25rem;
+}
+
+.dropdownItem {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 0.625rem 0.875rem;
+  font-size: 0.875rem;
+  border: none;
+  border-bottom: 1px solid var(--border, #f3f4f6);
+  cursor: pointer;
+  background: transparent;
+  color: var(--foreground, #111827);
+}
+
+.dropdownItem:hover {
+  background: var(--accent, #f3f4f6);
+}
+
+.dropdownItem:last-child {
+  border-bottom: none;
+}
+
 /* ===== PAYMENT ===== */
 .paymentOptions {
   display: flex;

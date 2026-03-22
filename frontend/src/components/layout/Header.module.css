@@ -295,34 +295,46 @@
 }
 
 /* ============================= */
-/* �����  live dropdown         */
+/* Пошук live dropdown           */
 /* ============================= */
 .searchDropdown {
-  @apply absolute top-full left-0 right-0 z-50 mt-1 rounded-md border bg-popover shadow-lg overflow-hidden;
-  max-height: 420px;
+  @apply absolute top-full left-0 right-0 z-50 mt-1 rounded-lg border bg-popover shadow-xl overflow-hidden;
+  max-height: 480px;
   overflow-y: auto;
 }
 
 .searchDropdownState {
-  @apply px-4 py-3 text-sm text-muted-foreground text-center;
+  @apply px-4 py-6 text-sm text-muted-foreground text-center;
+}
+
+.searchDropdownHeader {
+  @apply px-4 py-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider bg-muted/50 border-b;
 }
 
 .searchDropdownItem {
-  @apply flex items-center gap-3 px-3 py-2.5 hover:bg-accent transition-colors cursor-pointer;
+  @apply flex items-center gap-3 px-3 py-2.5 hover:bg-accent transition-colors cursor-pointer border-b border-border/40;
   text-decoration: none;
   color: inherit;
 }
 
+.searchDropdownItem:last-of-type {
+  border-bottom: none;
+}
+
 .searchDropdownImgWrap {
-  @apply flex-shrink-0 w-10 h-10 rounded overflow-hidden bg-muted;
+  @apply flex-shrink-0 w-14 h-14 rounded-md overflow-hidden bg-muted relative;
 }
 
 .searchDropdownImg {
-  @apply w-full h-full object-cover;
+  @apply w-full h-full object-contain p-0.5;
 }
 
 .searchDropdownImgPlaceholder {
-  @apply w-full h-full bg-muted;
+  @apply w-full h-full bg-muted flex items-center justify-center text-lg;
+}
+
+.searchDropdownBadge {
+  @apply absolute top-0 left-0 text-[10px] font-bold leading-none text-white bg-red-500 px-1 py-0.5 rounded-br-md;
 }
 
 .searchDropdownInfo {
@@ -330,18 +342,30 @@
 }
 
 .searchDropdownName {
-  @apply text-sm font-medium leading-tight truncate;
+  @apply text-sm font-medium leading-tight;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .searchDropdownBrand {
   @apply text-xs text-muted-foreground mt-0.5;
 }
 
+.searchDropdownPriceCol {
+  @apply flex flex-col items-end flex-shrink-0 ml-2;
+}
+
 .searchDropdownPrice {
-  @apply text-sm font-semibold text-primary flex-shrink-0;
+  @apply text-sm font-bold text-primary whitespace-nowrap;
+}
+
+.searchDropdownComparePrice {
+  @apply text-xs text-muted-foreground line-through whitespace-nowrap;
 }
 
 .searchDropdownAll {
-  @apply block px-4 py-2.5 text-sm text-center text-primary font-medium hover:bg-accent transition-colors border-t;
+  @apply block px-4 py-3 text-sm text-center text-primary font-semibold hover:bg-accent transition-colors border-t;
   text-decoration: none;
 }

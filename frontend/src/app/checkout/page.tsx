@@ -1,6 +1,7 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef, useCallback } from 'react'
+import { createPortal } from 'react-dom'
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -41,6 +42,58 @@ interface NovaPoshtaWarehouse {
   shortAddress: string
 }
 
+/* ─── Floating dropdown rendered via portal ─── */
+function FloatingDropdown({
+  anchorRef,
+  open,
+  children,
+}: {
+  anchorRef: React.RefObject<HTMLDivElement | null>
+  open: boolean
+  children: React.ReactNode
+}) {
+  const [pos, setPos] = useState({ top: 0, left: 0, width: 0 })
+
+  useEffect(() => {
+    if (!open || !anchorRef.current) return
+    const update = () => {
+      const r = anchorRef.current!.getBoundingClientRect()
+      setPos({ top: r.bottom + window.scrollY, left: r.left + window.scrollX, width: r.width })
+    }
+    update()
+    window.addEventListener('scroll', update, true)
+    window.addEventListener('resize', update)
+    return () => {
+      window.removeEventListener('scroll', update, true)
+      window.removeEventListener('resize', update)
+    }
+  }, [open, anchorRef])
+
+  if (!open || typeof document === 'undefined') return null
+
+  return createPortal(
+    <div
+      style={{
+        position: 'absolute',
+        top: pos.top,
+        left: pos.left,
+        width: pos.width,
+        zIndex: 9999,
+        background: 'var(--background, #fff)',
+        border: '1px solid var(--border, #e5e7eb)',
+        borderRadius: '0.5rem',
+        maxHeight: '240px',
+        overflowY: 'auto',
+        boxShadow: '0 12px 32px rgba(0,0,0,0.18)',
+      }}
+      onMouseDown={(e) => e.preventDefault()}
+    >
+      {children}
+    </div>,
+    document.body,
+  )
+}
+
 export default function CheckoutPage() {
   const router = useRouter()
   const { items, getTotalPrice, clearCart } = useCartStore()
@@ -67,6 +120,9 @@ export default function CheckoutPage() {
   const [showWarehouseDropdown, setShowWarehouseDropdown] = useState(false)
   const [loadingCities, setLoadingCities] = useState(false)
   const [loadingWarehouses, setLoadingWarehouses] = useState(false)
+
+  const cityFieldRef = useRef<HTMLDivElement>(null)
+  const warehouseFieldRef = useRef<HTMLDivElement>(null)
 
   const [address, setAddress] = useState<ShippingAddress>({
     firstName: '',
@@ -284,7 +340,7 @@ export default function CheckoutPage() {
         {/* ===== LEFT: form ===== */}
         <div className={s.formSection}>
           {/* Delivery Method */}
-          <div className={s.card} style={{ position: 'relative', zIndex: 2 }}>
+          <div className={s.card}>
             <div className={s.cardHeader}>
               <Truck className={s.cardIcon} />
               <h2 className={s.cardTitle}>Доставка</h2>
@@ -331,7 +387,7 @@ export default function CheckoutPage() {
               {deliveryMethod === 'nova_poshta' ? (
                 <>
                   {/* City search */}
-                  <div className={`${s.fieldGroup} ${s.fullWidth}`} style={{ position: 'relative' }} onClick={(e) => e.stopPropagation()}>
+                  <div ref={cityFieldRef} className={`${s.fieldGroup} ${s.fullWidth}`} onClick={(e) => e.stopPropagation()}>
                     <label className={s.label}>Місто *</label>
                     <input
                       type="text"
@@ -347,72 +403,66 @@ export default function CheckoutPage() {
                       placeholder="Почніть вводити назву міста..."
                       required
                     />
-                    {loadingCities && <div style={{ position: 'absolute', right: 12, top: 38, fontSize: '0.75rem', color: 'var(--muted-foreground)' }}>Пошук...</div>}
-                    {showCityDropdown && cities.length > 0 && (
-                      <div style={{ position: 'absolute', top: '100%', left: 0, right: 0, zIndex: 200, background: 'var(--background, #fff)', border: '1px solid var(--border, #e5e7eb)', borderRadius: '0.5rem', maxHeight: '220px', overflowY: 'auto', boxShadow: '0 8px 24px rgba(0,0,0,0.15)' }}>
-                        {cities.map(city => (
-                          <button
-                            key={city.ref}
-                            type="button"
-                            onClick={() => {
-                              setSelectedCity(city)
-                              setCitySearch('')
-                              setShowCityDropdown(false)
-                              setSelectedWarehouse(null)
-                              setWarehouseSearch('')
-                              setAddress(prev => ({ ...prev, city: city.mainDescription }))
-                            }}
-                            style={{ display: 'block', width: '100%', textAlign: 'left', padding: '0.625rem 0.875rem', fontSize: '0.875rem', borderBottom: '1px solid var(--border, #f3f4f6)', cursor: 'pointer', background: 'transparent' }}
-                            onMouseEnter={(e) => (e.currentTarget.style.background = 'var(--accent, #f3f4f6)')}
-                            onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
-                          >
-                            {city.name}
-                          </button>
-                        ))}
-                      </div>
-                    )}
+                    {loadingCities && <div className={s.fieldHint}>Пошук...</div>}
                   </div>
+                  <FloatingDropdown anchorRef={cityFieldRef} open={showCityDropdown && cities.length > 0}>
+                    {cities.map(city => (
+                      <button
+                        key={city.ref}
+                        type="button"
+                        className={s.dropdownItem}
+                        onClick={() => {
+                          setSelectedCity(city)
+                          setCitySearch('')
+                          setShowCityDropdown(false)
+                          setSelectedWarehouse(null)
+                          setWarehouseSearch('')
+                          setAddress(prev => ({ ...prev, city: city.mainDescription }))
+                        }}
+                      >
+                        {city.name}
+                      </button>
+                    ))}
+                  </FloatingDropdown>
 
                   {/* Warehouse search */}
                   {selectedCity && (
-                    <div className={`${s.fieldGroup} ${s.fullWidth}`} style={{ position: 'relative' }} onClick={(e) => e.stopPropagation()}>
-                      <label className={s.label}>Відділення Нової Пошти *</label>
-                      <input
-                        type="text"
-                        value={selectedWarehouse ? selectedWarehouse.description : warehouseSearch}
-                        onChange={(e) => {
-                          setWarehouseSearch(e.target.value)
-                          setSelectedWarehouse(null)
-                        }}
-                        onFocus={() => warehouses.length > 0 && setShowWarehouseDropdown(true)}
-                        className={s.input}
-                        placeholder="Пошук відділення за номером або адресою..."
-                        required
-                      />
-                      {loadingWarehouses && <div style={{ position: 'absolute', right: 12, top: 38, fontSize: '0.75rem', color: 'var(--muted-foreground)' }}>Завантаження...</div>}
-                      {showWarehouseDropdown && warehouses.length > 0 && (
-                        <div style={{ position: 'absolute', top: '100%', left: 0, right: 0, zIndex: 200, background: 'var(--background, #fff)', border: '1px solid var(--border, #e5e7eb)', borderRadius: '0.5rem', maxHeight: '250px', overflowY: 'auto', boxShadow: '0 8px 24px rgba(0,0,0,0.15)' }}>
-                          {warehouses.map(wh => (
-                            <button
-                              key={wh.ref}
-                              type="button"
-                              onClick={() => {
-                                setSelectedWarehouse(wh)
-                                setShowWarehouseDropdown(false)
-                                setWarehouseSearch('')
-                                setAddress(prev => ({ ...prev, street: wh.description, zipCode: wh.number }))
-                              }}
-                              style={{ display: 'block', width: '100%', textAlign: 'left', padding: '0.625rem 0.875rem', fontSize: '0.875rem', borderBottom: '1px solid var(--border, #f3f4f6)', cursor: 'pointer', background: 'transparent' }}
-                              onMouseEnter={(e) => (e.currentTarget.style.background = 'var(--accent, #f3f4f6)')}
-                              onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
-                            >
-                              <div style={{ fontWeight: 500 }}>{wh.description}</div>
-                              <div style={{ fontSize: '0.75rem', color: 'var(--muted-foreground)' }}>{wh.shortAddress}</div>
-                            </button>
-                          ))}
-                        </div>
-                      )}
-                    </div>
+                    <>
+                      <div ref={warehouseFieldRef} className={`${s.fieldGroup} ${s.fullWidth}`} onClick={(e) => e.stopPropagation()}>
+                        <label className={s.label}>Відділення Нової Пошти *</label>
+                        <input
+                          type="text"
+                          value={selectedWarehouse ? selectedWarehouse.description : warehouseSearch}
+                          onChange={(e) => {
+                            setWarehouseSearch(e.target.value)
+                            setSelectedWarehouse(null)
+                          }}
+                          onFocus={() => warehouses.length > 0 && setShowWarehouseDropdown(true)}
+                          className={s.input}
+                          placeholder="Пошук відділення за номером або адресою..."
+                          required
+                        />
+                        {loadingWarehouses && <div className={s.fieldHint}>Завантаження...</div>}
+                      </div>
+                      <FloatingDropdown anchorRef={warehouseFieldRef} open={showWarehouseDropdown && warehouses.length > 0}>
+                        {warehouses.map(wh => (
+                          <button
+                            key={wh.ref}
+                            type="button"
+                            className={s.dropdownItem}
+                            onClick={() => {
+                              setSelectedWarehouse(wh)
+                              setShowWarehouseDropdown(false)
+                              setWarehouseSearch('')
+                              setAddress(prev => ({ ...prev, street: wh.description, zipCode: wh.number }))
+                            }}
+                          >
+                            <div style={{ fontWeight: 500 }}>{wh.description}</div>
+                            <div style={{ fontSize: '0.75rem', color: 'var(--muted-foreground)' }}>{wh.shortAddress}</div>
+                          </button>
+                        ))}
+                      </FloatingDropdown>
+                    </>
                   )}
                 </>
               ) : (

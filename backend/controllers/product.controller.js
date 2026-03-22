@@ -412,8 +412,8 @@ exports.autocompleteProducts = async (req, res) => {
       { score: { $meta: 'textScore' } }
     )
       .sort({ score: { $meta: 'textScore' } })
-      .limit(6)
-      .select('name slug price comparePrice images brand')
+      .limit(8)
+      .select('name slug price comparePrice images brand stock')
       .lean();
 
     // Fallback: prefix regex on name/brand when text search returns nothing
@@ -424,8 +424,8 @@ exports.autocompleteProducts = async (req, res) => {
         isActive: true,
         $or: [{ name: regex }, { brand: regex }],
       })
-        .limit(6)
-        .select('name slug price comparePrice images brand')
+        .limit(8)
+        .select('name slug price comparePrice images brand stock')
         .lean();
     }
 

@@ -39,6 +39,7 @@ interface SearchResult {
   comparePrice?: number
   images: { url: string; alt?: string }[]
   brand?: string
+  stock?: number
 }
 
 export default function Header() {
@@ -221,42 +222,55 @@ export default function Header() {
                   {isSearching ? (
                     <div className={s.searchDropdownState}>Пошук...</div>
                   ) : searchResults.length === 0 ? (
-                    <div className={s.searchDropdownState}>Нічого не знайдено</div>
+                    <div className={s.searchDropdownState}>Нічого не знайдено за запитом &ldquo;{searchQuery}&rdquo;</div>
                   ) : (
                     <>
-                      {searchResults.map((product) => (
-                        <Link
-                          key={product._id}
-                          href={`/products/${product.slug}`}
-                          className={s.searchDropdownItem}
-                          onClick={closeDropdownAndNavigate}
-                        >
-                          <div className={s.searchDropdownImgWrap}>
-                            {product.images?.[0]?.url ? (
-                              // eslint-disable-next-line @next/next/no-img-element
-                              <img
-                                src={product.images[0].url}
-                                alt={product.name}
-                                className={s.searchDropdownImg}
-                                loading="lazy"
-                              />
-                            ) : (
-                              <div className={s.searchDropdownImgPlaceholder} />
-                            )}
-                          </div>
-                          <div className={s.searchDropdownInfo}>
-                            <span className={s.searchDropdownName}>{product.name}</span>
-                            {product.brand && <span className={s.searchDropdownBrand}>{product.brand}</span>}
-                          </div>
-                          <span className={s.searchDropdownPrice}>{formatPrice(product.price)}</span>
-                        </Link>
-                      ))}
+                      <div className={s.searchDropdownHeader}>Товари ({searchResults.length})</div>
+                      {searchResults.map((product) => {
+                        const hasDiscount = product.comparePrice && product.comparePrice > product.price
+                        const discountPct = hasDiscount ? Math.round((1 - product.price / product.comparePrice!) * 100) : 0
+                        return (
+                          <Link
+                            key={product._id}
+                            href={`/products/${product.slug}`}
+                            className={s.searchDropdownItem}
+                            onClick={closeDropdownAndNavigate}
+                          >
+                            <div className={s.searchDropdownImgWrap}>
+                              {product.images?.[0]?.url ? (
+                                // eslint-disable-next-line @next/next/no-img-element
+                                <img
+                                  src={product.images[0].url}
+                                  alt={product.name}
+                                  className={s.searchDropdownImg}
+                                  loading="lazy"
+                                />
+                              ) : (
+                                <div className={s.searchDropdownImgPlaceholder}>📦</div>
+                              )}
+                              {hasDiscount && (
+                                <span className={s.searchDropdownBadge}>-{discountPct}%</span>
+                              )}
+                            </div>
+                            <div className={s.searchDropdownInfo}>
+                              <span className={s.searchDropdownName}>{product.name}</span>
+                              {product.brand && <span className={s.searchDropdownBrand}>{product.brand}</span>}
+                            </div>
+                            <div className={s.searchDropdownPriceCol}>
+                              <span className={s.searchDropdownPrice}>{formatPrice(product.price)}</span>
+                              {hasDiscount && (
+                                <span className={s.searchDropdownComparePrice}>{formatPrice(product.comparePrice!)}</span>
+                              )}
+                            </div>
+                          </Link>
+                        )
+                      })}
                       <Link
                         href={`/products?search=${encodeURIComponent(searchQuery)}`}
                         className={s.searchDropdownAll}
                         onClick={closeDropdownAndNavigate}
                       >
-                        Всі результати для &ldquo;{searchQuery}&rdquo; &rarr;
+                        Показати всі результати &rarr;
                       </Link>
                     </>
                   )}
@@ -440,42 +454,55 @@ export default function Header() {
                       {isSearching ? (
                         <div className={s.searchDropdownState}>Пошук...</div>
                       ) : searchResults.length === 0 ? (
-                        <div className={s.searchDropdownState}>Нічого не знайдено</div>
+                        <div className={s.searchDropdownState}>Нічого не знайдено за запитом &ldquo;{searchQuery}&rdquo;</div>
                       ) : (
                         <>
-                          {searchResults.map((product) => (
-                            <Link
-                              key={product._id}
-                              href={`/products/${product.slug}`}
-                              className={s.searchDropdownItem}
-                              onClick={closeDropdownAndNavigate}
-                            >
-                              <div className={s.searchDropdownImgWrap}>
-                                {product.images?.[0]?.url ? (
-                                  // eslint-disable-next-line @next/next/no-img-element
-                                  <img
-                                    src={product.images[0].url}
-                                    alt={product.name}
-                                    className={s.searchDropdownImg}
-                                    loading="lazy"
-                                  />
-                                ) : (
-                                  <div className={s.searchDropdownImgPlaceholder} />
-                                )}
-                              </div>
-                              <div className={s.searchDropdownInfo}>
-                                <span className={s.searchDropdownName}>{product.name}</span>
-                                {product.brand && <span className={s.searchDropdownBrand}>{product.brand}</span>}
-                              </div>
-                              <span className={s.searchDropdownPrice}>{formatPrice(product.price)}</span>
-                            </Link>
-                          ))}
+                          <div className={s.searchDropdownHeader}>Товари ({searchResults.length})</div>
+                          {searchResults.map((product) => {
+                            const hasDiscount = product.comparePrice && product.comparePrice > product.price
+                            const discountPct = hasDiscount ? Math.round((1 - product.price / product.comparePrice!) * 100) : 0
+                            return (
+                              <Link
+                                key={product._id}
+                                href={`/products/${product.slug}`}
+                                className={s.searchDropdownItem}
+                                onClick={closeDropdownAndNavigate}
+                              >
+                                <div className={s.searchDropdownImgWrap}>
+                                  {product.images?.[0]?.url ? (
+                                    // eslint-disable-next-line @next/next/no-img-element
+                                    <img
+                                      src={product.images[0].url}
+                                      alt={product.name}
+                                      className={s.searchDropdownImg}
+                                      loading="lazy"
+                                    />
+                                  ) : (
+                                    <div className={s.searchDropdownImgPlaceholder}>📦</div>
+                                  )}
+                                  {hasDiscount && (
+                                    <span className={s.searchDropdownBadge}>-{discountPct}%</span>
+                                  )}
+                                </div>
+                                <div className={s.searchDropdownInfo}>
+                                  <span className={s.searchDropdownName}>{product.name}</span>
+                                  {product.brand && <span className={s.searchDropdownBrand}>{product.brand}</span>}
+                                </div>
+                                <div className={s.searchDropdownPriceCol}>
+                                  <span className={s.searchDropdownPrice}>{formatPrice(product.price)}</span>
+                                  {hasDiscount && (
+                                    <span className={s.searchDropdownComparePrice}>{formatPrice(product.comparePrice!)}</span>
+                                  )}
+                                </div>
+                              </Link>
+                            )
+                          })}
                           <Link
                             href={`/products?search=${encodeURIComponent(searchQuery)}`}
                             className={s.searchDropdownAll}
                             onClick={closeDropdownAndNavigate}
                           >
-                            Всі результати для &ldquo;{searchQuery}&rdquo; &rarr;
+                            Показати всі результати &rarr;
                           </Link>
                         </>
                       )}
