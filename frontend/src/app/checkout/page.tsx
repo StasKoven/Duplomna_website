@@ -97,12 +97,12 @@ export default function CheckoutPage() {
     }
   }, [isAuthenticated, user, router])
 
-  // If cart is empty — redirect back
+  // If cart is empty — redirect back (but NOT while we are placing the order)
   useEffect(() => {
-    if (isAuthenticated && items.length === 0 && !orderPlaced) {
+    if (isAuthenticated && items.length === 0 && !orderPlaced && !isSubmitting) {
       router.replace('/cart')
     }
-  }, [items, isAuthenticated, orderPlaced, router])
+  }, [items, isAuthenticated, orderPlaced, isSubmitting, router])
 
   // Search cities with debounce
   useEffect(() => {
@@ -186,6 +186,13 @@ export default function CheckoutPage() {
         toast.error(`Поле "${fieldLabel(key)}" обов'язкове`)
         return
       }
+    }
+
+    // Phone format: must contain 10-15 digits
+    const digitsOnly = address.phone.replace(/\D/g, '')
+    if (digitsOnly.length < 10 || digitsOnly.length > 15) {
+      toast.error('Введіть коректний номер телефону (+380XXXXXXXXX)')
+      return
     }
 
     if (deliveryMethod === 'nova_poshta') {
@@ -476,7 +483,7 @@ export default function CheckoutPage() {
                 <CreditCard className={s.paymentIcon} />
                 <div>
                   <span className={s.paymentTitle}>Оплата карткою онлайн</span>
-                  <span className={s.paymentDesc}>Visa, Mastercard</span>
+                  <span className={s.paymentDesc}>Visa, Mastercard &mdash; замовлення буде відправлено після підтвердження</span>
                 </div>
               </label>
             </div>

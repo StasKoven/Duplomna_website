@@ -3,7 +3,7 @@ const router = express.Router();
 const { body } = require('express-validator');
 const reviewController = require('../controllers/review.controller');
 const { verifyToken } = require('../middleware/auth');
-const { validate } = require('../middleware/validator');
+const { validate, sanitizePagination } = require('../middleware/validator');
 
 /**
  * @route   POST /api/reviews
@@ -29,7 +29,7 @@ router.get('/can-review/:productId', verifyToken, reviewController.canReview);
  * @desc    Get product reviews
  * @access  Public
  */
-router.get('/product/:productId', reviewController.getProductReviews);
+router.get('/product/:productId', sanitizePagination, reviewController.getProductReviews);
 
 /**
  * @route   PUT /api/reviews/:id/helpful

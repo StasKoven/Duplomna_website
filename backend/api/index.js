@@ -4,6 +4,7 @@ const cors = require('cors');
 const helmet = require('helmet');
 const mongoSanitize = require('express-mongo-sanitize');
 const compression = require('compression');
+const rateLimit = require('express-rate-limit');
 require('dotenv').config();
 
 const authRoutes = require('../routes/auth.routes');
@@ -41,6 +42,7 @@ const corsOptions = {
       process.env.CLIENT_URL,
       'http://localhost:3000',
       'https://duplomna-website-1dy7.vercel.app',
+      'https://duplomna-website-p786.vercel.app',
       'https://duplomnawebsite-production.up.railway.app',
     ];
 
@@ -61,6 +63,17 @@ const corsOptions = {
 };
 app.use(cors(corsOptions));
 app.options('*', cors(corsOptions));
+
+// Rate limiting
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 100,
+  standardHeaders: true,
+  legacyHeaders: false,
+  skip: (req) => req.method === 'OPTIONS',
+  message: 'Too many requests from this IP, please try again later.'
+});
+app.use('/api', limiter);
 
 // Body parser
 app.use(express.json({ limit: '10mb' }));

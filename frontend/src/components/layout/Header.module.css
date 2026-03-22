@@ -73,8 +73,12 @@
 /* ============================= */
 /* Пошук — десктоп               */
 /* ============================= */
+.searchContainer {
+  @apply hidden lg:flex flex-col flex-1 max-w-sm mx-8 relative;
+}
+
 .searchForm {
-  @apply hidden lg:flex flex-1 max-w-sm mx-8;
+  @apply w-full;
 }
 
 .searchWrapper {
@@ -288,4 +292,56 @@
 
 .mobileLogoutBtn {
   @apply flex w-full items-center space-x-3 px-3 py-2.5 rounded-md hover:bg-red-50 text-red-600;
+}
+
+/* ============================= */
+/* �����  live dropdown         */
+/* ============================= */
+.searchDropdown {
+  @apply absolute top-full left-0 right-0 z-50 mt-1 rounded-md border bg-popover shadow-lg overflow-hidden;
+  max-height: 420px;
+  overflow-y: auto;
+}
+
+.searchDropdownState {
+  @apply px-4 py-3 text-sm text-muted-foreground text-center;
+}
+
+.searchDropdownItem {
+  @apply flex items-center gap-3 px-3 py-2.5 hover:bg-accent transition-colors cursor-pointer;
+  text-decoration: none;
+  color: inherit;
+}
+
+.searchDropdownImgWrap {
+  @apply flex-shrink-0 w-10 h-10 rounded overflow-hidden bg-muted;
+}
+
+.searchDropdownImg {
+  @apply w-full h-full object-cover;
+}
+
+.searchDropdownImgPlaceholder {
+  @apply w-full h-full bg-muted;
+}
+
+.searchDropdownInfo {
+  @apply flex flex-col flex-1 min-w-0;
+}
+
+.searchDropdownName {
+  @apply text-sm font-medium leading-tight truncate;
+}
+
+.searchDropdownBrand {
+  @apply text-xs text-muted-foreground mt-0.5;
+}
+
+.searchDropdownPrice {
+  @apply text-sm font-semibold text-primary flex-shrink-0;
+}
+
+.searchDropdownAll {
+  @apply block px-4 py-2.5 text-sm text-center text-primary font-medium hover:bg-accent transition-colors border-t;
+  text-decoration: none;
 }

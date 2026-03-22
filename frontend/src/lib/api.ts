@@ -89,6 +89,11 @@ api.interceptors.response.use(
             if (typeof window !== 'undefined') {
               localStorage.setItem('accessToken', accessToken)
               localStorage.setItem('refreshToken', newRefreshToken)
+
+              // Update auth cookie so Next.js middleware uses the new token
+              const expires = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toUTCString()
+              const secure = window.location.protocol === 'https:' ? '; Secure' : ''
+              document.cookie = `auth-token=${accessToken}; path=/; expires=${expires}; SameSite=Lax${secure}`
             }
 
             return accessToken

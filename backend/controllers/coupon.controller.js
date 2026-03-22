@@ -208,9 +208,21 @@ exports.createCoupon = async (req, res) => {
  */
 exports.updateCoupon = async (req, res) => {
   try {
+    const allowedFields = [
+      'code', 'description', 'type', 'value', 'minPurchase', 'maxDiscount',
+      'usageLimit', 'applicableCategories', 'applicableProducts',
+      'startDate', 'endDate', 'isActive', 'isPublic'
+    ];
+    const updates = {};
+    for (const key of allowedFields) {
+      if (req.body[key] !== undefined) {
+        updates[key] = req.body[key];
+      }
+    }
+
     const coupon = await Coupon.findByIdAndUpdate(
       req.params.id,
-      req.body,
+      updates,
       { new: true, runValidators: true }
     );
 

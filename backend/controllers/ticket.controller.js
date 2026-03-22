@@ -21,7 +21,10 @@ exports.createTicket = async (req, res) => {
     if (req.user) {
       ticketData.user = req.user._id;
     } else {
-      // Guest ticket
+      // Guest ticket - require contact info
+      if (!guestName || !guestEmail) {
+        return res.status(400).json({ message: "Ім'я та email обов'язкові для гостьових тікетів" });
+      }
       ticketData.guestName = guestName;
       ticketData.guestEmail = guestEmail;
     }

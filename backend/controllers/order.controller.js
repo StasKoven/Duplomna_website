@@ -15,6 +15,7 @@ exports.createOrder = async (req, res) => {
     // Validate and calculate order totals
     let subtotal = 0;
     const orderItems = [];
+    const productMap = new Map(); // Store full product docs for coupon calculation
 
     for (const item of items) {
       const product = await Product.findById(item.product);
@@ -31,6 +32,7 @@ exports.createOrder = async (req, res) => {
 
       const itemSubtotal = product.price * item.quantity;
       subtotal += itemSubtotal;
+      productMap.set(product._id.toString(), product);
 
       orderItems.push({
         product: product._id,
@@ -56,7 +58,15 @@ exports.createOrder = async (req, res) => {
       if (coupon) {
         const validCheck = coupon.isValid();
         if (validCheck.valid && !coupon.usedBy.some(u => u.user.toString() === userId.toString())) {
-          const result = coupon.calculateDiscount(subtotal, items);
+          // Build cart with populated product data for correct category/product filtering
+          const cartForCoupon = orderItems.map(oi => {
+            const fullProduct = productMap.get(oi.product.toString());
+            return {
+              product: { _id: oi.product, price: oi.price, category: fullProduct?.category },
+              quantity: oi.quantity
+            };
+          });
+          const result = coupon.calculateDiscount(subtotal, cartForCoupon);
           discount = result.discount || 0;
 
           // Mark coupon as used
@@ -65,6 +75,28 @@ exports.createOrder = async (req, res) => {
           await coupon.save();
         }
       }
+    }
+
+    // Atomically decrement stock with guard to prevent overselling
+    const decrementedItems = [];
+    for (const item of items) {
+      const result = await Product.findOneAndUpdate(
+        { _id: item.product, stock: { $gte: item.quantity } },
+        { $inc: { stock: -item.quantity } },
+        { new: true }
+      );
+      if (!result) {
+        // Rollback: restore stock for all previously decremented items
+        for (const dec of decrementedItems) {
+          await Product.findByIdAndUpdate(dec.product, {
+            $inc: { stock: dec.quantity }
+          });
+        }
+        return res.status(400).json({ 
+          message: 'Stock changed during order creation. Please try again.' 
+        });
+      }
+      decrementedItems.push({ product: item.product, quantity: item.quantity });
     }
 
     const total = subtotal + shippingCost + tax - discount;
@@ -84,21 +116,8 @@ exports.createOrder = async (req, res) => {
 
     await order.save();
 
-    // Atomically decrement stock with guard to prevent overselling
-    for (const item of items) {
-      const result = await Product.findOneAndUpdate(
-        { _id: item.product, stock: { $gte: item.quantity } },
-        { $inc: { stock: -item.quantity } },
-        { new: true }
-      );
-      if (!result) {
-        // Rollback: delete the order and restore already decremented items
-        await Order.findByIdAndDelete(order._id);
-        return res.status(400).json({ 
-          message: 'Stock changed during order creation. Please try again.' 
-        });
-      }
-    }
+    // Clear user's cart after successful order
+    await User.findByIdAndUpdate(userId, { $set: { cart: [] } });
 
     createNotification({
       userId,
@@ -238,6 +257,15 @@ exports.updateOrderStatus = async (req, res) => {
 
     const previousStatus = order.orderStatus;
     order.orderStatus = orderStatus;
+
+    // Manually push status history with admin info (pre-save hook also pushes, so disable it)
+    order.statusHistory.push({
+      status: orderStatus,
+      date: new Date(),
+      note: note || undefined,
+      changedBy: req.user._id
+    });
+    order._skipStatusHistory = true;
     
     if (trackingNumber) {
       order.trackingNumber = trackingNumber;

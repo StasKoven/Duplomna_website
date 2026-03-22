@@ -50,13 +50,15 @@ exports.getProducts = async (req, res) => {
       if (maxPrice) filter.price.$lte = Number(maxPrice);
     }
 
-    // Search only by product name and brand
+    // Search by name, brand, tags and shortDescription
     if (search) {
       const escapedSearch = search.trim().replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
       const searchRegex = new RegExp(escapedSearch, 'i');
       filter.$or = [
         { name: searchRegex },
-        { brand: searchRegex }
+        { brand: searchRegex },
+        { tags: searchRegex },
+        { shortDescription: searchRegex },
       ];
     }
 
@@ -214,7 +216,20 @@ exports.createProduct = async (req, res) => {
 exports.updateProduct = async (req, res) => {
   try {
     const { id } = req.params;
-    const updates = req.body;
+
+    // Whitelist updatable fields — protect internal fields like views, rating, slug
+    const allowedFields = [
+      'name', 'description', 'shortDescription', 'price', 'comparePrice', 'cost',
+      'category', 'brand', 'sku', 'barcode', 'images', 'stock', 'lowStockThreshold',
+      'specifications', 'features', 'tags', 'warranty', 'isActive', 'isFeatured',
+      'isOnSale', 'weight', 'dimensions', 'seoTitle', 'seoDescription'
+    ];
+    const updates = {};
+    for (const key of allowedFields) {
+      if (req.body[key] !== undefined) {
+        updates[key] = req.body[key];
+      }
+    }
 
     const product = await Product.findByIdAndUpdate(
       id,
@@ -375,5 +390,48 @@ exports.getProductStats = async (req, res) => {
   } catch (error) {
     console.error('Get product stats error:', error);
     res.status(500).json({ message: 'Failed to fetch product statistics' });
+  }
+};
+
+/**
+ * Autocomplete search — fast endpoint for the header search bar
+ * Uses MongoDB $text index (name + description + brand), falls back to regex
+ */
+exports.autocompleteProducts = async (req, res) => {
+  try {
+    const { q } = req.query;
+    if (!q || q.trim().length < 2) {
+      return res.json({ products: [] });
+    }
+
+    const query = q.trim().slice(0, 100);
+
+    // Primary: use the text index for relevance-scored results
+    let products = await Product.find(
+      { $text: { $search: query }, isActive: true },
+      { score: { $meta: 'textScore' } }
+    )
+      .sort({ score: { $meta: 'textScore' } })
+      .limit(6)
+      .select('name slug price comparePrice images brand')
+      .lean();
+
+    // Fallback: prefix regex on name/brand when text search returns nothing
+    if (products.length === 0) {
+      const escaped = query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      const regex = new RegExp(escaped, 'i');
+      products = await Product.find({
+        isActive: true,
+        $or: [{ name: regex }, { brand: regex }],
+      })
+        .limit(6)
+        .select('name slug price comparePrice images brand')
+        .lean();
+    }
+
+    res.json({ products });
+  } catch (error) {
+    console.error('Autocomplete error:', error);
+    res.status(500).json({ message: 'Search failed' });
   }
 };

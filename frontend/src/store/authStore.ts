@@ -15,7 +15,8 @@ const setAuthCookie = (token: string) => {
   if (typeof document !== 'undefined') {
     // Set cookie that expires in 7 days (same as refresh token)
     const expires = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toUTCString()
-    document.cookie = `auth-token=${token}; path=/; expires=${expires}; SameSite=Lax`
+    const secure = window.location.protocol === 'https:' ? '; Secure' : ''
+    document.cookie = `auth-token=${token}; path=/; expires=${expires}; SameSite=Lax${secure}`
   }
 }
 
@@ -34,7 +35,7 @@ interface AuthState {
   login: (email: string, password: string) => Promise<void>
   register: (data: RegisterData) => Promise<void>
   googleLogin: () => Promise<void>
-  logout: () => void
+  logout: () => Promise<void>
   setUser: (user: User) => void
   fetchProfile: () => Promise<void>
   syncStores: () => Promise<void>
@@ -179,7 +180,13 @@ export const useAuthStore = create<AuthState>()(
         }
       },
 
-      logout: () => {
+      logout: async () => {
+        // Revoke refresh token on the server (best-effort, don't block UI)
+        const refreshToken = get().refreshToken
+        if (refreshToken) {
+          api.post('/auth/logout', { refreshToken }).catch(() => {})
+        }
+
         localStorage.removeItem('accessToken')
         localStorage.removeItem('refreshToken')
         removeAuthCookie()

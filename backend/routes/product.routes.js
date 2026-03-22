@@ -3,14 +3,21 @@ const router = express.Router();
 const { body } = require('express-validator');
 const productController = require('../controllers/product.controller');
 const { verifyToken, requireAdmin } = require('../middleware/auth');
-const { validate } = require('../middleware/validator');
+const { validate, sanitizePagination } = require('../middleware/validator');
 
 /**
  * @route   GET /api/products
  * @desc    Get all products with filters
  * @access  Public
  */
-router.get('/', productController.getProducts);
+router.get('/', sanitizePagination, productController.getProducts);
+
+/**
+ * @route   GET /api/products/autocomplete
+ * @desc    Fast autocomplete search for the header search bar
+ * @access  Public
+ */
+router.get('/autocomplete', productController.autocompleteProducts);
 
 /**
  * @route   GET /api/products/featured

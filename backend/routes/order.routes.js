@@ -3,7 +3,7 @@ const router = express.Router();
 const { body } = require('express-validator');
 const orderController = require('../controllers/order.controller');
 const { verifyToken, requireAdmin } = require('../middleware/auth');
-const { validate } = require('../middleware/validator');
+const { validate, sanitizePagination } = require('../middleware/validator');
 
 /**
  * @route   POST /api/orders
@@ -22,7 +22,7 @@ router.post('/', verifyToken, [
  * @desc    Get current user orders
  * @access  Private
  */
-router.get('/my-orders', verifyToken, orderController.getUserOrders);
+router.get('/my-orders', verifyToken, sanitizePagination, orderController.getUserOrders);
 
 /**
  * @route   GET /api/orders/stats
@@ -36,7 +36,7 @@ router.get('/stats', verifyToken, requireAdmin, orderController.getOrderStats);
  * @desc    Get all orders
  * @access  Private (Admin)
  */
-router.get('/all', verifyToken, requireAdmin, orderController.getAllOrders);
+router.get('/all', verifyToken, requireAdmin, sanitizePagination, orderController.getAllOrders);
 
 /**
  * @route   GET /api/orders/dashboard-stats

@@ -95,7 +95,11 @@ const orderSchema = new mongoose.Schema({
       type: Date,
       default: Date.now
     },
-    note: String
+    note: String,
+    changedBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User'
+    }
   }],
   subtotal: {
     type: Number,
@@ -140,9 +144,9 @@ orderSchema.pre('save', async function(next) {
   next();
 });
 
-// Add status to history when order status changes
+// Add status to history when order status changes (only if not already pushed manually)
 orderSchema.pre('save', function(next) {
-  if (this.isModified('orderStatus')) {
+  if (this.isModified('orderStatus') && !this._skipStatusHistory) {
     this.statusHistory.push({
       status: this.orderStatus,
       date: new Date()

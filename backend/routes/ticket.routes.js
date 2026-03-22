@@ -3,7 +3,7 @@ const router = express.Router();
 const { body } = require('express-validator');
 const ticketController = require('../controllers/ticket.controller');
 const { verifyToken, requireAdmin, optionalAuth } = require('../middleware/auth');
-const { validate } = require('../middleware/validator');
+const { validate, sanitizePagination } = require('../middleware/validator');
 
 // ===== USER ROUTES =====
 
@@ -52,7 +52,7 @@ router.post('/:id/messages', verifyToken, [
  * @desc    Get all tickets (admin)
  * @access  Admin
  */
-router.get('/admin/all', verifyToken, requireAdmin, ticketController.getAllTickets);
+router.get('/admin/all', verifyToken, requireAdmin, sanitizePagination, ticketController.getAllTickets);
 
 /**
  * @route   PUT /api/tickets/:id/status

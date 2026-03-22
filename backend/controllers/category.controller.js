@@ -91,7 +91,15 @@ exports.createCategory = async (req, res) => {
 exports.updateCategory = async (req, res) => {
   try {
     const { id } = req.params;
-    const updates = req.body;
+    
+    // Whitelist allowed update fields to prevent injection of protected fields
+    const allowedFields = ['name', 'slug', 'description', 'image', 'parent', 'isActive', 'order'];
+    const updates = {};
+    for (const key of allowedFields) {
+      if (req.body[key] !== undefined) {
+        updates[key] = req.body[key];
+      }
+    }
 
     const category = await Category.findByIdAndUpdate(
       id,

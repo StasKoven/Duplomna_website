@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import { useRouter, usePathname } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
@@ -26,8 +26,20 @@ import { useCartStore } from '@/store/cartStore'
 import { useWishlistStore } from '@/store/wishlistStore'
 import { useComparisonStore } from '@/store/comparisonStore'
 import { cn } from '@/lib/utils'
+import { formatPrice } from '@/lib/utils'
+import api from '@/lib/api'
 import NotificationBell from './NotificationBell'
 import s from './Header.module.css'
+
+interface SearchResult {
+  _id: string
+  name: string
+  slug: string
+  price: number
+  comparePrice?: number
+  images: { url: string; alt?: string }[]
+  brand?: string
+}
 
 export default function Header() {
   const router = useRouter()
@@ -38,6 +50,12 @@ export default function Header() {
   const [searchQuery, setSearchQuery] = useState('')
   const [isMobileSearchOpen, setIsMobileSearchOpen] = useState(false)
   const [mounted, setMounted] = useState(false)
+  const [searchResults, setSearchResults] = useState<SearchResult[]>([])
+  const [isSearching, setIsSearching] = useState(false)
+  const [showSearchDropdown, setShowSearchDropdown] = useState(false)
+
+  const searchContainerRef = useRef<HTMLDivElement>(null)
+  const mobileSearchContainerRef = useRef<HTMLDivElement>(null)
 
   const { user, isAuthenticated, logout } = useAuthStore()
   const { getTotalItems } = useCartStore()
@@ -46,6 +64,49 @@ export default function Header() {
   
   useEffect(() => {
     setMounted(true)
+  }, [])
+
+  // Debounced live search for dropdown
+  useEffect(() => {
+    if (searchQuery.trim().length < 2) {
+      setSearchResults([])
+      setShowSearchDropdown(false)
+      return
+    }
+    const timer = setTimeout(async () => {
+      setIsSearching(true)
+      try {
+        const { data } = await api.get(`/products/autocomplete?q=${encodeURIComponent(searchQuery)}`)
+        setSearchResults(data.products || [])
+        setShowSearchDropdown(true)
+      } catch {
+        setSearchResults([])
+      } finally {
+        setIsSearching(false)
+      }
+    }, 280)
+    return () => clearTimeout(timer)
+  }, [searchQuery])
+
+  // Close dropdown on click outside
+  useEffect(() => {
+    const handleClick = (e: MouseEvent) => {
+      const target = e.target as Node
+      const outsideDesktop = searchContainerRef.current && !searchContainerRef.current.contains(target)
+      const outsideMobile = mobileSearchContainerRef.current && !mobileSearchContainerRef.current.contains(target)
+      if (outsideDesktop && outsideMobile) {
+        setShowSearchDropdown(false)
+      }
+    }
+    document.addEventListener('mousedown', handleClick)
+    return () => document.removeEventListener('mousedown', handleClick)
+  }, [])
+
+  // Close dropdown on Esc
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') setShowSearchDropdown(false) }
+    document.addEventListener('keydown', onKey)
+    return () => document.removeEventListener('keydown', onKey)
   }, [])
   
   const cartItemsCount = mounted ? getTotalItems() : 0
@@ -70,12 +131,19 @@ export default function Header() {
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault()
+    setShowSearchDropdown(false)
     if (searchQuery.trim()) {
       router.push(`/products?search=${encodeURIComponent(searchQuery)}`)
       setSearchQuery('')
       setIsMobileSearchOpen(false)
       setIsMobileMenuOpen(false)
     }
+  }
+
+  const closeDropdownAndNavigate = () => {
+    setShowSearchDropdown(false)
+    setSearchQuery('')
+    setIsMobileSearchOpen(false)
   }
 
   const handleLogout = () => {
@@ -133,18 +201,68 @@ export default function Header() {
             </nav>
 
             {/* Десктоп пошук */}
-            <form onSubmit={handleSearch} className={s.searchForm}>
-              <div className={s.searchWrapper}>
-                <Search className={s.searchIcon} />
-                <input
-                  type="text"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Пошук товарів..."
-                  className={s.searchInput}
-                />
-              </div>
-            </form>
+            <div ref={searchContainerRef} className={s.searchContainer}>
+              <form onSubmit={handleSearch} className={s.searchForm}>
+                <div className={s.searchWrapper}>
+                  <Search className={s.searchIcon} />
+                  <input
+                    type="text"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    placeholder="Пошук товарів..."
+                    className={s.searchInput}
+                    autoComplete="off"
+                  />
+                </div>
+              </form>
+              {/* Live search dropdown */}
+              {showSearchDropdown && (
+                <div className={s.searchDropdown}>
+                  {isSearching ? (
+                    <div className={s.searchDropdownState}>Пошук...</div>
+                  ) : searchResults.length === 0 ? (
+                    <div className={s.searchDropdownState}>Нічого не знайдено</div>
+                  ) : (
+                    <>
+                      {searchResults.map((product) => (
+                        <Link
+                          key={product._id}
+                          href={`/products/${product.slug}`}
+                          className={s.searchDropdownItem}
+                          onClick={closeDropdownAndNavigate}
+                        >
+                          <div className={s.searchDropdownImgWrap}>
+                            {product.images?.[0]?.url ? (
+                              // eslint-disable-next-line @next/next/no-img-element
+                              <img
+                                src={product.images[0].url}
+                                alt={product.name}
+                                className={s.searchDropdownImg}
+                                loading="lazy"
+                              />
+                            ) : (
+                              <div className={s.searchDropdownImgPlaceholder} />
+                            )}
+                          </div>
+                          <div className={s.searchDropdownInfo}>
+                            <span className={s.searchDropdownName}>{product.name}</span>
+                            {product.brand && <span className={s.searchDropdownBrand}>{product.brand}</span>}
+                          </div>
+                          <span className={s.searchDropdownPrice}>{formatPrice(product.price)}</span>
+                        </Link>
+                      ))}
+                      <Link
+                        href={`/products?search=${encodeURIComponent(searchQuery)}`}
+                        className={s.searchDropdownAll}
+                        onClick={closeDropdownAndNavigate}
+                      >
+                        Всі результати для &ldquo;{searchQuery}&rdquo; &rarr;
+                      </Link>
+                    </>
+                  )}
+                </div>
+              )}
+            </div>
 
             {/* Секція дій (праворуч) */}
             <div className={s.actions}>
@@ -294,26 +412,76 @@ export default function Header() {
                 exit={{ opacity: 0, height: 0 }}
                 className={s.mobileSearchSection}
               >
-                <form onSubmit={handleSearch}>
-                  <div className={s.searchWrapper}>
-                    <Search className={s.searchIcon} />
-                    <input
-                      type="text"
-                      value={searchQuery}
-                      onChange={(e) => setSearchQuery(e.target.value)}
-                      placeholder="Пошук товарів..."
-                      autoFocus
-                      className={s.mobileSearchInput}
-                    />
-                    <button
-                      type="button"
-                      onClick={() => setIsMobileSearchOpen(false)}
-                      className={s.mobileSearchClose}
-                    >
-                      <X className={s.iconMutedSm} />
-                    </button>
-                  </div>
-                </form>
+                <div ref={mobileSearchContainerRef} style={{ position: 'relative' }}>
+                  <form onSubmit={handleSearch}>
+                    <div className={s.searchWrapper}>
+                      <Search className={s.searchIcon} />
+                      <input
+                        type="text"
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        placeholder="Пошук товарів..."
+                        autoFocus
+                        autoComplete="off"
+                        className={s.mobileSearchInput}
+                      />
+                      <button
+                        type="button"
+                        onClick={() => { setIsMobileSearchOpen(false); setShowSearchDropdown(false) }}
+                        className={s.mobileSearchClose}
+                      >
+                        <X className={s.iconMutedSm} />
+                      </button>
+                    </div>
+                  </form>
+                  {/* Mobile live search dropdown */}
+                  {showSearchDropdown && (
+                    <div className={s.searchDropdown}>
+                      {isSearching ? (
+                        <div className={s.searchDropdownState}>Пошук...</div>
+                      ) : searchResults.length === 0 ? (
+                        <div className={s.searchDropdownState}>Нічого не знайдено</div>
+                      ) : (
+                        <>
+                          {searchResults.map((product) => (
+                            <Link
+                              key={product._id}
+                              href={`/products/${product.slug}`}
+                              className={s.searchDropdownItem}
+                              onClick={closeDropdownAndNavigate}
+                            >
+                              <div className={s.searchDropdownImgWrap}>
+                                {product.images?.[0]?.url ? (
+                                  // eslint-disable-next-line @next/next/no-img-element
+                                  <img
+                                    src={product.images[0].url}
+                                    alt={product.name}
+                                    className={s.searchDropdownImg}
+                                    loading="lazy"
+                                  />
+                                ) : (
+                                  <div className={s.searchDropdownImgPlaceholder} />
+                                )}
+                              </div>
+                              <div className={s.searchDropdownInfo}>
+                                <span className={s.searchDropdownName}>{product.name}</span>
+                                {product.brand && <span className={s.searchDropdownBrand}>{product.brand}</span>}
+                              </div>
+                              <span className={s.searchDropdownPrice}>{formatPrice(product.price)}</span>
+                            </Link>
+                          ))}
+                          <Link
+                            href={`/products?search=${encodeURIComponent(searchQuery)}`}
+                            className={s.searchDropdownAll}
+                            onClick={closeDropdownAndNavigate}
+                          >
+                            Всі результати для &ldquo;{searchQuery}&rdquo; &rarr;
+                          </Link>
+                        </>
+                      )}
+                    </div>
+                  )}
+                </div>
               </motion.div>
             )}
           </AnimatePresence>

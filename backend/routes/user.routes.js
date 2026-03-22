@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const userController = require('../controllers/user.controller');
 const { verifyToken, requireAdmin } = require('../middleware/auth');
+const { sanitizePagination } = require('../middleware/validator');
 
 /**
  * @route   GET /api/users/loyalty
@@ -36,7 +37,7 @@ router.put('/cart', verifyToken, userController.updateCart);
  * @desc    Get all users
  * @access  Private (Admin)
  */
-router.get('/', verifyToken, requireAdmin, userController.getAllUsers);
+router.get('/', verifyToken, requireAdmin, sanitizePagination, userController.getAllUsers);
 
 /**
  * @route   GET /api/users/:id

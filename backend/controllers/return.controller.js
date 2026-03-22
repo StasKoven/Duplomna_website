@@ -1,5 +1,6 @@
 const ReturnRequest = require('../models/ReturnRequest.model');
 const Order = require('../models/Order.model');
+const Product = require('../models/Product.model');
 
 /**
  * Create return/exchange request
@@ -159,10 +160,20 @@ exports.updateReturnRequestStatus = async (req, res) => {
       return res.status(404).json({ message: 'Заявку не знайдено' });
     }
 
+    const previousStatus = request.status;
     request.status = status;
     if (adminComment) request.adminComment = adminComment;
     if (status === 'completed' || status === 'rejected') {
       request.resolvedAt = new Date();
+    }
+
+    // When a return/exchange is first approved, restore product stock
+    if (status === 'approved' && previousStatus !== 'approved') {
+      for (const item of request.items) {
+        await Product.findByIdAndUpdate(item.product, {
+          $inc: { stock: item.quantity }
+        });
+      }
     }
 
     await request.save();

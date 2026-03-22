@@ -174,7 +174,6 @@ exports.deleteReview = async (req, res) => {
     await Review.findByIdAndDelete(id);
 
     // Recalculate product rating after deletion
-    const Product = require('../models/Product.model');
     const stats = await Review.aggregate([
       { $match: { product: productId, isApproved: true } },
       { $group: { _id: '$product', averageRating: { $avg: '$rating' }, reviewCount: { $sum: 1 } } }
