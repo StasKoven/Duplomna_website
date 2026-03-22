@@ -58,7 +58,7 @@ function FloatingDropdown({
     if (!open || !anchorRef.current) return
     const update = () => {
       const r = anchorRef.current!.getBoundingClientRect()
-      setPos({ top: r.bottom + window.scrollY, left: r.left + window.scrollX, width: r.width })
+      setPos({ top: r.bottom, left: r.left, width: r.width })
     }
     update()
     window.addEventListener('scroll', update, true)
@@ -74,11 +74,11 @@ function FloatingDropdown({
   return createPortal(
     <div
       style={{
-        position: 'absolute',
+        position: 'fixed',
         top: pos.top,
         left: pos.left,
         width: pos.width,
-        zIndex: 9999,
+        zIndex: 99999,
         background: 'var(--background, #fff)',
         border: '1px solid var(--border, #e5e7eb)',
         borderRadius: '0.5rem',
