@@ -1,26 +1,26 @@
 /* Секція промо-пропозицій */
 .section {
-  @apply py-16 bg-muted/30;
+  @apply py-12 sm:py-16 md:py-20 bg-muted/20;
 }
 
 /* Заголовок секції */
 .title {
-  @apply text-3xl font-bold tracking-tight mb-8 text-center;
+  @apply text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight mb-8 sm:mb-10 text-center;
 }
 
 /* Сітка карток */
 .gridLayout {
-  @apply grid grid-cols-1 md:grid-cols-3 gap-6;
+  @apply grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6;
 }
 
 /* Картка промо-акції */
 .card {
-  @apply relative overflow-hidden rounded-xl bg-gradient-to-br p-6 text-white transition-transform hover:scale-105;
+  @apply relative overflow-hidden rounded-2xl sm:rounded-3xl bg-gradient-to-br p-6 sm:p-8 text-white transition-all duration-300 hover:scale-[1.02] hover:shadow-xl;
 }
 
 /* Декоративне коло */
 .circle {
-  @apply absolute top-0 right-0 -mt-4 -mr-4 h-24 w-24 rounded-full bg-white/10;
+  @apply absolute top-0 right-0 -mt-6 -mr-6 h-32 w-32 rounded-full bg-white/10;
 }
 
 /* Контент картки */
@@ -30,20 +30,20 @@
 
 /* Обгортка іконки */
 .iconWrap {
-  @apply mb-4;
+  @apply mb-4 sm:mb-5;
 }
 
 /* Іконка промо */
 .icon {
-  @apply h-8 w-8;
+  @apply h-8 w-8 sm:h-10 sm:w-10;
 }
 
 /* Назва акції */
 .cardTitle {
-  @apply text-xl font-bold mb-2;
+  @apply text-xl sm:text-2xl font-bold mb-2;
 }
 
 /* Опис акції */
 .cardDescription {
-  @apply text-sm text-white/90;
+  @apply text-sm sm:text-base text-white/90;
 }

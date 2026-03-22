@@ -26,7 +26,7 @@
 
 /* Заголовок порожнього стану */
 .emptyTitle {
-  @apply text-3xl font-bold mb-3;
+  @apply text-3xl font-extrabold mb-3;
 }
 
 /* Текст порожнього стану */
@@ -46,7 +46,7 @@
 
 /* Кнопка переходу до каталогу */
 .emptyButton {
-  @apply inline-flex items-center gap-2 bg-primary text-primary-foreground px-6 py-3 rounded-lg hover:bg-primary/90 transition font-medium;
+  @apply inline-flex items-center gap-2 bg-primary text-primary-foreground px-8 py-3.5 rounded-2xl hover:bg-primary/90 hover:shadow-lg hover:shadow-primary/25 transition-all font-semibold;
 }
 
 /* Іконка кнопки каталогу */
@@ -80,7 +80,7 @@
 
 /* Заголовок сторінки */
 .title {
-  @apply text-2xl sm:text-3xl font-bold;
+  @apply text-2xl sm:text-3xl font-extrabold tracking-tight;
 }
 
 /* Підзаголовок з інформацією */
@@ -305,7 +305,7 @@
 
 /* Контейнер таблиці */
 .desktopView {
-  @apply hidden lg:block overflow-x-auto rounded-xl border bg-card;
+  @apply hidden lg:block overflow-x-auto rounded-2xl border bg-card;
 }
 
 /* Таблиця */
@@ -345,7 +345,7 @@
 
 /* Обгортка зображення (десктоп) */
 .desktopImageWrap {
-  @apply w-36 h-36 mx-auto bg-muted/50 rounded-xl overflow-hidden mb-3;
+  @apply w-36 h-36 mx-auto bg-muted/50 rounded-2xl overflow-hidden mb-3;
 }
 
 /* Зображення з ефектом масштабування */

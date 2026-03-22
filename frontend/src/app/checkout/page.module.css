@@ -38,14 +38,15 @@
 }
 
 .title {
-  font-size: 1.75rem;
-  font-weight: 700;
+  font-size: 2rem;
+  font-weight: 800;
   color: var(--foreground, #111827);
+  letter-spacing: -0.025em;
 }
 
 @media (max-width: 640px) {
   .title {
-    font-size: 1.375rem;
+    font-size: 1.5rem;
   }
 }
 
@@ -72,15 +73,16 @@
 .card {
   background: var(--card, #fff);
   border: 1px solid var(--border, #e5e7eb);
-  border-radius: 0.75rem;
-  padding: 1.5rem;
+  border-radius: 1rem;
+  padding: 1.75rem;
   margin-bottom: 1.25rem;
   overflow: visible;
+  transition: box-shadow 0.2s;
 }
 
 @media (max-width: 640px) {
   .card {
-    padding: 1rem;
+    padding: 1.25rem;
   }
 }
 
@@ -141,9 +143,9 @@
 
 .input {
   width: 100%;
-  padding: 0.625rem 0.875rem;
+  padding: 0.75rem 1rem;
   border: 1px solid var(--border, #d1d5db);
-  border-radius: 0.5rem;
+  border-radius: 0.75rem;
   font-size: 1rem;
   background: var(--background, #fff);
   color: var(--foreground, #111827);
@@ -154,7 +156,7 @@
 
 .input:focus {
   border-color: var(--primary, #2563eb);
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
 }
 
 /* ===== DROPDOWN ===== */
@@ -196,11 +198,11 @@
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  padding: 0.75rem 0.875rem;
+  padding: 0.875rem 1rem;
   border: 2px solid var(--border, #e5e7eb);
-  border-radius: 0.625rem;
+  border-radius: 0.75rem;
   cursor: pointer;
-  transition: border-color 0.2s, background 0.2s;
+  transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
 }
 
 @media (max-width: 640px) {
@@ -281,7 +283,7 @@
 }
 
 .itemImg {
-  border-radius: 0.5rem;
+  border-radius: 0.75rem;
   object-fit: contain;
   background: var(--muted, #f3f4f6);
   flex-shrink: 0;
@@ -290,7 +292,7 @@
 .itemImgPlaceholder {
   width: 56px;
   height: 56px;
-  border-radius: 0.5rem;
+  border-radius: 0.75rem;
   background: var(--muted, #f3f4f6);
   flex-shrink: 0;
 }
@@ -401,10 +403,11 @@
 /* ===== SUBMIT ===== */
 .submitBtn {
   width: 100%;
-  padding: 0.875rem;
+  padding: 1rem;
   font-size: 1rem;
-  font-weight: 600;
+  font-weight: 700;
   margin-top: 0.25rem;
+  border-radius: 1rem;
 }
 
 .secureNote {
@@ -429,8 +432,9 @@
   width: 100%;
   background: var(--card, #fff);
   border: 1px solid var(--border, #e5e7eb);
-  border-radius: 1rem;
+  border-radius: 1.5rem;
   padding: 3rem 2rem;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.1);
 }
 
 .successIcon {
@@ -451,8 +455,8 @@
 }
 
 .successTitle {
-  font-size: 1.75rem;
-  font-weight: 700;
+  font-size: 2rem;
+  font-weight: 800;
   color: var(--foreground, #111827);
   margin-bottom: 0.75rem;
 }

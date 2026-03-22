@@ -12,7 +12,7 @@
 
 /* Заголовок сторінки */
 .title {
-  @apply text-4xl font-bold mb-6;
+  @apply text-4xl font-extrabold mb-6 tracking-tight;
 }
 
 /* Контейнер секцій */
@@ -22,7 +22,7 @@
 
 /* Заголовок секції */
 .sectionTitle {
-  @apply text-2xl font-bold mb-4;
+  @apply text-2xl font-extrabold mb-4;
 }
 
 /* Блок прозового контенту */
@@ -42,7 +42,7 @@
 
 /* Картка інформації */
 .card {
-  @apply p-6 bg-card border rounded-lg;
+  @apply p-6 bg-card border rounded-2xl;
 }
 
 /* Заголовок картки */
@@ -97,7 +97,7 @@
 
 /* Інформаційний блок */
 .infoBox {
-  @apply bg-muted p-6 rounded-lg;
+  @apply bg-muted p-6 rounded-2xl;
 }
 
 /* Заголовок інформаційного блоку */

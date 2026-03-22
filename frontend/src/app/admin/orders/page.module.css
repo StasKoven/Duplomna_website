@@ -11,7 +11,7 @@
 }
 
 .title {
-  @apply text-3xl font-bold mb-2;
+  @apply text-3xl font-extrabold mb-2 tracking-tight;
 }
 
 .subtitle {
@@ -32,7 +32,7 @@
 }
 
 .searchInput {
-  @apply w-full pl-10 pr-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary;
+  @apply w-full pl-10 pr-4 py-2.5 border rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary;
 }
 
 /* Стан завантаження */
@@ -42,7 +42,7 @@
 
 /* Порожній стан */
 .emptyState {
-  @apply text-center py-12 bg-card border rounded-lg;
+  @apply text-center py-12 bg-card border rounded-2xl;
 }
 
 .emptyIcon {

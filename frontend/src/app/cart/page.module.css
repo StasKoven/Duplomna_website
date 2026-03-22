@@ -37,7 +37,7 @@
 }
 
 .emptyLink {
-  @apply inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-md hover:bg-primary/90 transition;
+  @apply inline-flex items-center gap-2 bg-primary text-white px-8 py-3.5 rounded-2xl hover:bg-primary/90 hover:shadow-lg hover:shadow-primary/25 transition-all font-semibold;
 }
 
 .emptyLinkIcon {
@@ -50,7 +50,7 @@
 }
 
 .modalContent {
-  @apply fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-50 w-full max-w-sm bg-background rounded-xl shadow-xl p-6;
+  @apply fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-50 w-full max-w-sm bg-background rounded-2xl shadow-2xl p-8;
 }
 
 .modalCloseBtn {
@@ -86,11 +86,11 @@
 }
 
 .modalLoginBtn {
-  @apply flex items-center justify-center gap-2 w-full bg-primary text-white py-3 px-4 rounded-lg font-medium hover:bg-primary/90 transition;
+  @apply flex items-center justify-center gap-2 w-full bg-primary text-white py-3 px-4 rounded-xl font-semibold hover:bg-primary/90 hover:shadow-lg hover:shadow-primary/25 transition-all;
 }
 
 .modalRegisterBtn {
-  @apply flex items-center justify-center gap-2 w-full border py-3 px-4 rounded-lg font-medium hover:bg-accent transition;
+  @apply flex items-center justify-center gap-2 w-full border-2 py-3 px-4 rounded-xl font-semibold hover:bg-accent transition-all;
 }
 
 .modalBtnIcon {
@@ -107,7 +107,7 @@
 }
 
 .pageTitle {
-  @apply text-2xl sm:text-3xl font-bold mb-4 sm:mb-8;
+  @apply text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight mb-6 sm:mb-10;
 }
 
 .gridLayout {
@@ -120,7 +120,7 @@
 }
 
 .cartCard {
-  @apply bg-card border rounded-lg p-3 sm:p-4;
+  @apply bg-card border rounded-2xl p-4 sm:p-5 transition-shadow hover:shadow-md;
 }
 
 /* Мобільний макет товару */
@@ -129,7 +129,7 @@
 }
 
 .mobileImageWrapper {
-  @apply relative w-20 h-20 flex-shrink-0 bg-muted rounded-md overflow-hidden;
+  @apply relative w-20 h-20 flex-shrink-0 bg-muted rounded-xl overflow-hidden;
 }
 
 .objectCover {
@@ -162,7 +162,7 @@
 }
 
 .mobileQuantityGroup {
-  @apply flex items-center gap-1 border rounded-md;
+  @apply flex items-center gap-1 border rounded-xl;
 }
 
 .mobileQuantityBtn {
@@ -178,7 +178,7 @@
 }
 
 .deleteBtn {
-  @apply p-2 text-destructive hover:bg-destructive/10 rounded-md transition;
+  @apply p-2 text-destructive hover:bg-destructive/10 rounded-xl transition;
 }
 
 .deleteBtnIconSm {
@@ -195,7 +195,7 @@
 }
 
 .desktopImageWrapper {
-  @apply relative w-24 h-24 flex-shrink-0 bg-muted rounded-md overflow-hidden;
+  @apply relative w-24 h-24 flex-shrink-0 bg-muted rounded-xl overflow-hidden;
 }
 
 .desktopPlaceholder {
@@ -219,7 +219,7 @@
 }
 
 .desktopQuantityGroup {
-  @apply flex items-center gap-2 border rounded-md;
+  @apply flex items-center gap-2 border rounded-xl;
 }
 
 .desktopQuantityBtn {
@@ -274,7 +274,7 @@
 }
 
 .summaryCard {
-  @apply bg-card border rounded-lg p-4 sm:p-6 sticky top-4;
+  @apply bg-card border rounded-2xl p-5 sm:p-7 sticky top-4 shadow-sm;
 }
 
 .summaryTitle {
@@ -302,7 +302,7 @@
 }
 
 .deliveryHint {
-  @apply text-xs text-muted-foreground bg-muted p-2 rounded;
+  @apply text-xs text-muted-foreground bg-muted p-3 rounded-xl;
 }
 
 .totalDivider {
@@ -314,7 +314,7 @@
 }
 
 .checkoutBtn {
-  @apply w-full bg-primary text-white py-2.5 sm:py-3 px-4 rounded-md hover:bg-primary/90 transition font-medium mb-3 text-sm sm:text-base;
+  @apply w-full bg-primary text-white py-3 sm:py-3.5 px-4 rounded-2xl hover:bg-primary/90 hover:shadow-lg hover:shadow-primary/25 transition-all font-semibold mb-3 text-sm sm:text-base;
 }
 
 .continueLink {

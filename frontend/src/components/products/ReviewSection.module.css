@@ -21,7 +21,7 @@
 }
 
 .title {
-  @apply text-xl sm:text-2xl font-bold;
+  @apply text-xl sm:text-2xl font-extrabold;
 }
 
 .reviewCount {
@@ -31,7 +31,7 @@
 /* --- Кнопка написати відгук --- */
 
 .writeReviewBtn {
-  @apply px-5 py-2.5 rounded-lg text-sm font-medium transition-all;
+  @apply px-5 py-2.5 rounded-xl text-sm font-semibold transition-all;
 }
 
 .writeReviewBtnActive {
@@ -45,7 +45,7 @@
 /* --- Блок загальної оцінки --- */
 
 .ratingSummary {
-  @apply grid md:grid-cols-[280px_1fr] gap-6 sm:gap-8 mb-8 p-4 sm:p-6 bg-muted/30 rounded-xl border;
+  @apply grid md:grid-cols-[280px_1fr] gap-6 sm:gap-8 mb-8 p-4 sm:p-6 bg-muted/30 rounded-2xl border;
 }
 
 .overallScore {

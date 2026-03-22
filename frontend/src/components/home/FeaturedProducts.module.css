@@ -1,51 +1,51 @@
 /* Секція рекомендованих товарів */
 .section {
-  @apply py-8 sm:py-12 md:py-16;
+  @apply py-10 sm:py-14 md:py-20;
 }
 
 /* Обгортка заголовка */
 .header {
-  @apply flex items-center justify-between mb-4 sm:mb-6 md:mb-8;
+  @apply flex items-end justify-between mb-6 sm:mb-8 md:mb-10;
 }
 
 /* Заголовок секції */
 .title {
-  @apply text-xl sm:text-2xl md:text-3xl font-bold tracking-tight;
+  @apply text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight;
 }
 
 /* Підзаголовок */
 .subtitle {
-  @apply text-sm sm:text-base text-muted-foreground mt-1 sm:mt-2;
+  @apply text-sm sm:text-base text-muted-foreground mt-1.5 sm:mt-2;
 }
 
 /* Сітка товарів */
 .gridLayout {
-  @apply grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-6;
+  @apply grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-5 md:gap-6;
 }
 
 /* Скелетон-заглушка при завантаженні */
 .skeleton {
-  @apply rounded-lg bg-muted animate-pulse aspect-[3/4] sm:h-96;
+  @apply rounded-2xl bg-muted animate-pulse aspect-[3/4] sm:h-96;
 }
 
 /* Посилання "Дивитись всі" (десктоп) */
 .viewAllDesktop {
-  @apply hidden sm:flex items-center text-sm font-medium text-primary hover:underline;
+  @apply hidden sm:inline-flex items-center text-sm font-semibold text-primary hover:underline underline-offset-4;
 }
 
 /* Іконка стрілки (десктоп) */
 .arrowIconDesktop {
-  @apply ml-1 h-4 w-4;
+  @apply ml-1.5 h-4 w-4;
 }
 
 /* Обгортка мобільної кнопки */
 .mobileLink {
-  @apply mt-6 sm:hidden text-center;
+  @apply mt-8 sm:hidden text-center;
 }
 
 /* Посилання "Дивитись всі" (мобільне) */
 .viewAllMobile {
-  @apply inline-flex items-center justify-center px-6 py-2.5 text-sm font-medium text-primary border border-primary rounded-md hover:bg-primary/5;
+  @apply inline-flex items-center justify-center px-8 py-3 text-sm font-semibold text-primary border-2 border-primary rounded-2xl hover:bg-primary/5 transition-colors;
 }
 
 /* Іконка стрілки (мобільне) */

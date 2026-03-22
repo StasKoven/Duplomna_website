@@ -11,12 +11,13 @@
 }
 
 .code {
-  font-size: 7rem;
-  font-weight: 800;
+  font-size: 8rem;
+  font-weight: 900;
   line-height: 1;
   color: hsl(var(--primary));
   display: block;
-  margin-bottom: 1rem;
+  margin-bottom: 1.25rem;
+  letter-spacing: -0.05em;
 }
 
 .title {
@@ -35,16 +36,22 @@
 
 .homeLink {
   display: inline-block;
-  padding: 0.75rem 2rem;
+  padding: 0.875rem 2.5rem;
   background-color: hsl(var(--primary));
   color: hsl(var(--primary-foreground));
-  border-radius: var(--radius);
+  border-radius: 0.75rem;
   font-weight: 600;
   font-size: 0.95rem;
-  transition: opacity 0.2s;
+  transition: opacity 0.2s, box-shadow 0.2s, transform 0.1s;
   text-decoration: none;
+  box-shadow: 0 4px 14px hsl(var(--primary) / 0.25);
 }
 
 .homeLink:hover {
   opacity: 0.9;
+  box-shadow: 0 6px 20px hsl(var(--primary) / 0.3);
+}
+
+.homeLink:active {
+  transform: scale(0.97);
 }

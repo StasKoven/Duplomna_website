@@ -21,7 +21,7 @@
 
 /* Заповнювач скелетону */
 .skeletonCard {
-  @apply aspect-square bg-muted rounded-lg;
+  @apply aspect-square bg-muted rounded-2xl;
 }
 
 /* ===== Заголовна секція ===== */
@@ -33,7 +33,7 @@
 
 /* Заголовок сторінки */
 .title {
-  @apply text-4xl font-bold mb-4;
+  @apply text-4xl font-extrabold mb-4 tracking-tight;
 }
 
 /* Підзаголовок */
@@ -55,7 +55,7 @@
 
 /* Картка категорії */
 .categoryCard {
-  @apply relative aspect-square bg-gradient-to-br from-primary/10 to-primary/5 rounded-lg p-8 hover:shadow-lg transition-all duration-300 group-hover:scale-105;
+  @apply relative aspect-square bg-gradient-to-br from-primary/10 to-primary/5 rounded-2xl p-8 hover:shadow-xl hover:shadow-primary/5 transition-all duration-300 group-hover:scale-[1.03];
 }
 
 /* Вміст картки */
@@ -87,7 +87,7 @@
 
 /* Напівпрозорий шар при наведенні */
 .hoverOverlay {
-  @apply absolute inset-0 opacity-0 group-hover:opacity-10 transition-opacity rounded-lg overflow-hidden;
+  @apply absolute inset-0 opacity-0 group-hover:opacity-10 transition-opacity rounded-2xl overflow-hidden;
 }
 
 /* Фон overlay */

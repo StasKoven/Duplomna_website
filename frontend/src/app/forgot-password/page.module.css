@@ -24,7 +24,7 @@
 
 /* Заголовок */
 .title {
-  @apply text-3xl font-bold mb-2;
+  @apply text-3xl font-extrabold mb-2 tracking-tight;
 }
 
 .subtitle {
@@ -33,7 +33,7 @@
 
 /* Блок підказки (стан успіху) */
 .hintBox {
-  @apply bg-muted p-4 rounded-lg mb-6 text-sm text-muted-foreground;
+  @apply bg-muted p-4 rounded-2xl mb-6 text-sm text-muted-foreground;
 }
 
 .hintTitle {

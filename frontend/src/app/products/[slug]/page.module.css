@@ -17,7 +17,7 @@
 }
 
 .skeletonImage {
-  @apply aspect-square bg-muted rounded-lg;
+  @apply aspect-square bg-muted rounded-2xl;
 }
 
 .skeletonInfo {
@@ -56,7 +56,7 @@
 
 /* === Галерея зображень === */
 .mainImageWrapper {
-  @apply relative aspect-square bg-muted rounded-lg overflow-hidden mb-3 sm:mb-4;
+  @apply relative aspect-square bg-muted rounded-2xl overflow-hidden mb-3 sm:mb-4;
 }
 
 .mainImage {
@@ -113,7 +113,7 @@
 }
 
 .thumbnailBtn {
-  @apply flex-shrink-0 aspect-square w-[calc(25%-6px)] sm:w-[calc(20%-8px)] max-w-[100px] rounded-lg overflow-hidden border-2;
+  @apply flex-shrink-0 aspect-square w-[calc(25%-6px)] sm:w-[calc(20%-8px)] max-w-[100px] rounded-xl overflow-hidden border-2;
 }
 
 .thumbnailActive {
@@ -147,7 +147,7 @@
 }
 
 .productTitle {
-  @apply text-xl sm:text-3xl font-bold mb-2;
+  @apply text-xl sm:text-3xl font-extrabold mb-2 tracking-tight;
 }
 
 /* Рейтинг */
@@ -210,7 +210,7 @@
 }
 
 .addToCartBtn {
-  @apply w-full rounded-md bg-primary px-6 sm:px-8 py-2.5 sm:py-3 text-white text-sm sm:text-base font-medium hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2;
+  @apply w-full rounded-2xl bg-primary px-6 sm:px-8 py-3 sm:py-3.5 text-white text-sm sm:text-base font-semibold hover:bg-primary/90 hover:shadow-lg hover:shadow-primary/25 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 transition-all;
 }
 
 .actionButtonsGrid {
@@ -218,7 +218,7 @@
 }
 
 .actionBtn {
-  @apply rounded-md border px-4 py-2.5 sm:py-3 text-sm font-medium hover:bg-accent flex items-center justify-center gap-2;
+  @apply rounded-xl border px-4 py-2.5 sm:py-3 text-sm font-medium hover:bg-accent flex items-center justify-center gap-2 transition-all;
 }
 
 .wishlistActive {
@@ -266,7 +266,7 @@
 }
 
 .sectionTitle {
-  @apply text-xl sm:text-2xl font-bold mb-3 sm:mb-4;
+  @apply text-xl sm:text-2xl font-extrabold mb-3 sm:mb-4;
 }
 
 .descriptionText {

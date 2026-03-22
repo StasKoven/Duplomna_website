@@ -28,7 +28,7 @@
 
 /* Заголовок секції "Про нас" */
 .aboutTitle {
-  @apply mb-3 md:mb-4 text-base sm:text-lg font-semibold;
+  @apply mb-3 md:mb-4 text-base sm:text-lg font-bold;
 }
 
 /* Опис магазину */
@@ -43,12 +43,12 @@
 
 /* Перша іконка соціальної мережі (з від'ємним лівим відступом) */
 .socialLinkFirst {
-  @apply text-muted-foreground hover:text-primary p-2 -ml-2 rounded-md hover:bg-accent transition-colors;
+  @apply text-muted-foreground hover:text-primary p-2.5 -ml-2 rounded-xl hover:bg-accent transition-all duration-200;
 }
 
 /* Іконка соціальної мережі */
 .socialLink {
-  @apply text-muted-foreground hover:text-primary p-2 rounded-md hover:bg-accent transition-colors;
+  @apply text-muted-foreground hover:text-primary p-2.5 rounded-xl hover:bg-accent transition-all duration-200;
 }
 
 /* Розмір іконки соціальної мережі */
@@ -111,7 +111,7 @@
 
 /* Посилання у списку */
 .footerLink {
-  @apply text-muted-foreground hover:text-primary transition-colors inline-block py-0.5;
+  @apply text-muted-foreground hover:text-primary transition-colors inline-block py-1;
 }
 
 /* ==================== */

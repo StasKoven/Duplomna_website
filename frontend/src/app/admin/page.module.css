@@ -3,7 +3,7 @@
 }
 
 .pageTitle {
-  @apply text-2xl font-bold mb-6;
+  @apply text-2xl font-extrabold mb-6 tracking-tight;
 }
 
 .loadingGrid {
@@ -20,7 +20,7 @@
 }
 
 .statCard {
-  @apply flex items-center gap-4 p-5 bg-card border rounded-xl;
+  @apply flex items-center gap-4 p-5 bg-card border rounded-2xl transition-shadow hover:shadow-md;
 }
 
 .statIconWrap {
@@ -49,7 +49,7 @@
 }
 
 .chartCard {
-  @apply bg-card border rounded-xl p-5 mb-6;
+  @apply bg-card border rounded-2xl p-5 mb-6;
 }
 
 .chartHeader {
@@ -78,7 +78,7 @@
 }
 
 .linkCard {
-  @apply flex items-center gap-4 p-4 bg-card border rounded-xl hover:border-primary/50 transition;
+  @apply flex items-center gap-4 p-4 bg-card border rounded-2xl hover:border-primary/50 hover:shadow-md transition-all;
 }
 
 .linkIcon {

@@ -17,7 +17,7 @@
 
 /* Назва сторінки */
 .title {
-  @apply text-4xl font-bold mb-4;
+  @apply text-4xl font-extrabold mb-4 tracking-tight;
 }
 
 /* Підзаголовок */
@@ -32,7 +32,7 @@
 
 /* Заголовок секції */
 .sectionTitle {
-  @apply text-2xl font-bold mb-6;
+  @apply text-2xl font-extrabold mb-6;
 }
 
 /* Список контактів */
@@ -47,7 +47,7 @@
 
 /* Обгортка іконки */
 .iconBox {
-  @apply p-3 bg-primary/10 rounded-lg;
+  @apply p-3 bg-primary/10 rounded-xl;
 }
 
 /* Іконка контакту */
@@ -72,7 +72,7 @@
 
 /* Блок годин роботи */
 .hoursBox {
-  @apply mt-8 p-6 bg-muted rounded-lg;
+  @apply mt-8 p-6 bg-muted rounded-2xl;
 }
 
 /* Заголовок годин роботи */
@@ -112,17 +112,17 @@
 
 /* Поле введення */
 .input {
-  @apply w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary;
+  @apply w-full px-4 py-2.5 border rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all;
 }
 
 /* Текстове поле */
 .textarea {
-  @apply w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary resize-none;
+  @apply w-full px-4 py-2.5 border rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary resize-none transition-all;
 }
 
 /* Кнопка відправки */
 .submitBtn {
-  @apply w-full bg-primary text-white py-3 px-4 rounded-md hover:bg-primary/90 transition font-medium flex items-center justify-center gap-2;
+  @apply w-full bg-primary text-white py-3.5 px-4 rounded-xl hover:bg-primary/90 hover:shadow-lg hover:shadow-primary/25 transition-all font-semibold flex items-center justify-center gap-2;
 }
 
 /* Іконка відправки */

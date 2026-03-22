@@ -1,11 +1,11 @@
 /* Головна секція героя */
 .section {
-  @apply relative overflow-hidden bg-gradient-to-br from-primary/10 via-background to-background py-10 sm:py-16 md:py-20;
+  @apply relative overflow-hidden bg-gradient-to-br from-primary/5 via-background to-accent/30 py-12 sm:py-20 md:py-28;
 }
 
 /* Сітка контенту */
 .gridLayout {
-  @apply grid gap-8 lg:grid-cols-2 lg:gap-12 items-center;
+  @apply grid gap-10 lg:grid-cols-2 lg:gap-16 items-center;
 }
 
 /* Ліва частина — текст і кнопки */
@@ -15,17 +15,17 @@
 
 /* Заголовок */
 .title {
-  @apply text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-4 sm:mb-6;
+  @apply text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight mb-5 sm:mb-7 leading-[1.1];
 }
 
 /* Акцентний рядок заголовка */
 .titleAccent {
-  @apply block text-primary mt-1 sm:mt-2;
+  @apply block text-primary mt-2 sm:mt-3;
 }
 
 /* Опис під заголовком */
 .description {
-  @apply text-base sm:text-lg text-muted-foreground mb-6 sm:mb-8 max-w-lg mx-auto lg:mx-0;
+  @apply text-base sm:text-lg md:text-xl text-muted-foreground mb-8 sm:mb-10 max-w-xl mx-auto lg:mx-0 leading-relaxed;
 }
 
 /* Блок кнопок */
@@ -35,32 +35,32 @@
 
 /* Основна CTA кнопка */
 .primaryBtn {
-  @apply inline-flex items-center justify-center rounded-md bg-primary px-6 sm:px-8 py-3 text-sm font-medium text-primary-foreground shadow transition-colors hover:bg-primary/90 active:bg-primary/80;
+  @apply inline-flex items-center justify-center rounded-2xl bg-primary px-7 sm:px-10 py-3.5 sm:py-4 text-sm sm:text-base font-semibold text-primary-foreground shadow-lg shadow-primary/25 transition-all hover:bg-primary/90 hover:shadow-xl hover:shadow-primary/30 active:scale-[0.98];
 }
 
 /* Вторинна кнопка */
 .secondaryBtn {
-  @apply inline-flex items-center justify-center rounded-md border border-input bg-background px-6 sm:px-8 py-3 text-sm font-medium shadow-sm transition-colors hover:bg-accent hover:text-accent-foreground active:bg-accent/80;
+  @apply inline-flex items-center justify-center rounded-2xl border-2 border-input bg-background px-7 sm:px-10 py-3.5 sm:py-4 text-sm sm:text-base font-semibold shadow-sm transition-all hover:bg-accent hover:text-accent-foreground active:scale-[0.98];
 }
 
 /* Іконка стрілки */
 .arrowIcon {
-  @apply ml-2 h-4 w-4;
+  @apply ml-2 h-4 w-4 sm:h-5 sm:w-5;
 }
 
 /* Сітка переваг */
 .featuresGrid {
-  @apply mt-8 sm:mt-12 grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6;
+  @apply mt-10 sm:mt-14 grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-5;
 }
 
 /* Картка переваги */
 .featureCard {
-  @apply flex items-center sm:items-start space-x-3 bg-background/50 sm:bg-transparent p-3 sm:p-0 rounded-lg;
+  @apply flex items-center sm:items-start space-x-3 bg-background/70 backdrop-blur-sm sm:bg-card p-4 rounded-2xl border border-border/50 shadow-sm;
 }
 
 /* Іконка переваги */
 .featureIconWrap {
-  @apply rounded-lg bg-primary/10 p-2 flex-shrink-0;
+  @apply rounded-xl bg-primary/10 p-2.5 flex-shrink-0;
 }
 
 .featureIcon {
@@ -87,7 +87,7 @@
 
 /* Картка ілюстрації */
 .illustrationCard {
-  @apply relative h-[280px] sm:h-[350px] lg:h-[400px] w-full rounded-2xl sm:rounded-3xl bg-gradient-to-br from-primary/20 to-primary/5 p-6 sm:p-8 overflow-hidden;
+  @apply relative h-[300px] sm:h-[380px] lg:h-[440px] w-full rounded-3xl bg-gradient-to-br from-primary/20 via-primary/10 to-accent/20 p-8 overflow-hidden border border-primary/10;
 }
 
 /* Фонова сітка */
@@ -109,11 +109,11 @@
 
 /* Кругла іконка ілюстрації */
 .illustrationCircle {
-  @apply inline-flex items-center justify-center w-24 h-24 sm:w-32 sm:h-32 rounded-full bg-primary/10 mb-3 sm:mb-4;
+  @apply inline-flex items-center justify-center w-28 h-28 sm:w-36 sm:h-36 rounded-full bg-primary/10 backdrop-blur-sm mb-4 sm:mb-5 border border-primary/20;
 }
 
 .illustrationEmoji {
-  @apply text-5xl sm:text-6xl;
+  @apply text-5xl sm:text-7xl;
 }
 
 /* Текст ілюстрації */
