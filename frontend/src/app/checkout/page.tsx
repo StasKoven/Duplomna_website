@@ -284,7 +284,7 @@ export default function CheckoutPage() {
         {/* ===== LEFT: form ===== */}
         <div className={s.formSection}>
           {/* Delivery Method */}
-          <div className={s.card}>
+          <div className={s.card} style={{ position: 'relative', zIndex: 2 }}>
             <div className={s.cardHeader}>
               <Truck className={s.cardIcon} />
               <h2 className={s.cardTitle}>Доставка</h2>
@@ -349,7 +349,7 @@ export default function CheckoutPage() {
                     />
                     {loadingCities && <div style={{ position: 'absolute', right: 12, top: 38, fontSize: '0.75rem', color: 'var(--muted-foreground)' }}>Пошук...</div>}
                     {showCityDropdown && cities.length > 0 && (
-                      <div style={{ position: 'absolute', top: '100%', left: 0, right: 0, zIndex: 50, background: 'var(--card, #fff)', border: '1px solid var(--border, #e5e7eb)', borderRadius: '0.5rem', maxHeight: '200px', overflowY: 'auto', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}>
+                      <div style={{ position: 'absolute', top: '100%', left: 0, right: 0, zIndex: 200, background: 'var(--background, #fff)', border: '1px solid var(--border, #e5e7eb)', borderRadius: '0.5rem', maxHeight: '220px', overflowY: 'auto', boxShadow: '0 8px 24px rgba(0,0,0,0.15)' }}>
                         {cities.map(city => (
                           <button
                             key={city.ref}
@@ -391,7 +391,7 @@ export default function CheckoutPage() {
                       />
                       {loadingWarehouses && <div style={{ position: 'absolute', right: 12, top: 38, fontSize: '0.75rem', color: 'var(--muted-foreground)' }}>Завантаження...</div>}
                       {showWarehouseDropdown && warehouses.length > 0 && (
-                        <div style={{ position: 'absolute', top: '100%', left: 0, right: 0, zIndex: 50, background: 'var(--card, #fff)', border: '1px solid var(--border, #e5e7eb)', borderRadius: '0.5rem', maxHeight: '250px', overflowY: 'auto', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}>
+                        <div style={{ position: 'absolute', top: '100%', left: 0, right: 0, zIndex: 200, background: 'var(--background, #fff)', border: '1px solid var(--border, #e5e7eb)', borderRadius: '0.5rem', maxHeight: '250px', overflowY: 'auto', boxShadow: '0 8px 24px rgba(0,0,0,0.15)' }}>
                           {warehouses.map(wh => (
                             <button
                               key={wh.ref}

@@ -51,6 +51,11 @@
   }
 }
 
+.formSection {
+  min-width: 0; /* prevent grid blowout */
+  position: relative;
+}
+
 /* ===== CARD ===== */
 .card {
   background: var(--card, #fff);

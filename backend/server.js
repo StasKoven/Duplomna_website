@@ -60,13 +60,15 @@ const corsOptions = {
       'https://duplomna-website-1dy7.vercel.app',
       'https://duplomna-website-p786.vercel.app',
       'https://duplomnawebsite-production.up.railway.app',
-      'https://duplomna-website-p786-a9jicjudp-staskovens-projects.vercel.app',
     ];
+
+    // Allow all Vercel preview deployments for this project
+    const vercelPreviewPattern = /^https:\/\/duplomna-website[\w-]*\.vercel\.app$/;
 
     const isAllowed = allowedOrigins.some(allowed => {
       if (!allowed) return false;
       return allowed === origin;
-    });
+    }) || vercelPreviewPattern.test(origin);
 
     if (isAllowed) {
       callback(null, true);
