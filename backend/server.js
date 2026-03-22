@@ -60,6 +60,7 @@ const corsOptions = {
       'https://duplomna-website-1dy7.vercel.app',
       'https://duplomna-website-p786.vercel.app',
       'https://duplomnawebsite-production.up.railway.app',
+      'https://duplomna-website-p786-a9jicjudp-staskovens-projects.vercel.app',
     ];
 
     const isAllowed = allowedOrigins.some(allowed => {
