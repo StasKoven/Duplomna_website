@@ -542,7 +542,7 @@ export default function CheckoutPage() {
 
         {/* ===== RIGHT: order summary ===== */}
         <div className={s.summarySection}>
-          <div className={s.card}>
+          <div className={`${s.card} ${s.summaryCard}`}>
             <div className={s.cardHeader}>
               <ShoppingBag className={s.cardIcon} />
               <h2 className={s.cardTitle}>Ваше замовлення</h2>

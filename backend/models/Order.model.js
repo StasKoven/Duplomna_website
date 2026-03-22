@@ -130,8 +130,8 @@ const orderSchema = new mongoose.Schema({
   timestamps: true
 });
 
-// Generate order number before validation (pre validate runs before required checks)
-orderSchema.pre('validate', async function(next) {
+// Generate order number before validation (fallback if not set by controller)
+orderSchema.pre('validate', function(next) {
   if (!this.orderNumber) {
     const date = new Date();
     const year = date.getFullYear();
