@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken');
+const crypto = require('crypto');
 const User = require('../models/User.model');
 const admin = require('../config/firebase');
 
@@ -399,5 +400,73 @@ exports.changePassword = async (req, res) => {
   } catch (error) {
     console.error('Change password error:', error);
     res.status(500).json({ message: 'Failed to change password' });
+  }
+};
+
+/**
+ * Forgot password — generate reset token
+ */
+exports.forgotPassword = async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    const user = await User.findOne({ email });
+
+    // Always return success to prevent email enumeration
+    if (!user) {
+      return res.json({ message: 'Якщо акаунт з таким email існує, ми надіслали інструкції для відновлення паролю.' });
+    }
+
+    if (user.authProvider === 'google') {
+      return res.json({ message: 'Якщо акаунт з таким email існує, ми надіслали інструкції для відновлення паролю.' });
+    }
+
+    // Generate reset token
+    const resetToken = crypto.randomBytes(32).toString('hex');
+    const hashedToken = crypto.createHash('sha256').update(resetToken).digest('hex');
+
+    user.resetPasswordToken = hashedToken;
+    user.resetPasswordExpires = new Date(Date.now() + 60 * 60 * 1000); // 1 hour
+    await user.save();
+
+    // In production, send email with reset link
+    // For now, log the token (replace with email service like nodemailer)
+    const resetUrl = `${process.env.FRONTEND_URL || 'http://localhost:3000'}/reset-password?token=${resetToken}`;
+    console.log(`Password reset link for ${email}: ${resetUrl}`);
+
+    res.json({ message: 'Якщо акаунт з таким email існує, ми надіслали інструкції для відновлення паролю.' });
+  } catch (error) {
+    console.error('Forgot password error:', error);
+    res.status(500).json({ message: 'Помилка відправки. Спробуйте пізніше.' });
+  }
+};
+
+/**
+ * Reset password with token
+ */
+exports.resetPassword = async (req, res) => {
+  try {
+    const { token, newPassword } = req.body;
+
+    const hashedToken = crypto.createHash('sha256').update(token).digest('hex');
+
+    const user = await User.findOne({
+      resetPasswordToken: hashedToken,
+      resetPasswordExpires: { $gt: Date.now() }
+    }).select('+resetPasswordToken +resetPasswordExpires');
+
+    if (!user) {
+      return res.status(400).json({ message: 'Токен недійсний або прострочений.' });
+    }
+
+    user.password = newPassword;
+    user.resetPasswordToken = undefined;
+    user.resetPasswordExpires = undefined;
+    await user.save();
+
+    res.json({ message: 'Пароль успішно змінено. Тепер ви можете увійти.' });
+  } catch (error) {
+    console.error('Reset password error:', error);
+    res.status(500).json({ message: 'Помилка зміни паролю.' });
   }
 };

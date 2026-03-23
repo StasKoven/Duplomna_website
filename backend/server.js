@@ -87,7 +87,7 @@ app.options('*', cors(corsOptions));
 // Rate limiting (more lenient in development and skip preflight)
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: process.env.NODE_ENV === 'development' ? 1000 : 100, // higher limit in dev
+  max: process.env.NODE_ENV === 'development' ? 1000 : 300, // higher limit in dev
   standardHeaders: true,
   legacyHeaders: false,
   skip: (req) => req.method === 'OPTIONS',

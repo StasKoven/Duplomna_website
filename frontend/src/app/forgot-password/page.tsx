@@ -8,6 +8,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
 import { Mail, ArrowLeft } from 'lucide-react'
 import { toast } from 'sonner'
+import api from '@/lib/api'
 import s from './page.module.css'
 
 const forgotPasswordSchema = z.object({
@@ -28,14 +29,10 @@ export default function ForgotPasswordPage() {
     resolver: zodResolver(forgotPasswordSchema),
   })
 
-  const onSubmit = async (_data: ForgotPasswordFormData) => {
+  const onSubmit = async (data: ForgotPasswordFormData) => {
     setIsLoading(true)
     try {
-      // TODO: Реалізувати API для відновлення паролю
-      // await api.post('/auth/forgot-password', data)
-      
-      // Тимчасова заглушка
-      await new Promise(resolve => setTimeout(resolve, 1000))
+      await api.post('/auth/forgot-password', { email: data.email })
       
       setEmailSent(true)
       toast.success('Інструкції надіслано на ваш email!')

@@ -18,7 +18,7 @@
 /* Кнопка мобільного меню        */
 /* ============================= */
 .mobileMenuBtn {
-  @apply md:hidden p-2 -ml-2 hover:bg-accent rounded-xl transition-colors;
+  @apply md:hidden p-2.5 -ml-2 hover:bg-accent rounded-xl transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center;
 }
 
 /* ============================= */
@@ -63,7 +63,7 @@
 }
 
 .navLink {
-  @apply text-sm font-medium transition-colors hover:text-primary relative;
+  @apply text-sm font-medium transition-colors hover:text-primary relative py-3;
 }
 
 .navLink::after {
@@ -108,15 +108,15 @@
 }
 
 .mobileSearchBtn {
-  @apply lg:hidden p-2 hover:bg-accent rounded-md;
+  @apply lg:hidden p-2.5 hover:bg-accent rounded-md min-w-[44px] min-h-[44px] flex items-center justify-center;
 }
 
 .actionBtn {
-  @apply relative p-2 hover:bg-accent rounded-xl transition-colors;
+  @apply relative p-2.5 hover:bg-accent rounded-xl transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center;
 }
 
 .compareBtn {
-  @apply hidden sm:flex relative p-2 hover:bg-accent rounded-xl transition-colors;
+  @apply hidden sm:flex relative p-2.5 hover:bg-accent rounded-xl transition-colors min-w-[44px] min-h-[44px] items-center justify-center;
 }
 
 /* ============================= */
@@ -142,7 +142,7 @@
 }
 
 .userMenuBtn {
-  @apply flex items-center p-2 hover:bg-accent rounded-md;
+  @apply flex items-center p-2 hover:bg-accent rounded-md min-w-[44px] min-h-[44px] justify-center;
 }
 
 .userAvatar {
@@ -185,7 +185,7 @@
 /* Кнопка входу                  */
 /* ============================= */
 .loginLink {
-  @apply flex items-center space-x-2 p-2 text-sm font-medium hover:bg-accent rounded-md;
+  @apply flex items-center justify-center space-x-2 p-2 text-sm font-medium hover:bg-accent rounded-md min-w-[44px] min-h-[44px];
 }
 
 .loginText {
