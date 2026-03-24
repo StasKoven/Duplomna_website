@@ -1,6 +1,6 @@
 /* Головна секція героя */
 .section {
-  @apply relative overflow-hidden bg-gradient-to-b from-background via-background to-muted/30 py-12 sm:py-20 md:py-28;
+  @apply relative overflow-hidden bg-gradient-to-b from-background via-background to-muted/30 py-16 sm:py-24 md:py-36;
 }
 
 /* Сітка контенту */
@@ -15,7 +15,7 @@
 
 /* Заголовок */
 .title {
-  @apply text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight mb-5 sm:mb-7 leading-[1.1];
+  @apply text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-extrabold tracking-tight mb-5 sm:mb-7 leading-[1.05];
 }
 
 /* Акцентний рядок заголовка */
@@ -25,7 +25,7 @@
 
 /* Опис під заголовком */
 .description {
-  @apply text-base sm:text-lg md:text-xl text-muted-foreground mb-8 sm:mb-10 max-w-xl mx-auto lg:mx-0 leading-relaxed;
+  @apply text-lg sm:text-xl md:text-2xl text-muted-foreground mb-8 sm:mb-10 max-w-xl mx-auto lg:mx-0 leading-relaxed;
 }
 
 /* Блок кнопок */
@@ -35,12 +35,12 @@
 
 /* Основна CTA кнопка */
 .primaryBtn {
-  @apply inline-flex items-center justify-center rounded-lg bg-primary px-7 sm:px-10 py-3.5 sm:py-4 text-sm sm:text-base font-semibold text-primary-foreground shadow-md transition-all hover:bg-primary/90 hover:shadow-lg active:scale-[0.98];
+  @apply inline-flex items-center justify-center rounded-lg bg-primary px-8 sm:px-12 py-4 sm:py-5 text-base sm:text-lg font-semibold text-primary-foreground shadow-md transition-all hover:bg-primary/90 hover:shadow-lg active:scale-[0.98];
 }
 
 /* Вторинна кнопка */
 .secondaryBtn {
-  @apply inline-flex items-center justify-center rounded-lg border border-border bg-background px-7 sm:px-10 py-3.5 sm:py-4 text-sm sm:text-base font-semibold transition-all hover:bg-muted hover:text-foreground active:scale-[0.98];
+  @apply inline-flex items-center justify-center rounded-lg border border-border bg-background px-8 sm:px-12 py-4 sm:py-5 text-base sm:text-lg font-semibold transition-all hover:bg-muted hover:text-foreground active:scale-[0.98];
 }
 
 /* Іконка стрілки */
@@ -50,21 +50,21 @@
 
 /* Сітка переваг */
 .featuresGrid {
-  @apply mt-10 sm:mt-14 grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-5;
+  @apply mt-10 sm:mt-14 grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6;
 }
 
 /* Картка переваги */
 .featureCard {
-  @apply flex items-center sm:items-start space-x-3 bg-background/80 sm:bg-card p-4 rounded-xl border border-border/40;
+  @apply flex items-center sm:items-start space-x-4 bg-background/80 sm:bg-card p-5 rounded-xl border border-border/40;
 }
 
 /* Іконка переваги */
 .featureIconWrap {
-  @apply rounded-xl bg-primary/10 p-2.5 flex-shrink-0;
+  @apply rounded-xl bg-primary/10 p-3 flex-shrink-0;
 }
 
 .featureIcon {
-  @apply h-5 w-5 text-primary;
+  @apply h-6 w-6 text-primary;
 }
 
 /* Текст переваги */
@@ -73,11 +73,11 @@
 }
 
 .featureTitle {
-  @apply font-semibold text-sm;
+  @apply font-semibold text-base;
 }
 
 .featureDesc {
-  @apply text-xs text-muted-foreground;
+  @apply text-sm text-muted-foreground;
 }
 
 /* Права частина — ілюстрація */
@@ -87,7 +87,7 @@
 
 /* Картка ілюстрації */
 .illustrationCard {
-  @apply relative h-[300px] sm:h-[380px] lg:h-[440px] w-full rounded-2xl bg-muted/60 p-8 overflow-hidden border border-border/30;
+  @apply relative h-[380px] sm:h-[480px] lg:h-[560px] w-full rounded-2xl bg-muted/60 p-8 overflow-hidden border border-border/30;
 }
 
 /* Фонова сітка */
@@ -131,40 +131,40 @@
 }
 
 .deviceCard {
-  @apply absolute flex flex-col items-center gap-2 bg-background rounded-xl p-3 sm:p-4 border border-border/60 shadow-md min-w-[90px];
+  @apply absolute flex flex-col items-center gap-2 bg-background rounded-xl p-5 sm:p-6 border border-border/60 shadow-md min-w-[110px] sm:min-w-[130px];
   animation: float 6s ease-in-out infinite;
 }
 
 .deviceCard1 {
-  top: 10%;
-  left: 8%;
+  top: 12%;
+  left: 10%;
   animation-delay: 0s;
 }
 
 .deviceCard2 {
-  top: 8%;
-  right: 8%;
+  top: 10%;
+  right: 10%;
   animation-delay: -1.5s;
 }
 
 .deviceCard3 {
-  bottom: 12%;
-  left: 6%;
+  bottom: 14%;
+  left: 8%;
   animation-delay: -3s;
 }
 
 .deviceCard4 {
-  bottom: 10%;
-  right: 8%;
+  bottom: 12%;
+  right: 10%;
   animation-delay: -4.5s;
 }
 
 .deviceIcon {
-  @apply h-8 w-8 sm:h-10 sm:w-10 text-primary;
+  @apply h-10 w-10 sm:h-12 sm:w-12 text-primary;
 }
 
 .deviceLabel {
-  @apply text-xs sm:text-sm font-medium text-muted-foreground;
+  @apply text-sm sm:text-base font-semibold text-foreground;
 }
 
 @keyframes float {
