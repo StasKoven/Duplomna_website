@@ -100,7 +100,7 @@
 
 /* Контейнер вмісту ілюстрації */
 .illustrationInner {
-  @apply relative z-10 flex items-center justify-center h-full;
+  @apply absolute inset-0 z-10;
 }
 
 .illustrationCenter {
@@ -131,27 +131,31 @@
 }
 
 .deviceCard {
-  @apply absolute flex flex-col items-center gap-2 bg-background rounded-xl p-4 sm:p-5 border border-border/60 shadow-md;
+  @apply absolute flex flex-col items-center gap-2 bg-background rounded-xl p-3 sm:p-4 border border-border/60 shadow-md min-w-[90px];
   animation: float 6s ease-in-out infinite;
 }
 
 .deviceCard1 {
-  @apply top-[8%] left-[10%];
+  top: 10%;
+  left: 8%;
   animation-delay: 0s;
 }
 
 .deviceCard2 {
-  @apply top-[5%] right-[8%];
+  top: 8%;
+  right: 8%;
   animation-delay: -1.5s;
 }
 
 .deviceCard3 {
-  @apply bottom-[15%] left-[5%];
+  bottom: 12%;
+  left: 6%;
   animation-delay: -3s;
 }
 
 .deviceCard4 {
-  @apply bottom-[10%] right-[12%];
+  bottom: 10%;
+  right: 8%;
   animation-delay: -4.5s;
 }
 
