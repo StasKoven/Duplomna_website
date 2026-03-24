@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import { Facebook, Instagram, Twitter, Mail, Phone, MapPin, ChevronDown } from 'lucide-react'
+import { Facebook, Instagram, Youtube, Mail, Phone, MapPin, ChevronDown, Send } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import s from './Footer.module.css'
 
@@ -53,19 +53,22 @@ export default function Footer() {
           {/* Містить опис та соціальні мережі */}
           {/* ==================== */}
           <div className={s.aboutSection}>
-            <h3 className={s.aboutTitle}>TechStore</h3>
+            <h3 className={s.aboutTitle}>Tech<span className={s.aboutTitleAccent}>Store</span></h3>
             <p className={s.aboutDescription}>
-              Ваш надійний партнер у світі електроніки. Найкращі ціни та якість гарантовані.
+              Інтернет-магазин електроніки з 2020 року. Працюємо напряму з офіційними дистрибуторами.
             </p>
             <div className={s.socialLinks}>
-              <a href="#" className={s.socialLinkFirst}>
+              <a href="#" className={s.socialLinkFirst} aria-label="Facebook">
                 <Facebook className={s.socialIcon} />
               </a>
-              <a href="#" className={s.socialLink}>
+              <a href="#" className={s.socialLink} aria-label="Instagram">
                 <Instagram className={s.socialIcon} />
               </a>
-              <a href="#" className={s.socialLink}>
-                <Twitter className={s.socialIcon} />
+              <a href="#" className={s.socialLink} aria-label="YouTube">
+                <Youtube className={s.socialIcon} />
+              </a>
+              <a href="#" className={s.socialLink} aria-label="Telegram">
+                <Send className={s.socialIcon} />
               </a>
             </div>
           </div>

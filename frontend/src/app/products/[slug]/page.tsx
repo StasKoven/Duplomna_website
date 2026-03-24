@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import { useParams } from 'next/navigation'
 import Image from 'next/image'
 import { motion } from 'framer-motion'
-import { ShoppingCart, Heart, Star, Truck, Shield, Package, GitCompare, ChevronLeft, ChevronRight } from 'lucide-react'
+import { ShoppingCart, Heart, Star, Truck, Shield, Package, ArrowLeftRight, ChevronLeft, ChevronRight } from 'lucide-react'
 import api from '@/lib/api'
 import { Product } from '@/types'
 import { formatPrice } from '@/lib/utils'
@@ -333,7 +333,7 @@ export default function ProductDetailPage() {
                   isInComparison() ? s.comparisonActive : ''
                 }`}
               >
-                <GitCompare className={s.actionIcon} />
+                <ArrowLeftRight className={s.actionIcon} />
                 <span className={s.hiddenMobile}>{isInComparison() ? 'Порівнюється' : 'Порівняти'}</span>
                 <span className={s.hiddenDesktop}>{isInComparison() ? '✓' : ''}</span>
               </button>

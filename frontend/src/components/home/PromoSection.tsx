@@ -2,32 +2,32 @@
 
 import Link from 'next/link'
 import { motion } from 'framer-motion'
-import { Percent, Package, Clock } from 'lucide-react'
+import { BadgePercent, Truck, ShieldCheck } from 'lucide-react'
 import s from './PromoSection.module.css'
 
 export default function PromoSection() {
   // Дані промо-акцій
   const promos = [
     {
-      icon: <Percent className={s.icon} />,
-      title: 'Знижки до 50%',
-      description: 'На обрані моделі смартфонів',
+      icon: <BadgePercent className={s.icon} />,
+      title: 'Акції тижня',
+      description: 'Знижки до 50% на обрані моделі',
       link: '/products?onSale=true',
-      gradient: 'from-blue-500 to-cyan-500'
+      variant: 'blue'
     },
     {
-      icon: <Package className={s.icon} />,
+      icon: <Truck className={s.icon} />,
       title: 'Безкоштовна доставка',
-      description: 'При замовленні від 1000 грн',
+      description: 'Новою поштою від 1000 грн',
       link: '/delivery',
-      gradient: 'from-purple-500 to-pink-500'
+      variant: 'green'
     },
     {
-      icon: <Clock className={s.icon} />,
-      title: 'Швидка доставка',
-      description: 'Доставка протягом 1-3 днів',
-      link: '/delivery',
-      gradient: 'from-orange-500 to-red-500'
+      icon: <ShieldCheck className={s.icon} />,
+      title: 'Гарантія до 2 років',
+      description: 'Офіційний сервіс по всій Україні',
+      link: '/warranty',
+      variant: 'amber'
     }
   ]
 
@@ -50,8 +50,7 @@ export default function PromoSection() {
               viewport={{ once: true }}
             >
               <Link href={promo.link}>
-                {/* Картка з динамічним градієнтом */}
-                <div className={`${s.card} ${promo.gradient}`}>
+                <div className={`${s.card} ${s[promo.variant]}`}>
                   <div className={s.circle} />
                   <div className={s.content}>
                     <div className={s.iconWrap}>{promo.icon}</div>

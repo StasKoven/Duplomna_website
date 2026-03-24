@@ -1,6 +1,6 @@
 /* Головна секція героя */
 .section {
-  @apply relative overflow-hidden bg-gradient-to-br from-primary/5 via-background to-accent/30 py-12 sm:py-20 md:py-28;
+  @apply relative overflow-hidden bg-gradient-to-b from-background via-background to-muted/30 py-12 sm:py-20 md:py-28;
 }
 
 /* Сітка контенту */
@@ -35,12 +35,12 @@
 
 /* Основна CTA кнопка */
 .primaryBtn {
-  @apply inline-flex items-center justify-center rounded-2xl bg-primary px-7 sm:px-10 py-3.5 sm:py-4 text-sm sm:text-base font-semibold text-primary-foreground shadow-lg shadow-primary/25 transition-all hover:bg-primary/90 hover:shadow-xl hover:shadow-primary/30 active:scale-[0.98];
+  @apply inline-flex items-center justify-center rounded-lg bg-primary px-7 sm:px-10 py-3.5 sm:py-4 text-sm sm:text-base font-semibold text-primary-foreground shadow-md transition-all hover:bg-primary/90 hover:shadow-lg active:scale-[0.98];
 }
 
 /* Вторинна кнопка */
 .secondaryBtn {
-  @apply inline-flex items-center justify-center rounded-2xl border-2 border-input bg-background px-7 sm:px-10 py-3.5 sm:py-4 text-sm sm:text-base font-semibold shadow-sm transition-all hover:bg-accent hover:text-accent-foreground active:scale-[0.98];
+  @apply inline-flex items-center justify-center rounded-lg border border-border bg-background px-7 sm:px-10 py-3.5 sm:py-4 text-sm sm:text-base font-semibold transition-all hover:bg-muted hover:text-foreground active:scale-[0.98];
 }
 
 /* Іконка стрілки */
@@ -55,7 +55,7 @@
 
 /* Картка переваги */
 .featureCard {
-  @apply flex items-center sm:items-start space-x-3 bg-background/70 backdrop-blur-sm sm:bg-card p-4 rounded-2xl border border-border/50 shadow-sm;
+  @apply flex items-center sm:items-start space-x-3 bg-background/80 sm:bg-card p-4 rounded-xl border border-border/40;
 }
 
 /* Іконка переваги */
@@ -87,7 +87,7 @@
 
 /* Картка ілюстрації */
 .illustrationCard {
-  @apply relative h-[300px] sm:h-[380px] lg:h-[440px] w-full rounded-3xl bg-gradient-to-br from-primary/20 via-primary/10 to-accent/20 p-8 overflow-hidden border border-primary/10;
+  @apply relative h-[300px] sm:h-[380px] lg:h-[440px] w-full rounded-2xl bg-muted/60 p-8 overflow-hidden border border-border/30;
 }
 
 /* Фонова сітка */
@@ -109,7 +109,7 @@
 
 /* Кругла іконка ілюстрації */
 .illustrationCircle {
-  @apply inline-flex items-center justify-center w-28 h-28 sm:w-36 sm:h-36 rounded-full bg-primary/10 backdrop-blur-sm mb-4 sm:mb-5 border border-primary/20;
+  @apply inline-flex items-center justify-center w-28 h-28 sm:w-36 sm:h-36 rounded-2xl bg-primary/10 backdrop-blur-sm mb-4 sm:mb-5 border border-primary/20;
 }
 
 .illustrationEmoji {
@@ -123,4 +123,47 @@
 
 .illustrationDesc {
   @apply text-sm sm:text-base text-muted-foreground;
+}
+
+/* Floating device cards */
+.floatingDevices {
+  @apply relative w-full h-full;
+}
+
+.deviceCard {
+  @apply absolute flex flex-col items-center gap-2 bg-background rounded-xl p-4 sm:p-5 border border-border/60 shadow-md;
+  animation: float 6s ease-in-out infinite;
+}
+
+.deviceCard1 {
+  @apply top-[8%] left-[10%];
+  animation-delay: 0s;
+}
+
+.deviceCard2 {
+  @apply top-[5%] right-[8%];
+  animation-delay: -1.5s;
+}
+
+.deviceCard3 {
+  @apply bottom-[15%] left-[5%];
+  animation-delay: -3s;
+}
+
+.deviceCard4 {
+  @apply bottom-[10%] right-[12%];
+  animation-delay: -4.5s;
+}
+
+.deviceIcon {
+  @apply h-8 w-8 sm:h-10 sm:w-10 text-primary;
+}
+
+.deviceLabel {
+  @apply text-xs sm:text-sm font-medium text-muted-foreground;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-12px); }
 }

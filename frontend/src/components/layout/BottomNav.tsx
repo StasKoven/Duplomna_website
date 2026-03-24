@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Home, Search, ShoppingCart, Heart, User } from 'lucide-react'
+import { Home, LayoutGrid, ShoppingCart, Heart, User } from 'lucide-react'
 import { useCartStore } from '@/store/cartStore'
 import { useWishlistStore } from '@/store/wishlistStore'
 import { useAuthStore } from '@/store/authStore'
@@ -34,7 +34,7 @@ export default function BottomNav() {
     },
     {
       href: '/products',
-      icon: Search,
+      icon: LayoutGrid,
       label: 'Каталог',
       isActive: pathname === '/products' || pathname.startsWith('/products/')
     },

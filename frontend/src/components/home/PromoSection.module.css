@@ -15,12 +15,24 @@
 
 /* Картка промо-акції */
 .card {
-  @apply relative overflow-hidden rounded-2xl sm:rounded-3xl bg-gradient-to-br p-6 sm:p-8 text-white transition-all duration-300 hover:scale-[1.02] hover:shadow-xl;
+  @apply relative overflow-hidden rounded-xl p-6 sm:p-8 transition-all duration-300 hover:scale-[1.02] hover:shadow-lg border;
+}
+
+.blue {
+  @apply bg-blue-50 dark:bg-blue-950/40 border-blue-200 dark:border-blue-800 text-blue-900 dark:text-blue-100;
+}
+
+.green {
+  @apply bg-emerald-50 dark:bg-emerald-950/40 border-emerald-200 dark:border-emerald-800 text-emerald-900 dark:text-emerald-100;
+}
+
+.amber {
+  @apply bg-amber-50 dark:bg-amber-950/40 border-amber-200 dark:border-amber-800 text-amber-900 dark:text-amber-100;
 }
 
 /* Декоративне коло */
 .circle {
-  @apply absolute top-0 right-0 -mt-6 -mr-6 h-32 w-32 rounded-full bg-white/10;
+  @apply absolute top-0 right-0 -mt-6 -mr-6 h-32 w-32 rounded-full bg-current opacity-[0.04];
 }
 
 /* Контент картки */
@@ -35,7 +47,7 @@
 
 /* Іконка промо */
 .icon {
-  @apply h-8 w-8 sm:h-10 sm:w-10;
+  @apply h-8 w-8 sm:h-10 sm:w-10 text-current;
 }
 
 /* Назва акції */
@@ -45,5 +57,5 @@
 
 /* Опис акції */
 .cardDescription {
-  @apply text-sm sm:text-base text-white/90;
+  @apply text-sm sm:text-base opacity-75;
 }

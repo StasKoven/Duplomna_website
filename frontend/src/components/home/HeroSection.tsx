@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
-import { ArrowRight, Zap, Shield, Truck } from 'lucide-react'
+import { ArrowRight, Cpu, Headphones, Smartphone, Laptop, Watch, Wifi } from 'lucide-react'
 import s from './HeroSection.module.css'
 
 export default function HeroSection() {
@@ -30,20 +30,20 @@ export default function HeroSection() {
             className={s.leftContent}
           >
             <h1 className={s.title}>
-              Найкраща електроніка
-              <span className={s.titleAccent}>за доступними цінами</span>
+              Техніка, яка працює
+              <span className={s.titleAccent}>на вас</span>
             </h1>
             <p className={s.description}>
-              Смартфони, ноутбуки, планшети та аксесуари від провідних брендів.
-              Офіційна гарантія та безкоштовна доставка.
+              Смартфони, ноутбуки, планшети та аксесуари від перевірених брендів.
+              Офіційна гарантія, професійна консультація та швидка доставка.
             </p>
             <div className={s.actions}>
               <Link href="/products" className={s.primaryBtn}>
-                Переглянути каталог
+                Перейти до каталогу
                 <ArrowRight className={s.arrowIcon} />
               </Link>
-              <Link href="/about" className={s.secondaryBtn}>
-                Дізнатись більше
+              <Link href="/categories" className={s.secondaryBtn}>
+                Категорії товарів
               </Link>
             </div>
 
@@ -51,29 +51,29 @@ export default function HeroSection() {
             <div className={s.featuresGrid}>
               <div className={s.featureCard}>
                 <div className={s.featureIconWrap}>
-                  <Zap className={s.featureIcon} />
+                  <Cpu className={s.featureIcon} />
                 </div>
                 <div className={s.featureText}>
-                  <h3 className={s.featureTitle}>Швидка доставка</h3>
-                  <p className={s.featureDesc}>1-3 дні по Україні</p>
+                  <h3 className={s.featureTitle}>Оригінальна техніка</h3>
+                  <p className={s.featureDesc}>Лише сертифіковані товари</p>
                 </div>
               </div>
               <div className={s.featureCard}>
                 <div className={s.featureIconWrap}>
-                  <Shield className={s.featureIcon} />
+                  <Headphones className={s.featureIcon} />
                 </div>
                 <div className={s.featureText}>
-                  <h3 className={s.featureTitle}>Гарантія якості</h3>
-                  <p className={s.featureDesc}>Офіційна гарантія</p>
+                  <h3 className={s.featureTitle}>Підтримка 24/7</h3>
+                  <p className={s.featureDesc}>Завжди на звʼязку</p>
                 </div>
               </div>
               <div className={s.featureCard}>
                 <div className={s.featureIconWrap}>
-                  <Truck className={s.featureIcon} />
+                  <Wifi className={s.featureIcon} />
                 </div>
                 <div className={s.featureText}>
-                  <h3 className={s.featureTitle}>Безкоштовна доставка</h3>
-                  <p className={s.featureDesc}>Від 1000 грн</p>
+                  <h3 className={s.featureTitle}>Доставка по Україні</h3>
+                  <p className={s.featureDesc}>Від 1 до 3 днів</p>
                 </div>
               </div>
             </div>
@@ -91,12 +91,23 @@ export default function HeroSection() {
             <div className={s.illustrationCard}>
               <div className={s.gridOverlay} />
               <div className={s.illustrationInner}>
-                <div className={s.illustrationCenter}>
-                  <div className={s.illustrationCircle}>
-                    <span className={s.illustrationEmoji}>📱</span>
+                <div className={s.floatingDevices}>
+                  <div className={s.deviceCard + ' ' + s.deviceCard1}>
+                    <Smartphone className={s.deviceIcon} />
+                    <span className={s.deviceLabel}>Смартфони</span>
                   </div>
-                  <h3 className={s.illustrationTitle}>Новинки техніки</h3>
-                  <p className={s.illustrationDesc}>Вже в наявності</p>
+                  <div className={s.deviceCard + ' ' + s.deviceCard2}>
+                    <Laptop className={s.deviceIcon} />
+                    <span className={s.deviceLabel}>Ноутбуки</span>
+                  </div>
+                  <div className={s.deviceCard + ' ' + s.deviceCard3}>
+                    <Headphones className={s.deviceIcon} />
+                    <span className={s.deviceLabel}>Навушники</span>
+                  </div>
+                  <div className={s.deviceCard + ' ' + s.deviceCard4}>
+                    <Watch className={s.deviceIcon} />
+                    <span className={s.deviceLabel}>Годинники</span>
+                  </div>
                 </div>
               </div>
             </div>

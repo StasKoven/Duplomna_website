@@ -11,13 +11,13 @@ import {
   Menu, 
   X, 
   Heart,
-  ShoppingBag,
+  Monitor,
   LogOut,
   Settings,
   Package,
-  GitCompare,
+  ArrowLeftRight,
   Home,
-  Grid3X3,
+  LayoutGrid,
   Info,
   Phone
 } from 'lucide-react'
@@ -181,8 +181,8 @@ export default function Header() {
 
             {/* Логотип */}
             <Link href="/" className={s.logo}>
-              <ShoppingBag className={s.iconLogo} />
-              <span className={s.logoText}>TechStore</span>
+              <Monitor className={s.iconLogo} />
+              <span className={s.logoText}>Tech<span className={s.logoAccent}>Store</span></span>
             </Link>
 
             {/* Десктоп навігація */}
@@ -291,7 +291,7 @@ export default function Header() {
 
               {/* Порівняння */}
               <Link href="/compare" className={s.compareBtn}>
-                <GitCompare className={s.icon} />
+                <ArrowLeftRight className={s.icon} />
                 {comparisonItemsCount > 0 && (
                   <span className={s.badgeBlue}>
                     {comparisonItemsCount}
@@ -586,7 +586,7 @@ export default function Header() {
                     className={s.mobileNavLink}
                     onClick={closeMobileMenu}
                   >
-                    <ShoppingBag className={s.iconMuted} />
+                    <Search className={s.iconMuted} />
                     <span>Каталог</span>
                   </Link>
                   <Link
@@ -594,7 +594,7 @@ export default function Header() {
                     className={s.mobileNavLink}
                     onClick={closeMobileMenu}
                   >
-                    <Grid3X3 className={s.iconMuted} />
+                    <LayoutGrid className={s.iconMuted} />
                     <span>Категорії</span>
                   </Link>
                   <Link
@@ -602,7 +602,7 @@ export default function Header() {
                     className={s.mobileNavLink}
                     onClick={closeMobileMenu}
                   >
-                    <GitCompare className={s.iconMuted} />
+                    <ArrowLeftRight className={s.iconMuted} />
                     <span>Порівняння</span>
                     {comparisonItemsCount > 0 && (
                       <span className={s.mobileBadgeBlue}>

@@ -3,7 +3,7 @@
 }
 
 .headerScrolled {
-  @apply bg-background/80 backdrop-blur-xl border-b shadow-sm;
+  @apply bg-background/95 backdrop-blur-md border-b border-border/60 shadow-sm;
 }
 
 .headerDefault {
@@ -55,6 +55,10 @@
   @apply text-lg sm:text-xl font-extrabold tracking-tight;
 }
 
+.logoAccent {
+  @apply text-primary;
+}
+
 /* ============================= */
 /* Десктоп навігація              */
 /* ============================= */
@@ -95,7 +99,7 @@
 }
 
 .searchInput {
-  @apply w-full rounded-2xl border border-input bg-muted/50 px-10 py-2.5 text-sm placeholder:text-muted-foreground/60
+  @apply w-full rounded-lg border border-input bg-muted/40 px-10 py-2.5 text-sm placeholder:text-muted-foreground/60
     focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/20 focus-visible:border-primary focus-visible:bg-background
     transition-all duration-200;
 }
@@ -200,7 +204,7 @@
 }
 
 .mobileSearchInput {
-  @apply w-full rounded-2xl border border-input bg-muted/50 px-10 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all;
+  @apply w-full rounded-lg border border-input bg-muted/40 px-10 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all;
 }
 
 .mobileSearchClose {

@@ -4,7 +4,7 @@
 
 /* Обгортка картки */
 .card {
-  @apply relative rounded-2xl border bg-card overflow-hidden transition-all duration-300 hover:shadow-xl hover:shadow-primary/5 hover:-translate-y-0.5 active:shadow-lg;
+  @apply relative rounded-xl border bg-card overflow-hidden transition-all duration-300 hover:shadow-lg hover:shadow-black/5 hover:-translate-y-0.5 active:shadow-md;
 }
 
 /* === Бейджі товару (ліва верхня частина) === */
@@ -159,8 +159,8 @@
 
 /* === Кнопка "Додати до кошика" === */
 .addToCartButton {
-  @apply w-full rounded-xl bg-primary text-primary-foreground transition-all;
-  @apply hover:bg-primary/90 hover:shadow-md hover:shadow-primary/20 active:scale-[0.97];
+  @apply w-full rounded-lg bg-primary text-primary-foreground transition-all;
+  @apply hover:bg-primary/90 hover:shadow-md active:scale-[0.97];
   @apply disabled:opacity-50 disabled:cursor-not-allowed;
   @apply flex items-center justify-center gap-1.5 font-semibold;
   @apply px-3 py-2.5 text-xs;
@@ -169,8 +169,8 @@
 
 /* Кнопка "Додати до кошика" — компактний вигляд */
 .addToCartButtonCompact {
-  @apply w-full rounded-xl bg-primary text-primary-foreground transition-all;
-  @apply hover:bg-primary/90 hover:shadow-md hover:shadow-primary/20 active:scale-[0.97];
+  @apply w-full rounded-lg bg-primary text-primary-foreground transition-all;
+  @apply hover:bg-primary/90 hover:shadow-md active:scale-[0.97];
   @apply disabled:opacity-50 disabled:cursor-not-allowed;
   @apply flex items-center justify-center gap-1.5 font-semibold;
   @apply px-2 py-2 text-xs;

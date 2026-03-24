@@ -31,6 +31,10 @@
   @apply mb-3 md:mb-4 text-base sm:text-lg font-bold;
 }
 
+.aboutTitleAccent {
+  @apply text-primary;
+}
+
 /* Опис магазину */
 .aboutDescription {
   @apply text-sm text-muted-foreground mb-4;

@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { motion } from 'framer-motion'
-import { Heart, ShoppingCart, Star, GitCompare } from 'lucide-react'
+import { Heart, ShoppingCart, Star, ArrowLeftRight } from 'lucide-react'
 import { Product } from '@/types'
 import { formatPrice } from '@/lib/utils'
 import { useCartStore } from '@/store/cartStore'
@@ -129,7 +129,7 @@ export default function ProductCard({ product, compact = false }: ProductCardPro
             onClick={handleToggleComparison}
             className={s.actionButton}
           >
-            <GitCompare
+            <ArrowLeftRight
               className={isInComparison() ? s.compareIconActive : s.compareIcon}
             />
           </button>

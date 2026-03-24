@@ -136,8 +136,14 @@ export default function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
+        {/* Blocking script to set theme before first paint — prevents FOUC */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(t!=='light'&&matchMedia('(prefers-color-scheme:dark)').matches)){document.documentElement.classList.add('dark')}}catch(e){}})()`,
+          }}
+        />
       </head>
-      <body className={inter.className} suppressHydrationWarning>
+      <body className={`${inter.className} fouc-guard`} suppressHydrationWarning>
         <ErrorBoundary>
           <ThemeProvider
             attribute="class"
