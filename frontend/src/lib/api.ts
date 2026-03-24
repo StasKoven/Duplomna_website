@@ -35,7 +35,6 @@ api.get = async function retryGet(...args: Parameters<typeof originalGet>) {
     } catch (error: any) {
       lastError = error
       if (attempt < MAX_RETRIES && isRetryableError(error)) {
-        console.warn(`[API] GET ${args[0]} failed (attempt ${attempt + 1}/${MAX_RETRIES + 1}), retrying in ${RETRY_DELAY * (attempt + 1)}ms...`)
         await sleep(RETRY_DELAY * (attempt + 1))
       } else {
         throw error

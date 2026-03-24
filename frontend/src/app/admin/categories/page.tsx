@@ -49,8 +49,6 @@ export default function AdminCategoriesPage() {
       const incoming = response.data?.categories
       if (Array.isArray(incoming)) {
         setCategories(incoming)
-      } else if (response.status === 304) {
-        console.log('Admin categories 304, keeping previous list')
       } else {
         setCategories([])
       }

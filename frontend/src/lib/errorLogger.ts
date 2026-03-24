@@ -1,57 +1,27 @@
-/**
+﻿/**
  * Global error logger for frontend
+ * Only outputs in development mode to keep production console clean
  */
 
+const isDev = process.env.NODE_ENV !== 'production'
+
 export const logError = (context: string, error: any, additionalInfo?: any) => {
-  console.error('\n❌ ========== FRONTEND ERROR ==========');
-  console.error('📍 Context:', context);
-  console.error('💬 Message:', error?.message || error);
-  
+  if (!isDev) return
+  console.error('[Error]', context, '', error?.message || error)
   if (error?.response) {
-    console.error('🔴 Response Status:', error.response.status);
-    console.error('🔴 Response Data:', error.response.data);
+    console.error('Status:', error.response.status, error.response.data?.message || '')
   }
-  
-  if (error?.request && !error?.response) {
-    console.error('🔴 No Response Received');
-    console.error('🔴 Request:', error.request);
-  }
-  
-  if (error?.config) {
-    console.error('⚙️ Config:', {
-      method: error.config.method,
-      url: error.config.url,
-      baseURL: error.config.baseURL,
-    });
-  }
-  
   if (additionalInfo) {
-    console.error('ℹ️ Additional Info:', additionalInfo);
+    console.error('Info:', additionalInfo)
   }
-  
-  if (error?.stack) {
-    console.error('📚 Stack:', error.stack);
-  }
-  
-  console.error('======================================\n');
-};
+}
 
 export const logWarning = (context: string, message: string, data?: any) => {
-  console.warn('\n⚠️ ========== FRONTEND WARNING ==========');
-  console.warn('📍 Context:', context);
-  console.warn('💬 Message:', message);
-  if (data) {
-    console.warn('ℹ️ Data:', data);
-  }
-  console.warn('=========================================\n');
-};
+  if (!isDev) return
+  console.warn('[Warning]', context, '', message, data ?? '')
+}
 
 export const logInfo = (context: string, message: string, data?: any) => {
-  console.log('\nℹ️ ========== INFO ==========');
-  console.log('📍 Context:', context);
-  console.log('💬 Message:', message);
-  if (data) {
-    console.log('ℹ️ Data:', data);
-  }
-  console.log('=============================\n');
-};
+  if (!isDev) return
+  console.info('[Info]', context, '', message, data ?? '')
+}

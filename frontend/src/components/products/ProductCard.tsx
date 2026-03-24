@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { motion } from 'framer-motion'
+import { useState } from 'react'
 import { Heart, ShoppingCart, Star, ArrowLeftRight } from 'lucide-react'
 import { Product } from '@/types'
 import { formatPrice } from '@/lib/utils'
@@ -46,6 +47,7 @@ export default function ProductCard({ product, compact = false }: ProductCardPro
   }
 
   const mainImage = product.images.find(img => img.isMain)?.url || product.images[0]?.url
+  const [imgError, setImgError] = useState(false)
 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault()
@@ -137,13 +139,14 @@ export default function ProductCard({ product, compact = false }: ProductCardPro
 
         {/* Зображення товару */}
         <div className={s.imageWrapper}>
-          {mainImage ? (
+          {mainImage && !imgError ? (
             <Image
               src={mainImage}
               alt={product.name}
               fill
               sizes="(max-width: 480px) 50vw, (max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
               className={s.image}
+              onError={() => setImgError(true)}
             />
           ) : (
             <div className={s.imagePlaceholder}>📱</div>
