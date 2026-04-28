@@ -5,6 +5,7 @@ import { ThemeProvider } from '@/components/providers/ThemeProvider'
 import Main from '@/components/main'
 import App from '@/components/app'
 import ErrorBoundary from '@/components/ErrorBoundary'
+import NavigationFOUCGuard from '@/components/NavigationFOUCGuard'
 
 const inter = Inter({ subsets: ['latin', 'cyrillic'] })
 
@@ -136,14 +137,24 @@ export default function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
-        {/* Blocking script to set theme before first paint — prevents FOUC */}
+        {/* Blocking script to set theme before first paint — prevents theme FOUC */}
         <script
           dangerouslySetInnerHTML={{
             __html: `(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(t!=='light'&&matchMedia('(prefers-color-scheme:dark)').matches)){document.documentElement.classList.add('dark')}}catch(e){}})()`,
           }}
         />
+        {/* FOUC guard — mark <html> as loading immediately, then reveal once
+            every stylesheet is actually parsed. Replaces the previous fixed
+            50ms timeout, which was unreliable on slow connections. The
+            attribute is managed entirely by this script (not React) so
+            hydration can't overwrite it. */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){var d=document,h=d.documentElement;h.setAttribute('data-fouc','loading');function reveal(){h.setAttribute('data-fouc','ready')}function check(){var l=d.querySelectorAll('link[rel="stylesheet"]'),p=[],i;for(i=0;i<l.length;i++){(function(x){if(x.sheet)return;p.push(new Promise(function(r){var done=function(){r()};x.addEventListener('load',done,{once:true});x.addEventListener('error',done,{once:true})}))})(l[i])}if(!p.length){reveal();return}Promise.all(p).then(reveal)}if(d.readyState==='loading'){d.addEventListener('DOMContentLoaded',check)}else{check()}setTimeout(reveal,1500)})()`,
+          }}
+        />
       </head>
-      <body className={`${inter.className} fouc-guard`} suppressHydrationWarning>
+      <body className={inter.className} suppressHydrationWarning>
         <ErrorBoundary>
           <ThemeProvider
             attribute="class"
@@ -152,7 +163,9 @@ export default function RootLayout({
             disableTransitionOnChange
           >
             <Main>
-              <App>{children}</App>
+              <App>
+                <NavigationFOUCGuard>{children}</NavigationFOUCGuard>
+              </App>
             </Main>
           </ThemeProvider>
         </ErrorBoundary>
