@@ -78,7 +78,10 @@ exports.register = async (req, res) => {
     });
   } catch (error) {
     console.error('Register error:', error);
-    res.status(500).json({ message: 'Registration failed', error: error.message });
+    res.status(500).json({
+      message: 'Registration failed',
+      ...(process.env.NODE_ENV !== 'production' && { error: error.message })
+    });
   }
 };
 
@@ -181,7 +184,10 @@ exports.googleAuth = async (req, res) => {
       return res.status(400).json({ message: 'Invalid token' });
     }
     
-    res.status(500).json({ message: 'Google authentication failed', error: error.message });
+    res.status(500).json({
+      message: 'Google authentication failed',
+      ...(process.env.NODE_ENV !== 'production' && { error: error.message })
+    });
   }
 };
 
@@ -252,7 +258,10 @@ exports.login = async (req, res) => {
     });
   } catch (error) {
     console.error('Login error:', error);
-    res.status(500).json({ message: 'Login failed', error: error.message });
+    res.status(500).json({
+      message: 'Login failed',
+      ...(process.env.NODE_ENV !== 'production' && { error: error.message })
+    });
   }
 };
 

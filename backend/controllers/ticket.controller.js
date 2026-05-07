@@ -38,7 +38,10 @@ exports.createTicket = async (req, res) => {
     });
   } catch (error) {
     console.error('Create ticket error:', error);
-    res.status(500).json({ message: 'Помилка створення тікету', error: error.message });
+    res.status(500).json({
+      message: 'Помилка створення тікету',
+      ...(process.env.NODE_ENV !== 'production' && { error: error.message })
+    });
   }
 };
 

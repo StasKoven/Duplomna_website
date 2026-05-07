@@ -2,7 +2,18 @@ import axios, { AxiosError, InternalAxiosRequestConfig } from 'axios'
 
 const isProduction = process.env.NODE_ENV === 'production'
 
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api'
+const ENV_API_URL = process.env.NEXT_PUBLIC_API_URL
+
+if (isProduction && !ENV_API_URL && typeof window !== 'undefined') {
+  // Fail loudly in production: silently falling back to localhost is the
+  // worst-case bug because the UI looks fine but every request times out.
+  // eslint-disable-next-line no-console
+  console.error(
+    '[TechStore] NEXT_PUBLIC_API_URL is not set. Production build cannot reach the backend.'
+  )
+}
+
+const API_BASE = ENV_API_URL || 'http://localhost:5000/api'
 
 const api = axios.create({
   baseURL: API_BASE,

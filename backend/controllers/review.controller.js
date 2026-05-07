@@ -46,7 +46,10 @@ exports.createReview = async (req, res) => {
     });
   } catch (error) {
     console.error('Create review error:', error);
-    res.status(500).json({ message: 'Failed to create review', error: error.message });
+    res.status(500).json({
+      message: 'Failed to create review',
+      ...(process.env.NODE_ENV !== 'production' && { error: error.message })
+    });
   }
 };
 

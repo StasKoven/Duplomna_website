@@ -8,39 +8,40 @@ interface MainProps {
   children: ReactNode
 }
 
-// This component initializes the app without blocking rendering
+// Initializes the app (auth restore + cart hydration) without blocking the
+// first paint. Runs once even under React.StrictMode's double-mount.
 export default function Main({ children }: MainProps) {
-  const { fetchProfile, isAuthenticated } = useAuthStore()
-  const { setAuthenticated, fetchCart } = useCartStore()
   const initialized = useRef(false)
 
   useEffect(() => {
-    // Prevent double initialization in React StrictMode
     if (initialized.current) return
     initialized.current = true
 
-    // Initialize auth in background - doesn't block rendering
     const initAuth = async () => {
       const accessToken = localStorage.getItem('accessToken')
-      
-      if (accessToken && !isAuthenticated) {
-        try {
-          await fetchProfile()
-          // fetchProfile → syncStores → setAuthenticated(true) вже виконано
-          // Завантажуємо кошик з сервера
-          await fetchCart()
-        } catch (error) {
-          console.error('Failed to restore session:', error)
-          localStorage.removeItem('accessToken')
-          localStorage.removeItem('refreshToken')
-          setAuthenticated(false)
-        }
+      if (!accessToken) return
+
+      // Read fresh state via getState() rather than closing over the hook
+      // values. This keeps the effect's dep list empty without lying to the
+      // exhaustive-deps lint rule.
+      const { fetchProfile } = useAuthStore.getState()
+      const { setAuthenticated, fetchCart } = useCartStore.getState()
+
+      if (useAuthStore.getState().isAuthenticated) return
+
+      try {
+        await fetchProfile()
+        await fetchCart()
+      } catch (error) {
+        console.error('Failed to restore session:', error)
+        localStorage.removeItem('accessToken')
+        localStorage.removeItem('refreshToken')
+        setAuthenticated(false)
       }
     }
 
     initAuth()
   }, [])
 
-  // Always render children immediately
   return <>{children}</>
 }

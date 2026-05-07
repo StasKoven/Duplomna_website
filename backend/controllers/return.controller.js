@@ -86,7 +86,10 @@ exports.createReturnRequest = async (req, res) => {
     });
   } catch (error) {
     console.error('Create return request error:', error);
-    res.status(500).json({ message: 'Помилка створення заявки', error: error.message });
+    res.status(500).json({
+      message: 'Помилка створення заявки',
+      ...(process.env.NODE_ENV !== 'production' && { error: error.message })
+    });
   }
 };
 

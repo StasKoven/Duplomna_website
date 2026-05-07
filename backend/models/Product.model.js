@@ -157,14 +157,27 @@ productSchema.index({ price: 1 });
 productSchema.index({ 'rating.average': -1 });
 productSchema.index({ createdAt: -1 });
 
-// Generate slug before saving
-productSchema.pre('save', function(next) {
-  if (this.isModified('name')) {
-    this.slug = this.name
-      .toLowerCase()
-      .replace(/[^a-z0-9]+/g, '-')
-      .replace(/^-|-$/g, '') + '-' + Date.now();
+// Generate slug only on creation. Editing the name should NOT change the slug —
+// otherwise indexed URLs and external links break (SEO regression).
+productSchema.pre('save', async function(next) {
+  if (this.slug) return next();
+
+  const base = (this.name || 'product')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '') || 'product';
+
+  // Ensure uniqueness by appending a numeric suffix if needed
+  let candidate = base;
+  let suffix = 1;
+  // eslint-disable-next-line no-constant-condition
+  while (true) {
+    const existing = await this.constructor.findOne({ slug: candidate }).select('_id').lean();
+    if (!existing || existing._id.equals(this._id)) break;
+    suffix += 1;
+    candidate = `${base}-${suffix}`;
   }
+  this.slug = candidate;
   next();
 });
 

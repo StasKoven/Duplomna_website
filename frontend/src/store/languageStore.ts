@@ -15,6 +15,11 @@ interface LanguageStore {
   loadTranslations: (lang: Language) => Promise<void>
 }
 
+// Track the in-flight request so concurrent setLanguage() calls don't overwrite
+// each other (e.g. quick toggle ua → en → ua would otherwise resolve out of
+// order and leave the store on the wrong locale).
+let inflight: { lang: Language; promise: Promise<void> } | null = null
+
 export const useLanguageStore = create<LanguageStore>()(
   persist(
     (set, get) => ({
@@ -27,14 +32,26 @@ export const useLanguageStore = create<LanguageStore>()(
       },
 
       loadTranslations: async (lang: Language) => {
-        try {
-          const response = await fetch(`/locales/${lang}/translation.json`)
-          if (!response.ok) throw new Error(`HTTP ${response.status}`)
-          const translations = await response.json()
-          set({ translations })
-        } catch (error) {
-          console.error('Failed to load translations:', error)
-        }
+        if (inflight && inflight.lang === lang) return inflight.promise
+
+        const promise = (async () => {
+          try {
+            const response = await fetch(`/locales/${lang}/translation.json`)
+            if (!response.ok) throw new Error(`HTTP ${response.status}`)
+            const translations = await response.json()
+            // Drop the result if the user switched language again while we were fetching.
+            if (get().language === lang) {
+              set({ translations })
+            }
+          } catch (error) {
+            console.error('Failed to load translations:', error)
+          } finally {
+            if (inflight && inflight.lang === lang) inflight = null
+          }
+        })()
+
+        inflight = { lang, promise }
+        return promise
       },
 
       t: (key: string) => {
@@ -55,12 +72,15 @@ export const useLanguageStore = create<LanguageStore>()(
     }),
     {
       name: 'language-storage',
-      partialize: (state) => ({ language: state.language })
+      partialize: (state) => ({ language: state.language }),
+      // After zustand rehydrates the persisted language, kick off the matching
+      // translation file. Doing it here (instead of at module top-level) means
+      // we wait for the real persisted value rather than racing against it.
+      onRehydrateStorage: () => (state) => {
+        if (state && typeof window !== 'undefined') {
+          state.loadTranslations(state.language)
+        }
+      },
     }
   )
 )
-
-// Initialize translations
-if (typeof window !== 'undefined') {
-  useLanguageStore.getState().loadTranslations(useLanguageStore.getState().language)
-}

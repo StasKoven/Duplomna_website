@@ -82,7 +82,9 @@ const corsOptions = {
   allowedHeaders: ['Content-Type', 'Authorization', 'Cache-Control'],
 };
 app.use(cors(corsOptions));
-app.options('*', cors(corsOptions));
+// Use a regex match so this keeps working when migrating to Express 5,
+// where the bare '*' string is no longer a valid path pattern.
+app.options(/.*/, cors(corsOptions));
 
 // Rate limiting (more lenient in development and skip preflight)
 const limiter = rateLimit({
@@ -106,17 +108,21 @@ app.use(compression());
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
   
-  // Detailed request logging
+  // Detailed request logging (development-only). Auth headers and password
+  // bodies are redacted to avoid accidentally leaking secrets via dev logs.
   app.use((req, res, next) => {
     console.log('\n🔵 ========== INCOMING REQUEST ==========');
     console.log('📍 Method:', req.method);
     console.log('📍 URL:', req.originalUrl);
     console.log('📍 IP:', req.ip);
     if (req.headers.authorization) {
-      console.log('🔑 Auth:', req.headers.authorization.substring(0, 20) + '...');
+      console.log('🔑 Auth: <present>');
     }
-    if (Object.keys(req.body).length > 0) {
-      console.log('📦 Body:', JSON.stringify(req.body, null, 2));
+    if (req.body && Object.keys(req.body).length > 0) {
+      const safeBody = { ...req.body };
+      ['password', 'currentPassword', 'newPassword', 'confirmPassword', 'idToken', 'refreshToken', 'token']
+        .forEach(k => { if (k in safeBody) safeBody[k] = '***'; });
+      console.log('📦 Body:', JSON.stringify(safeBody, null, 2));
     }
     if (Object.keys(req.query).length > 0) {
       console.log('🔎 Query:', req.query);

@@ -24,7 +24,8 @@ export function formatDate(date: string | Date): string {
 export function getImageUrl(url: string): string {
   if (!url) return '/placeholder.png'
   if (url.startsWith('http')) return url
-  return `${process.env.NEXT_PUBLIC_API_URL}/${url}`
+  const base = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api'
+  return `${base}/${url.replace(/^\/+/, '')}`
 }
 
 export function truncateText(text: string, maxLength: number): string {

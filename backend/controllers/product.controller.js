@@ -203,9 +203,9 @@ exports.createProduct = async (req, res) => {
       });
     }
     
-    res.status(500).json({ 
-      message: 'Failed to create product', 
-      error: error.message 
+    res.status(500).json({
+      message: 'Failed to create product',
+      ...(process.env.NODE_ENV !== 'production' && { error: error.message })
     });
   }
 };

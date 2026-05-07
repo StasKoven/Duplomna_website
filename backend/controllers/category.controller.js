@@ -81,7 +81,10 @@ exports.createCategory = async (req, res) => {
     });
   } catch (error) {
     console.error('Create category error:', error);
-    res.status(500).json({ message: 'Failed to create category', error: error.message });
+    res.status(500).json({
+      message: 'Failed to create category',
+      ...(process.env.NODE_ENV !== 'production' && { error: error.message })
+    });
   }
 };
 

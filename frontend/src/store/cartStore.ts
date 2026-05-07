@@ -40,29 +40,32 @@ export const useCartStore = create<CartState>()(
         if (!isAuthenticated || items.length === 0) return
 
         try {
-          // Спочатку отримуємо поточний серверний кошик
+          // Get the current server-side cart first.
           const serverResponse = await api.get('/cart')
           const serverCart = serverResponse.data?.cart || []
 
-          // Додаємо тільки ті товари, яких ще немає на сервері
-          for (const item of items) {
-            const product = item.product as Product
-            const existsOnServer = serverCart.some(
-              (sc: any) => {
-                const serverId = typeof sc.product === 'object' ? sc.product._id : sc.product
-                return serverId === product._id
-              }
+          // Push only the local items that aren't already on the server.
+          // Run them in parallel: this is bounded by the local-cart size, and
+          // for typical 5–10 items it cuts sync time roughly N×.
+          const serverIds = new Set(
+            serverCart.map((sc: any) =>
+              typeof sc.product === 'object' ? sc.product._id : sc.product
             )
+          )
 
-            if (!existsOnServer) {
-              await api.post('/cart', {
-                productId: product._id,
-                quantity: item.quantity
-              })
-            }
+          const toPush = items
+            .map((item) => item.product as Product)
+            .filter((p) => !serverIds.has(p._id))
+            .map((product) => {
+              const item = items.find((i) => (i.product as Product)._id === product._id)!
+              return api.post('/cart', { productId: product._id, quantity: item.quantity })
+            })
+
+          if (toPush.length > 0) {
+            await Promise.all(toPush)
           }
 
-          // Отримуємо оновлений кошик з сервера
+          // Get the freshly-merged cart back from the server.
           const response = await api.get('/cart')
           set({ items: (response.data?.cart || []).filter((i: any) => i.product != null) })
         } catch (error) {

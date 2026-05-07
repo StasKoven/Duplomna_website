@@ -143,7 +143,10 @@ exports.createOrder = async (req, res) => {
     });
   } catch (error) {
     console.error('Create order error:', error);
-    res.status(500).json({ message: 'Failed to create order', error: error.message });
+    res.status(500).json({
+      message: 'Failed to create order',
+      ...(process.env.NODE_ENV !== 'production' && { error: error.message })
+    });
   }
 };
 
