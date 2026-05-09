@@ -81,7 +81,7 @@
 
 /* Опис категорії */
 .categoryDescription {
-  @apply text-sm text-muted-foreground line-clamp-2 break-words;
+  @apply text-sm text-muted-foreground line-clamp-2 break-all;
 }
 
 /* ===== Ефект hover overlay ===== */
