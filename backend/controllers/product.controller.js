@@ -50,16 +50,12 @@ exports.getProducts = async (req, res) => {
       if (maxPrice) filter.price.$lte = Number(maxPrice);
     }
 
-    // Search by name, brand, tags and shortDescription
+    // Search strictly by product name to avoid noisy matches from
+    // brand/tags/description (e.g. searching "iphone" must not return a MagSafe
+    // charger just because "iphone" appears in its description).
     if (search) {
       const escapedSearch = search.trim().replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-      const searchRegex = new RegExp(escapedSearch, 'i');
-      filter.$or = [
-        { name: searchRegex },
-        { brand: searchRegex },
-        { tags: searchRegex },
-        { shortDescription: searchRegex },
-      ];
+      filter.name = new RegExp(escapedSearch, 'i');
     }
 
     // Calculate pagination
@@ -405,29 +401,16 @@ exports.autocompleteProducts = async (req, res) => {
     }
 
     const query = q.trim().slice(0, 100);
+    const escaped = query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const regex = new RegExp(escaped, 'i');
 
-    // Primary: use the text index for relevance-scored results
-    let products = await Product.find(
-      { $text: { $search: query }, isActive: true },
-      { score: { $meta: 'textScore' } }
-    )
-      .sort({ score: { $meta: 'textScore' } })
+    // Match strictly by product name so suggestions stay relevant to the typed
+    // term — text-index matches against description/brand caused unrelated items
+    // (e.g. accessories) to surface for product searches like "iphone".
+    const products = await Product.find({ isActive: true, name: regex })
       .limit(8)
       .select('name slug price comparePrice images brand stock')
       .lean();
-
-    // Fallback: prefix regex on name/brand when text search returns nothing
-    if (products.length === 0) {
-      const escaped = query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-      const regex = new RegExp(escaped, 'i');
-      products = await Product.find({
-        isActive: true,
-        $or: [{ name: regex }, { brand: regex }],
-      })
-        .limit(8)
-        .select('name slug price comparePrice images brand stock')
-        .lean();
-    }
 
     res.json({ products });
   } catch (error) {

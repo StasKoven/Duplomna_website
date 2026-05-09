@@ -98,31 +98,57 @@ couponSchema.methods.isValid = function() {
   return { valid: true };
 };
 
+// Normalise an ObjectId / populated doc / plain string into a hex string so
+// equality checks work regardless of how the relation came back from Mongo.
+function toIdString(value) {
+  if (value == null) return '';
+  if (typeof value === 'string') return value;
+  // Populated mongoose document or plain object with _id
+  if (typeof value === 'object' && value._id) return value._id.toString();
+  return value.toString();
+}
+
 // Method to calculate discount
 couponSchema.methods.calculateDiscount = function(subtotal, cart = []) {
-  // Check if applicable to cart items
-  if (this.applicableCategories.length > 0 || this.applicableProducts.length > 0) {
+  const hasProductScope = this.applicableProducts && this.applicableProducts.length > 0;
+  const hasCategoryScope = this.applicableCategories && this.applicableCategories.length > 0;
+
+  if (hasProductScope || hasCategoryScope) {
+    const productIds = (this.applicableProducts || []).map(toIdString);
+    const categoryIds = (this.applicableCategories || []).map(toIdString);
+
     const applicableTotal = cart.reduce((sum, item) => {
-      const isApplicable = 
-        this.applicableProducts.some(p => p.toString() === item.product._id.toString()) ||
-        this.applicableCategories.some(c => c.toString() === item.product.category.toString());
-      
-      return sum + (isApplicable ? item.product.price * item.quantity : 0);
+      const productId = toIdString(item.product?._id || item.product);
+      const categoryId = toIdString(item.product?.category);
+
+      const isApplicable =
+        (productId && productIds.includes(productId)) ||
+        (categoryId && categoryIds.includes(categoryId));
+
+      const itemPrice = item.product?.price ?? item.price ?? 0;
+      return sum + (isApplicable ? itemPrice * item.quantity : 0);
     }, 0);
-    
+
     subtotal = applicableTotal;
   }
-  
+
   // Check minimum purchase
   if (subtotal < this.minPurchase) {
-    return { 
-      discount: 0, 
-      message: `Minimum purchase of ${this.minPurchase} required` 
+    return {
+      discount: 0,
+      message: `Мінімальна сума замовлення ${this.minPurchase} ₴`
     };
   }
-  
+
+  if (subtotal <= 0) {
+    return {
+      discount: 0,
+      message: 'Купон не застосовується до жодного товару в кошику'
+    };
+  }
+
   let discount = 0;
-  
+
   if (this.type === 'percentage') {
     discount = (subtotal * this.value) / 100;
     if (this.maxDiscount && discount > this.maxDiscount) {
@@ -134,8 +160,8 @@ couponSchema.methods.calculateDiscount = function(subtotal, cart = []) {
       discount = subtotal;
     }
   }
-  
-  return { 
+
+  return {
     discount: Math.round(discount * 100) / 100,
     message: 'Coupon applied successfully'
   };

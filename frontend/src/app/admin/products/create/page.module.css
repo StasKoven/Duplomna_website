@@ -166,19 +166,30 @@
   @apply sr-only;
 }
 
-/* Трек перемикача (зелений) */
-.toggleTrackGreen {
-  @apply relative w-10 h-6 bg-muted rounded-full peer-checked:bg-green-500 transition-colors flex-shrink-0;
+/* Трек перемикача (контрольований через React-стан, без peer-checked) */
+.toggleTrack {
+  @apply relative w-10 h-6 rounded-full transition-colors flex-shrink-0;
 }
 
-/* Трек перемикача (жовтий) */
-.toggleTrackYellow {
-  @apply relative w-10 h-6 bg-muted rounded-full peer-checked:bg-yellow-500 transition-colors flex-shrink-0;
+.toggleTrackOff {
+  @apply bg-muted;
+}
+
+.toggleTrackOnGreen {
+  @apply bg-green-500;
+}
+
+.toggleTrackOnYellow {
+  @apply bg-yellow-500;
 }
 
 /* Повзунок перемикача */
 .toggleKnob {
-  @apply absolute top-0.5 left-0.5 bg-white rounded-full h-5 w-5 shadow-sm transition-transform peer-checked:translate-x-4;
+  @apply absolute top-0.5 left-0.5 bg-white rounded-full h-5 w-5 shadow-sm transition-transform;
+}
+
+.toggleKnobOn {
+  @apply translate-x-4;
 }
 
 .toggleTitle {

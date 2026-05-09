@@ -185,19 +185,8 @@ export default function ProfilePage() {
               Змінити пароль
             </div>
           </button>
-          <button
-            onClick={() => setActiveTab('loyalty')}
-            className={`${s.tabBtn} ${
-              activeTab === 'loyalty'
-                ? s.tabBtnActive
-                : s.tabBtnInactive
-            }`}
-          >
-            <div className={s.tabBtnContent}>
-              <Award className={s.tabIcon} />
-              Бонуси
-            </div>
-          </button>
+          {/* Бонусна вкладка приховується з UI на час, поки програма
+              лояльності тимчасово не використовується. Дані в БД зберігаються. */}
         </div>
 
         {/* Profile Tab */}

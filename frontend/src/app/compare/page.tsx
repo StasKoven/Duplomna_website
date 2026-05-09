@@ -10,6 +10,7 @@ import { useComparisonStore } from '@/store/comparisonStore'
 import { useCartStore } from '@/store/cartStore'
 import { formatPrice } from '@/lib/utils'
 import { Product } from '@/types'
+import ProductImagePlaceholder from '@/components/products/ProductImagePlaceholder'
 import s from './page.module.css'
 
 function ComparisonContent() {
@@ -282,7 +283,7 @@ function ComparisonContent() {
                 {product.images?.[0]?.url ? (
                   <Image src={product.images[0].url} alt={product.name} width={80} height={80} className={s.productImage} />
                 ) : (
-                  <div className={s.mobileFallback}>📱</div>
+                  <ProductImagePlaceholder size="sm" />
                 )}
               </div>
 
@@ -429,7 +430,7 @@ function ComparisonContent() {
                           className={s.desktopImage}
                         />
                       ) : (
-                        <div className={s.desktopFallback}>📱</div>
+                        <ProductImagePlaceholder size="md" />
                       )}
                     </div>
 

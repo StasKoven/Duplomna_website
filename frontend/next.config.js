@@ -20,6 +20,15 @@ const nextConfig = {
         protocol: 'https',
         hostname: 'randomuser.me',
       },
+      // Backend-served uploaded product images (Railway + local dev)
+      {
+        protocol: 'https',
+        hostname: 'duplomnawebsite-production.up.railway.app',
+      },
+      {
+        protocol: 'http',
+        hostname: 'localhost',
+      },
     ],
     // Optimize images
     unoptimized: false,

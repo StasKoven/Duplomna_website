@@ -5,18 +5,37 @@ import Link from 'next/link'
 import { motion } from 'framer-motion'
 import api from '@/lib/api'
 import { Category } from '@/types'
+import * as LucideIcons from 'lucide-react'
 import { Smartphone, Laptop, Tablet, Watch, Headphones, Camera, Tv, Gamepad2 } from 'lucide-react'
 import s from './page.module.css'
 
-const categoryIcons: Record<string, any> = {
+// Resolve a category to a Lucide icon by either its `icon` field (admin-set
+// Lucide name) or a slug-based fallback. Unknown values fall back to Smartphone
+// so empty/Cyrillic-named categories still render a sensible tile.
+const slugIcons: Record<string, any> = {
   smartphone: Smartphone,
+  smartphones: Smartphone,
   laptop: Laptop,
+  laptops: Laptop,
   tablet: Tablet,
+  tablets: Tablet,
   smartwatch: Watch,
+  smartwatches: Watch,
   headphones: Headphones,
   camera: Camera,
+  cameras: Camera,
   tv: Tv,
   gaming: Gamepad2,
+}
+
+function resolveIcon(category: { icon?: string | null; slug?: string }) {
+  if (category.icon && (LucideIcons as any)[category.icon]) {
+    return (LucideIcons as any)[category.icon]
+  }
+  if (category.slug && slugIcons[category.slug.toLowerCase()]) {
+    return slugIcons[category.slug.toLowerCase()]
+  }
+  return Smartphone
 }
 
 export default function CategoriesPage() {
@@ -70,7 +89,7 @@ export default function CategoriesPage() {
 
       <div className={s.gridLayout}>
         {categories.map((category, index) => {
-          const IconComponent = categoryIcons[category.slug] || Smartphone
+          const IconComponent = resolveIcon(category as any)
 
           return (
             <motion.div

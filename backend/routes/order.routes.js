@@ -60,6 +60,8 @@ router.get('/:id', verifyToken, orderController.getOrder);
 router.put('/:id/status', verifyToken, requireAdmin, [
   body('orderStatus').isIn(['pending', 'processing', 'shipped', 'delivered', 'cancelled'])
     .withMessage('Invalid order status'),
+  body('paymentStatus').optional().isIn(['pending', 'paid', 'failed', 'refunded'])
+    .withMessage('Invalid payment status'),
   validate
 ], orderController.updateOrderStatus);
 

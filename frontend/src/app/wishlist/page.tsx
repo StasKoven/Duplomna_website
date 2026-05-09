@@ -8,6 +8,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { useWishlistStore } from '@/store/wishlistStore'
 import { useCartStore } from '@/store/cartStore'
 import { useAuthStore } from '@/store/authStore'
+import ProductImagePlaceholder from '@/components/products/ProductImagePlaceholder'
 import s from './page.module.css'
 
 export default function WishlistPage() {
@@ -131,9 +132,7 @@ export default function WishlistPage() {
                   className={s.image}
                 />
               ) : (
-                <div className={s.imagePlaceholder}>
-                  📱
-                </div>
+                <ProductImagePlaceholder label={item.brand || 'Без фото'} size="md" />
               )}
               <button
                 onClick={() => handleRemove(item._id)}

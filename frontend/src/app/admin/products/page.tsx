@@ -10,6 +10,7 @@ import { Pencil, Trash2, Plus, Search } from 'lucide-react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { toast } from 'sonner'
+import ProductImagePlaceholder from '@/components/products/ProductImagePlaceholder'
 import s from './page.module.css'
 
 export default function AdminProductsPage() {
@@ -127,9 +128,7 @@ export default function AdminProductsPage() {
                             className={s.image}
                           />
                         ) : (
-                          <div className={s.imagePlaceholder}>
-                            📱
-                          </div>
+                          <ProductImagePlaceholder size="sm" />
                         )}
                       </div>
                     </td>

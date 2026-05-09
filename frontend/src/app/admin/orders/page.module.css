@@ -18,13 +18,27 @@
   @apply text-muted-foreground;
 }
 
-/* Пошук */
-.searchWrapper {
-  @apply mb-6;
+/* Пошук + фільтри */
+.toolbar {
+  @apply mb-6 flex flex-col gap-3;
+  @apply md:flex-row md:items-center md:justify-between;
 }
 
 .searchContainer {
-  @apply relative max-w-md;
+  @apply relative w-full md:max-w-md;
+}
+
+.filterTabs {
+  @apply flex flex-wrap gap-1.5;
+}
+
+.filterTab {
+  @apply px-3 py-1.5 rounded-full text-sm border bg-card transition;
+  @apply hover:bg-muted/40;
+}
+
+.filterTabActive {
+  @apply bg-primary text-primary-foreground border-primary;
 }
 
 .searchIcon {
@@ -154,4 +168,47 @@
 
 .itemRow {
   @apply flex justify-between text-sm;
+}
+
+/* Inline-редагування замовлень */
+.editGrid {
+  @apply mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-5 lg:items-end;
+}
+
+.field {
+  @apply flex flex-col gap-1;
+}
+
+.fieldLabel {
+  @apply text-xs uppercase tracking-wide text-muted-foreground;
+}
+
+.select,
+.input {
+  @apply rounded-lg border bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary;
+}
+
+.saveBtn {
+  @apply inline-flex items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground transition;
+  @apply hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed;
+}
+
+.saveIcon {
+  @apply h-4 w-4;
+}
+
+.expandBtn {
+  @apply mt-3 inline-flex items-center gap-1.5 text-sm text-primary hover:underline;
+}
+
+.expandIcon {
+  @apply h-4 w-4;
+}
+
+.detailsBlock {
+  @apply mt-4 border-t pt-4 space-y-4;
+}
+
+.detailsGrid {
+  @apply grid grid-cols-1 gap-4 sm:grid-cols-2;
 }

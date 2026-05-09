@@ -22,6 +22,8 @@ const ticketRoutes = require('./routes/ticket.routes');
 const returnRoutes = require('./routes/return.routes');
 const notificationRoutes = require('./routes/notification.routes');
 const novaPoshtaRoutes = require('./routes/novaposhta.routes');
+const uploadRoutes = require('./routes/upload.routes');
+const path = require('path');
 
 const errorHandler = require('./middleware/errorHandler');
 
@@ -156,6 +158,14 @@ app.use('/api/tickets', ticketRoutes);
 app.use('/api/returns', returnRoutes);
 app.use('/api/notifications', notificationRoutes);
 app.use('/api/novaposhta', novaPoshtaRoutes);
+app.use('/api/uploads', uploadRoutes);
+
+// Serve uploaded product images statically. helmet's CORP is set to
+// "cross-origin" above, so Next/Image on the admin host can fetch these files.
+app.use('/uploads', express.static(path.join(__dirname, 'uploads'), {
+  maxAge: '7d',
+  fallthrough: true,
+}));
 
 // Silence Chrome DevTools probe noise
 // Chrome sometimes requests this well-known URL; respond with 204 to avoid 404 logs

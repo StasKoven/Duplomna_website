@@ -70,7 +70,11 @@ exports.getCategory = async (req, res) => {
  */
 exports.createCategory = async (req, res) => {
   try {
-    const categoryData = req.body;
+    const allowedFields = ['name', 'slug', 'description', 'image', 'icon', 'parent', 'isActive', 'order'];
+    const categoryData = {};
+    for (const key of allowedFields) {
+      if (req.body[key] !== undefined) categoryData[key] = req.body[key];
+    }
 
     const category = new Category(categoryData);
     await category.save();
@@ -81,6 +85,16 @@ exports.createCategory = async (req, res) => {
     });
   } catch (error) {
     console.error('Create category error:', error);
+
+    if (error.name === 'ValidationError') {
+      const messages = Object.values(error.errors).map(e => e.message);
+      return res.status(400).json({ message: messages.join(', ') });
+    }
+    if (error.code === 11000) {
+      const field = Object.keys(error.keyPattern || {})[0] || 'field';
+      return res.status(400).json({ message: `Категорія з таким "${field}" вже існує` });
+    }
+
     res.status(500).json({
       message: 'Failed to create category',
       ...(process.env.NODE_ENV !== 'production' && { error: error.message })
@@ -96,7 +110,7 @@ exports.updateCategory = async (req, res) => {
     const { id } = req.params;
     
     // Whitelist allowed update fields to prevent injection of protected fields
-    const allowedFields = ['name', 'slug', 'description', 'image', 'parent', 'isActive', 'order'];
+    const allowedFields = ['name', 'slug', 'description', 'image', 'icon', 'parent', 'isActive', 'order'];
     const updates = {};
     for (const key of allowedFields) {
       if (req.body[key] !== undefined) {

@@ -11,6 +11,7 @@ import { useCartStore } from '@/store/cartStore'
 import { useWishlistStore } from '@/store/wishlistStore'
 import { useComparisonStore } from '@/store/comparisonStore'
 import { toast } from 'sonner'
+import ProductImagePlaceholder from './ProductImagePlaceholder'
 import s from './ProductCard.module.css'
 
 interface ProductCardProps {
@@ -149,7 +150,7 @@ export default function ProductCard({ product, compact = false }: ProductCardPro
               onError={() => setImgError(true)}
             />
           ) : (
-            <div className={s.imagePlaceholder}>📱</div>
+            <ProductImagePlaceholder label={product.brand || 'Без фото'} size="md" />
           )}
         </div>
 

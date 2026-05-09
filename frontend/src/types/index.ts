@@ -30,6 +30,7 @@ export interface Category {
   slug: string
   description?: string
   image?: string
+  icon?: string
   parent?: string
   isActive: boolean
   order: number

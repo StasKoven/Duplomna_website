@@ -53,14 +53,15 @@
   @apply block;
 }
 
-/* Картка категорії */
+/* Картка категорії — фіксована мінімальна висота, без жорсткого aspect-square,
+   щоб довгі описи не вилазили за межі плитки. */
 .categoryCard {
-  @apply relative aspect-square bg-gradient-to-br from-primary/10 to-primary/5 rounded-2xl p-8 hover:shadow-xl hover:shadow-primary/5 transition-all duration-300 group-hover:scale-[1.03];
+  @apply relative min-h-[16rem] bg-gradient-to-br from-primary/10 to-primary/5 rounded-2xl p-6 hover:shadow-xl hover:shadow-primary/5 transition-all duration-300 group-hover:scale-[1.03];
 }
 
 /* Вміст картки */
 .cardContent {
-  @apply flex flex-col items-center justify-center h-full text-center;
+  @apply flex flex-col items-center justify-center h-full text-center gap-1;
 }
 
 /* Обгортка іконки */

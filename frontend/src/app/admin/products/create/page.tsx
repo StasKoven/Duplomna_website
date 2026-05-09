@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState, useCallback } from 'react'
+import { useEffect, useState, useCallback, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import { useAuthStore } from '@/store/authStore'
 import { useForm } from 'react-hook-form'
@@ -11,7 +11,7 @@ import { toast } from 'sonner'
 import {
   ArrowLeft, X, Plus,
   Image as ImageIcon, Tag, Info, DollarSign,
-  Package, Settings, Star, Loader2,
+  Package, Settings, Star, Loader2, Upload,
   ChevronDown, ChevronUp, AlertCircle, CheckCircle
 } from 'lucide-react'
 import Link from 'next/link'
@@ -59,6 +59,8 @@ export default function CreateProductPage() {
   const [newImageUrl, setNewImageUrl] = useState('')
   const [imageError, setImageError] = useState<Record<string, boolean>>({})
   const [slugPreview, setSlugPreview] = useState('')
+  const [uploadingFiles, setUploadingFiles] = useState(false)
+  const fileInputRef = useRef<HTMLInputElement>(null)
 
   const [openSections, setOpenSections] = useState<Record<string, boolean>>({
     basic: true,
@@ -89,6 +91,8 @@ export default function CreateProductPage() {
   const watchName = watch('name')
   const watchPrice = watch('price')
   const watchComparePrice = watch('comparePrice')
+  const watchActive = watch('isActive')
+  const watchFeatured = watch('isFeatured')
 
   useEffect(() => {
     if (watchName) {
@@ -181,6 +185,46 @@ export default function CreateProductPage() {
     setImageError(prev => ({ ...prev, [id]: false }))
   }
 
+  const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files || [])
+    if (files.length === 0) return
+
+    setUploadingFiles(true)
+    try {
+      // Upload sequentially so errors per file are clear, but each one only
+      // takes ~1s for typical product photos.
+      const uploaded: ImageItem[] = []
+      for (const file of files) {
+        const formData = new FormData()
+        formData.append('file', file)
+        try {
+          const res = await api.post('/uploads/image', formData, {
+            headers: { 'Content-Type': 'multipart/form-data' },
+          })
+          uploaded.push({
+            id: `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+            url: res.data.url,
+            isMain: false,
+          })
+        } catch (err: any) {
+          toast.error(`${file.name}: ${err?.response?.data?.message || err.message || 'Помилка завантаження'}`)
+        }
+      }
+
+      if (uploaded.length > 0) {
+        setImages(prev => {
+          const next = [...prev, ...uploaded]
+          if (!next.some(i => i.isMain)) next[0].isMain = true
+          return next
+        })
+        toast.success(`Завантажено: ${uploaded.length}`)
+      }
+    } finally {
+      setUploadingFiles(false)
+      if (fileInputRef.current) fileInputRef.current.value = ''
+    }
+  }
+
   // ===== Features =====
   const addFeature = () => setFeatures(prev => [...prev, ''])
   const removeFeature = (index: number) => setFeatures(prev => prev.filter((_, i) => i !== index))
@@ -214,6 +258,21 @@ export default function CreateProductPage() {
       e.preventDefault()
       addTag()
     }
+  }
+
+  // Auto-open sections that contain validation errors so the user can see them.
+  useEffect(() => {
+    const errored: Record<string, boolean> = {}
+    if (errors.name || errors.description) errored.basic = true
+    if (errors.price || errors.comparePrice) errored.pricing = true
+    if (errors.category || errors.sku || errors.stock) errored.details = true
+    if (Object.keys(errored).length > 0) {
+      setOpenSections(prev => ({ ...prev, ...errored }))
+    }
+  }, [errors])
+
+  const onInvalid = () => {
+    toast.error('Перевірте заповнення обовʼязкових полів')
   }
 
   // ===== Submit =====
@@ -322,7 +381,7 @@ export default function CreateProductPage() {
         )}
       </div>
 
-      <form onSubmit={handleSubmit(onSubmit)} className={s.form}>
+      <form onSubmit={handleSubmit(onSubmit, onInvalid)} className={s.form}>
         {/* ===== BASIC INFO ===== */}
         <div className={s.sectionCard}>
           <div className={s.sectionHeaderWrap}>
@@ -388,9 +447,17 @@ export default function CreateProductPage() {
 
                   <div className={s.togglesRow}>
                     <label className={s.toggleLabel}>
-                      <input type="checkbox" {...register('isActive')} className={s.srOnly + ' peer'} />
-                      <div className={s.toggleTrackGreen}>
-                        <div className={s.toggleKnob} />
+                      <input
+                        type="checkbox"
+                        {...register('isActive')}
+                        className={s.srOnly}
+                      />
+                      <div
+                        className={`${s.toggleTrack} ${watchActive ? s.toggleTrackOnGreen : s.toggleTrackOff}`}
+                      >
+                        <div
+                          className={`${s.toggleKnob} ${watchActive ? s.toggleKnobOn : ''}`}
+                        />
                       </div>
                       <div>
                         <span className={s.toggleTitle}>Активний товар</span>
@@ -398,9 +465,17 @@ export default function CreateProductPage() {
                       </div>
                     </label>
                     <label className={s.toggleLabel}>
-                      <input type="checkbox" {...register('isFeatured')} className={s.srOnly + ' peer'} />
-                      <div className={s.toggleTrackYellow}>
-                        <div className={s.toggleKnob} />
+                      <input
+                        type="checkbox"
+                        {...register('isFeatured')}
+                        className={s.srOnly}
+                      />
+                      <div
+                        className={`${s.toggleTrack} ${watchFeatured ? s.toggleTrackOnYellow : s.toggleTrackOff}`}
+                      >
+                        <div
+                          className={`${s.toggleKnob} ${watchFeatured ? s.toggleKnobOn : ''}`}
+                        />
                       </div>
                       <div>
                         <span className={s.toggleTitle}>Рекомендований</span>
@@ -535,8 +610,29 @@ export default function CreateProductPage() {
                     />
                     <button type="button" onClick={addImage} disabled={!newImageUrl.trim()} className={s.addImageBtn}>
                       <Plus className={s.addImageBtnIcon} />
-                      Додати
+                      Додати URL
                     </button>
+                    <button
+                      type="button"
+                      onClick={() => fileInputRef.current?.click()}
+                      disabled={uploadingFiles}
+                      className={s.addImageBtn}
+                    >
+                      {uploadingFiles ? (
+                        <Loader2 className={s.addImageBtnIcon} />
+                      ) : (
+                        <Upload className={s.addImageBtnIcon} />
+                      )}
+                      {uploadingFiles ? 'Завантаження...' : 'Завантажити з ПК'}
+                    </button>
+                    <input
+                      ref={fileInputRef}
+                      type="file"
+                      accept="image/*"
+                      multiple
+                      onChange={handleFileSelect}
+                      className="hidden"
+                    />
                   </div>
 
                   {images.length > 0 ? (
@@ -577,8 +673,10 @@ export default function CreateProductPage() {
                   ) : (
                     <div className={s.emptyImages}>
                       <ImageIcon className={s.emptyImagesIcon} />
-                      <p className={s.emptyImagesText}>Додайте URL зображень товару</p>
-                      <p className={s.emptyImagesHint}>Перше додане зображення стане головним</p>
+                      <p className={s.emptyImagesText}>Додайте зображення товару</p>
+                      <p className={s.emptyImagesHint}>
+                        Можна вставити URL або завантажити файл з ПК. Перше додане зображення стане головним.
+                      </p>
                     </div>
                   )}
                 </div>

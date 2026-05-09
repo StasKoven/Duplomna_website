@@ -10,6 +10,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { Trash2, Plus, Minus, ShoppingBag, ArrowRight, X, LogIn, UserPlus } from 'lucide-react'
 import { formatPrice } from '@/lib/utils'
 import { Product } from '@/types'
+import ProductImagePlaceholder from '@/components/products/ProductImagePlaceholder'
 import s from './page.module.css'
 
 export default function CartPage() {
@@ -161,9 +162,7 @@ export default function CartPage() {
                       className={s.objectCover}
                     />
                   ) : (
-                    <div className={s.mobilePlaceholder}>
-                      📱
-                    </div>
+                    <ProductImagePlaceholder size="sm" />
                   )}
                 </div>
                 <div className={s.mobileInfo}>
@@ -232,9 +231,7 @@ export default function CartPage() {
                       className={s.objectCover}
                     />
                   ) : (
-                    <div className={s.desktopPlaceholder}>
-                      📱
-                    </div>
+                    <ProductImagePlaceholder size="sm" />
                   )}
                 </div>
 

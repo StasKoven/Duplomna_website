@@ -260,7 +260,7 @@ exports.getOrder = async (req, res) => {
 exports.updateOrderStatus = async (req, res) => {
   try {
     const { id } = req.params;
-    const { orderStatus, trackingNumber, note } = req.body;
+    const { orderStatus, trackingNumber, note, paymentStatus } = req.body;
 
     const order = await Order.findById(id);
 
@@ -270,6 +270,15 @@ exports.updateOrderStatus = async (req, res) => {
 
     const previousStatus = order.orderStatus;
     order.orderStatus = orderStatus;
+
+    if (paymentStatus && ['pending', 'paid', 'failed', 'refunded'].includes(paymentStatus)) {
+      const previousPayment = order.paymentStatus;
+      order.paymentStatus = paymentStatus;
+      if (paymentStatus === 'paid' && previousPayment !== 'paid') {
+        order.paymentDetails = order.paymentDetails || {};
+        order.paymentDetails.paidAt = new Date();
+      }
+    }
 
     // Manually push status history with admin info (pre-save hook also pushes, so disable it)
     order.statusHistory.push({

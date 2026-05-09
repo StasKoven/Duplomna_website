@@ -158,15 +158,24 @@ export default function Categories() {
 }
 
 function getCategoryEmoji(name: string): string {
-  const emojiMap: Record<string, string> = {
-    'Smartphones': '📱',
-    'Laptops': '💻',
-    'Tablets': '📲',
-    'Smartwatches': '⌚',
-    'Headphones': '🎧',
-    'Cameras': '📷',
-    'Gaming': '🎮',
-    'Accessories': '🔌',
+  // Match by lowercase keyword so both English and Ukrainian category names get
+  // a fitting icon (Tile fallback when no image is set).
+  const lower = (name || '').toLowerCase()
+  const map: Array<[RegExp, string]> = [
+    [/смартфон|phone|телефон/i, '📱'],
+    [/ноутбук|laptop|macbook/i, '💻'],
+    [/планшет|tablet|ipad/i, '📲'],
+    [/годинник|watch/i, '⌚'],
+    [/навушник|headphone|airpods/i, '🎧'],
+    [/камер|camera|фотоапарат/i, '📷'],
+    [/консол|console|xbox|playstation|gaming/i, '🎮'],
+    [/телевізор|tv|монітор|monitor/i, '🖥️'],
+    [/аксесуар|accessor|зарядк|кабел/i, '🔌'],
+    [/розумн|smart\s*home/i, '🏠'],
+    [/самокат|scooter/i, '🛴'],
+  ]
+  for (const [re, emoji] of map) {
+    if (re.test(lower)) return emoji
   }
-  return emojiMap[name] || '📦'
+  return '📦'
 }

@@ -14,6 +14,7 @@ import { useComparisonStore } from '@/store/comparisonStore'
 import { useRecentlyViewedStore } from '@/store/recentlyViewedStore'
 import { toast } from 'sonner'
 import ReviewSection from '@/components/products/ReviewSection'
+import ProductImagePlaceholder from '@/components/products/ProductImagePlaceholder'
 import s from './page.module.css'
 
 export default function ProductDetailPage() {
@@ -31,6 +32,7 @@ export default function ProductDetailPage() {
   const [product, setProduct] = useState<Product | null>(cached)
   const [loading, setLoading] = useState(!cached)
   const [selectedImage, setSelectedImage] = useState(0)
+  const [mainImageBroken, setMainImageBroken] = useState<Record<number, boolean>>({})
   const { addItem } = useCartStore()
   const { addToWishlist, isInWishlist } = useWishlistStore()
   const { addToComparison, removeFromComparison, getComparisonByCategory } = useComparisonStore()
@@ -164,18 +166,17 @@ export default function ProductDetailPage() {
             animate={{ opacity: 1 }}
             className={`group ${s.mainImageWrapper}`}
           >
-            {mainImage ? (
+            {mainImage && !mainImageBroken[selectedImage] ? (
               <Image
                 src={mainImage}
                 alt={product.name}
                 width={600}
                 height={600}
                 className={s.mainImage}
+                onError={() => setMainImageBroken(prev => ({ ...prev, [selectedImage]: true }))}
               />
             ) : (
-              <div className={s.imagePlaceholder}>
-                📱
-              </div>
+              <ProductImagePlaceholder label={product.brand || 'Без фото'} size="lg" />
             )}
 
             {/* Main image navigation arrows */}
