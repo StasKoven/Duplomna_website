@@ -11,8 +11,37 @@
 ## Структура репозиторію
 
 ```
-├── frontend/   # Next.js 14 (App Router)
-└── backend/    # Express REST API
+├── frontend/                   # Next.js 14 (App Router)
+│   └── src/
+│       ├── app/                # Маршрути сторінок
+│       │   ├── (public)/       # Головна, каталог, товар, категорії
+│       │   ├── admin/          # Адмін-панель (products, orders, users, categories, coupons, tickets)
+│       │   ├── cart/           # Кошик
+│       │   ├── checkout/       # Оформлення замовлення
+│       │   ├── orders/         # Замовлення та повернення
+│       │   ├── wishlist/       # Список бажань
+│       │   ├── compare/        # Порівняння товарів
+│       │   ├── profile/        # Профіль користувача
+│       │   └── (info)/         # about, faq, contact, delivery, warranty
+│       ├── components/         # React-компоненти
+│       │   ├── layout/         # Header, Footer, BottomNav, NotificationBell
+│       │   ├── home/           # HeroSection, Categories, FeaturedProducts, PromoSection
+│       │   ├── products/       # ProductCard, ProductFilters, ReviewSection, Rating
+│       │   ├── checkout/       # CouponInput
+│       │   ├── chat/           # ChatWidget
+│       │   └── providers/      # ThemeProvider
+│       ├── store/              # Zustand: authStore, cartStore
+│       ├── lib/                # api.ts (Axios), utils.ts
+│       └── types/              # TypeScript-типи
+│
+└── backend/                    # Express REST API
+    ├── controllers/            # Бізнес-логіка
+    ├── models/                 # Mongoose-схеми
+    ├── routes/                 # Express-маршрути
+    ├── middleware/             # auth, validation, error handling
+    ├── config/                 # Firebase, DB підключення
+    ├── api/                    # Зовнішні API (Нова Пошта тощо)
+    └── scripts/                # seed та інші утиліти
 ```
 
 ## Швидкий старт
@@ -70,27 +99,133 @@ npm run dev            # → http://localhost:3000
 
 Базовий URL: `http://localhost:5000/api`
 
-| Префікс | Опис |
-|---------|------|
-| `/auth` | Реєстрація, вхід, refresh, профіль |
-| `/products` | CRUD товарів, пошук, фільтрація |
-| `/categories` | CRUD категорій |
-| `/orders` | Замовлення (user + admin) |
-| `/users` | Управління користувачами (admin) |
-| `/reviews` | Відгуки |
+### Автентифікація `/api/auth`
+
+| Метод | Endpoint | Опис | Доступ |
+|-------|----------|------|--------|
+| POST | `/register` | Реєстрація | Public |
+| POST | `/login` | Вхід (email + пароль) | Public |
+| POST | `/google` | Вхід через Google (Firebase ID token) | Public |
+| POST | `/refresh` | Оновлення access-токена | Public |
+| POST | `/logout` | Вихід | Private |
+| GET | `/profile` | Отримати профіль | Private |
+| PUT | `/profile` | Оновити профіль | Private |
+| PUT | `/password` | Змінити пароль | Private |
+
+### Товари `/api/products`
+
+| Метод | Endpoint | Опис | Доступ |
+|-------|----------|------|--------|
+| GET | `/` | Список з фільтрами | Public |
+| GET | `/featured` | Рекомендовані | Public |
+| GET | `/:id` | Деталі товару | Public |
+| GET | `/:id/related` | Схожі товари | Public |
+| POST | `/` | Створити | Admin |
+| PUT | `/:id` | Оновити | Admin |
+| DELETE | `/:id` | Видалити | Admin |
+
+**Параметри фільтрації:** `page`, `limit`, `sort`, `category`, `minPrice`, `maxPrice`, `brand`, `search`, `inStock`, `featured`, `onSale`
+
+### Категорії `/api/categories`
+
+| Метод | Endpoint | Опис | Доступ |
+|-------|----------|------|--------|
+| GET | `/` | Список | Public |
+| GET | `/:id` | Деталі | Public |
+| POST | `/` | Створити | Admin |
+| PUT | `/:id` | Оновити | Admin |
+| DELETE | `/:id` | Видалити | Admin |
+
+### Замовлення `/api/orders`
+
+| Метод | Endpoint | Опис | Доступ |
+|-------|----------|------|--------|
+| POST | `/` | Створити замовлення | Private |
+| GET | `/my-orders` | Мої замовлення | Private |
+| GET | `/:id` | Деталі замовлення | Private |
+| GET | `/all` | Всі замовлення | Admin |
+| PUT | `/:id/status` | Оновити статус | Admin |
+
+### Користувачі `/api/users`
+
+| Метод | Endpoint | Опис | Доступ |
+|-------|----------|------|--------|
+| GET | `/` | Список | Admin |
+| GET | `/:id` | Деталі | Admin |
+| PUT | `/:id` | Оновити | Admin |
+| DELETE | `/:id` | Видалити | Admin |
+| POST | `/wishlist` | Додати до бажань | Private |
+| DELETE | `/wishlist/:productId` | Видалити з бажань | Private |
+| PUT | `/cart` | Оновити кошик | Private |
+
+### Відгуки `/api/reviews`
+
+| Метод | Endpoint | Опис | Доступ |
+|-------|----------|------|--------|
+| POST | `/` | Залишити відгук | Private |
+| GET | `/product/:productId` | Відгуки товару | Public |
+| PUT | `/:id/helpful` | Позначити корисним | Private |
+| DELETE | `/:id` | Видалити | Private/Admin |
 
 Захищені endpoints використовують Bearer-токен: `Authorization: Bearer <access_token>`
 
 ## Основні можливості
 
-- Каталог з фільтрацією за категорією, брендом, ціною, рейтингом
-- Кошик та список бажань
-- Оформлення замовлень
-- JWT-автентифікація (access 15 хв + refresh 7 днів) з автооновленням
-- Google OAuth через Firebase
-- Адмін-панель: товари, категорії, замовлення, користувачі, статистика
-- Завантаження зображень через Cloudinary
-- Захист: Helmet, CORS, rate limiting, mongo-sanitize
+### Покупець
+- Каталог з фільтрацією за категорією, брендом, ціною, рейтингом і текстовим пошуком
+- Порівняння товарів
+- Кошик та список бажань (зберігаються між сесіями)
+- Оформлення замовлення з купоном на знижку
+- Трекінг статусу замовлення та заявка на повернення
+- Відгуки з рейтингом
+- Онлайн-чат підтримки
+- Сповіщення (NotificationBell)
+
+### Автентифікація
+- Email/пароль або Google OAuth (Firebase)
+- JWT: access-токен (15 хв) + refresh-токен (7 днів)
+- Автоматичне оновлення токенів через Axios interceptors
+
+### Адмін-панель (`/admin`)
+- Dashboard зі статистикою продажів
+- CRUD товарів із завантаженням зображень (Cloudinary)
+- CRUD категорій
+- Управління замовленнями та їх статусами
+- Управління користувачами
+- Купони на знижку
+- Тікети підтримки
+
+### Безпека
+- Helmet (HTTP-заголовки)
+- CORS з whitelist
+- Rate limiting
+- Mongo sanitize (захист від NoSQL-ін'єкцій)
+- express-validator на всіх вхідних даних
+- bcrypt (12 rounds) для паролів
+
+## Скрипти
+
+### Frontend
+
+```bash
+npm run dev        # dev-сервер → http://localhost:3000
+npm run build      # production-білд
+npm run start      # запуск production
+npm run lint       # ESLint
+```
+
+### Backend
+
+```bash
+npm run dev        # nodemon dev-сервер → http://localhost:5000
+npm start          # production
+npm run seed       # заповнити БД тестовими даними
+```
+
+## Deploy
+
+Проєкт налаштований для деплою на [Railway](https://railway.app) — конфігурація у `railway.json`.  
+Frontend та Backend деплояться як окремі сервіси з відповідними змінними середовища.
 
 ## Ліцензія
 
