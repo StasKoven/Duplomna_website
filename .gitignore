@@ -1,3 +1,4 @@
+# Diploma defense materials (not part of the project)
 FRONTEND_DESCRIPTION.md
 PROJECT_DESCRIPTION.md
 project_documentation.md
@@ -7,9 +8,18 @@ project_full_description.md
 DEFENSE_GUIDE.md
 FRONTEND_DEFENSE.md
 PROJECT_REVIEW.md
-backend/.env.example
-backend/.env.example
 FRONTEND_TECH_STACK.md
 ZAHYST_SHPARGALKA.md
 ГАЙД_ДЛЯ_ЗАХИСТУ.md
 ПИТАННЯ_ТА_ВІДПОВІДІ.md
+
+# Playwright MCP logs
+.playwright-mcp/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
