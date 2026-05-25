@@ -9,7 +9,7 @@ import NavigationFOUCGuard from '@/components/NavigationFOUCGuard'
 
 const inter = Inter({ subsets: ['latin', 'cyrillic'] })
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://techstore.ua'
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://duplomna-website-1dy7.vercel.app'
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),

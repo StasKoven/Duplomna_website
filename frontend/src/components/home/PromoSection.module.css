@@ -1,61 +1,89 @@
 /* Секція промо-пропозицій */
 .section {
-  @apply py-12 sm:py-16 md:py-20 bg-muted/20;
+  @apply relative overflow-hidden py-16 sm:py-20 md:py-24;
+  background:
+    radial-gradient(ellipse at top left, hsl(var(--primary) / 0.08), transparent 50%),
+    radial-gradient(ellipse at bottom right, hsl(262 83% 58% / 0.08), transparent 50%),
+    hsl(var(--background));
 }
 
-/* Заголовок секції */
+.header {
+  @apply text-center mb-10 sm:mb-14;
+}
+
 .title {
-  @apply text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight mb-8 sm:mb-10 text-center;
+  @apply text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight mb-3;
+}
+
+.subtitle {
+  @apply text-sm sm:text-base md:text-lg text-muted-foreground max-w-xl mx-auto;
 }
 
 /* Сітка карток */
 .gridLayout {
-  @apply grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6;
+  @apply grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-6 relative z-10;
 }
 
 /* Картка промо-акції */
 .card {
-  @apply relative overflow-hidden rounded-xl p-6 sm:p-8 transition-all duration-300 hover:scale-[1.02] hover:shadow-lg border;
+  @apply relative overflow-hidden rounded-3xl p-7 sm:p-8 h-full transition-all duration-300 hover:-translate-y-1.5 hover:shadow-2xl border;
 }
 
+/* Кольорові варіанти — в темі магазину */
 .blue {
-  @apply bg-blue-50 dark:bg-blue-950/40 border-blue-200 dark:border-blue-800 text-blue-900 dark:text-blue-100;
+  background: linear-gradient(135deg, hsl(222 84% 50% / 0.95), hsl(217 91% 60% / 0.85));
+  @apply border-blue-400/30 text-white shadow-lg shadow-blue-500/20;
 }
 
 .green {
-  @apply bg-emerald-50 dark:bg-emerald-950/40 border-emerald-200 dark:border-emerald-800 text-emerald-900 dark:text-emerald-100;
+  background: linear-gradient(135deg, hsl(160 84% 39% / 0.95), hsl(142 76% 36% / 0.85));
+  @apply border-emerald-400/30 text-white shadow-lg shadow-emerald-500/20;
 }
 
 .amber {
-  @apply bg-amber-50 dark:bg-amber-950/40 border-amber-200 dark:border-amber-800 text-amber-900 dark:text-amber-100;
+  background: linear-gradient(135deg, hsl(24 95% 53% / 0.95), hsl(38 92% 50% / 0.85));
+  @apply border-amber-400/30 text-white shadow-lg shadow-amber-500/20;
 }
 
-/* Декоративне коло */
+/* Декоративні кола */
 .circle {
-  @apply absolute top-0 right-0 -mt-6 -mr-6 h-32 w-32 rounded-full bg-current opacity-[0.04];
+  @apply absolute -top-16 -right-16 h-48 w-48 rounded-full bg-white/15 blur-2xl;
 }
 
-/* Контент картки */
+.circleSm {
+  @apply absolute -bottom-12 -left-12 h-32 w-32 rounded-full bg-white/10 blur-2xl;
+}
+
 .content {
-  @apply relative;
+  @apply relative z-10 flex flex-col h-full;
 }
 
 /* Обгортка іконки */
 .iconWrap {
-  @apply mb-4 sm:mb-5;
+  @apply mb-5 inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-white/20 backdrop-blur;
 }
 
-/* Іконка промо */
 .icon {
-  @apply h-8 w-8 sm:h-10 sm:w-10 text-current;
+  @apply h-7 w-7 text-white;
 }
 
-/* Назва акції */
 .cardTitle {
-  @apply text-xl sm:text-2xl font-bold mb-2;
+  @apply text-2xl sm:text-3xl font-extrabold mb-2 tracking-tight;
 }
 
-/* Опис акції */
 .cardDescription {
-  @apply text-sm sm:text-base opacity-75;
+  @apply text-sm sm:text-base text-white/85 mb-6 leading-relaxed;
+}
+
+/* CTA-стрілка внизу */
+.cta {
+  @apply mt-auto inline-flex items-center gap-1.5 text-sm font-semibold text-white;
+}
+
+.ctaIcon {
+  @apply h-4 w-4 transition-transform duration-300;
+}
+
+.card:hover .ctaIcon {
+  transform: translateX(4px);
 }

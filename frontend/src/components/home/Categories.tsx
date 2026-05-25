@@ -120,14 +120,14 @@ export default function Categories() {
                 href={`/products?category=${category._id}`}
                 className={`group ${s.categoryLink}`}
               >
-                {/* Картка категорії */}
+                {/* Картка категорії — назва та стрілка поверх */}
                 <div className={s.card}>
                   {category.image ? (
                     <Image
                       src={category.image}
                       alt={category.name}
                       fill
-                      sizes="(max-width: 480px) 33vw, (max-width: 640px) 33vw, (max-width: 1024px) 25vw, 16vw"
+                      sizes="(max-width: 480px) 50vw, (max-width: 640px) 33vw, (max-width: 1024px) 25vw, 16vw"
                       className={s.cardImage}
                     />
                   ) : (
@@ -136,10 +136,13 @@ export default function Categories() {
                     </div>
                   )}
                   <div className={s.overlay} />
+                  <span className={s.arrowBadge}>
+                    <ArrowRight className={s.arrowBadgeIcon} />
+                  </span>
+                  <h3 className={s.categoryName}>
+                    {category.name}
+                  </h3>
                 </div>
-                <h3 className={s.categoryName}>
-                  {category.name}
-                </h3>
               </Link>
             </motion.div>
           ))}

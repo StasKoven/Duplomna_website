@@ -20,6 +20,16 @@ playwright-report/
 test-results/
 coverage/
 
+# SWC cache
+.swc/
+
+# Lighthouse reports
+lighthouse-*.json
+
+# Dev server logs
+dev-server.*.log
+playwright-dev-server.*.log
+
 # IDE & OS
 .vscode/
 .idea/

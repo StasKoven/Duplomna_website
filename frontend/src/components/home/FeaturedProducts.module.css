@@ -1,21 +1,21 @@
 /* Секція рекомендованих товарів */
 .section {
-  @apply py-10 sm:py-14 md:py-20;
+  @apply py-14 sm:py-20 md:py-24 bg-muted/20;
 }
 
 /* Обгортка заголовка */
 .header {
-  @apply flex items-end justify-between mb-6 sm:mb-8 md:mb-10;
+  @apply flex items-end justify-between mb-8 sm:mb-10 md:mb-12;
 }
 
 /* Заголовок секції */
 .title {
-  @apply text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight;
+  @apply text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight;
 }
 
 /* Підзаголовок */
 .subtitle {
-  @apply text-sm sm:text-base text-muted-foreground mt-1.5 sm:mt-2;
+  @apply text-sm sm:text-base text-muted-foreground mt-2;
 }
 
 /* Сітка товарів */
@@ -30,7 +30,7 @@
 
 /* Посилання "Дивитись всі" (десктоп) */
 .viewAllDesktop {
-  @apply hidden sm:inline-flex items-center text-sm font-semibold text-primary hover:underline underline-offset-4;
+  @apply hidden sm:inline-flex items-center gap-1.5 rounded-full border border-border bg-card px-4 py-2 text-sm font-semibold text-foreground hover:bg-primary hover:text-primary-foreground hover:border-primary transition-all;
 }
 
 /* Іконка стрілки (десктоп) */

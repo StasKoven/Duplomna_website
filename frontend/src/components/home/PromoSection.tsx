@@ -2,60 +2,68 @@
 
 import Link from 'next/link'
 import { motion } from 'framer-motion'
-import { BadgePercent, Truck, ShieldCheck } from 'lucide-react'
+import { BadgePercent, Truck, ShieldCheck, ArrowRight } from 'lucide-react'
 import s from './PromoSection.module.css'
 
 export default function PromoSection() {
-  // Дані промо-акцій
   const promos = [
     {
       icon: <BadgePercent className={s.icon} />,
       title: 'Акції тижня',
-      description: 'Знижки до 50% на обрані моделі',
+      description: 'Знижки до 50% на обрані моделі смартфонів, ноутбуків та аксесуарів',
+      cta: 'Дивитися акції',
       link: '/products?onSale=true',
       variant: 'blue'
     },
     {
       icon: <Truck className={s.icon} />,
       title: 'Безкоштовна доставка',
-      description: 'Новою поштою від 1000 грн',
+      description: 'Доставляємо Новою Поштою по всій Україні від 1000 грн',
+      cta: 'Деталі доставки',
       link: '/delivery',
       variant: 'green'
     },
     {
       icon: <ShieldCheck className={s.icon} />,
       title: 'Гарантія до 2 років',
-      description: 'Офіційний сервіс по всій Україні',
+      description: 'Офіційний сервіс і повернення коштів протягом 14 днів',
+      cta: 'Про гарантію',
       link: '/warranty',
       variant: 'amber'
     }
   ]
 
   return (
-    // Секція промо-пропозицій
     <section className={s.section}>
       <div className="container-custom">
-        <h2 className={s.title}>
-          Спеціальні пропозиції
-        </h2>
+        <div className={s.header}>
+          <h2 className={s.title}>Чому обирають TechStore</h2>
+          <p className={s.subtitle}>
+            Працюємо для того, щоб купувати техніку було легко, швидко і вигідно
+          </p>
+        </div>
 
-        {/* Сітка карток */}
         <div className={s.gridLayout}>
           {promos.map((promo, index) => (
             <motion.div
               key={index}
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 24 }}
               whileInView={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.1 }}
+              transition={{ delay: index * 0.1, duration: 0.5 }}
               viewport={{ once: true }}
             >
               <Link href={promo.link}>
                 <div className={`${s.card} ${s[promo.variant]}`}>
-                  <div className={s.circle} />
+                  <span className={s.circle} aria-hidden />
+                  <span className={s.circleSm} aria-hidden />
                   <div className={s.content}>
                     <div className={s.iconWrap}>{promo.icon}</div>
                     <h3 className={s.cardTitle}>{promo.title}</h3>
                     <p className={s.cardDescription}>{promo.description}</p>
+                    <span className={s.cta}>
+                      {promo.cta}
+                      <ArrowRight className={s.ctaIcon} />
+                    </span>
                   </div>
                 </div>
               </Link>
