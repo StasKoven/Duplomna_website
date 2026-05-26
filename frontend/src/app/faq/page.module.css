@@ -65,9 +65,18 @@
   @apply rotate-180;
 }
 
-/* Обгортка анімації */
+/* Accordion wrapper — CSS grid trick animates height 0 → auto */
 .animWrapper {
-  @apply overflow-hidden;
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.2s ease;
+}
+.animWrapper > * {
+  overflow: hidden;
+  min-height: 0;
+}
+.animWrapperOpen {
+  grid-template-rows: 1fr;
 }
 
 /* Текст відповіді */

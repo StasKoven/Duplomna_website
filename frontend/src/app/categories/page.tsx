@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
-import { motion } from 'framer-motion'
 import api from '@/lib/api'
 import { Category } from '@/types'
 import * as LucideIcons from 'lucide-react'
@@ -92,11 +91,10 @@ export default function CategoriesPage() {
           const IconComponent = resolveIcon(category as any)
 
           return (
-            <motion.div
+            <div
               key={category._id}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.1 }}
+              className={s.categoryItem}
+              style={{ animationDelay: `${index * 0.1}s` }}
             >
               <Link
                 href={`/products?category=${category._id}`}
@@ -124,7 +122,7 @@ export default function CategoriesPage() {
                   )}
                 </div>
               </Link>
-            </motion.div>
+            </div>
           )
         })}
       </div>

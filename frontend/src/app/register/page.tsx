@@ -3,7 +3,6 @@
 import { useState, useEffect } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
-import { motion } from 'framer-motion'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
@@ -87,10 +86,7 @@ export default function RegisterPage() {
 
   return (
     <div className={s.wrapper}>
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className={s.container}
+      <div className={`${s.container} ${s.containerEnter}`}
       >
         <div className={s.header}>
           <h1 className={s.title}>Створити аккаунт</h1>
@@ -326,7 +322,7 @@ export default function RegisterPage() {
             </p>
           </div>
         </div>
-      </motion.div>
+      </div>
     </div>
   )
 }

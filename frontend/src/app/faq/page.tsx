@@ -2,7 +2,6 @@
 
 import { useState } from 'react'
 import { ChevronDown } from 'lucide-react'
-import { motion, AnimatePresence } from 'framer-motion'
 import s from './page.module.css'
 
 const faqs = [
@@ -135,21 +134,11 @@ export default function FAQPage() {
                           className={`${s.chevron} ${isOpen ? s.chevronOpen : ''}`}
                         />
                       </button>
-                      <AnimatePresence>
-                        {isOpen && (
-                          <motion.div
-                            initial={{ height: 0 }}
-                            animate={{ height: 'auto' }}
-                            exit={{ height: 0 }}
-                            transition={{ duration: 0.2 }}
-                            className={s.animWrapper}
-                          >
-                            <div className={s.answer}>
-                              {faq.a}
-                            </div>
-                          </motion.div>
-                        )}
-                      </AnimatePresence>
+                      <div className={`${s.animWrapper} ${isOpen ? s.animWrapperOpen : ''}`}>
+                        <div className={s.answer}>
+                          {faq.a}
+                        </div>
+                      </div>
                     </div>
                   )
                 })}

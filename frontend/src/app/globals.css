@@ -2,13 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Prevent flash of unstyled content — body stays hidden until the inline
-   script in <head> confirms all stylesheets are loaded and toggles the
-   data attribute on <html>. */
-html[data-fouc="loading"] body {
-  visibility: hidden;
-}
-
 @layer base {
   :root {
     --background: 0 0% 100%;

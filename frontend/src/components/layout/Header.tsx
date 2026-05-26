@@ -3,7 +3,6 @@
 import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import { useRouter, usePathname } from 'next/navigation'
-import { motion, AnimatePresence } from 'framer-motion'
 import { 
   ShoppingCart, 
   User, 
@@ -346,19 +345,13 @@ export default function Header() {
                       )}
                     </button>
 
-                    <AnimatePresence>
-                      {isUserMenuOpen && (
+                    {isUserMenuOpen && (
                         <>
-                          <div 
-                            className={s.userMenuOverlay} 
+                          <div
+                            className={s.userMenuOverlay}
                             onClick={() => setIsUserMenuOpen(false)}
                           />
-                          <motion.div
-                            initial={{ opacity: 0, y: -10 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            exit={{ opacity: 0, y: -10 }}
-                            className={s.userDropdown}
-                          >
+                          <div className={`${s.userDropdown} ${s.userDropdownEnter}`}>
                             <div className={s.userInfo}>
                               <p className={s.userName}>{currentUser?.firstName} {currentUser?.lastName}</p>
                               <p className={s.userEmail}>{currentUser?.email}</p>
@@ -400,10 +393,9 @@ export default function Header() {
                               <LogOut className={s.iconSm} />
                               <span>Вийти</span>
                             </button>
-                          </motion.div>
+                          </div>
                         </>
                       )}
-                    </AnimatePresence>
                   </>
                 ) : (
                   <Link
@@ -419,14 +411,8 @@ export default function Header() {
           </div>
 
           {/* Мобільний пошук — розгорнутий */}
-          <AnimatePresence>
             {isMobileSearchOpen && (
-              <motion.div
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: 'auto' }}
-                exit={{ opacity: 0, height: 0 }}
-                className={s.mobileSearchSection}
-              >
+              <div className={`${s.mobileSearchSection} ${s.mobileSearchEnter}`}>
                 <div ref={mobileSearchContainerRef} style={{ position: 'relative' }}>
                   <form onSubmit={handleSearch}>
                     <div className={s.searchWrapper}>
@@ -511,30 +497,19 @@ export default function Header() {
                     </div>
                   )}
                 </div>
-              </motion.div>
+              </div>
             )}
-          </AnimatePresence>
         </div>
       </header>
 
       {/* Мобільне меню — повноекранний оверлей */}
-      <AnimatePresence>
         {isMobileMenuOpen && (
           <>
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className={s.mobileOverlay}
+            <div
+              className={`${s.mobileOverlay} ${s.mobileOverlayEnter}`}
               onClick={closeMobileMenu}
             />
-            <motion.div
-              initial={{ x: '-100%' }}
-              animate={{ x: 0 }}
-              exit={{ x: '-100%' }}
-              transition={{ type: 'tween', duration: 0.3 }}
-              className={s.mobilePanel}
-            >
+            <div className={`${s.mobilePanel} ${s.mobilePanelEnter}`}>
               <div className={s.mobilePanelContent}>
                 {/* Секція користувача — мобільна */}
                 {isAuth ? (
@@ -698,10 +673,9 @@ export default function Header() {
                   </div>
                 )}
               </div>
-            </motion.div>
+            </div>
           </>
         )}
-      </AnimatePresence>
     </>
   )
 }

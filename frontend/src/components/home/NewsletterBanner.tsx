@@ -1,7 +1,6 @@
 'use client'
 
 import { useState } from 'react'
-import { motion } from 'framer-motion'
 import { Mail, Send, CheckCircle2 } from 'lucide-react'
 import s from './NewsletterBanner.module.css'
 
@@ -20,13 +19,7 @@ export default function NewsletterBanner() {
   return (
     <section className={s.section}>
       <div className="container-custom">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          viewport={{ once: true }}
-          className={s.card}
-        >
+        <div className={`${s.card} ${s.cardEnter}`}>
           <span className={s.glowA} aria-hidden />
           <span className={s.glowB} aria-hidden />
 
@@ -69,7 +62,7 @@ export default function NewsletterBanner() {
               )}
             </form>
           </div>
-        </motion.div>
+        </div>
       </div>
     </section>
   )

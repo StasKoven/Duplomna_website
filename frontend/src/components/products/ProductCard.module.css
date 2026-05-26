@@ -4,7 +4,7 @@
 
 /* Обгортка картки */
 .card {
-  @apply relative rounded-xl border bg-card overflow-hidden transition-all duration-300 hover:shadow-lg hover:shadow-black/5 hover:-translate-y-0.5 active:shadow-md;
+  @apply relative rounded-xl border bg-card overflow-hidden transition-all duration-300 hover:shadow-lg hover:shadow-black/5 hover:-translate-y-1 active:scale-[0.98] active:shadow-md;
 }
 
 /* === Бейджі товару (ліва верхня частина) === */

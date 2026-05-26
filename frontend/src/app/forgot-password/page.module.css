@@ -1,3 +1,18 @@
+@keyframes formFadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes successScaleIn {
+  from { opacity: 0; transform: scale(0.9); }
+  to   { opacity: 1; transform: scale(1); }
+}
+.containerEnter {
+  animation: formFadeUp 0.4s ease-out both;
+}
+.successEnter {
+  animation: successScaleIn 0.4s ease-out both;
+}
+
 /* Сторінка відновлення паролю — стилі */
 
 /* Обгортка сторінки */

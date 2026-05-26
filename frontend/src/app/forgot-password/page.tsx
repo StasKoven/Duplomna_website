@@ -2,7 +2,6 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import { motion } from 'framer-motion'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
@@ -46,11 +45,7 @@ export default function ForgotPasswordPage() {
   if (emailSent) {
     return (
       <div className={s.wrapper}>
-        <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          className={s.successContainer}
-        >
+        <div className={`${s.successContainer} ${s.successEnter}`}>
           <div className={s.successHeader}>
             <div className={s.successIconWrap}>
               <Mail className={s.successIcon} />
@@ -78,18 +73,14 @@ export default function ForgotPasswordPage() {
             <ArrowLeft className={s.backIcon} />
             Повернутися до входу
           </Link>
-        </motion.div>
+        </div>
       </div>
     )
   }
 
   return (
     <div className={s.wrapper}>
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className={s.container}
-      >
+      <div className={`${s.container} ${s.containerEnter}`}>
         <div className={s.headerSection}>
           <Link
             href="/login"
@@ -154,7 +145,7 @@ export default function ForgotPasswordPage() {
             Для тестування використовуйте email: <strong>admin@electronics.com</strong>
           </p>
         </div>
-      </motion.div>
+      </div>
     </div>
   )
 }

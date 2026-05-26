@@ -1,7 +1,6 @@
 'use client'
 
 import Link from 'next/link'
-import { motion } from 'framer-motion'
 import { BadgePercent, Truck, ShieldCheck, ArrowRight } from 'lucide-react'
 import s from './PromoSection.module.css'
 
@@ -45,12 +44,10 @@ export default function PromoSection() {
 
         <div className={s.gridLayout}>
           {promos.map((promo, index) => (
-            <motion.div
+            <div
               key={index}
-              initial={{ opacity: 0, y: 24 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.1, duration: 0.5 }}
-              viewport={{ once: true }}
+              className={s.promoItem}
+              style={{ animationDelay: `${index * 0.1}s` }}
             >
               <Link href={promo.link}>
                 <div className={`${s.card} ${s[promo.variant]}`}>
@@ -67,7 +64,7 @@ export default function PromoSection() {
                   </div>
                 </div>
               </Link>
-            </motion.div>
+            </div>
           ))}
         </div>
       </div>

@@ -2,7 +2,6 @@
 
 import { useEffect, useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { motion, AnimatePresence } from 'framer-motion'
 import { Bell, Check, CheckCheck, Trash2, Package, Tag, Star, Info } from 'lucide-react'
 import { useNotificationStore, Notification } from '@/store/notificationStore'
 import { useAuthStore } from '@/store/authStore'
@@ -96,14 +95,8 @@ export default function NotificationBell() {
         )}
       </button>
 
-      <AnimatePresence>
         {open && (
-          <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            className={s.dropdown}
-          >
+          <div className={`${s.dropdown} ${s.dropdownEnter}`}>
             <div className={s.dropdownHeader}>
               <span className={s.dropdownTitle}>Сповіщення</span>
               {unreadCount > 0 && (
@@ -158,9 +151,8 @@ export default function NotificationBell() {
                 ))
               )}
             </div>
-          </motion.div>
+          </div>
         )}
-      </AnimatePresence>
     </div>
   )
 }

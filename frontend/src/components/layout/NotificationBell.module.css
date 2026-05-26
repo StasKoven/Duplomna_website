@@ -89,3 +89,11 @@
 .itemActionIcon {
   @apply h-3.5 w-3.5 text-muted-foreground;
 }
+
+@keyframes notifDropdownEnter {
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.dropdownEnter {
+  animation: notifDropdownEnter 0.15s ease-out both;
+}

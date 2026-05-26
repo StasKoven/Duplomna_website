@@ -2,7 +2,6 @@
 
 import Link from 'next/link'
 import Image from 'next/image'
-import { motion } from 'framer-motion'
 import { useState } from 'react'
 import { Heart, ShoppingCart, Star, ArrowLeftRight } from 'lucide-react'
 import { Product } from '@/types'
@@ -94,11 +93,7 @@ export default function ProductCard({ product, compact = false }: ProductCardPro
 
   return (
     <Link href={`/products/${product.slug}`}>
-      <motion.div
-        whileHover={{ y: -4 }}
-        whileTap={{ scale: 0.98 }}
-        className={`group ${s.card}`}
-      >
+      <div className={`group ${s.card}`}>
         {/* Бейджі товару */}
         <div className={s.badgesContainer}>
           {product.isOnSale && product.discountPercentage && (
@@ -203,7 +198,7 @@ export default function ProductCard({ product, compact = false }: ProductCardPro
             </span>
           </button>
         </div>
-      </motion.div>
+      </div>
     </Link>
   )
 }

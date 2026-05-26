@@ -380,3 +380,34 @@
   @apply block px-4 py-3 text-sm text-center text-primary font-semibold hover:bg-accent transition-colors border-t;
   text-decoration: none;
 }
+
+/* CSS-анімації замість framer-motion (enter-only, без exit) */
+@keyframes dropdownEnter {
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes overlayEnter {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes panelSlideIn {
+  from { transform: translateX(-100%); }
+  to   { transform: translateX(0); }
+}
+@keyframes searchFadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.userDropdownEnter {
+  animation: dropdownEnter 0.15s ease-out both;
+}
+.mobileOverlayEnter {
+  animation: overlayEnter 0.25s ease-out both;
+}
+.mobilePanelEnter {
+  animation: panelSlideIn 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+}
+.mobileSearchEnter {
+  animation: searchFadeIn 0.15s ease-out both;
+}

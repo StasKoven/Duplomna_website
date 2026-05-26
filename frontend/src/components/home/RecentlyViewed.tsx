@@ -1,7 +1,6 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { motion } from 'framer-motion'
 import { Clock } from 'lucide-react'
 import ProductCard from '@/components/products/ProductCard'
 import { useRecentlyViewedStore } from '@/store/recentlyViewedStore'
@@ -18,16 +17,6 @@ export default function RecentlyViewed() {
 
   if (!mounted || items.length === 0) return null
 
-  const container = {
-    hidden: { opacity: 0 },
-    show: { opacity: 1, transition: { staggerChildren: 0.08 } },
-  }
-
-  const item = {
-    hidden: { opacity: 0, y: 20 },
-    show: { opacity: 1, y: 0 },
-  }
-
   return (
     <section className={s.section}>
       <div className="container-custom">
@@ -38,19 +27,17 @@ export default function RecentlyViewed() {
           </div>
         </div>
 
-        <motion.div
-          variants={container}
-          initial="hidden"
-          whileInView="show"
-          viewport={{ once: true }}
-          className={s.productGrid}
-        >
-          {items.slice(0, 8).map((product: Product) => (
-            <motion.div key={product._id} variants={item}>
+        <div className={s.productGrid}>
+          {items.slice(0, 8).map((product: Product, i: number) => (
+            <div
+              key={product._id}
+              className={s.productItem}
+              style={{ animationDelay: `${i * 0.08}s` }}
+            >
               <ProductCard product={product} />
-            </motion.div>
+            </div>
           ))}
-        </motion.div>
+        </div>
       </div>
     </section>
   )
