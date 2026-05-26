@@ -2,7 +2,7 @@
 const nextConfig = {
   // Disable powered by header
   poweredByHeader: false,
-  
+
   // Enable React strict mode
   reactStrictMode: true,
   
