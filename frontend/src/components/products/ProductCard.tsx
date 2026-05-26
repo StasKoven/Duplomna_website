@@ -123,6 +123,7 @@ export default function ProductCard({ product, compact = false }: ProductCardPro
           <button
             onClick={handleToggleWishlist}
             className={s.actionButton}
+            aria-label={isWishlisted ? 'Видалити зі списку бажань' : 'Додати до списку бажань'}
           >
             <Heart
               className={isWishlisted ? s.heartIconActive : s.heartIcon}
@@ -131,6 +132,7 @@ export default function ProductCard({ product, compact = false }: ProductCardPro
           <button
             onClick={handleToggleComparison}
             className={s.actionButton}
+            aria-label={isInComparison() ? 'Видалити з порівняння' : 'Додати до порівняння'}
           >
             <ArrowLeftRight
               className={isInComparison() ? s.compareIconActive : s.compareIcon}

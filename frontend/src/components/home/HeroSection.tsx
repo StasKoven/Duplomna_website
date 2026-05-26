@@ -1,20 +1,10 @@
-'use client'
-
-import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { motion } from 'framer-motion'
 import { ArrowRight, ShieldCheck, Truck, Headphones, Sparkles } from 'lucide-react'
 import s from './HeroSection.module.css'
 
+// Server component — no JS shipped for this section.
+// Animations are pure CSS (identical visuals to the previous framer-motion version).
 export default function HeroSection() {
-  const [mounted, setMounted] = useState(false)
-
-  useEffect(() => {
-    setMounted(true)
-  }, [])
-
-  const MotionDiv = mounted ? motion.div : 'div'
-
   return (
     <section className={s.section}>
       <div className={s.bgGrid} aria-hidden />
@@ -23,14 +13,7 @@ export default function HeroSection() {
 
       <div className={`container-custom ${s.wrapper}`}>
         <div className={s.layout}>
-          <MotionDiv
-            {...(mounted && {
-              initial: { opacity: 0, y: 24 },
-              animate: { opacity: 1, y: 0 },
-              transition: { duration: 0.55 }
-            })}
-            className={s.content}
-          >
+          <div className={s.content}>
             <div className={s.badge}>
               <Sparkles className={s.badgeIcon} />
               <span>Нові надходження вже у каталозі</span>
@@ -72,16 +55,9 @@ export default function HeroSection() {
                 <span className={s.statLabel}>Середній рейтинг</span>
               </div>
             </div>
-          </MotionDiv>
+          </div>
 
-          <MotionDiv
-            {...(mounted && {
-              initial: { opacity: 0, scale: 0.9 },
-              animate: { opacity: 1, scale: 1 },
-              transition: { duration: 0.7, delay: 0.15 }
-            })}
-            className={s.visual}
-          >
+          <div className={s.visual}>
             <div className={s.deviceCard}>
               <div className={s.deviceGlow} aria-hidden />
               <div className={s.deviceInner}>
@@ -127,7 +103,7 @@ export default function HeroSection() {
                 </div>
               </div>
             </div>
-          </MotionDiv>
+          </div>
         </div>
       </div>
     </section>

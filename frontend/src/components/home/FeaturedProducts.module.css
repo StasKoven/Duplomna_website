@@ -23,6 +23,15 @@
   @apply grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-5 md:gap-6;
 }
 
+@keyframes productFadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.productItem {
+  animation: productFadeUp 0.4s ease-out both;
+}
+
 /* Скелетон-заглушка при завантаженні */
 .skeleton {
   @apply rounded-2xl bg-muted animate-pulse aspect-[3/4] sm:h-96;

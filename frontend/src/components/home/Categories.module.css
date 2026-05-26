@@ -30,6 +30,15 @@
   @apply grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 sm:gap-4 md:gap-5;
 }
 
+@keyframes categoryFadeUp {
+  from { transform: translateY(16px); opacity: 0.001; }
+  to   { transform: translateY(0);    opacity: 1;     }
+}
+
+.categoryItem {
+  animation: categoryFadeUp 0.4s ease-out both;
+}
+
 /* Скелетон */
 .skeleton {
   @apply aspect-[4/5] rounded-2xl bg-muted animate-pulse;

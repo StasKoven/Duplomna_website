@@ -75,9 +75,12 @@ import Header from '@/components/layout/Header';
 // -----
 
 describe('Header', () => {
-  it('renders the logo text', () => {
+  it('renders the logo link', () => {
     render(<Header />);
-    expect(screen.getByText('TechStore')).toBeInTheDocument();
+    // Logo renders as "Tech<span>Store</span>", so match via accessible link name
+    const logoLink = screen.getByRole('link', { name: /tech.*store/i });
+    expect(logoLink).toBeInTheDocument();
+    expect(logoLink).toHaveAttribute('href', '/');
   });
 
   it('renders the desktop search input', () => {

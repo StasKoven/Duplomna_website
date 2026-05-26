@@ -290,7 +290,7 @@ export default function Header() {
               </button>
 
               {/* Порівняння */}
-              <Link href="/compare" className={s.compareBtn}>
+              <Link href="/compare" className={s.compareBtn} aria-label="Порівняння товарів">
                 <ArrowLeftRight className={s.icon} />
                 {comparisonItemsCount > 0 && (
                   <span className={s.badgeBlue}>
@@ -300,7 +300,7 @@ export default function Header() {
               </Link>
 
               {/* Список бажань */}
-              <Link href="/wishlist" className={s.actionBtn}>
+              <Link href="/wishlist" className={s.actionBtn} aria-label="Список бажань">
                 <Heart className={s.icon} />
                 {wishlistItemsCount > 0 && (
                   <span className={s.badgeRed}>
@@ -313,7 +313,7 @@ export default function Header() {
               <NotificationBell />
 
               {/* Кошик */}
-              <Link href="/cart" className={s.actionBtn}>
+              <Link href="/cart" className={s.actionBtn} aria-label="Кошик">
                 <ShoppingCart className={s.icon} />
                 {cartItemsCount > 0 && (
                   <span className={s.badgePrimary}>
@@ -329,6 +329,7 @@ export default function Header() {
                     <button
                       onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
                       className={s.userMenuBtn}
+                      aria-label="Профіль користувача"
                     >
                       {currentUser?.avatar ? (
                         // eslint-disable-next-line @next/next/no-img-element
@@ -443,6 +444,7 @@ export default function Header() {
                         type="button"
                         onClick={() => { setIsMobileSearchOpen(false); setShowSearchDropdown(false) }}
                         className={s.mobileSearchClose}
+                        aria-label="Закрити пошук"
                       >
                         <X className={s.iconMutedSm} />
                       </button>

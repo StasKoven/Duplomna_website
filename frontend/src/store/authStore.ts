@@ -4,8 +4,6 @@ import api from '@/lib/api'
 import { User, AuthResponse } from '@/types'
 import { toast } from 'sonner'
 import { logError, logInfo } from '@/lib/errorLogger'
-import { signInWithPopup } from 'firebase/auth'
-import { auth, googleProvider } from '@/lib/firebase'
 import { useCartStore } from '@/store/cartStore'
 import { useWishlistStore } from '@/store/wishlistStore'
 import { useComparisonStore } from '@/store/comparisonStore'
@@ -136,6 +134,12 @@ export const useAuthStore = create<AuthState>()(
         try {
           logInfo('Auth Store', 'Google login attempt')
           set({ isLoading: true })
+
+          // Lazy-load Firebase — only needed when user actually clicks "Login with Google"
+          const [{ signInWithPopup }, { auth, googleProvider }] = await Promise.all([
+            import('firebase/auth'),
+            import('@/lib/firebase'),
+          ])
 
           // Sign in with Google via Firebase
           const result = await signInWithPopup(auth, googleProvider)

@@ -2,15 +2,16 @@
 
 import { useEffect, useState, useRef } from 'react'
 import Link from 'next/link'
-import { motion } from 'framer-motion'
 import { ArrowRight } from 'lucide-react'
 import api from '@/lib/api'
 import { Product } from '@/types'
 import ProductCard from '@/components/products/ProductCard'
 import s from './FeaturedProducts.module.css'
 
-const COMPONENT_MAX_RETRIES = 5
-const COMPONENT_RETRY_DELAY = 2000
+const COMPONENT_MAX_RETRIES = 2
+const COMPONENT_RETRY_DELAY = 800
+// Give up entirely after this many ms so LCP is never blocked beyond it
+const COMPONENT_TOTAL_TIMEOUT_MS = 5000
 
 export default function FeaturedProducts() {
   const [products, setProducts] = useState<Product[]>([])
@@ -19,6 +20,14 @@ export default function FeaturedProducts() {
 
   useEffect(() => {
     cancelledRef.current = false
+
+    // Hard ceiling: if the backend never responds, stop the skeleton after 5s
+    const hardTimeout = setTimeout(() => {
+      if (!cancelledRef.current) {
+        cancelledRef.current = true
+        setLoading(false)
+      }
+    }, COMPONENT_TOTAL_TIMEOUT_MS)
 
     const fetchFeaturedProducts = async (attempt = 0) => {
       try {
@@ -30,9 +39,10 @@ export default function FeaturedProducts() {
       } catch (error: any) {
         if (cancelledRef.current) return
         console.error('Error fetching featured products:', error)
-        // If backend isn't ready (network error), retry with delay
         const isNetworkError = !error.response
-        if (isNetworkError && attempt < COMPONENT_MAX_RETRIES) {
+        // Only retry on timeouts — ECONNREFUSED is immediate and won't self-heal in 800ms.
+        const isTimeout = error.code === 'ECONNABORTED' || error.code === 'ERR_CANCELED'
+        if (isNetworkError && isTimeout && attempt < COMPONENT_MAX_RETRIES) {
           await new Promise(resolve => setTimeout(resolve, COMPONENT_RETRY_DELAY))
           if (!cancelledRef.current) {
             return fetchFeaturedProducts(attempt + 1)
@@ -47,25 +57,9 @@ export default function FeaturedProducts() {
 
     return () => {
       cancelledRef.current = true
+      clearTimeout(hardTimeout)
     }
   }, [])
-
-  // Анімація контейнера
-  const container = {
-    hidden: { opacity: 0 },
-    show: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1
-      }
-    }
-  }
-
-  // Анімація елемента
-  const item = {
-    hidden: { opacity: 0, y: 20 },
-    show: { opacity: 1, y: 0 }
-  }
 
   // Стан завантаження — скелетон
   if (loading) {
@@ -108,19 +102,17 @@ export default function FeaturedProducts() {
         </div>
 
         {/* Сітка товарів з анімацією */}
-        <motion.div
-          variants={container}
-          initial="hidden"
-          whileInView="show"
-          viewport={{ once: true }}
-          className={s.gridLayout}
-        >
-          {products.map((product) => (
-            <motion.div key={product._id} variants={item}>
+        <div className={s.gridLayout}>
+          {products.map((product, i) => (
+            <div
+              key={product._id}
+              className={s.productItem}
+              style={{ animationDelay: `${i * 0.07}s` }}
+            >
               <ProductCard product={product} />
-            </motion.div>
+            </div>
           ))}
-        </motion.div>
+        </div>
 
         {/* Кнопка "Дивитись всі" для мобільних */}
         <div className={s.mobileLink}>

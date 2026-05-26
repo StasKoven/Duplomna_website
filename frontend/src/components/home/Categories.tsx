@@ -3,22 +3,35 @@
 import { useEffect, useState, useRef } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
-import { motion } from 'framer-motion'
 import { ArrowRight } from 'lucide-react'
 import api from '@/lib/api'
 import { Category } from '@/types'
 import s from './Categories.module.css'
 
-const COMPONENT_MAX_RETRIES = 5
-const COMPONENT_RETRY_DELAY = 2000
+const COMPONENT_MAX_RETRIES = 2
+const COMPONENT_RETRY_DELAY = 800
+const COMPONENT_TOTAL_TIMEOUT_MS = 5000
 
-export default function Categories() {
-  const [categories, setCategories] = useState<Category[]>([])
-  const [loading, setLoading] = useState(true)
+type Props = { initialCategories?: Category[] }
+
+export default function Categories({ initialCategories }: Props) {
+  const hasServerData = initialCategories !== undefined
+  const [categories, setCategories] = useState<Category[]>(initialCategories ?? [])
+  // Skip loading state entirely when the server already provided data (even if empty)
+  const [loading, setLoading] = useState(!hasServerData)
   const cancelledRef = useRef(false)
 
   useEffect(() => {
+    if (hasServerData) return  // Server already attempted the fetch
+
     cancelledRef.current = false
+
+    const hardTimeout = setTimeout(() => {
+      if (!cancelledRef.current) {
+        cancelledRef.current = true
+        setLoading(false)
+      }
+    }, COMPONENT_TOTAL_TIMEOUT_MS)
 
     const fetchCategories = async (attempt = 0) => {
       try {
@@ -34,9 +47,10 @@ export default function Categories() {
       } catch (error: any) {
         if (cancelledRef.current) return
         console.error('Error fetching categories:', error)
-        // If backend isn't ready (network error), retry with delay
         const isNetworkError = !error.response
-        if (isNetworkError && attempt < COMPONENT_MAX_RETRIES) {
+        // Only retry on timeouts — ECONNREFUSED is immediate and won't self-heal in 800ms.
+        const isTimeout = error.code === 'ECONNABORTED' || error.code === 'ERR_CANCELED'
+        if (isNetworkError && isTimeout && attempt < COMPONENT_MAX_RETRIES) {
           await new Promise(resolve => setTimeout(resolve, COMPONENT_RETRY_DELAY))
           if (!cancelledRef.current) {
             return fetchCategories(attempt + 1)
@@ -51,26 +65,11 @@ export default function Categories() {
 
     return () => {
       cancelledRef.current = true
+      clearTimeout(hardTimeout)
     }
-  }, [])
+  }, [])  // eslint-disable-line react-hooks/exhaustive-deps
 
-  // Анімаційні варіанти
-  const container = {
-    hidden: { opacity: 0 },
-    show: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1
-      }
-    }
-  }
-
-  const item = {
-    hidden: { opacity: 0, y: 20 },
-    show: { opacity: 1, y: 0 }
-  }
-
-  // Стан завантаження (скелетон)
+  // Стан завантаження (скелетон) — тільки якщо немає серверних даних
   if (loading) {
     return (
       <section className={s.section}>
@@ -91,6 +90,8 @@ export default function Categories() {
     )
   }
 
+  if (!categories.length) return null
+
   return (
     <section className={s.section}>
       <div className={`container-custom ${s.container}`}>
@@ -106,16 +107,14 @@ export default function Categories() {
           </Link>
         </div>
 
-        {/* Сітка категорій з анімацією */}
-        <motion.div
-          variants={container}
-          initial="hidden"
-          whileInView="show"
-          viewport={{ once: true }}
-          className={s.gridLayout}
-        >
-          {categories.map((category) => (
-            <motion.div key={category._id} variants={item}>
+        {/* Сітка категорій з CSS-анімацією */}
+        <div className={s.gridLayout}>
+          {categories.map((category, i) => (
+            <div
+              key={category._id}
+              className={s.categoryItem}
+              style={{ animationDelay: `${i * 0.08}s` }}
+            >
               <Link
                 href={`/products?category=${category._id}`}
                 className={`group ${s.categoryLink}`}
@@ -144,9 +143,9 @@ export default function Categories() {
                   </h3>
                 </div>
               </Link>
-            </motion.div>
+            </div>
           ))}
-        </motion.div>
+        </div>
 
         {/* Мобільне посилання "Дивитись всі" */}
         <div className={s.mobileViewAll}>

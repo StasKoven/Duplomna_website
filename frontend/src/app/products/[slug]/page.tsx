@@ -156,7 +156,40 @@ export default function ProductDetailPage() {
 
   const mainImage = product.images[selectedImage]?.url || product.images[0]?.url
 
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Product',
+    name: product.name,
+    description: product.shortDescription || product.description,
+    sku: product.sku,
+    brand: product.brand ? { '@type': 'Brand', name: product.brand } : undefined,
+    image: product.images.map(img => img.url),
+    offers: {
+      '@type': 'Offer',
+      priceCurrency: 'UAH',
+      price: product.price,
+      availability:
+        product.stock > 0
+          ? 'https://schema.org/InStock'
+          : 'https://schema.org/OutOfStock',
+      url: typeof window !== 'undefined' ? window.location.href : '',
+    },
+    aggregateRating:
+      product.rating.count > 0
+        ? {
+            '@type': 'AggregateRating',
+            ratingValue: product.rating.average,
+            reviewCount: product.rating.count,
+          }
+        : undefined,
+  }
+
   return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
     <div className={`container-custom ${s.pageContainer}`}>
       <div className={s.mainGrid}>
         {/* Images */}
@@ -402,5 +435,6 @@ export default function ProductDetailPage() {
       {/* Reviews Section */}
       <ReviewSection productId={product._id} productRating={product.rating} />
     </div>
+    </>
   )
 }

@@ -93,17 +93,14 @@ describe('Product Controller — getProducts', () => {
     );
   });
 
-  it('adds $or filter when search query is provided', async () => {
+  it('filters by name regex when search query is provided', async () => {
     const { req, res } = mockReqRes({ search: 'iphone' });
     await productController.getProducts(req, res);
 
     const filterArg = Product.find.mock.calls[0][0];
-    expect(filterArg).toHaveProperty('$or');
-    expect(filterArg.$or.length).toBeGreaterThanOrEqual(2);
-    // Should search name and brand at minimum
-    const keys = filterArg.$or.map(o => Object.keys(o)[0]);
-    expect(keys).toContain('name');
-    expect(keys).toContain('brand');
+    expect(filterArg.name).toBeInstanceOf(RegExp);
+    expect(filterArg.name.test('iPhone 15 Pro')).toBe(true);
+    expect(filterArg.name.test('Samsung Galaxy')).toBe(false);
   });
 
   it('filters by inStock when inStock=true', async () => {

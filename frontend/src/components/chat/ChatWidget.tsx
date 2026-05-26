@@ -305,6 +305,7 @@ export default function ChatWidget() {
         className={s.floatingBtn}
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
+        aria-label={isOpen ? 'Закрити чат підтримки' : 'Відкрити чат підтримки'}
       >
         <AnimatePresence mode="wait">
           {isOpen ? (
