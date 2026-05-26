@@ -13,12 +13,18 @@ const COMPONENT_RETRY_DELAY = 800
 // Give up entirely after this many ms so LCP is never blocked beyond it
 const COMPONENT_TOTAL_TIMEOUT_MS = 5000
 
-export default function FeaturedProducts() {
-  const [products, setProducts] = useState<Product[]>([])
-  const [loading, setLoading] = useState(true)
+interface Props {
+  initialProducts?: Product[]
+}
+
+export default function FeaturedProducts({ initialProducts }: Props) {
+  const hasServerData = initialProducts !== undefined
+  const [products, setProducts] = useState<Product[]>(initialProducts ?? [])
+  const [loading, setLoading] = useState(!hasServerData)
   const cancelledRef = useRef(false)
 
   useEffect(() => {
+    if (hasServerData) return
     cancelledRef.current = false
 
     // Hard ceiling: if the backend never responds, stop the skeleton after 5s
@@ -60,6 +66,9 @@ export default function FeaturedProducts() {
       clearTimeout(hardTimeout)
     }
   }, [])
+
+  // If server provided data but it's empty, hide the section entirely (no CLS)
+  if (hasServerData && products.length === 0) return null
 
   // Стан завантаження — скелетон
   if (loading) {

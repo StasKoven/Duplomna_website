@@ -5,5 +5,5 @@
 
 /* Основний контент сторінки */
 .main {
-  @apply flex-1 pb-16 md:pb-0;
+  @apply flex-1 min-h-screen pb-16 md:pb-0;
 }

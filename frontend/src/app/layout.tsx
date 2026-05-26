@@ -133,6 +133,11 @@ export default function RootLayout({
   return (
     <html lang="uk" suppressHydrationWarning>
       <head>
+        {/* Preload Inter font subsets so they load in parallel with CSS, not after.
+            Without this, the browser discovers fonts only after CSS is parsed → ~3s delay. */}
+        <link rel="preload" as="font" type="font/woff2" href="/_next/static/media/e4af272ccee01ff0-s.p.woff2" crossOrigin="anonymous" />
+        <link rel="preload" as="font" type="font/woff2" href="/_next/static/media/21350d82a1f187e9-s.p.woff2" crossOrigin="anonymous" />
+        <link rel="preload" as="font" type="font/woff2" href="/_next/static/media/8e9860b6e62d6359-s.woff2" crossOrigin="anonymous" />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}

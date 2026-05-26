@@ -2,13 +2,13 @@ import type { Metadata } from 'next'
 import dynamic from 'next/dynamic'
 import HeroSection from '@/components/home/HeroSection'
 import Categories from '@/components/home/Categories'
-import { Category } from '@/types'
+import FeaturedProducts from '@/components/home/FeaturedProducts'
+import { Category, Product } from '@/types'
 
-// Below-fold sections: lazy-loaded after the critical path renders
-const PromoSection = dynamic(() => import('@/components/home/PromoSection'))
-const FeaturedProducts = dynamic(() => import('@/components/home/FeaturedProducts'))
-const RecentlyViewed = dynamic(() => import('@/components/home/RecentlyViewed'))
-const NewsletterBanner = dynamic(() => import('@/components/home/NewsletterBanner'))
+// Below-fold sections: client-only to avoid hydration suspension blocking LCP
+const PromoSection = dynamic(() => import('@/components/home/PromoSection'), { ssr: false })
+const RecentlyViewed = dynamic(() => import('@/components/home/RecentlyViewed'), { ssr: false })
+const NewsletterBanner = dynamic(() => import('@/components/home/NewsletterBanner'), { ssr: false })
 
 export const metadata: Metadata = {
   title: 'TechStore — Інтернет-магазин електроніки | Смартфони, Ноутбуки, Планшети',
@@ -31,15 +31,32 @@ async function getCategories(): Promise<Category[]> {
   }
 }
 
+async function getFeaturedProducts(): Promise<Product[]> {
+  try {
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api'
+    const res = await fetch(`${apiUrl}/products/featured?limit=8`, {
+      next: { revalidate: 3600 },
+    })
+    if (!res.ok) return []
+    const data = await res.json()
+    return Array.isArray(data.products) ? data.products : []
+  } catch {
+    return []
+  }
+}
+
 export default async function HomePage() {
-  const categories = await getCategories()
+  const [categories, featuredProducts] = await Promise.all([
+    getCategories(),
+    getFeaturedProducts(),
+  ])
 
   return (
     <>
       <HeroSection />
       <Categories initialCategories={categories} />
       <PromoSection />
-      <FeaturedProducts />
+      <FeaturedProducts initialProducts={featuredProducts} />
       <RecentlyViewed />
       <NewsletterBanner />
     </>
