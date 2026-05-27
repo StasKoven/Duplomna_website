@@ -128,7 +128,7 @@ export default function Categories({ initialCategories }: Props) {
                       fill
                       sizes="(max-width: 480px) 50vw, (max-width: 640px) 33vw, (max-width: 1024px) 25vw, 16vw"
                       className={s.cardImage}
-                      priority={i === 0}
+                      loading="lazy"
                     />
                   ) : (
                     <div className={s.emojiContainer}>

@@ -28,6 +28,16 @@ describe('formatPrice', () => {
     expect(result).toContain('45');
     expect(result).toContain('₴');
   });
+
+  it('uses only regular spaces (no NBSP/NNBSP) so SSR and client output match', () => {
+    // Node and Chrome ship different ICU versions that disagree on whether the
+    // grouping/currency separators are U+00A0 or U+202F. If the raw Intl output
+    // leaks through, the server HTML differs from the client render by these
+    // invisible chars → React hydration mismatch (#425 → #422). Normalizing to a
+    // plain space keeps the string byte-identical everywhere.
+    const result = formatPrice(15999);
+    expect(result).not.toMatch(/[  ]/);
+  });
 });
 
 describe('truncateText', () => {
