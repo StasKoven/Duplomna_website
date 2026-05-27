@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { Suspense } from 'react'
 import dynamic from 'next/dynamic'
 import HeroSection from '@/components/home/HeroSection'
 import Categories from '@/components/home/Categories'
@@ -54,9 +55,13 @@ export default async function HomePage() {
   return (
     <>
       <HeroSection />
-      <Categories initialCategories={categories} />
+      <Suspense fallback={null}>
+        <Categories initialCategories={categories} />
+      </Suspense>
       <PromoSection />
-      <FeaturedProducts initialProducts={featuredProducts} />
+      <Suspense fallback={null}>
+        <FeaturedProducts initialProducts={featuredProducts} />
+      </Suspense>
       <RecentlyViewed />
       <NewsletterBanner />
     </>

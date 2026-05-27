@@ -5,6 +5,11 @@ const nextConfig = {
 
   // Enable React strict mode
   reactStrictMode: true,
+
+  experimental: {
+    // Tree-shake lucide-react to only bundle icons actually used
+    optimizePackageImports: ['lucide-react'],
+  },
   
   images: {
     remotePatterns: [

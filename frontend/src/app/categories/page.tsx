@@ -4,13 +4,24 @@ import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import api from '@/lib/api'
 import { Category } from '@/types'
-import * as LucideIcons from 'lucide-react'
-import { Smartphone, Laptop, Tablet, Watch, Headphones, Camera, Tv, Gamepad2 } from 'lucide-react'
+import {
+  Smartphone, Laptop, Tablet, Watch, Headphones, Camera, Tv, Gamepad2,
+  Monitor, Keyboard, Mouse, Speaker, Mic, Printer, HardDrive, Cpu,
+  Battery, Cable, Plug, Zap, Wifi, Bluetooth, Radio, Disc, Joystick,
+  Phone, Smartphone as Mobile, Package, Box, ShoppingBag, Tag,
+} from 'lucide-react'
 import s from './page.module.css'
 
-// Resolve a category to a Lucide icon by either its `icon` field (admin-set
-// Lucide name) or a slug-based fallback. Unknown values fall back to Smartphone
-// so empty/Cyrillic-named categories still render a sensible tile.
+// Allow-listed Lucide icons for category tiles. Admin-set `category.icon`
+// names must match one of these keys; unknown values fall back to a slug
+// match, then to Smartphone. Avoids bundling the full lucide-react package.
+const allowedIcons: Record<string, any> = {
+  Smartphone, Laptop, Tablet, Watch, Headphones, Camera, Tv, Gamepad2,
+  Monitor, Keyboard, Mouse, Speaker, Mic, Printer, HardDrive, Cpu,
+  Battery, Cable, Plug, Zap, Wifi, Bluetooth, Radio, Disc, Joystick,
+  Phone, Mobile, Package, Box, ShoppingBag, Tag,
+}
+
 const slugIcons: Record<string, any> = {
   smartphone: Smartphone,
   smartphones: Smartphone,
@@ -28,8 +39,8 @@ const slugIcons: Record<string, any> = {
 }
 
 function resolveIcon(category: { icon?: string | null; slug?: string }) {
-  if (category.icon && (LucideIcons as any)[category.icon]) {
-    return (LucideIcons as any)[category.icon]
+  if (category.icon && allowedIcons[category.icon]) {
+    return allowedIcons[category.icon]
   }
   if (category.slug && slugIcons[category.slug.toLowerCase()]) {
     return slugIcons[category.slug.toLowerCase()]
