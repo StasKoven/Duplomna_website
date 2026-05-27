@@ -63,12 +63,12 @@ const makeProduct = (overrides: Partial<Product> = {}): Product =>
     ...overrides,
   } as Product)
 
-beforeAll(() => {
+beforeAll(async () => {
   ;(globalThis as any).fetch = jest.fn().mockResolvedValue({
     ok: true,
     json: jest.fn().mockResolvedValue({}),
   })
-  ;({ useLanguageStore } = require('@/store/languageStore'))
+  ;({ useLanguageStore } = await import('@/store/languageStore'))
 })
 
 beforeEach(() => {
