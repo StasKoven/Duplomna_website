@@ -28,6 +28,7 @@ import { cn } from '@/lib/utils'
 import { formatPrice } from '@/lib/utils'
 import api from '@/lib/api'
 import NotificationBell from './NotificationBell'
+import ThemeToggle from './ThemeToggle'
 import s from './Header.module.css'
 
 interface SearchResult {
@@ -287,6 +288,9 @@ export default function Header() {
               >
                 <Search className={s.icon} />
               </button>
+
+              {/* Перемикач теми */}
+              <ThemeToggle />
 
               {/* Порівняння */}
               <Link href="/compare" className={s.compareBtn} aria-label="Порівняння товарів">
@@ -642,6 +646,10 @@ export default function Header() {
                   <p className={s.sectionLabel}>
                     Інформація
                   </p>
+                  <div className={s.mobileNavLink} style={{ cursor: 'default' }}>
+                    <span style={{ flex: 1 }}>Тема оформлення</span>
+                    <ThemeToggle />
+                  </div>
                   <Link
                     href="/about"
                     className={s.mobileNavLink}

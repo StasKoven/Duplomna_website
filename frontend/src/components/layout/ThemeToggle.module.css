@@ -1,0 +1,64 @@
+.toggle {
+  @apply relative p-2.5 hover:bg-accent rounded-xl transition-all duration-300 min-w-[44px] min-h-[44px] flex items-center justify-center overflow-hidden;
+}
+
+.toggle:hover {
+  transform: scale(1.05);
+}
+
+.toggle:active {
+  transform: scale(0.95);
+}
+
+.iconWrap {
+  @apply relative h-5 w-5;
+}
+
+.icon {
+  @apply absolute inset-0 h-5 w-5 transition-all duration-500;
+}
+
+.sun {
+  @apply text-amber-500;
+  transform: rotate(0deg) scale(1);
+  opacity: 1;
+}
+
+.moon {
+  @apply text-indigo-400;
+  transform: rotate(-90deg) scale(0);
+  opacity: 0;
+}
+
+:global(.dark) .sun {
+  transform: rotate(90deg) scale(0);
+  opacity: 0;
+}
+
+:global(.dark) .moon {
+  transform: rotate(0deg) scale(1);
+  opacity: 1;
+}
+
+.glow {
+  position: absolute;
+  inset: 0;
+  border-radius: 0.75rem;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  background: radial-gradient(circle at center, rgba(251, 191, 36, 0.25), transparent 70%);
+}
+
+:global(.dark) .glow {
+  background: radial-gradient(circle at center, rgba(129, 140, 248, 0.3), transparent 70%);
+}
+
+.toggle:hover .glow {
+  opacity: 1;
+}
+
+/* Skeleton placeholder before mount to avoid layout shift */
+.skeleton {
+  @apply relative p-2.5 rounded-xl min-w-[44px] min-h-[44px];
+}
