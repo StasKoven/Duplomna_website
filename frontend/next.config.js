@@ -25,6 +25,15 @@ const nextConfig = {
         protocol: 'https',
         hostname: 'randomuser.me',
       },
+      // Прес-фото товарів (Wikimedia Commons) та згенеровані заповнювачі
+      {
+        protocol: 'https',
+        hostname: 'upload.wikimedia.org',
+      },
+      {
+        protocol: 'https',
+        hostname: 'placehold.co',
+      },
       // Backend-served uploaded product images (Railway + local dev)
       {
         protocol: 'https',

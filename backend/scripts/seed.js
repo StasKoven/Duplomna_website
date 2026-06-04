@@ -515,9 +515,7 @@ const seedDatabase = async () => {
         stock: 45,
         lowStockThreshold: 5,
         images: [
-          { url: 'https://images.unsplash.com/photo-1695048133142-1a20484d2569?w=800&h=800&fit=crop', alt: 'iPhone 15 Pro Max натуральний титан — вигляд спереду', isMain: true },
-          { url: 'https://images.unsplash.com/photo-1695048064803-064ea0794ed4?w=800&h=800&fit=crop', alt: 'iPhone 15 Pro Max — вигляд ззаду з камерою' },
-          { url: 'https://images.unsplash.com/photo-1592750475338-74b7b21085ab?w=800&h=800&fit=crop', alt: 'iPhone 15 Pro Max — бічний вигляд' }
+          { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/23/About_iPhone_15_Pro_Max_Natural_Titanium.jpg/960px-About_iPhone_15_Pro_Max_Natural_Titanium.jpg', alt: 'iPhone 15 Pro Max 256GB', isMain: true }
         ],
         specifications: [
           { name: 'Дисплей', value: '6.7" Super Retina XDR OLED, 2796×1290, 120 Гц ProMotion' },
@@ -555,8 +553,7 @@ const seedDatabase = async () => {
         stock: 62,
         lowStockThreshold: 8,
         images: [
-          { url: 'https://images.unsplash.com/photo-1695048133142-1a20484d2569?w=800&h=800&fit=crop', alt: 'iPhone 15 Pro синій титан — вигляд спереду', isMain: true },
-          { url: 'https://images.unsplash.com/photo-1592750475338-74b7b21085ab?w=800&h=800&fit=crop', alt: 'iPhone 15 Pro — бічний профіль' }
+          { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/19/Apple_iPhone_15_Pro.jpg/960px-Apple_iPhone_15_Pro.jpg', alt: 'iPhone 15 Pro 128GB', isMain: true }
         ],
         specifications: [
           { name: 'Дисплей', value: '6.1" Super Retina XDR OLED, 2556×1179, 120 Гц ProMotion' },
@@ -589,9 +586,7 @@ const seedDatabase = async () => {
         stock: 38,
         lowStockThreshold: 5,
         images: [
-          { url: 'https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?w=800&h=800&fit=crop', alt: 'Samsung Galaxy S24 Ultra чорний — фронтальний вигляд', isMain: true },
-          { url: 'https://images.unsplash.com/photo-1610945264803-c22b62d2a7b3?w=800&h=800&fit=crop', alt: 'Samsung Galaxy S24 Ultra — задня панель з камерами' },
-          { url: 'https://images.unsplash.com/photo-1678911820864-e2c567c655d7?w=800&h=800&fit=crop', alt: 'Samsung Galaxy S24 Ultra з S Pen' }
+          { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/ed/Samsung_S24_Ultra_Phone.png/960px-Samsung_S24_Ultra_Phone.png', alt: 'Samsung Galaxy S24 Ultra 256GB', isMain: true }
         ],
         specifications: [
           { name: 'Дисплей', value: '6.8" Dynamic AMOLED 2X, 3120×1440, 120 Гц LTPO' },
@@ -625,7 +620,7 @@ const seedDatabase = async () => {
         stock: 74,
         lowStockThreshold: 10,
         images: [
-          { url: 'https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?w=800&h=800&fit=crop', alt: 'Samsung Galaxy S24 фіолетовий', isMain: true }
+          { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/Samsung_Galaxy_S24_%28webtekno%29_008.png/960px-Samsung_Galaxy_S24_%28webtekno%29_008.png', alt: 'Samsung Galaxy S24 128GB', isMain: true }
         ],
         specifications: [
           { name: 'Дисплей', value: '6.2" Dynamic AMOLED 2X, 2340×1080, 120 Гц' },
@@ -655,8 +650,7 @@ const seedDatabase = async () => {
         stock: 28,
         lowStockThreshold: 5,
         images: [
-          { url: 'https://images.unsplash.com/photo-1598327105666-5b89351aff97?w=800&h=800&fit=crop', alt: 'Google Pixel 8 Pro блакитний', isMain: true },
-          { url: 'https://images.unsplash.com/photo-1512054502232-10a0a035d672?w=800&h=800&fit=crop', alt: 'Google Pixel 8 Pro — камера крупним планом' }
+          { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/cf/Google_Pixel_8_Pro_with_Google_Pixel_7_Pro.jpg/960px-Google_Pixel_8_Pro_with_Google_Pixel_7_Pro.jpg', alt: 'Google Pixel 8 Pro 128GB', isMain: true }
         ],
         specifications: [
           { name: 'Дисплей', value: '6.7" LTPO OLED, 2992×1344, 120 Гц' },
@@ -688,8 +682,7 @@ const seedDatabase = async () => {
         stock: 33,
         lowStockThreshold: 5,
         images: [
-          { url: 'https://images.unsplash.com/photo-1598327105666-5b89351aff97?w=800&h=800&fit=crop', alt: 'Xiaomi 14 Pro чорний', isMain: true },
-          { url: 'https://images.unsplash.com/photo-1533228100845-08145b01de14?w=800&h=800&fit=crop', alt: 'Xiaomi 14 Pro — приклад фото з камери Leica' }
+          { url: 'https://placehold.co/800x800/0f172a/e2e8f0/png?text=Xiaomi%2014%20Pro%20256GB', alt: 'Xiaomi 14 Pro 256GB (зображення-заповнювач)', isMain: true }
         ],
         specifications: [
           { name: 'Дисплей', value: '6.73" LTPO AMOLED, 3200×1440, 1-120 Гц' },
@@ -719,7 +712,7 @@ const seedDatabase = async () => {
         stock: 22,
         lowStockThreshold: 5,
         images: [
-          { url: 'https://images.unsplash.com/photo-1598327105666-5b89351aff97?w=800&h=800&fit=crop', alt: 'OnePlus 12 зелений', isMain: true }
+          { url: 'https://placehold.co/800x800/0f172a/e2e8f0/png?text=OnePlus%2012%20256GB', alt: 'OnePlus 12 256GB (зображення-заповнювач)', isMain: true }
         ],
         specifications: [
           { name: 'Дисплей', value: '6.82" LTPO AMOLED, 3168×1440, 120 Гц' },
@@ -748,7 +741,7 @@ const seedDatabase = async () => {
         stock: 55,
         lowStockThreshold: 8,
         images: [
-          { url: 'https://images.unsplash.com/photo-1695048133142-1a20484d2569?w=800&h=800&fit=crop', alt: 'iPhone 15 рожевий', isMain: true }
+          { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f9/Back_of_iPhone_15.jpg/960px-Back_of_iPhone_15.jpg', alt: 'iPhone 15 128GB', isMain: true }
         ],
         specifications: [
           { name: 'Дисплей', value: '6.1" Super Retina XDR OLED, 2556×1179, 60 Гц' },
@@ -782,9 +775,7 @@ const seedDatabase = async () => {
         stock: 18,
         lowStockThreshold: 3,
         images: [
-          { url: 'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=800&h=800&fit=crop', alt: 'MacBook Pro 16 M3 Pro — відкритий', isMain: true },
-          { url: 'https://images.unsplash.com/photo-1611186871348-b1ce696e52c9?w=800&h=800&fit=crop', alt: 'MacBook Pro 16 — вигляд збоку' },
-          { url: 'https://images.unsplash.com/photo-1541807084-5c52b6b3adef?w=800&h=800&fit=crop', alt: 'MacBook Pro 16 — клавіатура з Touch ID' }
+          { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a6/M3_Macbook_Pro_14_inch_Space_Grey_model.jpg/960px-M3_Macbook_Pro_14_inch_Space_Grey_model.jpg', alt: 'MacBook Pro 16" M3 Pro', isMain: true }
         ],
         specifications: [
           { name: 'Дисплей', value: '16.2" Liquid Retina XDR, 3456×2234, 120 Гц ProMotion' },
@@ -816,8 +807,7 @@ const seedDatabase = async () => {
         stock: 35,
         lowStockThreshold: 5,
         images: [
-          { url: 'https://images.unsplash.com/photo-1611186871348-b1ce696e52c9?w=800&h=800&fit=crop', alt: 'MacBook Air 15 M3 — вигляд спереду', isMain: true },
-          { url: 'https://images.unsplash.com/photo-1541807084-5c52b6b3adef?w=800&h=800&fit=crop', alt: 'MacBook Air 15 — клавіатура' }
+          { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c0/MacBook_Air_%2815-inch%2C_M4%2C_Silver%29.jpg/960px-MacBook_Air_%2815-inch%2C_M4%2C_Silver%29.jpg', alt: 'MacBook Air 15" M3', isMain: true }
         ],
         specifications: [
           { name: 'Дисплей', value: '15.3" Liquid Retina, 2880×1864, 500 ніт' },
@@ -847,8 +837,7 @@ const seedDatabase = async () => {
         stock: 14,
         lowStockThreshold: 3,
         images: [
-          { url: 'https://images.unsplash.com/photo-1603302576837-37561b2e2302?w=800&h=800&fit=crop', alt: 'ASUS ROG Strix G16 — ігровий ноутбук з RGB', isMain: true },
-          { url: 'https://images.unsplash.com/photo-1593642632559-0c6d3fc62b89?w=800&h=800&fit=crop', alt: 'ASUS ROG Strix — клавіатура з підсвіткою' }
+          { url: 'https://placehold.co/800x800/0f172a/e2e8f0/png?text=ASUS%20ROG%20Strix%20G16%20(2024)', alt: 'ASUS ROG Strix G16 (2024) (зображення-заповнювач)', isMain: true }
         ],
         specifications: [
           { name: 'Дисплей', value: '16" QHD (2560×1600), IPS, 240 Гц, 3 мс' },
@@ -877,7 +866,7 @@ const seedDatabase = async () => {
         stock: 12,
         lowStockThreshold: 2,
         images: [
-          { url: 'https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?w=800&h=800&fit=crop', alt: 'Lenovo ThinkPad X1 Carbon', isMain: true }
+          { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/48/Lenovo_ThinkPad_X1_Carbon_Ultrabook.jpg/960px-Lenovo_ThinkPad_X1_Carbon_Ultrabook.jpg', alt: 'Lenovo ThinkPad X1 Carbon Gen 11', isMain: true }
         ],
         specifications: [
           { name: 'Дисплей', value: '14" 2.8K OLED (2880×1800), 400 ніт, 100% DCI-P3' },
@@ -907,7 +896,7 @@ const seedDatabase = async () => {
         stock: 48,
         lowStockThreshold: 8,
         images: [
-          { url: 'https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?w=800&h=800&fit=crop', alt: 'HP Pavilion 15 сріблястий', isMain: true }
+          { url: 'https://placehold.co/800x800/0f172a/e2e8f0/png?text=HP%20Pavilion%2015%20(2024)', alt: 'HP Pavilion 15 (2024) (зображення-заповнювач)', isMain: true }
         ],
         specifications: [
           { name: 'Дисплей', value: '15.6" Full HD IPS (1920×1080), 250 ніт, антивідблиск' },
@@ -937,7 +926,7 @@ const seedDatabase = async () => {
         stock: 16,
         lowStockThreshold: 3,
         images: [
-          { url: 'https://images.unsplash.com/photo-1593642632559-0c6d3fc62b89?w=800&h=800&fit=crop', alt: 'Dell XPS 15 з OLED дисплеєм', isMain: true }
+          { url: 'https://placehold.co/800x800/0f172a/e2e8f0/png?text=Dell%20XPS%2015%20(9530)', alt: 'Dell XPS 15 (9530) (зображення-заповнювач)', isMain: true }
         ],
         specifications: [
           { name: 'Дисплей', value: '15.6" 3.5K OLED (3456×2160), touch, 400 ніт, 100% DCI-P3' },
@@ -971,8 +960,7 @@ const seedDatabase = async () => {
         stock: 20,
         lowStockThreshold: 3,
         images: [
-          { url: 'https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?w=800&h=800&fit=crop', alt: 'iPad Pro 13 M4 — фронтальний вигляд', isMain: true },
-          { url: 'https://images.unsplash.com/photo-1561154464-82e9adf32764?w=800&h=800&fit=crop', alt: 'iPad Pro 13 з Apple Pencil Pro' }
+          { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/About_iPad_Pro_13-inch_%28M4%29.jpg/960px-About_iPad_Pro_13-inch_%28M4%29.jpg', alt: 'iPad Pro 13" M4 256GB', isMain: true }
         ],
         specifications: [
           { name: 'Дисплей', value: '13" Ultra Retina XDR OLED, 2752×2064, 120 Гц ProMotion' },
@@ -1004,7 +992,7 @@ const seedDatabase = async () => {
         stock: 42,
         lowStockThreshold: 5,
         images: [
-          { url: 'https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?w=800&h=800&fit=crop', alt: 'iPad Air 11 M2 блакитний', isMain: true }
+          { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/28/About_iPad_Air_11-inch_%28M2%29.jpg/960px-About_iPad_Air_11-inch_%28M2%29.jpg', alt: 'iPad Air 11" M2 128GB', isMain: true }
         ],
         specifications: [
           { name: 'Дисплей', value: '11" Liquid Retina, 2360×1640, P3, 500 ніт' },
@@ -1034,7 +1022,7 @@ const seedDatabase = async () => {
         stock: 15,
         lowStockThreshold: 3,
         images: [
-          { url: 'https://images.unsplash.com/photo-1561154464-82e9adf32764?w=800&h=800&fit=crop', alt: 'Samsung Galaxy Tab S9 Ultra сірий', isMain: true }
+          { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Samsung_Galaxy_Tab_S9.png/960px-Samsung_Galaxy_Tab_S9.png', alt: 'Samsung Galaxy Tab S9 Ultra 256GB', isMain: true }
         ],
         specifications: [
           { name: 'Дисплей', value: '14.6" Dynamic AMOLED 2X, 2960×1848, 120 Гц' },
@@ -1068,9 +1056,7 @@ const seedDatabase = async () => {
         stock: 36,
         lowStockThreshold: 5,
         images: [
-          { url: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800&h=800&fit=crop', alt: 'Sony WH-1000XM5 чорні', isMain: true },
-          { url: 'https://images.unsplash.com/photo-1546435770-a3e426bf472b?w=800&h=800&fit=crop', alt: 'Sony WH-1000XM5 — на голові' },
-          { url: 'https://images.unsplash.com/photo-1583394838336-acd977736f90?w=800&h=800&fit=crop', alt: 'Sony WH-1000XM5 з кейсом' }
+          { url: 'https://placehold.co/800x800/0f172a/e2e8f0/png?text=Sony%20WH-1000XM5', alt: 'Sony WH-1000XM5 (зображення-заповнювач)', isMain: true }
         ],
         specifications: [
           { name: 'Тип', value: 'Повнорозмірні бездротові (over-ear)' },
@@ -1100,8 +1086,7 @@ const seedDatabase = async () => {
         stock: 65,
         lowStockThreshold: 10,
         images: [
-          { url: 'https://images.unsplash.com/photo-1588423771073-b8903fbb85b5?w=800&h=800&fit=crop', alt: 'AirPods Pro 2 з USB-C кейсом', isMain: true },
-          { url: 'https://images.unsplash.com/photo-1606741965326-cb990ae01bb2?w=800&h=800&fit=crop', alt: 'AirPods Pro 2 — навушники крупним планом' }
+          { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/AirPods_Pro_%282nd_generation%29.jpg/960px-AirPods_Pro_%282nd_generation%29.jpg', alt: 'Apple AirPods Pro 2 (USB-C)', isMain: true }
         ],
         specifications: [
           { name: 'Тип', value: 'TWS (True Wireless Stereo)' },
@@ -1131,7 +1116,7 @@ const seedDatabase = async () => {
         stock: 44,
         lowStockThreshold: 8,
         images: [
-          { url: 'https://images.unsplash.com/photo-1590658268037-6bf12165a8df?w=800&h=800&fit=crop', alt: 'Samsung Galaxy Buds2 Pro сірі', isMain: true }
+          { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/Samsung_Galaxy_Buds2_Pro_%28Graphite%29.jpg/960px-Samsung_Galaxy_Buds2_Pro_%28Graphite%29.jpg', alt: 'Samsung Galaxy Buds2 Pro', isMain: true }
         ],
         specifications: [
           { name: 'Тип', value: 'TWS (True Wireless Stereo)' },
@@ -1161,7 +1146,7 @@ const seedDatabase = async () => {
         stock: 72,
         lowStockThreshold: 10,
         images: [
-          { url: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800&h=800&fit=crop', alt: 'JBL Tune 770NC чорні', isMain: true }
+          { url: 'https://placehold.co/800x800/0f172a/e2e8f0/png?text=JBL%20Tune%20770NC', alt: 'JBL Tune 770NC (зображення-заповнювач)', isMain: true }
         ],
         specifications: [
           { name: 'Тип', value: 'Повнорозмірні бездротові (over-ear)' },
@@ -1195,8 +1180,7 @@ const seedDatabase = async () => {
         stock: 50,
         lowStockThreshold: 8,
         images: [
-          { url: 'https://images.unsplash.com/photo-1434494878577-86c23bcb06b9?w=800&h=800&fit=crop', alt: 'Apple Watch Series 9', isMain: true },
-          { url: 'https://images.unsplash.com/photo-1546868871-af0de0ae72be?w=800&h=800&fit=crop', alt: 'Apple Watch Series 9 на руці' }
+          { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/39/Apple_Watch_Series_9_1_2023-11-14.jpg/960px-Apple_Watch_Series_9_1_2023-11-14.jpg', alt: 'Apple Watch Series 9 45mm', isMain: true }
         ],
         specifications: [
           { name: 'Дисплей', value: '45 мм Always-On Retina LTPO OLED, 396×484, до 2000 ніт' },
@@ -1226,7 +1210,7 @@ const seedDatabase = async () => {
         stock: 34,
         lowStockThreshold: 5,
         images: [
-          { url: 'https://images.unsplash.com/photo-1546868871-af0de0ae72be?w=800&h=800&fit=crop', alt: 'Samsung Galaxy Watch 6 Classic чорний', isMain: true }
+          { url: 'https://placehold.co/800x800/0f172a/e2e8f0/png?text=Samsung%20Galaxy%20Watch%206%20Classic%2047mm', alt: 'Samsung Galaxy Watch 6 Classic 47mm (зображення-заповнювач)', isMain: true }
         ],
         specifications: [
           { name: 'Дисплей', value: '1.47" Super AMOLED, 480×480, Always-On' },
@@ -1259,7 +1243,7 @@ const seedDatabase = async () => {
         stock: 95,
         lowStockThreshold: 15,
         images: [
-          { url: 'https://images.unsplash.com/photo-1600490722773-8a6d75739926?w=800&h=800&fit=crop', alt: 'Apple MagSafe Charger', isMain: true }
+          { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/bb/MagSafe_%28iPhone%29.png/960px-MagSafe_%28iPhone%29.png', alt: 'Apple MagSafe Charger (15 Вт)', isMain: true }
         ],
         specifications: [
           { name: 'Тип', value: 'Бездротова зарядка з магнітним кріпленням' },
@@ -1284,7 +1268,7 @@ const seedDatabase = async () => {
         stock: 53,
         lowStockThreshold: 8,
         images: [
-          { url: 'https://images.unsplash.com/photo-1609592424438-72ee21d66b04?w=800&h=800&fit=crop', alt: 'Anker PowerCore 26800', isMain: true }
+          { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c2/2023_Powerbank_Anker_Powercore_5000mAh.jpg/960px-2023_Powerbank_Anker_Powercore_5000mAh.jpg', alt: 'Anker PowerCore 26800mAh PD', isMain: true }
         ],
         specifications: [
           { name: 'Ємність', value: '26800 мАг (96.48 Вт·год)' },
@@ -1313,7 +1297,7 @@ const seedDatabase = async () => {
         stock: 30,
         lowStockThreshold: 5,
         images: [
-          { url: 'https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?w=800&h=800&fit=crop', alt: 'Logitech MX Master 3S сірий', isMain: true }
+          { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/90/Logitech_MX_Master_3S_HS01.jpg/960px-Logitech_MX_Master_3S_HS01.jpg', alt: 'Logitech MX Master 3S', isMain: true }
         ],
         specifications: [
           { name: 'Тип', value: 'Бездротова ергономічна миша' },
@@ -1341,7 +1325,7 @@ const seedDatabase = async () => {
         stock: 38,
         lowStockThreshold: 5,
         images: [
-          { url: 'https://images.unsplash.com/photo-1597872200969-2b65d56bd16b?w=800&h=800&fit=crop', alt: 'Samsung T7 Shield 1TB чорний', isMain: true }
+          { url: 'https://placehold.co/800x800/0f172a/e2e8f0/png?text=Samsung%20T7%20Shield%201TB', alt: 'Samsung T7 Shield 1TB (зображення-заповнювач)', isMain: true }
         ],
         specifications: [
           { name: 'Ємність', value: '1 ТБ' },
@@ -1374,7 +1358,7 @@ const seedDatabase = async () => {
         stock: 88,
         lowStockThreshold: 15,
         images: [
-          { url: 'https://images.unsplash.com/photo-1610945265295-d9bdf067e59c?w=800&h=800&fit=crop', alt: 'Samsung Galaxy A55 темно-синій', isMain: true }
+          { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8b/Samsung_Galaxy_A55_5G_2024.jpg/960px-Samsung_Galaxy_A55_5G_2024.jpg', alt: 'Samsung Galaxy A55 5G 128GB', isMain: true }
         ],
         specifications: [
           { name: 'Дисплей', value: '6.6" Super AMOLED, 2340×1080, 120 Гц' },
@@ -1404,7 +1388,7 @@ const seedDatabase = async () => {
         stock: 95,
         lowStockThreshold: 15,
         images: [
-          { url: 'https://images.unsplash.com/photo-1598327105666-5b89351aff97?w=800&h=800&fit=crop', alt: 'Xiaomi Redmi Note 13 Pro чорний', isMain: true }
+          { url: 'https://placehold.co/800x800/0f172a/e2e8f0/png?text=Xiaomi%20Redmi%20Note%2013%20Pro%20256GB', alt: 'Xiaomi Redmi Note 13 Pro 256GB (зображення-заповнювач)', isMain: true }
         ],
         specifications: [
           { name: 'Дисплей', value: '6.67" AMOLED, 2400×1080, 120 Гц, 1800 ніт' },
@@ -1434,7 +1418,7 @@ const seedDatabase = async () => {
         stock: 19,
         lowStockThreshold: 3,
         images: [
-          { url: 'https://images.unsplash.com/photo-1592750475338-74b7b21085ab?w=800&h=800&fit=crop', alt: 'Nothing Phone (2) білий з Glyph', isMain: true }
+          { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/Nothing_phone_%282%29_%28Booredatwork.com%29_001.png/960px-Nothing_phone_%282%29_%28Booredatwork.com%29_001.png', alt: 'Nothing Phone (2) 256GB', isMain: true }
         ],
         specifications: [
           { name: 'Дисплей', value: '6.7" LTPO OLED, 2412×1080, 120 Гц' },
@@ -1467,7 +1451,7 @@ const seedDatabase = async () => {
         stock: 24,
         lowStockThreshold: 4,
         images: [
-          { url: 'https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?w=800&h=800&fit=crop', alt: 'Acer Swift Go 14 сріблястий', isMain: true }
+          { url: 'https://placehold.co/800x800/0f172a/e2e8f0/png?text=Acer%20Swift%20Go%2014%20(2024)', alt: 'Acer Swift Go 14 (2024) (зображення-заповнювач)', isMain: true }
         ],
         specifications: [
           { name: 'Дисплей', value: '14" 2.8K OLED (2880×1800), 90 Гц, 100% DCI-P3' },
@@ -1494,7 +1478,7 @@ const seedDatabase = async () => {
         stock: 10,
         lowStockThreshold: 2,
         images: [
-          { url: 'https://images.unsplash.com/photo-1541807084-5c52b6b3adef?w=800&h=800&fit=crop', alt: 'ASUS Zenbook 14 OLED — елегантний ультрабук', isMain: true }
+          { url: 'https://placehold.co/800x800/0f172a/e2e8f0/png?text=ASUS%20Zenbook%2014%20OLED%20(UX3405)', alt: 'ASUS Zenbook 14 OLED (UX3405) (зображення-заповнювач)', isMain: true }
         ],
         specifications: [
           { name: 'Дисплей', value: '14" 3K OLED (2880×1800), 120 Гц, 100% DCI-P3, Pantone Validated' },
@@ -1526,7 +1510,7 @@ const seedDatabase = async () => {
         stock: 56,
         lowStockThreshold: 10,
         images: [
-          { url: 'https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?w=800&h=800&fit=crop', alt: 'iPad 10 блакитний', isMain: true }
+          { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d2/IPad_10.2%E2%80%91inch.png/960px-IPad_10.2%E2%80%91inch.png', alt: 'iPad 10-го покоління 64GB', isMain: true }
         ],
         specifications: [
           { name: 'Дисплей', value: '10.9" Liquid Retina, 2360×1640, 500 ніт' },
@@ -1555,7 +1539,7 @@ const seedDatabase = async () => {
         stock: 40,
         lowStockThreshold: 8,
         images: [
-          { url: 'https://images.unsplash.com/photo-1561154464-82e9adf32764?w=800&h=800&fit=crop', alt: 'Xiaomi Pad 6 сірий', isMain: true }
+          { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f0/Xiaomi_Pad_6_display.jpg/960px-Xiaomi_Pad_6_display.jpg', alt: 'Xiaomi Pad 6 128GB', isMain: true }
         ],
         specifications: [
           { name: 'Дисплей', value: '11" 2.8K IPS (2880×1800), 144 Гц, 550 ніт' },
@@ -1588,7 +1572,7 @@ const seedDatabase = async () => {
         stock: 25,
         lowStockThreshold: 4,
         images: [
-          { url: 'https://images.unsplash.com/photo-1546435770-a3e426bf472b?w=800&h=800&fit=crop', alt: 'Bose QuietComfort Ultra чорні', isMain: true }
+          { url: 'https://placehold.co/800x800/0f172a/e2e8f0/png?text=Bose%20QuietComfort%20Ultra%20Headphones', alt: 'Bose QuietComfort Ultra Headphones (зображення-заповнювач)', isMain: true }
         ],
         specifications: [
           { name: 'Тип', value: 'Повнорозмірні бездротові (over-ear)' },
@@ -1615,7 +1599,7 @@ const seedDatabase = async () => {
         stock: 55,
         lowStockThreshold: 8,
         images: [
-          { url: 'https://images.unsplash.com/photo-1583394838336-acd977736f90?w=800&h=800&fit=crop', alt: 'Marshall Major IV чорні', isMain: true }
+          { url: 'https://placehold.co/800x800/0f172a/e2e8f0/png?text=Marshall%20Major%20IV', alt: 'Marshall Major IV (зображення-заповнювач)', isMain: true }
         ],
         specifications: [
           { name: 'Тип', value: 'Накладні бездротові (on-ear)' },
@@ -1646,7 +1630,7 @@ const seedDatabase = async () => {
         stock: 20,
         lowStockThreshold: 3,
         images: [
-          { url: 'https://images.unsplash.com/photo-1434494878577-86c23bcb06b9?w=800&h=800&fit=crop', alt: 'Garmin Venu 3 чорний', isMain: true }
+          { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/Garmin_Venu_3_%28a%29.JPG/960px-Garmin_Venu_3_%28a%29.JPG', alt: 'Garmin Venu 3 45mm', isMain: true }
         ],
         specifications: [
           { name: 'Дисплей', value: '1.4" AMOLED, 454×454, Always-On' },
@@ -1673,7 +1657,7 @@ const seedDatabase = async () => {
         stock: 110,
         lowStockThreshold: 20,
         images: [
-          { url: 'https://images.unsplash.com/photo-1575311373937-040b8e1fd5b6?w=800&h=800&fit=crop', alt: 'Xiaomi Smart Band 8 Pro', isMain: true }
+          { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e9/Xiaomi_Mi_Band_8.jpg/960px-Xiaomi_Mi_Band_8.jpg', alt: 'Xiaomi Smart Band 8 Pro', isMain: true }
         ],
         specifications: [
           { name: 'Дисплей', value: '1.74" AMOLED, 336×480, 600 ніт' },
@@ -1705,7 +1689,7 @@ const seedDatabase = async () => {
         stock: 68,
         lowStockThreshold: 12,
         images: [
-          { url: 'https://images.unsplash.com/photo-1600490722773-8a6d75739926?w=800&h=800&fit=crop', alt: 'Baseus GaN5 Pro 100W', isMain: true }
+          { url: 'https://placehold.co/800x800/0f172a/e2e8f0/png?text=Baseus%20GaN5%20Pro%20100W%20Charger', alt: 'Baseus GaN5 Pro 100W Charger (зображення-заповнювач)', isMain: true }
         ],
         specifications: [
           { name: 'Потужність', value: '100 Вт (сумарна)' },
@@ -1732,7 +1716,7 @@ const seedDatabase = async () => {
         stock: 45,
         lowStockThreshold: 8,
         images: [
-          { url: 'https://images.unsplash.com/photo-1572569511254-d8f925fe2cbb?w=800&h=800&fit=crop', alt: 'Apple AirTag 4 штуки', isMain: true }
+          { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/eb/Apple_AirTag_%2851334123725%29.jpg/960px-Apple_AirTag_%2851334123725%29.jpg', alt: 'Apple AirTag 4 Pack', isMain: true }
         ],
         specifications: [
           { name: 'Комплектація', value: '4 × AirTag' },
@@ -1763,7 +1747,7 @@ const seedDatabase = async () => {
         stock: 30,
         lowStockThreshold: 5,
         images: [
-          { url: 'https://images.unsplash.com/photo-1606144042614-b2417e99c4e3?w=800&h=800&fit=crop', alt: 'PlayStation 5 Slim Digital Edition', isMain: true }
+          { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/PlayStation_5_and_DualSense_with_transparent_background.png/960px-PlayStation_5_and_DualSense_with_transparent_background.png', alt: 'PlayStation 5 Slim Digital Edition', isMain: true }
         ],
         specifications: [
           { name: 'Процесор', value: 'AMD Zen 2, 8 ядер, 3.5 ГГц' },
@@ -1791,7 +1775,7 @@ const seedDatabase = async () => {
         stock: 22,
         lowStockThreshold: 4,
         images: [
-          { url: 'https://images.unsplash.com/photo-1621259182978-fbf93132d53d?w=800&h=800&fit=crop', alt: 'Xbox Series X чорний', isMain: true }
+          { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/12/Xbox_Series_X_2.jpg/960px-Xbox_Series_X_2.jpg', alt: 'Xbox Series X 1TB', isMain: true }
         ],
         specifications: [
           { name: 'Процесор', value: 'AMD Zen 2, 8 ядер, 3.8 ГГц' },
@@ -1818,7 +1802,7 @@ const seedDatabase = async () => {
         stock: 40,
         lowStockThreshold: 8,
         images: [
-          { url: 'https://images.unsplash.com/photo-1617096200347-cb04ae810b1d?w=800&h=800&fit=crop', alt: 'Nintendo Switch OLED білий', isMain: true }
+          { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/76/Nintendo-Switch-Console-Docked-wJoyConRB.jpg/960px-Nintendo-Switch-Console-Docked-wJoyConRB.jpg', alt: 'Nintendo Switch OLED', isMain: true }
         ],
         specifications: [
           { name: 'Дисплей', value: '7" OLED, 1280×720, multi-touch' },
@@ -1851,7 +1835,7 @@ const seedDatabase = async () => {
         stock: 10,
         lowStockThreshold: 2,
         images: [
-          { url: 'https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?w=800&h=800&fit=crop', alt: 'Samsung S95D 55" QD-OLED', isMain: true }
+          { url: 'https://placehold.co/800x800/0f172a/e2e8f0/png?text=Samsung%2055%22%20S95D%20QD-OLED%204K%20Smart%20TV', alt: 'Samsung 55" S95D QD-OLED 4K Smart TV (зображення-заповнювач)', isMain: true }
         ],
         specifications: [
           { name: 'Діагональ', value: '55" (139 см)' },
@@ -1882,7 +1866,7 @@ const seedDatabase = async () => {
         stock: 26,
         lowStockThreshold: 4,
         images: [
-          { url: 'https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?w=800&h=800&fit=crop', alt: 'LG UltraGear 27GP850-B ігровий монітор', isMain: true }
+          { url: 'https://placehold.co/800x800/0f172a/e2e8f0/png?text=LG%20UltraGear%2027%22%2027GP850-B', alt: 'LG UltraGear 27" 27GP850-B (зображення-заповнювач)', isMain: true }
         ],
         specifications: [
           { name: 'Діагональ', value: '27" (68.6 см)' },
@@ -1911,7 +1895,7 @@ const seedDatabase = async () => {
         stock: 18,
         lowStockThreshold: 3,
         images: [
-          { url: 'https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?w=800&h=800&fit=crop', alt: 'Dell UltraSharp U2723QE 4K', isMain: true }
+          { url: 'https://placehold.co/800x800/0f172a/e2e8f0/png?text=Dell%20UltraSharp%20U2723QE%2027%22%204K', alt: 'Dell UltraSharp U2723QE 27" 4K (зображення-заповнювач)', isMain: true }
         ],
         specifications: [
           { name: 'Діагональ', value: '27" (68.6 см)' },
@@ -1943,8 +1927,7 @@ const seedDatabase = async () => {
         stock: 8,
         lowStockThreshold: 2,
         images: [
-          { url: 'https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=800&h=800&fit=crop', alt: 'Sony Alpha A7 IV — фронтальний вигляд', isMain: true },
-          { url: 'https://images.unsplash.com/photo-1502920917128-1aa500764cbd?w=800&h=800&fit=crop', alt: 'Sony Alpha A7 IV з об\'єктивом' }
+          { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8b/Sony_A7_IV_%28ILCE-7M4%29_-_by_Henry_S%C3%B6derlund_%2851739988735%29.jpg/960px-Sony_A7_IV_%28ILCE-7M4%29_-_by_Henry_S%C3%B6derlund_%2851739988735%29.jpg', alt: 'Sony Alpha A7 IV Body', isMain: true }
         ],
         specifications: [
           { name: 'Тип', value: 'Повнокадрова безрзеркальна (Full Frame)' },
@@ -1975,7 +1958,7 @@ const seedDatabase = async () => {
         stock: 14,
         lowStockThreshold: 3,
         images: [
-          { url: 'https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=800&h=800&fit=crop', alt: 'Canon EOS R50 з kit-об\'єктивом', isMain: true }
+          { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/Canon_EOS_R50%2C_White%2C_2.jpg/960px-Canon_EOS_R50%2C_White%2C_2.jpg', alt: 'Canon EOS R50 Kit 18-45mm', isMain: true }
         ],
         specifications: [
           { name: 'Тип', value: 'APS-C безрзеркальна' },
@@ -2009,7 +1992,7 @@ const seedDatabase = async () => {
         stock: 52,
         lowStockThreshold: 8,
         images: [
-          { url: 'https://images.unsplash.com/photo-1558089687-f282ffcbc126?w=800&h=800&fit=crop', alt: 'Apple HomePod mini блакитний', isMain: true }
+          { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b9/Apple_HomePod_mini.jpg/960px-Apple_HomePod_mini.jpg', alt: 'Apple HomePod mini', isMain: true }
         ],
         specifications: [
           { name: 'Тип', value: 'Розумна колонка' },
@@ -2037,7 +2020,7 @@ const seedDatabase = async () => {
         stock: 35,
         lowStockThreshold: 6,
         images: [
-          { url: 'https://images.unsplash.com/photo-1558089687-f282ffcbc126?w=800&h=800&fit=crop', alt: 'Google Nest Hub 2', isMain: true }
+          { url: 'https://placehold.co/800x800/0f172a/e2e8f0/png?text=Google%20Nest%20Hub%202-%D0%B3%D0%BE%20%D0%BF%D0%BE%D0%BA%D0%BE%D0%BB%D1%96%D0%BD%D0%BD%D1%8F', alt: 'Google Nest Hub 2-го покоління (зображення-заповнювач)', isMain: true }
         ],
         specifications: [
           { name: 'Дисплей', value: '7" LCD тачскрін' },
@@ -2064,7 +2047,7 @@ const seedDatabase = async () => {
         stock: 32,
         lowStockThreshold: 5,
         images: [
-          { url: 'https://images.unsplash.com/photo-1558089687-f282ffcbc126?w=800&h=800&fit=crop', alt: 'Philips Hue Starter Kit', isMain: true }
+          { url: 'https://upload.wikimedia.org/wikipedia/commons/8/84/Philips_Hue_hub_and_2_bulbs.jpg', alt: 'Philips Hue Starter Kit (3 лампи + Bridge)', isMain: true }
         ],
         specifications: [
           { name: 'Комплектація', value: '3× Hue E27 Color Ambiance + 1× Hue Bridge' },
