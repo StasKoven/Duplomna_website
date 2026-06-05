@@ -682,7 +682,7 @@ const seedDatabase = async () => {
         stock: 33,
         lowStockThreshold: 5,
         images: [
-          { url: 'https://placehold.co/800x800/0f172a/e2e8f0/png?text=Xiaomi%2014%20Pro%20256GB', alt: 'Xiaomi 14 Pro 256GB (зображення-заповнювач)', isMain: true }
+          { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/71/%E5%B0%8F%E7%B1%B314_Pro%E5%92%8C%E5%B0%8F%E7%B1%B314%EF%BC%882024%E5%B9%B42%E6%9C%8820%E6%97%A5%EF%BC%89.jpg/960px-%E5%B0%8F%E7%B1%B314_Pro%E5%92%8C%E5%B0%8F%E7%B1%B314%EF%BC%882024%E5%B9%B42%E6%9C%8820%E6%97%A5%EF%BC%89.jpg', alt: 'Xiaomi 14 Pro 256GB', isMain: true }
         ],
         specifications: [
           { name: 'Дисплей', value: '6.73" LTPO AMOLED, 3200×1440, 1-120 Гц' },
@@ -712,7 +712,7 @@ const seedDatabase = async () => {
         stock: 22,
         lowStockThreshold: 5,
         images: [
-          { url: 'https://placehold.co/800x800/0f172a/e2e8f0/png?text=OnePlus%2012%20256GB', alt: 'OnePlus 12 256GB (зображення-заповнювач)', isMain: true }
+          { url: 'https://image01.oneplus.net/media/202405/28/e2566b9853071dbb7fe9306713bbe51f.png', alt: 'OnePlus 12 256GB', isMain: true }
         ],
         specifications: [
           { name: 'Дисплей', value: '6.82" LTPO AMOLED, 3168×1440, 120 Гц' },
@@ -837,7 +837,7 @@ const seedDatabase = async () => {
         stock: 14,
         lowStockThreshold: 3,
         images: [
-          { url: 'https://placehold.co/800x800/0f172a/e2e8f0/png?text=ASUS%20ROG%20Strix%20G16%20(2024)', alt: 'ASUS ROG Strix G16 (2024) (зображення-заповнювач)', isMain: true }
+          { url: 'https://dlcdnwebimgs.asus.com/gain/C0280928-8FA3-4166-8F3F-FDEB3FBF0CDF', alt: 'ASUS ROG Strix G16 (2024)', isMain: true }
         ],
         specifications: [
           { name: 'Дисплей', value: '16" QHD (2560×1600), IPS, 240 Гц, 3 мс' },
@@ -896,7 +896,7 @@ const seedDatabase = async () => {
         stock: 48,
         lowStockThreshold: 8,
         images: [
-          { url: 'https://placehold.co/800x800/0f172a/e2e8f0/png?text=HP%20Pavilion%2015%20(2024)', alt: 'HP Pavilion 15 (2024) (зображення-заповнювач)', isMain: true }
+          { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/34/HP_Pavilion_15_cs3095nr.jpg/960px-HP_Pavilion_15_cs3095nr.jpg', alt: 'HP Pavilion 15 (2024)', isMain: true }
         ],
         specifications: [
           { name: 'Дисплей', value: '15.6" Full HD IPS (1920×1080), 250 ніт, антивідблиск' },
@@ -926,7 +926,7 @@ const seedDatabase = async () => {
         stock: 16,
         lowStockThreshold: 3,
         images: [
-          { url: 'https://placehold.co/800x800/0f172a/e2e8f0/png?text=Dell%20XPS%2015%20(9530)', alt: 'Dell XPS 15 (9530) (зображення-заповнювач)', isMain: true }
+          { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/df/Dell_XPS_15_%282017%29.png/960px-Dell_XPS_15_%282017%29.png', alt: 'Dell XPS 15 (9530)', isMain: true }
         ],
         specifications: [
           { name: 'Дисплей', value: '15.6" 3.5K OLED (3456×2160), touch, 400 ніт, 100% DCI-P3' },
@@ -1056,7 +1056,7 @@ const seedDatabase = async () => {
         stock: 36,
         lowStockThreshold: 5,
         images: [
-          { url: 'https://placehold.co/800x800/0f172a/e2e8f0/png?text=Sony%20WH-1000XM5', alt: 'Sony WH-1000XM5 (зображення-заповнювач)', isMain: true }
+          { url: 'https://snpi.dell.com/snp/images/products/large/en-us~AC097778/AC097778.jpg', alt: 'Sony WH-1000XM5', isMain: true }
         ],
         specifications: [
           { name: 'Тип', value: 'Повнорозмірні бездротові (over-ear)' },
@@ -1146,7 +1146,7 @@ const seedDatabase = async () => {
         stock: 72,
         lowStockThreshold: 10,
         images: [
-          { url: 'https://placehold.co/800x800/0f172a/e2e8f0/png?text=JBL%20Tune%20770NC', alt: 'JBL Tune 770NC (зображення-заповнювач)', isMain: true }
+          { url: 'https://i.rtings.com/assets/products/1JJFqGOA/jbl-tune-770nc-wireless/design-medium.jpg', alt: 'JBL Tune 770NC', isMain: true }
         ],
         specifications: [
           { name: 'Тип', value: 'Повнорозмірні бездротові (over-ear)' },
@@ -1210,7 +1210,7 @@ const seedDatabase = async () => {
         stock: 34,
         lowStockThreshold: 5,
         images: [
-          { url: 'https://placehold.co/800x800/0f172a/e2e8f0/png?text=Samsung%20Galaxy%20Watch%206%20Classic%2047mm', alt: 'Samsung Galaxy Watch 6 Classic 47mm (зображення-заповнювач)', isMain: true }
+          { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/34/Samsung_Galaxy_Watch_6_Classic_01.jpg/960px-Samsung_Galaxy_Watch_6_Classic_01.jpg', alt: 'Samsung Galaxy Watch 6 Classic 47mm', isMain: true }
         ],
         specifications: [
           { name: 'Дисплей', value: '1.47" Super AMOLED, 480×480, Always-On' },
@@ -1325,7 +1325,7 @@ const seedDatabase = async () => {
         stock: 38,
         lowStockThreshold: 5,
         images: [
-          { url: 'https://placehold.co/800x800/0f172a/e2e8f0/png?text=Samsung%20T7%20Shield%201TB', alt: 'Samsung T7 Shield 1TB (зображення-заповнювач)', isMain: true }
+          { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/0d/SAMSUNG_PROTABLE_SSD_T7_SHIELD_4TB_FRONT_SIDE.jpg/960px-SAMSUNG_PROTABLE_SSD_T7_SHIELD_4TB_FRONT_SIDE.jpg', alt: 'Samsung T7 Shield 1TB', isMain: true }
         ],
         specifications: [
           { name: 'Ємність', value: '1 ТБ' },
@@ -1388,7 +1388,7 @@ const seedDatabase = async () => {
         stock: 95,
         lowStockThreshold: 15,
         images: [
-          { url: 'https://placehold.co/800x800/0f172a/e2e8f0/png?text=Xiaomi%20Redmi%20Note%2013%20Pro%20256GB', alt: 'Xiaomi Redmi Note 13 Pro 256GB (зображення-заповнювач)', isMain: true }
+          { url: 'https://cdn.mos.cms.futurecdn.net/6awZEQRYTeAWaHEYWxYr6R-2560-80.jpg', alt: 'Xiaomi Redmi Note 13 Pro 256GB', isMain: true }
         ],
         specifications: [
           { name: 'Дисплей', value: '6.67" AMOLED, 2400×1080, 120 Гц, 1800 ніт' },
@@ -1451,7 +1451,7 @@ const seedDatabase = async () => {
         stock: 24,
         lowStockThreshold: 4,
         images: [
-          { url: 'https://placehold.co/800x800/0f172a/e2e8f0/png?text=Acer%20Swift%20Go%2014%20(2024)', alt: 'Acer Swift Go 14 (2024) (зображення-заповнювач)', isMain: true }
+          { url: 'https://cdn.mos.cms.futurecdn.net/rYcoYMMKfLfrNJ2fnKk83T-2560-80.jpg', alt: 'Acer Swift Go 14 (2024)', isMain: true }
         ],
         specifications: [
           { name: 'Дисплей', value: '14" 2.8K OLED (2880×1800), 90 Гц, 100% DCI-P3' },
@@ -1478,7 +1478,7 @@ const seedDatabase = async () => {
         stock: 10,
         lowStockThreshold: 2,
         images: [
-          { url: 'https://placehold.co/800x800/0f172a/e2e8f0/png?text=ASUS%20Zenbook%2014%20OLED%20(UX3405)', alt: 'ASUS Zenbook 14 OLED (UX3405) (зображення-заповнювач)', isMain: true }
+          { url: 'https://press.asus.com/assets/w_1200,h_630/c3a8d4a6-42fe-4495-9a65-a5607b483616/20231215110905242_s.jpg', alt: 'ASUS Zenbook 14 OLED (UX3405)', isMain: true }
         ],
         specifications: [
           { name: 'Дисплей', value: '14" 3K OLED (2880×1800), 120 Гц, 100% DCI-P3, Pantone Validated' },
@@ -1572,7 +1572,7 @@ const seedDatabase = async () => {
         stock: 25,
         lowStockThreshold: 4,
         images: [
-          { url: 'https://placehold.co/800x800/0f172a/e2e8f0/png?text=Bose%20QuietComfort%20Ultra%20Headphones', alt: 'Bose QuietComfort Ultra Headphones (зображення-заповнювач)', isMain: true }
+          { url: 'https://snpi.dell.com/snp/images/products/large/en-us~AD454066_v1/AD454066_v1.jpg', alt: 'Bose QuietComfort Ultra Headphones', isMain: true }
         ],
         specifications: [
           { name: 'Тип', value: 'Повнорозмірні бездротові (over-ear)' },
@@ -1599,7 +1599,7 @@ const seedDatabase = async () => {
         stock: 55,
         lowStockThreshold: 8,
         images: [
-          { url: 'https://placehold.co/800x800/0f172a/e2e8f0/png?text=Marshall%20Major%20IV', alt: 'Marshall Major IV (зображення-заповнювач)', isMain: true }
+          { url: 'https://images.ctfassets.net/javen7msabdh/6MSnZ4pbrucgwSh4iyCXtl/ee1e31aff173572e432b60bc8c377c3f/major-iv-black-front-desktop-1.jpg', alt: 'Marshall Major IV', isMain: true }
         ],
         specifications: [
           { name: 'Тип', value: 'Накладні бездротові (on-ear)' },
@@ -1689,7 +1689,7 @@ const seedDatabase = async () => {
         stock: 68,
         lowStockThreshold: 12,
         images: [
-          { url: 'https://placehold.co/800x800/0f172a/e2e8f0/png?text=Baseus%20GaN5%20Pro%20100W%20Charger', alt: 'Baseus GaN5 Pro 100W Charger (зображення-заповнювач)', isMain: true }
+          { url: 'https://cdn1.sgliteasset.com/baseus/images/product/product-6306159/cached/VdMW2TIe68ecbfecdb7f5_1760346092_420x420.jpg', alt: 'Baseus GaN5 Pro 100W Charger', isMain: true }
         ],
         specifications: [
           { name: 'Потужність', value: '100 Вт (сумарна)' },
@@ -1835,7 +1835,7 @@ const seedDatabase = async () => {
         stock: 10,
         lowStockThreshold: 2,
         images: [
-          { url: 'https://placehold.co/800x800/0f172a/e2e8f0/png?text=Samsung%2055%22%20S95D%20QD-OLED%204K%20Smart%20TV', alt: 'Samsung 55" S95D QD-OLED 4K Smart TV (зображення-заповнювач)', isMain: true }
+          { url: 'https://i.rtings.com/assets/products/s9rh5bkD/samsung-s95d-oled/design-medium.jpg', alt: 'Samsung 55" S95D QD-OLED 4K Smart TV', isMain: true }
         ],
         specifications: [
           { name: 'Діагональ', value: '55" (139 см)' },
@@ -1866,7 +1866,7 @@ const seedDatabase = async () => {
         stock: 26,
         lowStockThreshold: 4,
         images: [
-          { url: 'https://placehold.co/800x800/0f172a/e2e8f0/png?text=LG%20UltraGear%2027%22%2027GP850-B', alt: 'LG UltraGear 27" 27GP850-B (зображення-заповнювач)', isMain: true }
+          { url: 'https://www.lg.com/us/images/monitors/md08000370/450.jpg', alt: 'LG UltraGear 27" 27GP850-B', isMain: true }
         ],
         specifications: [
           { name: 'Діагональ', value: '27" (68.6 см)' },
@@ -1895,7 +1895,7 @@ const seedDatabase = async () => {
         stock: 18,
         lowStockThreshold: 3,
         images: [
-          { url: 'https://placehold.co/800x800/0f172a/e2e8f0/png?text=Dell%20UltraSharp%20U2723QE%2027%22%204K', alt: 'Dell UltraSharp U2723QE 27" 4K (зображення-заповнювач)', isMain: true }
+          { url: 'https://i.dell.com/is/image/DellContent/content/dam/ss2/product-images/dell-client-products/peripherals/monitors/u-series/u2723qe/spi/ng/monitor-u2723qe-campaign-hero-504x350-ng.psd?fmt=jpg&wid=1000&hei=694', alt: 'Dell UltraSharp U2723QE 27" 4K', isMain: true }
         ],
         specifications: [
           { name: 'Діагональ', value: '27" (68.6 см)' },
@@ -2020,7 +2020,7 @@ const seedDatabase = async () => {
         stock: 35,
         lowStockThreshold: 6,
         images: [
-          { url: 'https://placehold.co/800x800/0f172a/e2e8f0/png?text=Google%20Nest%20Hub%202-%D0%B3%D0%BE%20%D0%BF%D0%BE%D0%BA%D0%BE%D0%BB%D1%96%D0%BD%D0%BD%D1%8F', alt: 'Google Nest Hub 2-го покоління (зображення-заповнювач)', isMain: true }
+          { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/0f/Google_Nest_Hub.jpg/960px-Google_Nest_Hub.jpg', alt: 'Google Nest Hub 2-го покоління', isMain: true }
         ],
         specifications: [
           { name: 'Дисплей', value: '7" LCD тачскрін' },
@@ -2077,10 +2077,19 @@ const seedDatabase = async () => {
     // ═══════════════════════════════════════════════════════════════
     console.log('⭐ Створення відгуків...');
 
+    // Відгуки прив'язуються до товарів за НАЗВОЮ, а не за індексом масиву —
+    // так зв'язок не ламається при зміні порядку чи додаванні товарів.
+    const productByName = new Map(products.map(p => [p.name, p]));
+    const P = (name) => {
+      const prod = productByName.get(name);
+      if (!prod) throw new Error(`Seed: товар для відгуку не знайдено: "${name}"`);
+      return prod._id;
+    };
+
     const reviewsData = [
-      // iPhone 15 Pro Max (products[0]) — 4 відгуки
+      // iPhone 15 Pro Max — 4 відгуки
       {
-        product: products[0]._id,
+        product: P('iPhone 15 Pro Max 256GB'),
         user: users[0]._id,
         rating: 5,
         title: 'Найкращий смартфон, яким я користувався',
@@ -2089,7 +2098,7 @@ const seedDatabase = async () => {
         createdAt: daysAgo(180)
       },
       {
-        product: products[0]._id,
+        product: P('iPhone 15 Pro Max 256GB'),
         user: users[1]._id,
         rating: 5,
         title: 'Перейшла з Android — не шкодую',
@@ -2098,7 +2107,7 @@ const seedDatabase = async () => {
         createdAt: daysAgo(150)
       },
       {
-        product: products[0]._id,
+        product: P('iPhone 15 Pro Max 256GB'),
         user: users[2]._id,
         rating: 4,
         title: 'Відмінний апарат, але дорого',
@@ -2107,7 +2116,7 @@ const seedDatabase = async () => {
         createdAt: daysAgo(120)
       },
       {
-        product: products[0]._id,
+        product: P('iPhone 15 Pro Max 256GB'),
         user: users[4]._id,
         rating: 5,
         title: 'Камера замінила мою дзеркалку у подорожах',
@@ -2116,9 +2125,9 @@ const seedDatabase = async () => {
         createdAt: daysAgo(60)
       },
 
-      // Samsung Galaxy S24 Ultra (products[2]) — 3 відгуки
+      // Samsung Galaxy S24 Ultra — 3 відгуки
       {
-        product: products[2]._id,
+        product: P('Samsung Galaxy S24 Ultra 256GB'),
         user: users[1]._id,
         rating: 5,
         title: 'Galaxy AI — це справді майбутнє',
@@ -2127,7 +2136,7 @@ const seedDatabase = async () => {
         createdAt: daysAgo(140)
       },
       {
-        product: products[2]._id,
+        product: P('Samsung Galaxy S24 Ultra 256GB'),
         user: users[3]._id,
         rating: 5,
         title: 'Найкращий Android-смартфон без сумнівів',
@@ -2136,7 +2145,7 @@ const seedDatabase = async () => {
         createdAt: daysAgo(100)
       },
       {
-        product: products[2]._id,
+        product: P('Samsung Galaxy S24 Ultra 256GB'),
         user: users[6]._id,
         rating: 4,
         title: 'Потужний, але великий',
@@ -2145,9 +2154,9 @@ const seedDatabase = async () => {
         createdAt: daysAgo(25)
       },
 
-      // MacBook Pro 16 M3 Pro (products[8]) — 3 відгуки
+      // MacBook Pro 16 M3 Pro — 3 відгуки
       {
-        product: products[8]._id,
+        product: P('MacBook Pro 16" M3 Pro'),
         user: users[0]._id,
         rating: 5,
         title: 'Ідеальний ноутбук для розробника',
@@ -2156,7 +2165,7 @@ const seedDatabase = async () => {
         createdAt: daysAgo(200)
       },
       {
-        product: products[8]._id,
+        product: P('MacBook Pro 16" M3 Pro'),
         user: users[2]._id,
         rating: 5,
         title: 'Замінив робочу станцію Dell',
@@ -2165,7 +2174,7 @@ const seedDatabase = async () => {
         createdAt: daysAgo(160)
       },
       {
-        product: products[8]._id,
+        product: P('MacBook Pro 16" M3 Pro'),
         user: users[5]._id,
         rating: 4,
         title: 'Чудовий, але 18 ГБ маловато для 3D',
@@ -2174,9 +2183,9 @@ const seedDatabase = async () => {
         createdAt: daysAgo(45)
       },
 
-      // Sony WH-1000XM5 (products[17]) — 3 відгуки
+      // Sony WH-1000XM5 — 3 відгуки
       {
-        product: products[17]._id,
+        product: P('Sony WH-1000XM5'),
         user: users[0]._id,
         rating: 5,
         title: 'Рятують у офісі з open space',
@@ -2185,7 +2194,7 @@ const seedDatabase = async () => {
         createdAt: daysAgo(170)
       },
       {
-        product: products[17]._id,
+        product: P('Sony WH-1000XM5'),
         user: users[1]._id,
         rating: 5,
         title: 'Найкращі навушники для перельотів',
@@ -2194,7 +2203,7 @@ const seedDatabase = async () => {
         createdAt: daysAgo(110)
       },
       {
-        product: products[17]._id,
+        product: P('Sony WH-1000XM5'),
         user: users[3]._id,
         rating: 4,
         title: 'Відмінні, але мікрофон міг бути краще',
@@ -2203,9 +2212,9 @@ const seedDatabase = async () => {
         createdAt: daysAgo(80)
       },
 
-      // AirPods Pro 2 (products[18]) — 2 відгуки
+      // AirPods Pro 2 — 2 відгуки
       {
-        product: products[18]._id,
+        product: P('Apple AirPods Pro 2 (USB-C)'),
         user: users[5]._id,
         rating: 5,
         title: 'Ідеальні для екосистеми Apple',
@@ -2214,7 +2223,7 @@ const seedDatabase = async () => {
         createdAt: daysAgo(55)
       },
       {
-        product: products[18]._id,
+        product: P('Apple AirPods Pro 2 (USB-C)'),
         user: users[4]._id,
         rating: 4,
         title: 'Чудові, але час роботи 6 годин — мало',
@@ -2223,9 +2232,9 @@ const seedDatabase = async () => {
         createdAt: daysAgo(30)
       },
 
-      // Apple Watch Series 9 (products[22]) — 2 відгуки
+      // Apple Watch Series 9 — 2 відгуки
       {
-        product: products[22]._id,
+        product: P('Apple Watch Series 9 45mm'),
         user: users[2]._id,
         rating: 5,
         title: 'Double Tap — це геніально',
@@ -2234,7 +2243,7 @@ const seedDatabase = async () => {
         createdAt: daysAgo(90)
       },
       {
-        product: products[22]._id,
+        product: P('Apple Watch Series 9 45mm'),
         user: users[7]._id,
         rating: 4,
         title: 'Прекрасний годинник, але батарея на 1 день',
@@ -2243,9 +2252,9 @@ const seedDatabase = async () => {
         createdAt: daysAgo(10)
       },
 
-      // iPad Pro 13 M4 (products[15]) — 2 відгуки
+      // iPad Pro 13 M4 — 2 відгуки
       {
-        product: products[15]._id,
+        product: P('iPad Pro 13" M4 256GB'),
         user: users[3]._id,
         rating: 5,
         title: 'Замінив ноутбук для роботи дизайнера',
@@ -2254,7 +2263,7 @@ const seedDatabase = async () => {
         createdAt: daysAgo(70)
       },
       {
-        product: products[15]._id,
+        product: P('iPad Pro 13" M4 256GB'),
         user: users[6]._id,
         rating: 5,
         title: 'Ідеальний для студента медика',
@@ -2263,9 +2272,9 @@ const seedDatabase = async () => {
         createdAt: daysAgo(20)
       },
 
-      // HP Pavilion 15 (products[13]) — 1 відгук
+      // HP Pavilion 15 — 1 відгук
       {
-        product: products[13]._id,
+        product: P('HP Pavilion 15 (2024)'),
         user: users[8]._id,
         rating: 4,
         title: 'Відмінний ноутбук за свою ціну',
@@ -2274,9 +2283,9 @@ const seedDatabase = async () => {
         createdAt: daysAgo(3)
       },
 
-      // Logitech MX Master 3S (products[26]) — 1 відгук
+      // Logitech MX Master 3S — 1 відгук
       {
-        product: products[26]._id,
+        product: P('Logitech MX Master 3S'),
         user: users[2]._id,
         rating: 5,
         title: 'Незамінна для роботи з кодом',
@@ -2285,9 +2294,9 @@ const seedDatabase = async () => {
         createdAt: daysAgo(85)
       },
 
-      // JBL Tune 770NC (products[20]) — 1 відгук
+      // JBL Tune 770NC — 1 відгук
       {
-        product: products[20]._id,
+        product: P('JBL Tune 770NC'),
         user: users[6]._id,
         rating: 4,
         title: 'Найкраще за ці гроші',
@@ -2296,9 +2305,9 @@ const seedDatabase = async () => {
         createdAt: daysAgo(15)
       },
 
-      // ASUS ROG Strix G16 (products[10]) — 1 відгук
+      // ASUS ROG Strix G16 — 1 відгук
       {
-        product: products[10]._id,
+        product: P('ASUS ROG Strix G16 (2024)'),
         user: users[4]._id,
         rating: 5,
         title: 'Ігровий ноутбук мрії',
@@ -2309,9 +2318,9 @@ const seedDatabase = async () => {
 
       // ── ДОДАТКОВІ ВІДГУКИ ──
 
-      // Samsung Galaxy A55 (products[28]) — 2 відгуки
+      // Samsung Galaxy A55 — 2 відгуки
       {
-        product: products[28]._id,
+        product: P('Samsung Galaxy A55 5G 128GB'),
         user: users[13]._id,
         rating: 5,
         title: 'Найкращий телефон до 15 тисяч',
@@ -2320,7 +2329,7 @@ const seedDatabase = async () => {
         createdAt: daysAgo(35)
       },
       {
-        product: products[28]._id,
+        product: P('Samsung Galaxy A55 5G 128GB'),
         user: users[14]._id,
         rating: 4,
         title: 'Гідна заміна A53, але зарядка повільна',
@@ -2329,9 +2338,9 @@ const seedDatabase = async () => {
         createdAt: daysAgo(18)
       },
 
-      // Xiaomi Redmi Note 13 Pro (products[29]) — 2 відгуки
+      // Xiaomi Redmi Note 13 Pro — 2 відгуки
       {
-        product: products[29]._id,
+        product: P('Xiaomi Redmi Note 13 Pro 256GB'),
         user: users[11]._id,
         rating: 5,
         title: '200 Мп камера за 11 тисяч — нереально!',
@@ -2340,7 +2349,7 @@ const seedDatabase = async () => {
         createdAt: daysAgo(22)
       },
       {
-        product: products[29]._id,
+        product: P('Xiaomi Redmi Note 13 Pro 256GB'),
         user: users[12]._id,
         rating: 4,
         title: 'Добре для ігор, але Helio G99 — не Snapdragon',
@@ -2349,9 +2358,9 @@ const seedDatabase = async () => {
         createdAt: daysAgo(12)
       },
 
-      // Nothing Phone 2 (products[30]) — 1 відгук
+      // Nothing Phone 2 — 1 відгук
       {
-        product: products[30]._id,
+        product: P('Nothing Phone (2) 256GB'),
         user: users[12]._id,
         rating: 5,
         title: 'Унікальний дизайн, чудовий телефон',
@@ -2360,9 +2369,9 @@ const seedDatabase = async () => {
         createdAt: daysAgo(65)
       },
 
-      // iPad 10 (products[31]) — 1 відгук
+      // iPad 10 — 1 відгук
       {
-        product: products[31]._id,
+        product: P('iPad 10-го покоління 64GB'),
         user: users[13]._id,
         rating: 4,
         title: 'Ідеальний для студента',
@@ -2371,9 +2380,9 @@ const seedDatabase = async () => {
         createdAt: daysAgo(28)
       },
 
-      // Xiaomi Pad 6 (products[32]) — 1 відгук
+      // Xiaomi Pad 6 — 1 відгук
       {
-        product: products[32]._id,
+        product: P('Xiaomi Pad 6 128GB'),
         user: users[7]._id,
         rating: 5,
         title: 'iPad Pro для бідних — і це комплімент!',
@@ -2382,9 +2391,9 @@ const seedDatabase = async () => {
         createdAt: daysAgo(40)
       },
 
-      // Bose QuietComfort Ultra (products[33]) — 1 відгук
+      // Bose QuietComfort Ultra — 1 відгук
       {
-        product: products[33]._id,
+        product: P('Bose QuietComfort Ultra Headphones'),
         user: users[10]._id,
         rating: 5,
         title: 'Шумоподавлення навіть краще ніж у Sony',
@@ -2393,9 +2402,9 @@ const seedDatabase = async () => {
         createdAt: daysAgo(42)
       },
 
-      // Marshall Major IV (products[34]) — 1 відгук
+      // Marshall Major IV — 1 відгук
       {
-        product: products[34]._id,
+        product: P('Marshall Major IV'),
         user: users[14]._id,
         rating: 4,
         title: 'Стиль + батарея = Marshall Major IV',
@@ -2404,9 +2413,9 @@ const seedDatabase = async () => {
         createdAt: daysAgo(16)
       },
 
-      // PlayStation 5 Slim (products[38]) — 2 відгуки
+      // PlayStation 5 Slim — 2 відгуки
       {
-        product: products[38]._id,
+        product: P('PlayStation 5 Slim Digital Edition'),
         user: users[11]._id,
         rating: 5,
         title: 'DualSense — найкращий геймпад в історії',
@@ -2415,7 +2424,7 @@ const seedDatabase = async () => {
         createdAt: daysAgo(55)
       },
       {
-        product: products[38]._id,
+        product: P('PlayStation 5 Slim Digital Edition'),
         user: users[4]._id,
         rating: 5,
         title: 'Компактніша за оригінал і працює тихо',
@@ -2424,9 +2433,9 @@ const seedDatabase = async () => {
         createdAt: daysAgo(33)
       },
 
-      // Nintendo Switch OLED (products[40]) — 1 відгук
+      // Nintendo Switch OLED — 1 відгук
       {
-        product: products[40]._id,
+        product: P('Nintendo Switch OLED'),
         user: users[5]._id,
         rating: 5,
         title: 'Ідеальна консоль для подорожей та родини',
@@ -2435,9 +2444,9 @@ const seedDatabase = async () => {
         createdAt: daysAgo(48)
       },
 
-      // Samsung S95D QD-OLED TV (products[41]) — 1 відгук
+      // Samsung S95D QD-OLED TV — 1 відгук
       {
-        product: products[41]._id,
+        product: P('Samsung 55" S95D QD-OLED 4K Smart TV'),
         user: users[2]._id,
         rating: 5,
         title: 'Найкращий ТВ, який я бачив',
@@ -2446,9 +2455,9 @@ const seedDatabase = async () => {
         createdAt: daysAgo(38)
       },
 
-      // LG UltraGear 27GP850-B (products[42]) — 1 відгук
+      // LG UltraGear 27GP850-B — 1 відгук
       {
-        product: products[42]._id,
+        product: P('LG UltraGear 27" 27GP850-B'),
         user: users[11]._id,
         rating: 5,
         title: 'Ідеальний баланс для ігор та роботи',
@@ -2457,9 +2466,9 @@ const seedDatabase = async () => {
         createdAt: daysAgo(72)
       },
 
-      // Sony Alpha A7 IV (products[44]) — 1 відгук
+      // Sony Alpha A7 IV — 1 відгук
       {
-        product: products[44]._id,
+        product: P('Sony Alpha A7 IV Body'),
         user: users[10]._id,
         rating: 5,
         title: 'Перейшла з Canon 5D Mark IV — не шкодую',
@@ -2468,9 +2477,9 @@ const seedDatabase = async () => {
         createdAt: daysAgo(130)
       },
 
-      // Canon EOS R50 (products[45]) — 1 відгук
+      // Canon EOS R50 — 1 відгук
       {
-        product: products[45]._id,
+        product: P('Canon EOS R50 Kit 18-45mm'),
         user: users[8]._id,
         rating: 4,
         title: 'Ідеальна перша камера для блогера',
@@ -2479,9 +2488,9 @@ const seedDatabase = async () => {
         createdAt: daysAgo(4)
       },
 
-      // Garmin Venu 3 (products[35]) — 1 відгук
+      // Garmin Venu 3 — 1 відгук
       {
-        product: products[35]._id,
+        product: P('Garmin Venu 3 45mm'),
         user: users[12]._id,
         rating: 5,
         title: 'Ідеальний годинник для бігунів',
@@ -2490,9 +2499,9 @@ const seedDatabase = async () => {
         createdAt: daysAgo(58)
       },
 
-      // Baseus GaN5 Pro (products[37]) — 1 відгук
+      // Baseus GaN5 Pro — 1 відгук
       {
-        product: products[37]._id,
+        product: P('Baseus GaN5 Pro 100W Charger'),
         user: users[2]._id,
         rating: 5,
         title: 'Замінив 3 зарядки одним пристроєм',
@@ -2501,9 +2510,9 @@ const seedDatabase = async () => {
         createdAt: daysAgo(95)
       },
 
-      // Philips Hue (products[49]) — 1 відгук  
+      // Philips Hue — 1 відгук  
       {
-        product: products[49]._id,
+        product: P('Philips Hue Starter Kit (3 лампи + Bridge)'),
         user: users[14]._id,
         rating: 4,
         title: 'Розумне освітлення змінює атмосферу дому',
@@ -2512,9 +2521,9 @@ const seedDatabase = async () => {
         createdAt: daysAgo(88)
       },
 
-      // Lenovo ThinkPad X1 Carbon (products[11]) — 1 відгук
+      // Lenovo ThinkPad X1 Carbon — 1 відгук
       {
-        product: products[11]._id,
+        product: P('Lenovo ThinkPad X1 Carbon Gen 11'),
         user: users[12]._id,
         rating: 5,
         title: 'Найкращий ноутбук для бізнес-подорожей',
@@ -2523,9 +2532,9 @@ const seedDatabase = async () => {
         createdAt: daysAgo(82)
       },
 
-      // Google Pixel 8 Pro (products[4]) — 1 відгук
+      // Google Pixel 8 Pro — 1 відгук
       {
-        product: products[4]._id,
+        product: P('Google Pixel 8 Pro 128GB'),
         user: users[6]._id,
         rating: 5,
         title: 'AI-фішки Google — це нереально',
@@ -2534,9 +2543,9 @@ const seedDatabase = async () => {
         createdAt: daysAgo(62)
       },
 
-      // Samsung Galaxy Watch 6 Classic (products[23]) — 1 відгук
+      // Samsung Galaxy Watch 6 Classic — 1 відгук
       {
-        product: products[23]._id,
+        product: P('Samsung Galaxy Watch 6 Classic 47mm'),
         user: users[3]._id,
         rating: 4,
         title: 'Обертовий безель — це зручно',
@@ -2545,9 +2554,9 @@ const seedDatabase = async () => {
         createdAt: daysAgo(68)
       },
 
-      // Dell XPS 15 (products[14]) — 1 відгук
+      // Dell XPS 15 — 1 відгук
       {
-        product: products[14]._id,
+        product: P('Dell XPS 15 (9530)'),
         user: users[10]._id,
         rating: 5,
         title: 'OLED дисплей для фотографа — ідеально',

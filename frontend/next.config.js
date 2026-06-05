@@ -30,10 +30,17 @@ const nextConfig = {
         protocol: 'https',
         hostname: 'upload.wikimedia.org',
       },
-      {
-        protocol: 'https',
-        hostname: 'placehold.co',
-      },
+      // Прес-фото / зображення товарів із сайтів виробників, магазинів та оглядачів (hotlink)
+      { protocol: 'https', hostname: 'snpi.dell.com' },
+      { protocol: 'https', hostname: 'i.dell.com' },
+      { protocol: 'https', hostname: 'i.rtings.com' },
+      { protocol: 'https', hostname: 'cdn.mos.cms.futurecdn.net' },
+      { protocol: 'https', hostname: 'press.asus.com' },
+      { protocol: 'https', hostname: 'dlcdnwebimgs.asus.com' },
+      { protocol: 'https', hostname: 'image01.oneplus.net' },
+      { protocol: 'https', hostname: 'images.ctfassets.net' },
+      { protocol: 'https', hostname: 'cdn1.sgliteasset.com' },
+      { protocol: 'https', hostname: 'www.lg.com' },
       // Backend-served uploaded product images (Railway + local dev)
       {
         protocol: 'https',
