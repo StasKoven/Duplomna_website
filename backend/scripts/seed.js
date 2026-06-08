@@ -448,7 +448,7 @@ const seedDatabase = async () => {
         slug: 'smartwatches',
         description: 'Розумні годинники та фітнес-браслети: Apple Watch, Samsung Galaxy Watch, Garmin для спорту та повсякдення.',
         order: 5,
-        image: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400&h=400&fit=crop'
+        image: 'https://images.unsplash.com/photo-1546868871-7041f2a55e12?w=400&h=400&fit=crop'
       },
       {
         name: 'Аксесуари',
