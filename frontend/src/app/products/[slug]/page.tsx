@@ -205,6 +205,8 @@ export default function ProductDetailPage() {
                 alt={product.name}
                 width={600}
                 height={600}
+                sizes="(max-width: 768px) 100vw, 600px"
+                priority
                 className={s.mainImage}
                 onError={() => setMainImageBroken(prev => ({ ...prev, [selectedImage]: true }))}
               />

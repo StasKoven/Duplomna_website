@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useAuthStore } from '@/store/authStore'
 import api from '@/lib/api'
-import { User, Mail, Lock, Save, Star } from 'lucide-react'
+import { User, Mail, Lock, Save, Star, LogOut } from 'lucide-react'
 import { toast } from 'sonner'
 import { LoyaltyHistoryItem } from '@/types'
 import s from './page.module.css'
@@ -24,7 +24,7 @@ interface PasswordData {
 
 export default function ProfilePage() {
   const router = useRouter()
-  const { user, isAuthenticated, setUser } = useAuthStore()
+  const { user, isAuthenticated, setUser, logout } = useAuthStore()
   const [profileLoading, setProfileLoading] = useState(false)
   const [passwordLoading, setPasswordLoading] = useState(false)
   const [activeTab, setActiveTab] = useState<'profile' | 'password' | 'loyalty'>('profile')
@@ -72,6 +72,11 @@ export default function ProfilePage() {
     } finally {
       setLoyaltyLoading(false)
     }
+  }
+
+  const handleLogout = async () => {
+    await logout()
+    router.push('/')
   }
 
   const handleProfileUpdate = async (e: React.FormEvent) => {
@@ -411,6 +416,14 @@ export default function ProfilePage() {
             </div>
           </div>
         )}
+
+        {/* Вихід з акаунту */}
+        <div className={s.logoutSection}>
+          <button onClick={handleLogout} className={s.logoutBtn}>
+            <LogOut className={s.btnIcon} />
+            Вийти з акаунту
+          </button>
+        </div>
       </div>
     </div>
   )

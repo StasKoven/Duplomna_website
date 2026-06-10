@@ -16,9 +16,10 @@ import s from './ProductCard.module.css'
 interface ProductCardProps {
   product: Product
   compact?: boolean // For mobile grid view
+  priority?: boolean // Eagerly load above-the-fold images (LCP)
 }
 
-export default function ProductCard({ product, compact = false }: ProductCardProps) {
+export default function ProductCard({ product, compact = false, priority = false }: ProductCardProps) {
   const { addItem } = useCartStore()
   const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlistStore()
   const { addToComparison, removeFromComparison, getComparisonByCategory } = useComparisonStore()
@@ -144,6 +145,8 @@ export default function ProductCard({ product, compact = false }: ProductCardPro
               fill
               sizes="(max-width: 480px) 50vw, (max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
               className={s.image}
+              priority={priority}
+              loading={priority ? undefined : 'lazy'}
               onError={() => setImgError(true)}
             />
           ) : (

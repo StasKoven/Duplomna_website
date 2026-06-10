@@ -84,50 +84,52 @@ export default function CartPage() {
               className={s.modalOverlay}
               onClick={() => setShowAuthModal(false)}
             />
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95, y: 20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              className={s.modalContent}
-            >
-              <button
-                onClick={() => setShowAuthModal(false)}
-                className={s.modalCloseBtn}
+            <div className={s.modalCenter}>
+              <motion.div
+                initial={{ opacity: 0, scale: 0.95, y: 20 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.95, y: 20 }}
+                className={s.modalContent}
               >
-                <X className={s.modalCloseIcon} />
-              </button>
-              
-              <div className={s.modalHeader}>
-                <div className={s.modalIconWrapper}>
-                  <ShoppingBag className={s.modalIcon} />
+                <button
+                  onClick={() => setShowAuthModal(false)}
+                  className={s.modalCloseBtn}
+                >
+                  <X className={s.modalCloseIcon} />
+                </button>
+
+                <div className={s.modalHeader}>
+                  <div className={s.modalIconWrapper}>
+                    <ShoppingBag className={s.modalIcon} />
+                  </div>
+                  <h3 className={s.modalTitle}>Оформлення замовлення</h3>
+                  <p className={s.modalDescription}>
+                    Для оформлення замовлення потрібно увійти в акаунт або зареєструватися
+                  </p>
                 </div>
-                <h3 className={s.modalTitle}>Оформлення замовлення</h3>
-                <p className={s.modalDescription}>
-                  Для оформлення замовлення потрібно увійти в акаунт або зареєструватися
+
+                <div className={s.modalActions}>
+                  <Link
+                    href="/login?redirect=/checkout"
+                    className={s.modalLoginBtn}
+                  >
+                    <LogIn className={s.modalBtnIcon} />
+                    Увійти
+                  </Link>
+                  <Link
+                    href="/register?redirect=/checkout"
+                    className={s.modalRegisterBtn}
+                  >
+                    <UserPlus className={s.modalBtnIcon} />
+                    Зареєструватися
+                  </Link>
+                </div>
+
+                <p className={s.modalFooter}>
+                  Ваш кошик збережеться після входу
                 </p>
-              </div>
-
-              <div className={s.modalActions}>
-                <Link
-                  href="/login?redirect=/checkout"
-                  className={s.modalLoginBtn}
-                >
-                  <LogIn className={s.modalBtnIcon} />
-                  Увійти
-                </Link>
-                <Link
-                  href="/register?redirect=/checkout"
-                  className={s.modalRegisterBtn}
-                >
-                  <UserPlus className={s.modalBtnIcon} />
-                  Зареєструватися
-                </Link>
-              </div>
-
-              <p className={s.modalFooter}>
-                Ваш кошик збережеться після входу
-              </p>
-            </motion.div>
+              </motion.div>
+            </div>
           </>
         )}
       </AnimatePresence>

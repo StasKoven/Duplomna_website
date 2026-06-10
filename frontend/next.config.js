@@ -53,6 +53,15 @@ const nextConfig = {
     ],
     // Optimize images
     unoptimized: false,
+    // Cache optimized variants for 30 days. Product image URLs change when the
+    // underlying file changes, so caching aggressively is safe and avoids the
+    // slow re-optimization round-trip (Vercel → remote origin) on every visit.
+    minimumCacheTTL: 60 * 60 * 24 * 30,
+    // Trim the number of generated breakpoints to cut optimization work and
+    // keep payloads small on mobile (default lists are much larger).
+    deviceSizes: [360, 480, 640, 768, 1080, 1200],
+    imageSizes: [64, 96, 128, 256],
+    formats: ['image/webp'],
   },
   
   // Suppress Chrome DevTools 404 error

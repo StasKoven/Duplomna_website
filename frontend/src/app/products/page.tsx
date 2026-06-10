@@ -586,8 +586,8 @@ function ProductsContent() {
             </div>
           ) : (
             <div className={s.productsGrid}>
-              {products.map((product) => (
-                <ProductCard key={product._id} product={product} compact />
+              {products.map((product, i) => (
+                <ProductCard key={product._id} product={product} compact priority={i < 4} />
               ))}
             </div>
           )}

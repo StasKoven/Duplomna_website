@@ -118,7 +118,7 @@ export default function FeaturedProducts({ initialProducts }: Props) {
               className={s.productItem}
               style={{ animationDelay: `${i * 0.07}s` }}
             >
-              <ProductCard product={product} />
+              <ProductCard product={product} priority={i < 4} />
             </div>
           ))}
         </div>

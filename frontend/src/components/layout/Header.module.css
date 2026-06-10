@@ -214,16 +214,20 @@
 /* ============================= */
 /* Мобільне меню — оверлей       */
 /* ============================= */
+/* z-[60] тримає меню (оверлей + панель) над нижньою навігацією (z-50),
+   інакше фіксована нижня навігація перекриває кнопку «Вийти» і її неможливо
+   натиснути на мобільному. */
 .mobileOverlay {
-  @apply fixed inset-0 bg-background/80 backdrop-blur-sm z-40 md:hidden;
+  @apply fixed inset-0 bg-background/80 backdrop-blur-sm z-[60] md:hidden;
 }
 
 .mobilePanel {
-  @apply fixed top-14 left-0 bottom-0 w-[300px] bg-background border-r z-50 md:hidden overflow-y-auto shadow-2xl;
+  @apply fixed top-14 left-0 bottom-0 w-[300px] bg-background border-r z-[60] md:hidden overflow-y-auto shadow-2xl;
 }
 
+/* pb-24 додає простір унизу прокрутки, щоб кнопка виходу не впиралась у край */
 .mobilePanelContent {
-  @apply p-4;
+  @apply p-4 pb-24;
 }
 
 /* ============================= */
