@@ -18,7 +18,9 @@ interface Props {
 }
 
 export default function FeaturedProducts({ initialProducts }: Props) {
-  const hasServerData = initialProducts !== undefined
+  // Treat an empty server payload as "no data" and retry on the client, so the
+  // section doesn't silently vanish when the SSR fetch fails/times out.
+  const hasServerData = (initialProducts?.length ?? 0) > 0
   const [products, setProducts] = useState<Product[]>(initialProducts ?? [])
   const [loading, setLoading] = useState(!hasServerData)
   const cancelledRef = useRef(false)

@@ -1,6 +1,5 @@
 import { MetadataRoute } from 'next'
-
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://techstore.ua'
+import { SITE_URL } from '@/lib/siteConfig'
 
 export default function robots(): MetadataRoute.Robots {
   return {

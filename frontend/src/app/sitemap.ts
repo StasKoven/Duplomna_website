@@ -1,6 +1,6 @@
 import { MetadataRoute } from 'next'
+import { SITE_URL } from '@/lib/siteConfig'
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://techstore.ua'
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api'
 
 interface ProductItem {

@@ -160,7 +160,10 @@ export default function Footer() {
 
         {/* Нижня панель з копірайтом */}
         <div className={s.bottomBar}>
-          <p>&copy; {new Date().getFullYear()} TechStore. Всі права захищені.</p>
+          {/* suppressHydrationWarning: with cached SSR the rendered year can lag
+              the client's year around New Year — tolerate the diff instead of
+              triggering a hydration mismatch. */}
+          <p suppressHydrationWarning>&copy; {new Date().getFullYear()} TechStore. Всі права захищені.</p>
         </div>
       </div>
     </footer>

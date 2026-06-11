@@ -15,14 +15,17 @@ const COMPONENT_TOTAL_TIMEOUT_MS = 5000
 type Props = { initialCategories?: Category[] }
 
 export default function Categories({ initialCategories }: Props) {
-  const hasServerData = initialCategories !== undefined
+  // Only trust server data when it actually contains categories. If the SSR
+  // fetch failed/timed out (empty array), fall back to a client fetch instead
+  // of silently rendering nothing — otherwise the whole section disappears on
+  // deployments where the server can't reach the API.
+  const hasServerData = (initialCategories?.length ?? 0) > 0
   const [categories, setCategories] = useState<Category[]>(initialCategories ?? [])
-  // Skip loading state entirely when the server already provided data (even if empty)
   const [loading, setLoading] = useState(!hasServerData)
   const cancelledRef = useRef(false)
 
   useEffect(() => {
-    if (hasServerData) return  // Server already attempted the fetch
+    if (hasServerData) return  // Server already provided categories
 
     cancelledRef.current = false
 

@@ -13,14 +13,20 @@ export function cn(...inputs: ClassValue[]) {
 // Normalizing makes the string byte-identical everywhere.
 const normalizeSpaces = (s: string): string => s.replace(/[  ]/g, ' ')
 
+// Format prices fully deterministically — no Intl/ICU. Currency formatting via
+// Intl can't be trusted across environments: Node's ICU renders UAH as "₴"
+// while browsers' ICU render it as "грн", and the thousands separator varies
+// across ICU versions. Either difference produces a React #425/#422 hydration
+// mismatch on every price, forcing a client re-render of the products section
+// and hurting LCP. Manual formatting is byte-identical on server and client.
 export function formatPrice(price: number): string {
-  return normalizeSpaces(
-    new Intl.NumberFormat('uk-UA', {
-      style: 'currency',
-      currency: 'UAH',
-      minimumFractionDigits: 0,
-    }).format(price)
-  )
+  const rounded = Math.round(Number(price) || 0)
+  const sign = rounded < 0 ? '-' : ''
+  // Group thousands with a regular space: 1234567 → "1 234 567"
+  const grouped = Math.abs(rounded)
+    .toString()
+    .replace(/\B(?=(\d{3})+(?!\d))/g, ' ')
+  return `${sign}${grouped} ₴`
 }
 
 export function formatDate(date: string | Date): string {

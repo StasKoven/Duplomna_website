@@ -6,10 +6,9 @@ import Main from '@/components/main'
 import App from '@/components/app'
 import ErrorBoundary from '@/components/ErrorBoundary'
 import NavigationFOUCGuard from '@/components/NavigationFOUCGuard'
+import { SITE_URL } from '@/lib/siteConfig'
 
 const inter = Inter({ subsets: ['latin', 'cyrillic'] })
-
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://duplomna-website-1dy7.vercel.app'
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
