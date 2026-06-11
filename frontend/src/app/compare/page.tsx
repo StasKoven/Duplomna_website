@@ -54,13 +54,29 @@ function ComparisonContent() {
   const findSpec = (product: Product, key: string) =>
     product.specifications?.find(sp => normalizeSpecName(sp.name) === key)
 
-  // Collect all feature names
-  const allFeatures = useMemo(() => {
-    const features = new Set<string>()
+  const productHasFeature = (product: Product, key: string) =>
+    product.features?.some(f => normalizeSpecName(f) === key) ?? false
+
+  // Collect feature rows, grouped by normalized name (so "Wi-Fi 6" and "wi-fi 6"
+  // line up). Differentiating features — ones some products have and others
+  // don't — are the ones that actually help you choose, so they're sorted to the
+  // top (most exclusive first); features every product shares drop to the bottom.
+  const featureRows = useMemo(() => {
+    const seen = new Map<string, string>()
     products.forEach(product => {
-      product.features?.forEach(f => features.add(f))
+      product.features?.forEach(f => {
+        const key = normalizeSpecName(f)
+        if (key && !seen.has(key)) seen.set(key, f)
+      })
     })
-    return Array.from(features)
+    const rows = Array.from(seen, ([key, label]) => {
+      const count = products.filter(p => productHasFeature(p, key)).length
+      return { key, label, count, differentiator: count > 0 && count < products.length }
+    })
+    return rows.sort((a, b) => {
+      if (a.differentiator !== b.differentiator) return a.differentiator ? -1 : 1
+      return a.count - b.count
+    })
   }, [products])
 
   // Determine which rows have differences
@@ -94,13 +110,13 @@ function ComparisonContent() {
     })
 
     // Features
-    allFeatures.forEach(feature => {
-      const has = products.map(p => p.features?.includes(feature) ? 'yes' : 'no')
-      diff[`feature-${feature}`] = new Set(has).size > 1
+    featureRows.forEach(({ key }) => {
+      const has = products.map(p => productHasFeature(p, key) ? 'yes' : 'no')
+      diff[`feature-${key}`] = new Set(has).size > 1
     })
 
     return diff
-  }, [products, specRows, allFeatures])
+  }, [products, specRows, featureRows])
 
   // Find the winning product(s) per row so they can be highlighted. Each entry
   // holds *all* ids that tie for the best value, and rows with no clear winner
@@ -130,8 +146,16 @@ function ComparisonContent() {
       }
     })
 
+    // Features: having a differentiating feature is the advantage. Highlight the
+    // products that have it — but only when it's not shared by everyone.
+    featureRows.forEach(({ key, differentiator }) => {
+      if (differentiator) {
+        best[`feature-${key}`] = products.filter(p => productHasFeature(p, key)).map(p => p._id)
+      }
+    })
+
     return best
-  }, [products, specRows])
+  }, [products, specRows, featureRows])
 
   const shouldShowRow = (key: string) => {
     if (!showOnlyDifferences) return true
@@ -388,14 +412,14 @@ function ComparisonContent() {
           })}
 
           {/* Features */}
-          {allFeatures.map(feature => {
-            const key = `feature-${feature}`
-            if (!shouldShowRow(key)) return null
+          {featureRows.map(({ key, label }) => {
+            const rowKey = `feature-${key}`
+            if (!shouldShowRow(rowKey)) return null
             return (
-              <MobileCompareRow key={feature} label={feature} diffKey={key} hasDiff={hasDifference[key]}>
+              <MobileCompareRow key={key} label={label} diffKey={rowKey} hasDiff={hasDifference[rowKey]}>
                 {products.map(p => (
-                  <div key={p._id} className={s.mobileCellFeature}>
-                    {p.features?.includes(feature) ? (
+                  <div key={p._id} className={`${s.mobileCellFeature} ${getCellHighlightClass(rowKey, p._id)}`}>
+                    {productHasFeature(p, key) ? (
                       <Check className={s.checkIcon} />
                     ) : (
                       <Minus className={s.minusIcon} />
@@ -593,7 +617,7 @@ function ComparisonContent() {
             })}
 
             {/* Features section header */}
-            {allFeatures.length > 0 && (
+            {featureRows.length > 0 && (
               <tr className={s.sectionHeaderRow}>
                 <td colSpan={products.length + 1} className={s.sectionHeaderCell}>
                   <span className={s.sectionHeaderText}>
@@ -604,18 +628,18 @@ function ComparisonContent() {
             )}
 
             {/* Features */}
-            {allFeatures.map(feature => {
-              const key = `feature-${feature}`
-              if (!shouldShowRow(key)) return null
+            {featureRows.map(({ key, label }) => {
+              const rowKey = `feature-${key}`
+              if (!shouldShowRow(rowKey)) return null
               return (
-                <tr key={feature} className={`${s.tableRowHover} ${hasDifference[key] ? '' : s.dimmed}`}>
+                <tr key={key} className={`${s.tableRowHover} ${hasDifference[rowKey] ? '' : s.dimmed}`}>
                   <td className={s.rowLabel}>
-                    {feature}
-                    {hasDifference[key] && <DiffDot />}
+                    {label}
+                    {hasDifference[rowKey] && <DiffDot />}
                   </td>
                   {products.map(product => (
-                    <td key={product._id} className={s.rowValue}>
-                      {product.features?.includes(feature) ? (
+                    <td key={product._id} className={`${s.rowValue} ${getCellHighlightClass(rowKey, product._id)}`}>
+                      {productHasFeature(product, key) ? (
                         <Check className={s.checkIcon} />
                       ) : (
                         <Minus className={s.minusIcon} />
