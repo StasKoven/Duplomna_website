@@ -8,8 +8,13 @@ import { useCartStore } from '@/store/cartStore'
 import { useWishlistStore } from '@/store/wishlistStore'
 import { useComparisonStore } from '@/store/comparisonStore'
 
-// Helper function to set auth cookie for middleware
-const setAuthCookie = (token: string) => {
+// Helper function to set auth cookie for middleware.
+// Exported so the app bootstrap (main.tsx) can re-assert the cookie on load:
+// the middleware gates protected routes on this cookie's *presence*, but mobile
+// browsers (Safari ITP, storage pressure) can drop a script-set cookie while
+// localStorage survives. Without re-setting it, the client thinks it's logged
+// in but the server-side middleware bounces /profile, /wishlist → login.
+export const setAuthCookie = (token: string) => {
   if (typeof document !== 'undefined') {
     // Set cookie that expires in 7 days (same as refresh token)
     const expires = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toUTCString()
@@ -220,10 +225,18 @@ export const useAuthStore = create<AuthState>()(
         try {
           logInfo('Auth Store', 'Fetching profile...')
           const response = await api.get('/auth/profile')
-          set({ 
-            user: response.data.user, 
-            isAuthenticated: true 
+          set({
+            user: response.data.user,
+            isAuthenticated: true
           })
+          // Re-assert the middleware cookie. The profile call succeeded, so the
+          // session is valid — but the cookie may have been dropped by the
+          // browser even though localStorage kept the token. Without this, the
+          // next navigation to a protected route bounces to /login.
+          if (typeof window !== 'undefined') {
+            const token = localStorage.getItem('accessToken')
+            if (token) setAuthCookie(token)
+          }
           logInfo('Auth Store', 'Profile fetched successfully')
           
           // Sync stores after successful profile fetch

@@ -9,6 +9,7 @@ import { motion } from 'framer-motion'
 import { useComparisonStore } from '@/store/comparisonStore'
 import { useCartStore } from '@/store/cartStore'
 import { formatPrice } from '@/lib/utils'
+import { normalizeSpecName, getSpecMetric, bestIds } from '@/lib/specCompare'
 import { Product } from '@/types'
 import ProductImagePlaceholder from '@/components/products/ProductImagePlaceholder'
 import s from './page.module.css'
@@ -36,19 +37,22 @@ function ComparisonContent() {
 
   const products = comparison?.products || []
 
-  // Collect all specification names
-  const allSpecs = useMemo(() => {
-    const specs = new Map<string, string[]>()
+  // Collect spec rows, grouped by a normalized name so the same spec lines up
+  // across products even with case/whitespace differences. `label` keeps the
+  // first-seen original spelling for display; `key` is the matching id.
+  const specRows = useMemo(() => {
+    const seen = new Map<string, string>()
     products.forEach(product => {
       product.specifications?.forEach(spec => {
-        if (!specs.has(spec.name)) {
-          specs.set(spec.name, [])
-        }
-        specs.get(spec.name)!.push(spec.value)
+        const key = normalizeSpecName(spec.name)
+        if (key && !seen.has(key)) seen.set(key, spec.name)
       })
     })
-    return specs
+    return Array.from(seen, ([key, label]) => ({ key, label }))
   }, [products])
+
+  const findSpec = (product: Product, key: string) =>
+    product.specifications?.find(sp => normalizeSpecName(sp.name) === key)
 
   // Collect all feature names
   const allFeatures = useMemo(() => {
@@ -84,12 +88,9 @@ function ComparisonContent() {
     diff['warranty'] = new Set(warranties).size > 1
 
     // Specs
-    allSpecs.forEach((values, name) => {
-      const specValues = products.map(p => {
-        const sp = p.specifications?.find(sp => sp.name === name)
-        return sp?.value || '-'
-      })
-      diff[`spec-${name}`] = new Set(specValues).size > 1
+    specRows.forEach(({ key }) => {
+      const specValues = products.map(p => findSpec(p, key)?.value || '-')
+      diff[`spec-${key}`] = new Set(specValues).size > 1
     })
 
     // Features
@@ -99,33 +100,38 @@ function ComparisonContent() {
     })
 
     return diff
-  }, [products, allSpecs, allFeatures])
+  }, [products, specRows, allFeatures])
 
-  // Find best values for highlighting
+  // Find the winning product(s) per row so they can be highlighted. Each entry
+  // holds *all* ids that tie for the best value, and rows with no clear winner
+  // (all equal / not comparable) are simply omitted.
   const bestValues = useMemo(() => {
-    const best: Record<string, string> = {}
+    const best: Record<string, string[]> = {}
 
     if (products.length < 2) return best
 
-    // Lowest price is best
-    const minPrice = Math.min(...products.map(p => p.price))
-    const bestPriceProduct = products.find(p => p.price === minPrice)
-    if (bestPriceProduct) best['price'] = bestPriceProduct._id
-
-    // Highest rating is best
-    const maxRating = Math.max(...products.map(p => p.rating?.average || 0))
-    if (maxRating > 0) {
-      const bestRatingProduct = products.find(p => (p.rating?.average || 0) === maxRating)
-      if (bestRatingProduct) best['rating'] = bestRatingProduct._id
-    }
-
+    // Cheaper is better
+    best['price'] = bestIds(products.map(p => ({ id: p._id, num: p.price })), 'lower')
+    // Higher rating is better
+    best['rating'] = bestIds(products.map(p => ({ id: p._id, num: p.rating?.average ?? null })), 'higher')
     // More stock is better
-    const maxStock = Math.max(...products.map(p => p.stock))
-    const bestStockProduct = products.find(p => p.stock === maxStock)
-    if (bestStockProduct && maxStock > 0) best['stock'] = bestStockProduct._id
+    best['stock'] = bestIds(products.map(p => ({ id: p._id, num: p.stock })), 'higher')
+
+    // Numeric specs: more storage / battery / screen / camera, lighter weight…
+    specRows.forEach(({ key }) => {
+      const entries = products.map(p => {
+        const sp = findSpec(p, key)
+        const metric = sp ? getSpecMetric(sp.name, sp.value) : null
+        return { id: p._id, num: metric?.num ?? null, direction: metric?.direction }
+      })
+      const direction = entries.find(e => e.direction)?.direction
+      if (direction) {
+        best[`spec-${key}`] = bestIds(entries.map(e => ({ id: e.id, num: e.num })), direction)
+      }
+    })
 
     return best
-  }, [products])
+  }, [products, specRows])
 
   const shouldShowRow = (key: string) => {
     if (!showOnlyDifferences) return true
@@ -152,10 +158,7 @@ function ComparisonContent() {
 
   const getCellHighlightClass = (key: string, productId: string) => {
     if (!highlightBest || products.length < 2) return ''
-    if (bestValues[key] === productId) {
-      return s.cellHighlight
-    }
-    return ''
+    return bestValues[key]?.includes(productId) ? s.cellHighlight : ''
   }
 
   // ===== EMPTY STATE =====
@@ -367,14 +370,18 @@ function ComparisonContent() {
           )}
 
           {/* Specs */}
-          {Array.from(allSpecs.keys()).map(specName => {
-            const key = `spec-${specName}`
-            if (!shouldShowRow(key)) return null
+          {specRows.map(({ key, label }) => {
+            const rowKey = `spec-${key}`
+            if (!shouldShowRow(rowKey)) return null
             return (
-              <MobileCompareRow key={specName} label={specName} diffKey={key} hasDiff={hasDifference[key]}>
+              <MobileCompareRow key={key} label={label} diffKey={rowKey} hasDiff={hasDifference[rowKey]}>
                 {products.map(p => {
-                  const spec = p.specifications?.find(sp => sp.name === specName)
-                  return <div key={p._id} className={s.mobileCellText}>{spec?.value || '—'}</div>
+                  const spec = findSpec(p, key)
+                  return (
+                    <div key={p._id} className={`${s.mobileCellText} ${getCellHighlightClass(rowKey, p._id)}`}>
+                      {spec?.value || '—'}
+                    </div>
+                  )
                 })}
               </MobileCompareRow>
             )
@@ -552,7 +559,7 @@ function ComparisonContent() {
             )}
 
             {/* Specifications section header */}
-            {allSpecs.size > 0 && (
+            {specRows.length > 0 && (
               <tr className={s.sectionHeaderRow}>
                 <td colSpan={products.length + 1} className={s.sectionHeaderCell}>
                   <span className={s.sectionHeaderText}>
@@ -563,19 +570,20 @@ function ComparisonContent() {
             )}
 
             {/* Specifications */}
-            {Array.from(allSpecs.keys()).map(specName => {
-              const key = `spec-${specName}`
-              if (!shouldShowRow(key)) return null
+            {specRows.map(({ key, label }) => {
+              const rowKey = `spec-${key}`
+              if (!shouldShowRow(rowKey)) return null
               return (
-                <tr key={specName} className={`${s.tableRowHover} ${hasDifference[key] ? '' : s.dimmed}`}>
+                <tr key={key} className={`${s.tableRowHover} ${hasDifference[rowKey] ? '' : s.dimmed}`}>
                   <td className={s.rowLabel}>
-                    {specName}
-                    {hasDifference[key] && <DiffDot />}
+                    {label}
+                    {hasDifference[rowKey] && <DiffDot />}
                   </td>
                   {products.map(product => {
-                    const spec = product.specifications?.find(sp => sp.name === specName)
+                    const spec = findSpec(product, key)
+                    const highlight = getCellHighlightClass(rowKey, product._id)
                     return (
-                      <td key={product._id} className={`${s.rowValueText} ${hasDifference[key] ? s.specValueDiff : ''}`}>
+                      <td key={product._id} className={`${s.rowValueText} ${highlight || (hasDifference[rowKey] ? s.specValueDiff : '')}`}>
                         {spec?.value || '—'}
                       </td>
                     )

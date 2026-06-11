@@ -1,7 +1,7 @@
 'use client'
 
 import { ReactNode, useEffect, useRef } from 'react'
-import { useAuthStore } from '@/store/authStore'
+import { useAuthStore, setAuthCookie } from '@/store/authStore'
 import { useCartStore } from '@/store/cartStore'
 
 interface MainProps {
@@ -20,6 +20,13 @@ export default function Main({ children }: MainProps) {
     const initAuth = async () => {
       const accessToken = localStorage.getItem('accessToken')
       if (!accessToken) return
+
+      // Re-assert the middleware cookie immediately. The browser may have
+      // dropped it (mobile Safari ITP / storage eviction) while localStorage
+      // kept the token. Setting it synchronously — before the async profile
+      // fetch resolves — stops a quick tap on /profile or /wishlist from
+      // bouncing to /login during restore.
+      setAuthCookie(accessToken)
 
       // Read fresh state via getState() rather than closing over the hook
       // values. This keeps the effect's dep list empty without lying to the
